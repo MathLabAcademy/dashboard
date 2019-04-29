@@ -1,0 +1,14 @@
+[build]
+command = 'sed -i "s|{API_URL}|${REACT_APP_API_URL}|g" netlify.toml && npm run build'
+publish = "build"
+
+[[redirects]]
+from = "/api/*"
+to = "{API_URL}/:splat"
+status = 200
+force = true
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200
