@@ -1,3 +1,6 @@
+import { dispatchToStore } from 'store/index.js'
+import { setErrorBoundaryMessage } from 'store/actions/ui.js'
+
 async function api(endpoint, options = {}) {
   const Response = {
     meta: {}
@@ -21,6 +24,13 @@ async function api(endpoint, options = {}) {
   const res = await fetch(url, options)
 
   Response.meta.status = res.status
+
+  if (res.status >= 500) {
+    dispatchToStore(
+      setErrorBoundaryMessage(`Error ${res.status}: ${res.statusText}`)
+    )
+    return Response
+  }
 
   if (res.status === 204) {
     Response.data = null

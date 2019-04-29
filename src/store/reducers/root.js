@@ -12,7 +12,9 @@ const rootReducer = combineReducers({
 
 export default (state, action) => {
   if (action.type === CURRENT_USER_UNSET) {
-    state = undefined
+    state = {
+      ui: state.ui
+    }
   }
 
   return rootReducer(state, action)

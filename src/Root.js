@@ -4,13 +4,17 @@ import { Provider } from 'react-redux'
 
 import I18nProvider from 'i18n/index.js'
 
+import ErrorBoundary from 'components/ErrorBoundary.js'
+
 import App from './App'
 
 const Root = ({ store }) => (
   <Provider store={store}>
-    <I18nProvider>
-      <App />
-    </I18nProvider>
+    <ErrorBoundary>
+      <I18nProvider>
+        <App />
+      </I18nProvider>
+    </ErrorBoundary>
   </Provider>
 )
 
