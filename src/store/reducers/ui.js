@@ -1,8 +1,10 @@
 import { UI_LOCALE_UPDATE } from 'store/actions/actionTypes.js'
 
+import i18nConfig from 'i18n/config.js'
+
 const initialState = {
   locale: {
-    language: 'en'
+    language: i18nConfig.defaultLanguage
   }
 }
 
