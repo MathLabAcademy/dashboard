@@ -1,18 +1,23 @@
 import Gravatar from 'components/Gravatar.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import PersonInfo from 'components/User/PersonInfo.js'
-import { get } from 'lodash-es'
-import React from 'react'
+import { capitalize, get } from 'lodash-es'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Header, Segment } from 'semantic-ui-react'
+import { Header, Label, Segment } from 'semantic-ui-react'
+import { getUser } from 'store/actions/users.js'
 import getPersonName from 'utils/get-person-name.js'
-import ProfilePasswordEditor from './Editors/PasswordModal.js'
-import './Main.css'
 
-function View({ data }) {
-  return data ? (
+const labeledRoles = ['admin', 'teacher']
+
+function UserView({ id, data, getData }) {
+  useEffect(() => {
+    if (!data) getData(id)
+  }, [data, getData, id])
+
+  return (
     <>
-      <Segment>
+      <Segment loading={!data}>
         <HeaderGrid
           leftClassName="auto wide"
           Left={
@@ -28,10 +33,15 @@ function View({ data }) {
                 {getPersonName(get(data, 'Person'))}
                 <Header.Subheader>{get(data, 'email')}</Header.Subheader>
               </Header>
-              <ProfilePasswordEditor />
             </>
           }
         />
+
+        {labeledRoles.includes(get(data, 'roleId')) && (
+          <Label color="black" size="tiny" attached="bottom right">
+            {capitalize(get(data, 'roleId'))}
+          </Label>
+        )}
       </Segment>
 
       <PersonInfo
@@ -49,16 +59,18 @@ function View({ data }) {
         />
       )}
     </>
-  ) : null
+  )
 }
 
-const mapStateToProps = ({ user }) => ({
-  data: get(user, 'data')
+const mapStateToProps = ({ users }, { UserId }) => ({
+  data: get(users.byId, UserId)
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getData: getUser
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(UserView)

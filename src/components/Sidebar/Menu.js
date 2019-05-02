@@ -1,7 +1,5 @@
 import React from 'react'
-
-import { Sidebar, Menu } from 'semantic-ui-react'
-
+import { Menu, Sidebar } from 'semantic-ui-react'
 import MenuItems from './MenuItems.js'
 
 const items = [
@@ -12,6 +10,11 @@ const items = [
   {
     title: `Profile`,
     link: '/profile'
+  },
+  {
+    title: `Users`,
+    link: '/users',
+    permits: ['admin', 'teacher']
   }
 ]
 

@@ -1,15 +1,10 @@
-import React, { useCallback, useState } from 'react'
-
-import { connect } from 'react-redux'
-
-import get from 'lodash/get'
-
 import { Redirect } from '@reach/router'
-
+import { get } from 'lodash-es'
+import React, { useCallback, useState } from 'react'
+import { connect } from 'react-redux'
 import { Grid, Header, Message } from 'semantic-ui-react'
-
-import Form from './Form.js'
 import getPersonName from 'utils/get-person-name.js'
+import Form from './Form.js'
 
 function Register({ userStatus }) {
   const [data, setData] = useState(null)

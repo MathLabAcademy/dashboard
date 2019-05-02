@@ -1,22 +1,15 @@
-import React, { useMemo } from 'react'
-
-import { connect } from 'react-redux'
-import { updatePersonInfo, updateGuardianInfo } from 'store/actions/users.js'
-
-import { DateTime } from 'luxon'
-import get from 'lodash/get'
-
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-
 import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
-
-import { Header, Segment, Table, Button, Message } from 'semantic-ui-react'
-
-import HeaderGrid from 'components/HeaderGrid.js'
-
 import Form from 'components/Form/Form.js'
 import Input from 'components/Form/Input.js'
+import HeaderGrid from 'components/HeaderGrid.js'
+import { Formik } from 'formik'
+import { get } from 'lodash-es'
+import { DateTime } from 'luxon'
+import React, { useMemo } from 'react'
+import { connect } from 'react-redux'
+import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
+import { updateGuardianInfo, updatePersonInfo } from 'store/actions/users.js'
+import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({

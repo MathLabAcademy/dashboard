@@ -1,32 +1,34 @@
-import React, { memo, useState } from 'react'
-
-import { DateTime } from 'luxon'
-import get from 'lodash/get'
-
-import getPersonName from 'utils/get-person-name.js'
-
-import { Button, Header, Segment, Table } from 'semantic-ui-react'
-
 import HeaderGrid from 'components/HeaderGrid.js'
-
-import Editor from './Editors/PersonInfo.js'
+import Permit from 'components/Permit.js'
+import { get } from 'lodash-es'
+import { DateTime } from 'luxon'
+import React, { memo, useState } from 'react'
+import { Button, Header, Segment, Table } from 'semantic-ui-react'
+import getPersonName from 'utils/get-person-name.js'
+import Editor from './PersonInfoEditor.js'
 
 function PersonInfo({ userId, data, title, isGuardian }) {
   const [editing, setEditing] = useState(false)
 
   return editing ? (
-    <Editor
-      userId={userId}
-      data={data}
-      title={title}
-      isGuardian={isGuardian}
-      setOpen={setEditing}
-    />
+    <Permit admin UserId={userId}>
+      <Editor
+        userId={userId}
+        data={data}
+        title={title}
+        isGuardian={isGuardian}
+        setOpen={setEditing}
+      />
+    </Permit>
   ) : (
     <Segment className="mathlab user-info">
       <HeaderGrid
         Left={<Header content={title} />}
-        Right={<Button onClick={() => setEditing(true)}>Edit</Button>}
+        Right={
+          <Permit admin UserId={userId}>
+            <Button onClick={() => setEditing(true)}>Edit</Button>
+          </Permit>
+        }
       />
       <Table basic="very" compact>
         <Table.Body>

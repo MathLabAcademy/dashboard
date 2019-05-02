@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react'
-
-import { connect } from 'react-redux'
-
-import get from 'lodash/get'
-
 import { setupI18n } from '@lingui/core'
-
 import { I18nProvider } from '@lingui/react'
+import { get } from 'lodash-es'
+import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux'
 
 export const i18n = setupI18n()
 

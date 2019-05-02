@@ -1,14 +1,10 @@
-import './MenuItems.css'
-
-import React, { memo, useMemo } from 'react'
-
-import zipObject from 'lodash/zipObject'
-
-import { Match, Link } from '@reach/router'
-
-import { Accordion, Header, Icon, Menu } from 'semantic-ui-react'
-
+import { Link, Match } from '@reach/router'
 import Permit from 'components/Permit.js'
+import { zipObject } from 'lodash-es'
+import React, { memo, useMemo } from 'react'
+import { Accordion, Header, Icon, Menu } from 'semantic-ui-react'
+import { emptyArray } from 'utils/defaults.js'
+import './MenuItems.css'
 
 const ParentItem = ({ link, title, icon, active, children }) => (
   <Accordion className="parent-item">
@@ -31,7 +27,7 @@ const ParentItem = ({ link, title, icon, active, children }) => (
   </Accordion>
 )
 
-function Item({ link, title, icon, permits = [], children }) {
+function Item({ link, title, icon, permits = emptyArray, children }) {
   const permitsObject = useMemo(() => {
     return zipObject(permits, permits.map(Boolean))
   }, [permits])

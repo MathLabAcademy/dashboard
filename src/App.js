@@ -1,22 +1,15 @@
-import './App.css'
-
-import React, { useCallback, useEffect, useState } from 'react'
-
-import { connect } from 'react-redux'
-import { checkAuthStatus } from 'store/actions/currentUser.js'
-
-import get from 'lodash/get'
-
 import { Router } from '@reach/router'
-
-import { Segment, Sidebar } from 'semantic-ui-react'
-
 import Navbar from 'components/Navbar/Main.js'
 import SidebarMenu from 'components/Sidebar/Menu.js'
-
+import { get } from 'lodash-es'
 import LogIn from 'pages/login/Main.js'
-import Register from 'pages/register/Main.js'
 import Dashboard from 'pages/Main.js'
+import Register from 'pages/register/Main.js'
+import React, { useCallback, useEffect, useState } from 'react'
+import { connect } from 'react-redux'
+import { Segment, Sidebar } from 'semantic-ui-react'
+import { checkAuthStatus } from 'store/actions/currentUser.js'
+import './App.css'
 
 function App({ checkAuthStatus, userStatus }) {
   const [sidebarVisible, setSidebarVisible] = useState(false)

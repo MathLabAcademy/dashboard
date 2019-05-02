@@ -1,15 +1,10 @@
-import './Main.css'
-
+import { Link, Match } from '@reach/router'
+import { get } from 'lodash-es'
 import React from 'react'
-
 import { connect } from 'react-redux'
-import { logOut } from 'store/actions/currentUser.js'
-
-import get from 'lodash/get'
-
-import { Match, Link } from '@reach/router'
-
 import { Button, Menu } from 'semantic-ui-react'
+import { logOut } from 'store/actions/currentUser.js'
+import './Main.css'
 
 function Navbar({ userStatus, sidebarVisible, toggleSidebar, logOut }) {
   return (

@@ -1,13 +1,8 @@
-import React from 'react'
-
-import { connect } from 'react-redux'
-
-import get from 'lodash/get'
-
 import { Redirect } from '@reach/router'
-
+import { get } from 'lodash-es'
+import React from 'react'
+import { connect } from 'react-redux'
 import { Grid, Header } from 'semantic-ui-react'
-
 import Form from './Form.js'
 
 function LogIn({ userStatus, logIn }) {

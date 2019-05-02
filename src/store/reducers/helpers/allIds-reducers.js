@@ -1,4 +1,4 @@
-import union from 'lodash/union'
+import { union } from 'lodash-es'
 
 export const add = (state, { id }) => union(state, [id])
 
