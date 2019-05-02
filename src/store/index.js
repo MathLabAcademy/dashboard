@@ -1,12 +1,8 @@
-import throttle from 'lodash/throttle'
-
-import { createStore, applyMiddleware, compose } from 'redux'
-
+import { throttle } from 'lodash-es'
+import { applyMiddleware, compose, createStore } from 'redux'
 import ReduxThunkMiddleware from 'redux-thunk'
-
-import { loadState, saveState } from 'utils/localStorage.js'
-
 import rootReducer from 'store/reducers/root.js'
+import { loadState, saveState } from 'utils/localStorage.js'
 
 const stateLocalStorageKey = 'mathlab-state'
 
@@ -29,7 +25,7 @@ export const dispatchToStore = store.dispatch
 
 store.subscribe(
   throttle(() => {
-    const { user, ...state } = store.getState()
+    const { errorBoundary, pagination, user, ...state } = store.getState()
 
     saveState(stateLocalStorageKey, state)
   }, 1500)

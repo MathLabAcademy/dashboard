@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { setErrorBoundaryMessage } from 'store/actions/ui.js'
+import { setErrorBoundaryRootError } from 'store/actions/errorBoundary.js'
 
 import { Button, Segment } from 'semantic-ui-react'
 
@@ -9,20 +9,20 @@ import HeaderGrid from './HeaderGrid'
 
 const defaultMessage = `Something went wrong!`
 
-class ErrorBoundary extends Component {
+class RootErrorBoundary extends Component {
   componentDidCatch(_error, _info) {
-    this.props.setErrorBoundaryMessage(defaultMessage)
+    this.props.setError(defaultMessage)
   }
 
   tryRemount = () => {
-    this.props.setErrorBoundaryMessage(null)
+    this.props.setError(null)
   }
 
   render() {
-    return this.props.message ? (
+    return this.props.error ? (
       <Segment textAlign="center">
         <HeaderGrid
-          Left={this.props.message}
+          Left={this.props.error}
           Right={
             <Button type="button" icon="repeat" onClick={this.tryRemount} />
           }
@@ -34,15 +34,15 @@ class ErrorBoundary extends Component {
   }
 }
 
-const mapStateToProps = ({ ui }) => ({
-  message: ui.errorBoundaryMessage
+const mapStateToProps = ({ errorBoundary }) => ({
+  error: errorBoundary.rootError
 })
 
 const mapDispatchToProps = {
-  setErrorBoundaryMessage
+  setError: setErrorBoundaryRootError
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ErrorBoundary)
+)(RootErrorBoundary)

@@ -1,6 +1,9 @@
+import { map } from 'lodash-es'
+import { emptyArray, emptyObject } from 'utils/defaults.js'
+
 const initialPaginationState = {
   fetching: false,
-  pages: {},
+  pages: emptyObject,
   hasPages: 0,
   totalPages: 0,
   totalItems: 0,
@@ -8,19 +11,19 @@ const initialPaginationState = {
   nextLink: null
 }
 
-const getPaginationReducer = ({ ADD_PAGE, REMOVE_PAGE, REQUEST_PAGE }) => (
+const getPaginationReducer = ({ ADD, REMOVE, REQUEST }) => (
   state = initialPaginationState,
   { type, data, page, query = '' }
 ) => {
   switch (type) {
-    case ADD_PAGE:
+    case ADD:
       return {
         fetching: false,
         pages: {
           ...state.pages,
           [page]: {
             fetching: false,
-            itemIds: data.items.map(item => item.id),
+            itemIds: map(data.items, 'id'),
             query
           }
         },
@@ -30,7 +33,7 @@ const getPaginationReducer = ({ ADD_PAGE, REMOVE_PAGE, REQUEST_PAGE }) => (
         itemsPerPage: data.itemsPerPage,
         nextLink: data.nextLink
       }
-    case REMOVE_PAGE:
+    case REMOVE:
       return {
         ...state,
         fetching: false,
@@ -39,7 +42,7 @@ const getPaginationReducer = ({ ADD_PAGE, REMOVE_PAGE, REQUEST_PAGE }) => (
           [page]: undefined
         }
       }
-    case REQUEST_PAGE:
+    case REQUEST:
       return {
         ...state,
         fetching: true,
@@ -47,7 +50,7 @@ const getPaginationReducer = ({ ADD_PAGE, REMOVE_PAGE, REQUEST_PAGE }) => (
           ...state.pages,
           [page]: {
             fetching: true,
-            itemIds: [],
+            itemIds: emptyArray,
             query
           }
         }

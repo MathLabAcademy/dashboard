@@ -1,6 +1,78 @@
 import api from 'utils/api.js'
 
-import { CURRENT_USER_SET, USER_UPDATE } from './actionTypes.js'
+import {
+  CURRENT_USER_UPDATE,
+  USER_UPDATE,
+  USER_ADD,
+  USER_PAGE_REQUEST,
+  USER_BULK_ADD,
+  USER_PAGE_ADD,
+  USER_PAGE_REMOVE
+} from './actionTypes.js'
+
+import {
+  fetchAllPagesDefaultOpts,
+  fetchPageDefaultOpts
+} from './helpers/defaultOptions.js'
+
+const addUser = data => ({
+  type: USER_ADD,
+  data
+})
+
+export const getUser = UserId => async dispatch => {
+  let url = `/users/${UserId}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch(addUser(data))
+
+  return data
+}
+
+export const fetchUsersPage = (
+  { page = 1, query = '' } = fetchPageDefaultOpts,
+  storeItems = true
+) => async dispatch => {
+  dispatch({ type: USER_PAGE_REQUEST, page, query })
+
+  let url = `/users?page=${page}`
+  if (query) url += `&${query}`
+
+  const { data, error } = await api(url)
+
+  if (error) {
+    dispatch({ type: USER_PAGE_REMOVE, page, query })
+    throw error
+  }
+
+  if (storeItems) dispatch({ type: USER_BULK_ADD, data })
+
+  dispatch({ type: USER_PAGE_ADD, page, data, query })
+
+  return data
+}
+
+export const fetchAllUsersPage = (
+  { query = '' } = fetchAllPagesDefaultOpts,
+  storeItems = true
+) => async dispatch => {
+  let page = 1
+  let hasNext = true
+
+  while (hasNext) {
+    const { nextLink, pageIndex } = await dispatch(
+      fetchUsersPage({ page, query }, storeItems)
+    )
+
+    hasNext = Boolean(nextLink)
+    page = pageIndex + 1
+  }
+
+  return true
+}
 
 export const updatePersonInfo = (
   userId,
@@ -16,9 +88,7 @@ export const updatePersonInfo = (
 
   if (error) throw error
 
-  if (isCurrent) {
-    dispatch({ type: CURRENT_USER_SET, data })
-  }
+  if (isCurrent) dispatch({ type: CURRENT_USER_UPDATE, data })
 
   dispatch({ type: USER_UPDATE, data })
 
@@ -39,9 +109,7 @@ export const updateGuardianInfo = (
 
   if (error) throw error
 
-  if (isCurrent) {
-    dispatch({ type: CURRENT_USER_SET, data })
-  }
+  if (isCurrent) dispatch({ type: CURRENT_USER_UPDATE, data })
 
   dispatch({ type: USER_UPDATE, data })
 

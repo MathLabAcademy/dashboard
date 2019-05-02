@@ -1,36 +1,27 @@
-import { combineReducers } from 'redux'
-
-import keyBy from 'lodash/keyBy'
-import pickBy from 'lodash/pickBy'
-
-import * as allIds from './helpers/allIds-reducers.js'
-import getPaginationReducer from './helpers/get-pagination-reducer.js'
-
+import { get, keyBy, pickBy } from 'lodash-es'
 import {
   USER_ADD,
+  USER_BULK_ADD,
   USER_REMOVE,
-  USER_UPDATE,
-  USERS_ADD_BULK,
-  USERS_ADD_PAGE,
-  USERS_REMOVE_PAGE,
-  USERS_REQUEST_PAGE,
-  USERS_PURGE_PAGINATION
+  USER_UPDATE
 } from 'store/actions/actionTypes.js'
+import { emptyArray, emptyObject } from 'utils/defaults.js'
+import * as allIds from './helpers/allIds-reducers.js'
 
-const itemsReducer = (state = { byId: {}, allIds: [] }, { type, data, id }) => {
+const initialState = { byId: emptyObject, allIds: emptyArray }
+
+const usersReducer = (state = initialState, { type, data, id }) => {
   switch (type) {
     case USER_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: {
-            ...data
-          }
+          [data.id]: data
         },
         allIds: allIds.add(state.allIds, data)
       }
-    case USERS_ADD_BULK:
+    case USER_BULK_ADD:
       return {
         ...state,
         byId: {
@@ -51,7 +42,7 @@ const itemsReducer = (state = { byId: {}, allIds: [] }, { type, data, id }) => {
         byId: {
           ...state.byId,
           [data.id]: {
-            ...state.byId[data.id],
+            ...get(state.byId, data.id, emptyObject),
             ...data
           }
         }
@@ -61,19 +52,4 @@ const itemsReducer = (state = { byId: {}, allIds: [] }, { type, data, id }) => {
   }
 }
 
-const usersReducer = combineReducers({
-  items: itemsReducer,
-  pagination: getPaginationReducer({
-    ADD_PAGE: USERS_ADD_PAGE,
-    REMOVE_PAGE: USERS_REMOVE_PAGE,
-    REQUEST_PAGE: USERS_REQUEST_PAGE
-  })
-})
-
-export default (state, action) => {
-  if (action.type === USERS_PURGE_PAGINATION) {
-    state.pagination = undefined
-  }
-
-  return usersReducer(state, action)
-}
+export default usersReducer

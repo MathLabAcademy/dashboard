@@ -2,8 +2,8 @@ import api from 'utils/api.js'
 
 import {
   CURRENT_USER_LOGIN_REQUEST,
-  CURRENT_USER_SET,
-  CURRENT_USER_UNSET
+  CURRENT_USER_UPDATE,
+  CURRENT_USER_REMOVE
 } from './actionTypes'
 
 export const logIn = loginData => async dispatch => {
@@ -17,11 +17,11 @@ export const logIn = loginData => async dispatch => {
 
     if (error) throw error
 
-    dispatch({ type: CURRENT_USER_SET, data })
+    dispatch({ type: CURRENT_USER_UPDATE, data })
 
     return data
   } catch (err) {
-    dispatch({ type: CURRENT_USER_UNSET })
+    dispatch({ type: CURRENT_USER_REMOVE })
     throw err
   }
 }
@@ -33,7 +33,7 @@ export const logOut = () => async dispatch => {
 
   if (error) throw error
 
-  dispatch({ type: CURRENT_USER_UNSET })
+  dispatch({ type: CURRENT_USER_REMOVE })
 
   return data
 }
@@ -42,12 +42,12 @@ export const checkAuthStatus = () => async dispatch => {
   const { data } = await api('/user')
 
   if (data) {
-    dispatch({ type: CURRENT_USER_SET, data })
+    dispatch({ type: CURRENT_USER_UPDATE, data })
 
     return data
   }
 
-  dispatch({ type: CURRENT_USER_UNSET })
+  dispatch({ type: CURRENT_USER_REMOVE })
 }
 
 export const updatePassword = passwordData => async dispatch => {

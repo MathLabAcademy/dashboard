@@ -1,7 +1,7 @@
 import {
   CURRENT_USER_LOGIN_REQUEST,
-  CURRENT_USER_SET,
-  CURRENT_USER_UNSET
+  CURRENT_USER_UPDATE,
+  CURRENT_USER_REMOVE
 } from 'store/actions/actionTypes.js'
 
 const initialState = {
@@ -22,7 +22,7 @@ const currentUserReducer = (state = initialState, { type, data }) => {
           loading: true
         }
       }
-    case CURRENT_USER_SET:
+    case CURRENT_USER_UPDATE:
       return {
         data,
         status: {
@@ -30,7 +30,7 @@ const currentUserReducer = (state = initialState, { type, data }) => {
           loading: false
         }
       }
-    case CURRENT_USER_UNSET:
+    case CURRENT_USER_REMOVE:
       return {
         data: null,
         status: {

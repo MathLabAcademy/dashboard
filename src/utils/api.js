@@ -1,5 +1,5 @@
 import { dispatchToStore } from 'store/index.js'
-import { setErrorBoundaryMessage } from 'store/actions/ui.js'
+import { setErrorBoundaryRootError } from 'store/actions/errorBoundary.js'
 
 async function api(endpoint, options = {}) {
   const Response = {
@@ -27,7 +27,9 @@ async function api(endpoint, options = {}) {
 
   if (res.status >= 500) {
     dispatchToStore(
-      setErrorBoundaryMessage(`Error ${res.status}: ${res.statusText}`)
+      setErrorBoundaryRootError(
+        `Error ${res.status}${res.statusText ? `: ${res.statusText}` : ''}`
+      )
     )
     return Response
   }
