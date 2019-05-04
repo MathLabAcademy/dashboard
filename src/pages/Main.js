@@ -2,6 +2,7 @@ import { Redirect, Router } from '@reach/router'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
+import Courses from './courses/Main.js'
 import Index from './index/Main.js'
 import Profile from './profile/Main.js'
 import Users from './users/Main.js'
@@ -12,6 +13,7 @@ function Dashboard({ userStatus }) {
   ) : userStatus.authed ? (
     <Router>
       <Index path="/" />
+      <Courses path="courses/*" />
       <Profile path="profile/*" />
       <Users path="users/*" />
     </Router>

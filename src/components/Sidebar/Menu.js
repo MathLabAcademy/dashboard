@@ -15,6 +15,11 @@ const items = [
     title: `Users`,
     link: '/users',
     permits: ['admin', 'teacher']
+  },
+  {
+    title: `Courses`,
+    link: '/courses',
+    permits: ['admin', 'teacher']
   }
 ]
 
