@@ -11,7 +11,7 @@ function PersonInfo({ userId, data, title, isGuardian }) {
   const [editing, setEditing] = useState(false)
 
   return editing ? (
-    <Permit admin UserId={userId}>
+    <Permit admin userId={userId}>
       <Editor
         userId={userId}
         data={data}
@@ -25,7 +25,7 @@ function PersonInfo({ userId, data, title, isGuardian }) {
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
-          <Permit admin UserId={userId}>
+          <Permit admin userId={userId}>
             <Button onClick={() => setEditing(true)}>Edit</Button>
           </Permit>
         }

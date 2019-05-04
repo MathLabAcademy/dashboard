@@ -10,10 +10,10 @@ import getPersonName from 'utils/get-person-name.js'
 
 const labeledRoles = ['admin', 'teacher']
 
-function UserView({ id, data, getData }) {
+function UserView({ userId, data, getData }) {
   useEffect(() => {
-    if (!data) getData(id)
-  }, [data, getData, id])
+    if (!data) getData(userId)
+  }, [data, getData, userId])
 
   return (
     <>
@@ -62,8 +62,8 @@ function UserView({ id, data, getData }) {
   )
 }
 
-const mapStateToProps = ({ users }, { UserId }) => ({
-  data: get(users.byId, UserId)
+const mapStateToProps = ({ users }, { userId }) => ({
+  data: get(users.byId, userId)
 })
 
 const mapDispatchToProps = {

@@ -4,7 +4,6 @@ import { emptyArray, emptyObject } from 'utils/defaults.js'
 const initialPaginationState = {
   fetching: false,
   pages: emptyObject,
-  hasPages: 0,
   totalPages: 0,
   totalItems: 0,
   itemsPerPage: 0,
@@ -27,7 +26,6 @@ const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
             query
           }
         },
-        hasPages: state.hasPages + 1,
         totalPages: data.totalPages,
         totalItems: data.totalItems,
         itemsPerPage: data.itemsPerPage,

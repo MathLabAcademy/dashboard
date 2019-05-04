@@ -7,7 +7,7 @@ function Users() {
   return (
     <Router>
       <List path="/" />
-      <View path="/:UserId" />
+      <View path="/:userId" />
     </Router>
   )
 }
