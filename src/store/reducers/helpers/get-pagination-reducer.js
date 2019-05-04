@@ -11,7 +11,7 @@ const initialPaginationState = {
   nextLink: null
 }
 
-const getPaginationReducer = ({ ADD, REMOVE, REQUEST }) => (
+const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
   state = initialPaginationState,
   { type, data, page, query = '' }
 ) => {
@@ -55,6 +55,8 @@ const getPaginationReducer = ({ ADD, REMOVE, REQUEST }) => (
           }
         }
       }
+    case PURGE:
+      return initialPaginationState
     default:
       return state
   }

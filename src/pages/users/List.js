@@ -6,7 +6,7 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment } from 'semantic-ui-react'
-import { fetchUsersPage } from 'store/actions/users.js'
+import { fetchUserPage } from 'store/actions/users.js'
 import { emptyArray } from 'utils/defaults.js'
 import ListItem from './ListItem.js'
 
@@ -37,7 +37,7 @@ const mapStateToProps = ({ pagination }) => ({
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchUsersPage
+  fetchPage: fetchUserPage
 }
 
 export default connect(

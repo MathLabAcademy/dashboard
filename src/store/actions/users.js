@@ -11,17 +11,17 @@ import {
 } from './actionTypes.js'
 
 import {
-  fetchAllPagesDefaultOpts,
-  fetchPageDefaultOpts
-} from './helpers/defaultOptions.js'
+  defaultOptsFetchPage,
+  defaultOptsFetchAllPages
+} from 'utils/defaults.js'
 
 const addUser = data => ({
   type: USER_ADD,
   data
 })
 
-export const getUser = UserId => async dispatch => {
-  let url = `/users/${UserId}`
+export const getUser = userId => async dispatch => {
+  let url = `/users/${userId}`
 
   const { data, error } = await api(url)
 
@@ -32,8 +32,8 @@ export const getUser = UserId => async dispatch => {
   return data
 }
 
-export const fetchUsersPage = (
-  { page = 1, query = '' } = fetchPageDefaultOpts,
+export const fetchUserPage = (
+  { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
 ) => async dispatch => {
   dispatch({ type: USER_PAGE_REQUEST, page, query })
@@ -55,8 +55,8 @@ export const fetchUsersPage = (
   return data
 }
 
-export const fetchAllUsersPage = (
-  { query = '' } = fetchAllPagesDefaultOpts,
+export const fetchAllUserPage = (
+  { query = '' } = defaultOptsFetchAllPages,
   storeItems = true
 ) => async dispatch => {
   let page = 1
@@ -64,7 +64,7 @@ export const fetchAllUsersPage = (
 
   while (hasNext) {
     const { nextLink, pageIndex } = await dispatch(
-      fetchUsersPage({ page, query }, storeItems)
+      fetchUserPage({ page, query }, storeItems)
     )
 
     hasNext = Boolean(nextLink)

@@ -1,5 +1,9 @@
 import { combineReducers } from 'redux'
 import {
+  COURSE_PAGE_ADD,
+  COURSE_PAGE_REMOVE,
+  COURSE_PAGE_REQUEST,
+  COURSE_PAGINATION_PURGE,
   USER_PAGE_ADD,
   USER_PAGE_REMOVE,
   USER_PAGE_REQUEST,
@@ -7,22 +11,23 @@ import {
 } from 'store/actions/actionTypes.js'
 import getPaginationReducer from './helpers/get-pagination-reducer.js'
 
-const paginationReducer = combineReducers({
-  users: getPaginationReducer({
-    ADD: USER_PAGE_ADD,
-    REMOVE: USER_PAGE_REMOVE,
-    REQUEST: USER_PAGE_REQUEST
-  })
+const courses = getPaginationReducer({
+  ADD: COURSE_PAGE_ADD,
+  REMOVE: COURSE_PAGE_REMOVE,
+  REQUEST: COURSE_PAGE_REQUEST,
+  PURGE: COURSE_PAGINATION_PURGE
 })
 
-export default (state, action) => {
-  switch (action.type) {
-    case USER_PAGINATION_PURGE:
-      state.users = undefined
-      break
-    default:
-      break
-  }
+const users = getPaginationReducer({
+  ADD: USER_PAGE_ADD,
+  REMOVE: USER_PAGE_REMOVE,
+  REQUEST: USER_PAGE_REQUEST,
+  PURGE: USER_PAGINATION_PURGE
+})
 
-  return paginationReducer(state, action)
-}
+const paginationReducer = combineReducers({
+  courses,
+  users
+})
+
+export default paginationReducer
