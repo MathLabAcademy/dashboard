@@ -1,18 +1,33 @@
 import api from 'utils/api.js'
-
 import {
-  COURSE_UPDATE,
+  defaultOptsFetchAllPages,
+  defaultOptsFetchPage
+} from 'utils/defaults.js'
+import {
   COURSE_ADD,
-  COURSE_PAGE_REQUEST,
   COURSE_BULK_ADD,
   COURSE_PAGE_ADD,
-  COURSE_PAGE_REMOVE
+  COURSE_PAGE_REMOVE,
+  COURSE_PAGE_REQUEST,
+  COURSE_PAGINATION_PURGE,
+  COURSE_UPDATE
 } from './actionTypes.js'
 
-import {
-  defaultOptsFetchPage,
-  defaultOptsFetchAllPages
-} from 'utils/defaults.js'
+export const createCourse = courseData => async dispatch => {
+  const url = `/courses`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: courseData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_PAGINATION_PURGE })
+  dispatch({ type: COURSE_ADD, data })
+
+  return data
+}
 
 export const getCourse = courseId => async dispatch => {
   let url = `/courses/${courseId}`
