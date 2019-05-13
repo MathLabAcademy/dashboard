@@ -1,33 +1,43 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormField from 'components/Form/Input.js'
-import FormTextArea from 'components/Form/TextArea.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
+import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, updateCourse } from 'store/actions/courses.js'
+import { getMCQExam, updateMCQExam } from 'store/actions/mcqExams.js'
 import * as Yup from 'yup'
 
 const getInitialValues = data => ({
+  date: DateTime.fromISO(get(data, 'date')).toISODate() || '',
   name: get(data, 'name') || '',
   description: get(data, 'description') || ''
 })
 
 const getValidationSchema = () => {
   return Yup.object({
-    name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    date: Yup.date()
+      .min(DateTime.local().toISODate(), `date already passed`)
+      .required(`required`),
+    name: Yup.string().notRequired(),
+    description: Yup.string().notRequired()
   })
 }
 
-function CourseEdit({ courseId, data, getData, updateCourse }) {
+function CourseMCQExamEdit({
+  courseId,
+  mcqExamId,
+  data,
+  getData,
+  updateMCQExam
+}) {
   useEffect(() => {
-    if (!data) getData(courseId)
-  }, [courseId, data, getData])
+    if (!data) getData(mcqExamId)
+  }, [data, getData, mcqExamId])
 
   const initialValues = useMemo(() => getInitialValues(data), [data])
   const validationSchema = useMemo(() => getValidationSchema(), [])
@@ -35,7 +45,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   const onSubmit = useCallback(
     async (values, actions) => {
       try {
-        await updateCourse(courseId, values)
+        await updateMCQExam(mcqExamId, values)
         actions.setStatus(null)
       } catch (err) {
         if (err.errors) {
@@ -52,7 +62,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
 
       actions.setSubmitting(false)
     },
-    [courseId, updateCourse]
+    [mcqExamId, updateMCQExam]
   )
 
   return (
@@ -67,7 +77,9 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
+                Left={
+                  <Header as="h2">Edit MCQ Exam #{get(data, 'id')}:</Header>
+                }
                 Right={
                   <>
                     <Button as={Link} to="..">
@@ -88,11 +100,15 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
             </Segment>
 
             <Segment>
-              {status ? <Message color="yellow">{status}</Message> : null}
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
+
+              <FormField type="date" id="date" name="date" label={`Date`} />
 
               <FormField id="name" name="name" label={`Name`} />
 
-              <FormTextArea
+              <FormField
                 id="description"
                 name="description"
                 label={`Description`}
@@ -105,16 +121,16 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   )
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  data: get(courses.byId, courseId)
+const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
+  data: get(mcqExams.byId, mcqExamId)
 })
 
 const mapDispatchToProps = {
-  getData: getCourse,
-  updateCourse
+  getData: getMCQExam,
+  updateMCQExam
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CourseEdit)
+)(CourseMCQExamEdit)

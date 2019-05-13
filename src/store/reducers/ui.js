@@ -8,7 +8,7 @@ const initialState = {
   }
 }
 
-const uiReducer = (state = initialState, { type, data, locale }) => {
+const uiReducer = (state = initialState, { type, locale }) => {
   switch (type) {
     case UI_LOCALE_UPDATE:
       return {

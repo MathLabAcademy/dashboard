@@ -6,11 +6,11 @@ import {
   USER_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
-import * as allIds from './helpers/allIds-reducers.js'
+import * as allIds from './helpers/ids-reducers.js'
 
 const initialState = { byId: emptyObject, allIds: emptyArray }
 
-const usersReducer = (state = initialState, { type, data, id }) => {
+const usersReducer = (state = initialState, { type, id, data }) => {
   switch (type) {
     case USER_ADD:
       return {

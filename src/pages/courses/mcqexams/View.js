@@ -1,18 +1,20 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getCourse } from 'store/actions/courses.js'
-import Permit from 'components/Permit'
+import { getMCQExam } from 'store/actions/mcqExams.js'
 
-import CourseMCQExams from './mcqexams/Main.js'
+import Questions from './Questions.js'
+import SetAnswers from './SetAnswers.js'
+import { Router } from '@reach/router'
 
-function CourseView({ courseId, data, getData }) {
+function CourseMCQExamView({ courseId, mcqExamId, data, getData }) {
   useEffect(() => {
-    if (!data) getData(courseId)
-  }, [courseId, data, getData])
+    if (!data) getData(mcqExamId)
+  }, [data, getData, mcqExamId])
 
   return (
     <>
@@ -20,7 +22,7 @@ function CourseView({ courseId, data, getData }) {
         <HeaderGrid
           Left={
             <Header>
-              {get(data, 'name')}
+              MCQ Exam: {get(data, 'name')}
               <Header.Subheader>{get(data, 'description')}</Header.Subheader>
             </Header>
           }
@@ -34,20 +36,23 @@ function CourseView({ courseId, data, getData }) {
         />
       </Segment>
 
-      <CourseMCQExams courseId={courseId} />
+      <Router>
+        <Questions path="/" courseId={courseId} />
+        <SetAnswers path="set-answers" courseId={courseId} />
+      </Router>
     </>
   )
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  data: get(courses.byId, courseId)
+const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
+  data: get(mcqExams.byId, mcqExamId)
 })
 
 const mapDispatchToProps = {
-  getData: getCourse
+  getData: getMCQExam
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CourseView)
+)(CourseMCQExamView)

@@ -1,42 +1,43 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormField from 'components/Form/Input.js'
-import FormTextArea from 'components/Form/TextArea.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
 import { Formik } from 'formik'
-import { get } from 'lodash-es'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import { DateTime } from 'luxon'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, updateCourse } from 'store/actions/courses.js'
+import { createMCQExam } from 'store/actions/mcqExams.js'
 import * as Yup from 'yup'
 
-const getInitialValues = data => ({
-  name: get(data, 'name') || '',
-  description: get(data, 'description') || ''
+const getInitialValues = courseId => ({
+  courseId: Number(courseId),
+  date: '',
+  name: '',
+  description: ''
 })
 
 const getValidationSchema = () => {
   return Yup.object({
-    name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    date: Yup.date()
+      .min(DateTime.local().toISODate(), `date already passed`)
+      .required(`required`),
+    name: Yup.string().notRequired(),
+    description: Yup.string().notRequired()
   })
 }
 
-function CourseEdit({ courseId, data, getData, updateCourse }) {
-  useEffect(() => {
-    if (!data) getData(courseId)
-  }, [courseId, data, getData])
-
-  const initialValues = useMemo(() => getInitialValues(data), [data])
+function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
+  const initialValues = useMemo(() => getInitialValues(courseId), [courseId])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
     async (values, actions) => {
       try {
-        await updateCourse(courseId, values)
+        await createMCQExam(values)
         actions.setStatus(null)
+        navigate(`/courses/${courseId}/mcqexams`)
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -52,7 +53,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
 
       actions.setSubmitting(false)
     },
-    [courseId, updateCourse]
+    [courseId, createMCQExam, navigate]
   )
 
   return (
@@ -60,18 +61,17 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        enableReinitialize
         onSubmit={onSubmit}
       >
         {({ isSubmitting, isValid, status }) => (
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
+                Left={<Header>New MCQ Exam:</Header>}
                 Right={
                   <>
                     <Button as={Link} to="..">
-                      Go Back
+                      Cancel
                     </Button>
                     <Button type="reset">Reset</Button>
                     <Button
@@ -80,7 +80,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
                       loading={isSubmitting}
                       disabled={!isValid || isSubmitting}
                     >
-                      Save
+                      Create
                     </Button>
                   </>
                 }
@@ -88,11 +88,15 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
             </Segment>
 
             <Segment>
-              {status ? <Message color="yellow">{status}</Message> : null}
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
+
+              <FormField type="date" id="date" name="date" label={`Date`} />
 
               <FormField id="name" name="name" label={`Name`} />
 
-              <FormTextArea
+              <FormField
                 id="description"
                 name="description"
                 label={`Description`}
@@ -105,16 +109,13 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   )
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  data: get(courses.byId, courseId)
-})
+const mapStateToProps = null
 
 const mapDispatchToProps = {
-  getData: getCourse,
-  updateCourse
+  createMCQExam
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CourseEdit)
+)(CourseMCQExamCreate)

@@ -10,8 +10,8 @@ function Courses() {
     <Router>
       <List path="/" />
       <Create path="/create" />
-      <View path="/:courseId" />
       <Edit path="/:courseId/edit" />
+      <View path="/:courseId/*" />
     </Router>
   )
 }

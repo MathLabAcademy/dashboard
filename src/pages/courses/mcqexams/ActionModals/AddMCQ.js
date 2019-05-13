@@ -1,34 +1,34 @@
 import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
-import { Formik } from 'formik'
+import FormRichText from 'components/Form/RichText.js'
+import { ErrorMessage, Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Message, Modal } from 'semantic-ui-react'
-import { updatePassword } from 'store/actions/currentUser.js'
+import { Button, Message, Modal, Segment } from 'semantic-ui-react'
+import { createMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    currentPassword: Yup.string().required(`required`),
-    password: Yup.string()
-      .min(8, `must be at least 8 characters long`)
-      .required(`required`),
-    passwordConfirmation: Yup.string()
-      .oneOf([Yup.ref('password'), null], `recheck password`)
+    text: Yup.string().required(`required`),
+    options: Yup.array()
+      .of(Yup.string().required(`required`))
+      .min(4)
+      .max(4)
       .required(`required`)
   })
 }
 
-const initialValues = {
-  currentPassword: '',
-  password: '',
-  passwordConfirmation: ''
-}
+const getInitialValues = mcqExamId => ({
+  mcqExamId,
+  text: '',
+  options: ['', '', '', '']
+})
 
-function ProfilePasswordEditor({ updatePassword }) {
+function AddMCQ({ mcqExamId, createMCQ }) {
   const [open, handle] = useToggle(false)
 
+  const initialValues = useMemo(() => getInitialValues(mcqExamId), [mcqExamId])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -36,7 +36,7 @@ function ProfilePasswordEditor({ updatePassword }) {
       actions.setStatus(null)
 
       try {
-        await updatePassword(values)
+        await createMCQ(values)
         actions.resetForm()
         handle.close()
       } catch (err) {
@@ -54,7 +54,7 @@ function ProfilePasswordEditor({ updatePassword }) {
 
       actions.setSubmitting(false)
     },
-    [handle, updatePassword]
+    [createMCQ, handle]
   )
 
   return (
@@ -63,30 +63,42 @@ function ProfilePasswordEditor({ updatePassword }) {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting, isValid, status }) => (
+      {({ isSubmitting, isValid, values, status }) => (
         <Modal
           trigger={
-            <Button type="button" size="small" onClick={handle.open}>
-              Change Password
+            <Button type="button" color="blue" onClick={handle.open}>
+              Add MCQ
             </Button>
           }
+          as={Form}
           closeIcon
           open={open}
           onClose={handle.close}
-          as={Form}
         >
-          <Header>Change Password</Header>
+          <Modal.Header>Add MCQ</Modal.Header>
 
           <Modal.Content>
             <Message color="yellow" hidden={!status}>
               {status}
             </Message>
 
-            <Input name="currentPassword" label={`Current Password`} />
+            <FormRichText name="text" label={`Question`} />
 
-            <Input name="password" label={`Password`} />
+            <Segment secondary>
+              <ErrorMessage
+                name={`options`}
+                component="p"
+                className="red text"
+              />
 
-            <Input name="passwordConfirmation" label={`Confirm Password`} />
+              {values.options.map((_, index) => (
+                <FormRichText
+                  key={`options.${index}`}
+                  name={`options.${index}`}
+                  label={`Option ${index + 1}`}
+                />
+              ))}
+            </Segment>
           </Modal.Content>
 
           <Modal.Actions>
@@ -109,10 +121,10 @@ function ProfilePasswordEditor({ updatePassword }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  updatePassword
+  createMCQ
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfilePasswordEditor)
+)(AddMCQ)
