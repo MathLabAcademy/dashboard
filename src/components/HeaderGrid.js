@@ -6,10 +6,11 @@ function HeaderGrid({
   Left = null,
   Right = null,
   leftClassName = 'grow wide',
-  rightClassName = 'auto wide'
+  rightClassName = 'auto wide',
+  verticalAlign = 'middle'
 }) {
   return (
-    <Grid columns={2} verticalAlign="middle">
+    <Grid columns={2} verticalAlign={verticalAlign}>
       <Grid.Column className={leftClassName}>{Left}</Grid.Column>
       <Grid.Column className={rightClassName}>{Right}</Grid.Column>
     </Grid>

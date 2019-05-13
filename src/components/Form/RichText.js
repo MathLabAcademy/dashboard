@@ -1,9 +1,8 @@
-import HeaderGrid from 'components/HeaderGrid'
-import SlateEditor, { SlateViewer } from 'components/Slate/index.js'
-import { ErrorMessage, Field, getIn } from 'formik'
-import useToggle from 'hooks/useToggle.js'
-import React, { useRef } from 'react'
-import { Button, FormField, Modal, Segment } from 'semantic-ui-react'
+import HeaderGrid from 'components/HeaderGrid';
+import SlateEditor, { SlateViewer } from 'components/Slate/index.js';
+import { ErrorMessage, Field, getIn } from 'formik';
+import React, { useRef, useState } from 'react';
+import { Button, FormField, Segment } from 'semantic-ui-react';
 
 function RichTextField({
   field: { name, value },
@@ -16,7 +15,7 @@ function RichTextField({
 }) {
   const editor = useRef(null)
 
-  const [open, handle] = useToggle(false)
+  const [editing, setEditing] = useState(false)
 
   return (
     <FormField
@@ -31,39 +30,42 @@ function RichTextField({
           </label>
         }
         Right={
-          <Button
-            type="button"
-            icon="edit"
-            disabled={disabled}
-            onClick={handle.open}
-          />
+          <>
+            {editing && (
+              <Button
+                type="button"
+                icon="close"
+                onClick={() => setEditing(false)}
+              />
+            )}
+
+            <Button
+              type="button"
+              icon={editing ? 'check' : 'edit'}
+              disabled={disabled}
+              onClick={() => {
+                if (editing) {
+                  const newValue = editor.current.value.document.text.trim()
+                    ? JSON.stringify(editor.current.value.toJSON())
+                    : ''
+                  form.setFieldValue(name, newValue)
+                  setEditing(false)
+                } else {
+                  setEditing(true)
+                }
+              }}
+            />
+          </>
         }
       />
 
       <Segment>
-        <SlateViewer id={id} initialValue={value} />
-      </Segment>
-
-      <Modal open={open} onClose={handle.close} closeOnEscape={false}>
-        <Modal.Content>
+        {editing ? (
           <SlateEditor ref={editor} initialValue={value} />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            type="button"
-            color="blue"
-            onClick={() => {
-              form.setFieldValue(
-                name,
-                JSON.stringify(editor.current.value.toJSON())
-              )
-              handle.close()
-            }}
-          >
-            Done
-          </Button>
-        </Modal.Actions>
-      </Modal>
+        ) : (
+          <SlateViewer id={id} initialValue={value} />
+        )}
+      </Segment>
 
       <ErrorMessage name={name} component="p" className="red text" />
     </FormField>

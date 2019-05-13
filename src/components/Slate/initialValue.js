@@ -9,7 +9,7 @@ export default JSON.stringify({
         nodes: [
           {
             object: 'text',
-            text: 'Start Editing...'
+            text: ''
           }
         ]
       }

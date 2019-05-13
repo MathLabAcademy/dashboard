@@ -143,8 +143,8 @@ function BlockToggler({ editor, type, content, icon, popup }) {
 
 export function SlateEditorToolbar({ editor }) {
   return (
-    <Menu icon>
-      {editor && (
+    <Menu icon secondary size="small">
+      {editor ? (
         <>
           <MarkToggler editor={editor} type="bold" icon="bold" />
           <MarkToggler editor={editor} type="italic" icon="italic" />
@@ -173,6 +173,14 @@ export function SlateEditorToolbar({ editor }) {
               popup={`Block`}
             />
           </Menu.Menu>
+        </>
+      ) : (
+        <>
+          <Menu.Item icon>
+            <span>
+              <Icon name="arrow down" /> Write Here...
+            </span>
+          </Menu.Item>
         </>
       )}
     </Menu>

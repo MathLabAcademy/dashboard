@@ -45,11 +45,12 @@ async function api(endpoint, options = {}) {
     throw new Error(`Unsupported Content-Type: ${contentType}`)
   }
 
-  const { data, error, ...meta } = await res.json()
+  const { data, error, params, ...meta } = await res.json()
 
   Response.meta = Object.assign(Response.meta, meta)
   Response.data = data
   Response.error = error
+  Response.params = params
 
   return Response
 }
