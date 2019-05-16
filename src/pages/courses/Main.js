@@ -1,4 +1,5 @@
 import { Router } from '@reach/router'
+import Permit from 'components/Permit.js'
 import React from 'react'
 import Create from './Create.js'
 import Edit from './Edit.js'
@@ -7,12 +8,14 @@ import View from './View.js'
 
 function Courses() {
   return (
-    <Router>
-      <List path="/" />
-      <Create path="/create" />
-      <Edit path="/:courseId/edit" />
-      <View path="/:courseId/*" />
-    </Router>
+    <Permit teacher>
+      <Router>
+        <List path="/" />
+        <Create path="/create" />
+        <Edit path="/:courseId/edit" />
+        <View path="/:courseId/*" />
+      </Router>
+    </Permit>
   )
 }
 

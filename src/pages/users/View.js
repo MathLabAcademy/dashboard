@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { Header, Label, Segment } from 'semantic-ui-react'
 import { getUser } from 'store/actions/users.js'
 import getPersonName from 'utils/get-person-name.js'
+import TransactionInfo from 'components/User/TransactionInfo'
 
 const labeledRoles = ['admin', 'teacher']
 
@@ -58,6 +59,8 @@ function UserView({ userId, data, getData }) {
           isGuardian
         />
       )}
+
+      <TransactionInfo userData={data} title={`Transaction Info`} />
     </>
   )
 }

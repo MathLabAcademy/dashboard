@@ -1,7 +1,6 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Switcher from 'components/Pagination/Switcher.js'
-import Permit from 'components/Permit.js'
 import usePagination from 'hooks/usePagination.js'
 import { get } from 'lodash-es'
 import React from 'react'
@@ -15,7 +14,7 @@ function CourseList({ pagination, fetchPage }) {
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage)
 
   return (
-    <Permit admin teacher>
+    <>
       <Segment>
         <HeaderGrid
           Left={<Header>Courses</Header>}
@@ -36,7 +35,7 @@ function CourseList({ pagination, fetchPage }) {
         totalPages={pagination.totalPages}
         onPageChange={handlePageChange}
       />
-    </Permit>
+    </>
   )
 }
 

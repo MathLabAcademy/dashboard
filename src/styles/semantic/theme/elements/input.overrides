@@ -5,3 +5,7 @@
 .ui.disabled.input.static {
   opacity: 1;
 }
+
+.disabled.field.static .disabled.input {
+  opacity: 1;
+}

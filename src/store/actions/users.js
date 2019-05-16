@@ -115,3 +115,18 @@ export const updateGuardianInfo = (
 
   return data
 }
+
+export const addCredit = (userId, transactionData) => async dispatch => {
+  const url = `/users/${userId}/action/add-credit`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: transactionData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}

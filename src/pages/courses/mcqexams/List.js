@@ -1,6 +1,5 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
 import { get } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -26,7 +25,7 @@ function CourseMCQExamList({
   }, [courseId, mcqExams.allIds, mcqExams.byId])
 
   return (
-    <Permit admin teacher>
+    <>
       <Segment>
         <HeaderGrid
           Left={<Header>MCQ Exams</Header>}
@@ -41,7 +40,7 @@ function CourseMCQExamList({
           <ListItem key={id} id={id} linkToBase={linkToBase} />
         ))}
       </Segment>
-    </Permit>
+    </>
   )
 }
 

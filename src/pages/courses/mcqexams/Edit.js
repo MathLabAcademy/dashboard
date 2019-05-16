@@ -2,7 +2,6 @@ import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormField from 'components/Form/Input.js'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
@@ -66,58 +65,54 @@ function CourseMCQExamEdit({
   )
 
   return (
-    <Permit teacher>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        enableReinitialize
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting, isValid, status }) => (
-          <Form>
-            <Segment>
-              <HeaderGrid
-                Left={
-                  <Header as="h2">Edit MCQ Exam #{get(data, 'id')}:</Header>
-                }
-                Right={
-                  <>
-                    <Button as={Link} to="..">
-                      Go Back
-                    </Button>
-                    <Button type="reset">Reset</Button>
-                    <Button
-                      positive
-                      type="submit"
-                      loading={isSubmitting}
-                      disabled={!isValid || isSubmitting}
-                    >
-                      Save
-                    </Button>
-                  </>
-                }
-              />
-            </Segment>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      enableReinitialize
+      onSubmit={onSubmit}
+    >
+      {({ isSubmitting, isValid, status }) => (
+        <Form>
+          <Segment>
+            <HeaderGrid
+              Left={<Header as="h2">Edit MCQ Exam #{get(data, 'id')}:</Header>}
+              Right={
+                <>
+                  <Button as={Link} to="..">
+                    Go Back
+                  </Button>
+                  <Button type="reset">Reset</Button>
+                  <Button
+                    positive
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!isValid || isSubmitting}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
+            />
+          </Segment>
 
-            <Segment>
-              <Message color="yellow" hidden={!status}>
-                {status}
-              </Message>
+          <Segment>
+            <Message color="yellow" hidden={!status}>
+              {status}
+            </Message>
 
-              <FormField type="date" id="date" name="date" label={`Date`} />
+            <FormField type="date" id="date" name="date" label={`Date`} />
 
-              <FormField id="name" name="name" label={`Name`} />
+            <FormField id="name" name="name" label={`Name`} />
 
-              <FormField
-                id="description"
-                name="description"
-                label={`Description`}
-              />
-            </Segment>
-          </Form>
-        )}
-      </Formik>
-    </Permit>
+            <FormField
+              id="description"
+              name="description"
+              label={`Description`}
+            />
+          </Segment>
+        </Form>
+      )}
+    </Formik>
   )
 }
 

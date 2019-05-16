@@ -1,12 +1,11 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getCourse } from 'store/actions/courses.js'
-import Permit from 'components/Permit'
-
 import CourseMCQExams from './mcqexams/Main.js'
 
 function CourseView({ courseId, data, getData }) {
@@ -21,7 +20,11 @@ function CourseView({ courseId, data, getData }) {
           Left={
             <Header>
               {get(data, 'name')}
-              <Header.Subheader>{get(data, 'description')}</Header.Subheader>
+              <Header.Subheader>
+                {get(data, 'description')}
+                <br />
+                Price: {get(data, 'price') / 100} BDT
+              </Header.Subheader>
             </Header>
           }
           Right={

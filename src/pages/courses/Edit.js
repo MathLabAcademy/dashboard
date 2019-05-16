@@ -1,9 +1,8 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
-import FormField from 'components/Form/Input.js'
+import FormInput from 'components/Form/Input.js'
 import FormTextArea from 'components/Form/TextArea.js'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -14,13 +13,17 @@ import * as Yup from 'yup'
 
 const getInitialValues = data => ({
   name: get(data, 'name') || '',
-  description: get(data, 'description') || ''
+  description: get(data, 'description') || '',
+  price: (get(data, 'price') || 0) / 100
 })
 
 const getValidationSchema = () => {
   return Yup.object({
     name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    description: Yup.string().required(`required`),
+    price: Yup.number()
+      .integer()
+      .required(`required`)
   })
 }
 
@@ -33,9 +36,12 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async (values, actions) => {
+    async ({ price, ...values }, actions) => {
       try {
-        await updateCourse(courseId, values)
+        await updateCourse(courseId, {
+          price: price * 100,
+          ...values
+        })
         actions.setStatus(null)
       } catch (err) {
         if (err.errors) {
@@ -56,52 +62,58 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   )
 
   return (
-    <Permit teacher>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        enableReinitialize
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting, isValid, status }) => (
-          <Form>
-            <Segment>
-              <HeaderGrid
-                Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
-                Right={
-                  <>
-                    <Button as={Link} to="..">
-                      Go Back
-                    </Button>
-                    <Button type="reset">Reset</Button>
-                    <Button
-                      positive
-                      type="submit"
-                      loading={isSubmitting}
-                      disabled={!isValid || isSubmitting}
-                    >
-                      Save
-                    </Button>
-                  </>
-                }
-              />
-            </Segment>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      enableReinitialize
+      onSubmit={onSubmit}
+    >
+      {({ isSubmitting, isValid, status }) => (
+        <Form>
+          <Segment>
+            <HeaderGrid
+              Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
+              Right={
+                <>
+                  <Button as={Link} to="..">
+                    Go Back
+                  </Button>
+                  <Button type="reset">Reset</Button>
+                  <Button
+                    positive
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!isValid || isSubmitting}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
+            />
+          </Segment>
 
-            <Segment>
-              {status ? <Message color="yellow">{status}</Message> : null}
+          <Segment>
+            {status ? <Message color="yellow">{status}</Message> : null}
 
-              <FormField id="name" name="name" label={`Name`} />
+            <FormInput id="name" name="name" label={`Name`} />
 
-              <FormTextArea
-                id="description"
-                name="description"
-                label={`Description`}
-              />
-            </Segment>
-          </Form>
-        )}
-      </Formik>
-    </Permit>
+            <FormTextArea
+              id="description"
+              name="description"
+              label={`Description`}
+            />
+
+            <FormInput
+              type="number"
+              step="100"
+              id="price"
+              name="price"
+              label={`Price (BDT)`}
+            />
+          </Segment>
+        </Form>
+      )}
+    </Formik>
   )
 }
 

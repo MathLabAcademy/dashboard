@@ -1,6 +1,7 @@
 import Gravatar from 'components/Gravatar.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import PersonInfo from 'components/User/PersonInfo.js'
+import TransactionInfo from 'components/User/TransactionInfo.js'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
@@ -10,7 +11,7 @@ import ProfilePasswordEditor from './Editors/PasswordModal.js'
 import './Main.css'
 
 function View({ data }) {
-  return data ? (
+  return (
     <>
       <Segment>
         <HeaderGrid
@@ -40,7 +41,7 @@ function View({ data }) {
         title={`Personal Information`}
       />
 
-      {get(data, 'roleId' === 'student') && (
+      {/^student/.test(get(data, 'roleId')) && (
         <PersonInfo
           userId={get(data, 'id')}
           data={get(data, 'Person.Guardian')}
@@ -48,8 +49,10 @@ function View({ data }) {
           isGuardian
         />
       )}
+
+      <TransactionInfo userData={data} title={`Transaction Information`} />
     </>
-  ) : null
+  )
 }
 
 const mapStateToProps = ({ user }) => ({

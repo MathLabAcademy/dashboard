@@ -1,9 +1,8 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
-import FormField from 'components/Form/Input.js'
+import FormInput from 'components/Form/Input.js'
 import FormTextArea from 'components/Form/TextArea.js'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
 import { Formik } from 'formik'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -13,13 +12,17 @@ import * as Yup from 'yup'
 
 const getInitialValues = () => ({
   name: '',
-  description: ''
+  description: '',
+  price: 0
 })
 
 const getValidationSchema = () => {
   return Yup.object({
     name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    description: Yup.string().required(`required`),
+    price: Yup.number()
+      .integer()
+      .required(`required`)
   })
 }
 
@@ -28,9 +31,12 @@ function CourseCreate({ createCourse, navigate }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async (values, actions) => {
+    async ({ price, ...values }, actions) => {
       try {
-        await createCourse(values)
+        await createCourse({
+          price: price * 100,
+          ...values
+        })
         actions.setStatus(null)
         navigate('/courses')
       } catch (err) {
@@ -52,51 +58,57 @@ function CourseCreate({ createCourse, navigate }) {
   )
 
   return (
-    <Permit teacher>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting, isValid, status }) => (
-          <Form>
-            <Segment>
-              <HeaderGrid
-                Left={<Header as="h2">New Course:</Header>}
-                Right={
-                  <>
-                    <Button as={Link} to="..">
-                      Cancel
-                    </Button>
-                    <Button type="reset">Reset</Button>
-                    <Button
-                      positive
-                      type="submit"
-                      loading={isSubmitting}
-                      disabled={!isValid || isSubmitting}
-                    >
-                      Create
-                    </Button>
-                  </>
-                }
-              />
-            </Segment>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      {({ isSubmitting, isValid, status }) => (
+        <Form>
+          <Segment>
+            <HeaderGrid
+              Left={<Header as="h2">New Course:</Header>}
+              Right={
+                <>
+                  <Button as={Link} to="..">
+                    Cancel
+                  </Button>
+                  <Button type="reset">Reset</Button>
+                  <Button
+                    positive
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!isValid || isSubmitting}
+                  >
+                    Create
+                  </Button>
+                </>
+              }
+            />
+          </Segment>
 
-            <Segment>
-              {status ? <Message color="yellow">{status}</Message> : null}
+          <Segment>
+            {status ? <Message color="yellow">{status}</Message> : null}
 
-              <FormField id="name" name="name" label={`Name`} />
+            <FormInput id="name" name="name" label={`Name`} />
 
-              <FormTextArea
-                id="description"
-                name="description"
-                label={`Description`}
-              />
-            </Segment>
-          </Form>
-        )}
-      </Formik>
-    </Permit>
+            <FormTextArea
+              id="description"
+              name="description"
+              label={`Description`}
+            />
+
+            <FormInput
+              type="number"
+              step="100"
+              id="price"
+              name="price"
+              label={`Price (BDT)`}
+            />
+          </Segment>
+        </Form>
+      )}
+    </Formik>
   )
 }
 
