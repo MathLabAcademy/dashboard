@@ -2,32 +2,37 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
 
-function TransactionInfo({ userData, title }) {
+function TransactionInfo({ user, title }) {
   const creditTaka = useMemo(() => {
-    const credit = get(userData, 'credit') || 0
+    const credit = get(user, 'credit') || 0
     const inTaka = Number(credit / 100).toFixed(2)
-    return `${inTaka} ৳`
-  }, [userData])
+    return `${inTaka} BDT`
+  }, [user])
 
-  const isStudent = useMemo(() => get(userData, 'roleId') === 'student', [
-    userData
-  ])
+  const isStudent = useMemo(() => get(user, 'roleId') === 'student', [user])
 
   return (
     <Segment className="mathlab user-info">
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
-          isStudent && (
-            <Permit teacher>
-              <Button as={Link} to={'add-credit'}>
-                Add Credit
+          <>
+            {isStudent && (
+              <Permit teacher>
+                <Button as={Link} to={'add-credit'}>
+                  Add Credit
+                </Button>
+              </Permit>
+            )}
+            <Permit teacher userId={get(user, 'id')}>
+              <Button as={Link} to={'transactions'}>
+                Transactions
               </Button>
             </Permit>
-          )
+          </>
         }
       />
 
@@ -43,4 +48,4 @@ function TransactionInfo({ userData, title }) {
   )
 }
 
-export default TransactionInfo
+export default memo(TransactionInfo)

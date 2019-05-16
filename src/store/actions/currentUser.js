@@ -1,9 +1,8 @@
 import api from 'utils/api.js'
-
 import {
   CURRENT_USER_LOGIN_REQUEST,
-  CURRENT_USER_UPDATE,
-  CURRENT_USER_REMOVE
+  CURRENT_USER_REMOVE,
+  CURRENT_USER_UPDATE
 } from './actionTypes'
 
 export const logIn = loginData => async dispatch => {

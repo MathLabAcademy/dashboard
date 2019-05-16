@@ -1,20 +1,18 @@
 import { get } from 'lodash-es'
 import { connect } from 'react-redux'
 
-function Permit({ children, userId, user, ...roleIds }) {
-  if (userId === get(user, 'id')) return children
-
+function Permit({ children, currentUser, userId, ...roleIds }) {
   const allowedRoleIds = Object.keys(roleIds)
 
-  if (!allowedRoleIds.length) return children
+  if (allowedRoleIds.includes(get(currentUser, 'roleId'))) return children
 
-  const hasPermit = allowedRoleIds.includes(get(user, 'roleId'))
+  if (!userId || +userId === get(currentUser, 'id')) return children
 
-  return hasPermit ? children : null
+  return null
 }
 
 const mapStateToProps = ({ user }) => ({
-  user: user.data
+  currentUser: user.data
 })
 
 export default connect(

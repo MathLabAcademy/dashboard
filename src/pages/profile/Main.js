@@ -1,67 +1,27 @@
-import Gravatar from 'components/Gravatar.js'
-import HeaderGrid from 'components/HeaderGrid.js'
-import PersonInfo from 'components/User/PersonInfo.js'
-import TransactionInfo from 'components/User/TransactionInfo.js'
+import User from 'components/User/Main.js'
 import { get } from 'lodash-es'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Header, Segment } from 'semantic-ui-react'
-import getPersonName from 'utils/get-person-name.js'
-import ProfilePasswordEditor from './Editors/PasswordModal.js'
-import './Main.css'
+import { getUser } from 'store/actions/users.js'
 
-function View({ data }) {
-  return (
-    <>
-      <Segment>
-        <HeaderGrid
-          leftClassName="auto wide"
-          Left={
-            <Gravatar
-              email={get(data, 'Person.email')}
-              params={{ d: 'robohash' }}
-            />
-          }
-          rightClassName="grow wide"
-          Right={
-            <>
-              <Header>
-                {getPersonName(get(data, 'Person'))}
-                <Header.Subheader>{get(data, 'email')}</Header.Subheader>
-              </Header>
-              <ProfilePasswordEditor />
-            </>
-          }
-        />
-      </Segment>
+function Profile({ currentUserId, user, getUser }) {
+  useEffect(() => {
+    if (!user) getUser(currentUserId)
+  }, [currentUserId, getUser, user])
 
-      <PersonInfo
-        userId={get(data, 'id')}
-        data={get(data, 'Person')}
-        title={`Personal Information`}
-      />
-
-      {/^student/.test(get(data, 'roleId')) && (
-        <PersonInfo
-          userId={get(data, 'id')}
-          data={get(data, 'Person.Guardian')}
-          title={`Guardian Information`}
-          isGuardian
-        />
-      )}
-
-      <TransactionInfo userData={data} title={`Transaction Information`} />
-    </>
-  )
+  return <User userId={currentUserId} />
 }
 
-const mapStateToProps = ({ user }) => ({
-  data: get(user, 'data')
+const mapStateToProps = ({ user, users }) => ({
+  currentUserId: get(user.data, 'id'),
+  user: get(users.byId, get(user.data, 'id'))
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getUser
+}
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(View)
+)(Profile)

@@ -26,9 +26,20 @@ const getValidationSchema = () => {
   })
 }
 
-function ProfilePersonalInfoEditor({
+const getInitialValues = person => ({
+  firstName: get(person, 'firstName') || '',
+  middleName: get(person, 'middleName') || '',
+  lastName: get(person, 'lastName') || '',
+  dob: get(person, 'dob')
+    ? DateTime.fromISO(get(person, 'dob')).toISODate()
+    : '',
+  email: get(person, 'email') || '',
+  phone: get(person, 'phone') || ''
+})
+
+function PersonInfoEditor({
   userId,
-  data,
+  person,
   title,
   isCurrent,
   isGuardian = false,
@@ -37,19 +48,7 @@ function ProfilePersonalInfoEditor({
   updateGuardianInfo
 }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
-
-  const initialValues = useMemo(() => {
-    return {
-      firstName: get(data, 'firstName') || '',
-      middleName: get(data, 'middleName') || '',
-      lastName: get(data, 'lastName') || '',
-      dob: get(data, 'dob')
-        ? DateTime.fromISO(get(data, 'dob')).toISODate()
-        : '',
-      email: get(data, 'email') || '',
-      phone: get(data, 'phone') || ''
-    }
-  }, [data])
+  const initialValues = useMemo(() => getInitialValues(person), [person])
 
   return (
     <Formik
@@ -184,4 +183,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProfilePersonalInfoEditor)
+)(PersonInfoEditor)
