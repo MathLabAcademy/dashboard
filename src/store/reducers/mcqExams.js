@@ -3,14 +3,16 @@ import {
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
   MCQEXAM_REMOVE,
-  MCQEXAM_UPDATE
+  MCQEXAM_UPDATE,
+  MCQEXAMTRACKER_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
 
 const initialState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
+  trackersById: emptyObject
 }
 
 const mcqExamsReducer = (state = initialState, { type, data }) => {
@@ -47,6 +49,19 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
             ...data
+          }
+        }
+      }
+    case MCQEXAMTRACKER_UPDATE:
+      return {
+        ...state,
+        trackersById: {
+          ...state.trackersById,
+          [data.mcqExamId]: {
+            ...get(state.trackersById, data.mcqExamId, emptyObject),
+            [data.userId]: {
+              ...data
+            }
           }
         }
       }

@@ -7,7 +7,8 @@ import {
   USER_PAGE_REQUEST,
   USER_BULK_ADD,
   USER_PAGE_ADD,
-  USER_PAGE_REMOVE
+  USER_PAGE_REMOVE,
+  ENROLLMENT_BULK_ADD
 } from './actionTypes.js'
 
 import {
@@ -116,6 +117,18 @@ export const updateGuardianInfo = (
   return data
 }
 
+export const readCredit = userId => async dispatch => {
+  const url = `/users/${userId}/credit`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
 export const addCredit = (userId, transactionData) => async dispatch => {
   const url = `/users/${userId}/action/add-credit`
 
@@ -127,6 +140,18 @@ export const addCredit = (userId, transactionData) => async dispatch => {
   if (error) throw error
 
   dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
+export const getAllEnrollments = userId => async dispatch => {
+  const url = `/users/${userId}/enrollments`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: ENROLLMENT_BULK_ADD, data })
 
   return data
 }

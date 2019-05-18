@@ -1,10 +1,12 @@
-import { get, keyBy, pickBy, mapValues } from 'lodash-es'
+import { get, groupBy, keyBy, mapValues, pickBy } from 'lodash-es'
 import {
+  MCQANSWER_BULK_ADD,
+  MCQSUBMISSION_BULK_ADD,
+  MCQSUBMISSION_UPDATE,
   MCQ_ADD,
   MCQ_BULK_ADD,
   MCQ_REMOVE,
-  MCQ_UPDATE,
-  MCQANSWER_BULK_ADD
+  MCQ_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -12,7 +14,8 @@ import * as ids from './helpers/ids-reducers.js'
 const initialState = {
   byId: emptyObject,
   allIds: emptyArray,
-  answerById: emptyObject
+  answerById: emptyObject,
+  submissionsById: emptyObject
 }
 
 const mcqExamsReducer = (state = initialState, { type, data }) => {
@@ -58,6 +61,30 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
         answerById: {
           ...state.answerById,
           ...mapValues(keyBy(data.items, 'mcqId'), 'mcqOptionId')
+        }
+      }
+    case MCQSUBMISSION_UPDATE:
+      return {
+        ...state,
+        submissionsById: {
+          ...state.submissionsById,
+          [data.mcqId]: {
+            ...get(state.submissionsById, data.mcqId, emptyObject),
+            [data.userId]: {
+              ...data
+            }
+          }
+        }
+      }
+    case MCQSUBMISSION_BULK_ADD:
+      return {
+        ...state,
+        submissionsById: {
+          ...state.submissionsById,
+          ...mapValues(groupBy(data.items, 'mcqId'), (items, mcqId) => ({
+            ...get(state.submissionsById, mcqId, emptyObject),
+            ...mapValues(groupBy(items, 'userId'), items => items[0])
+          }))
         }
       }
     default:

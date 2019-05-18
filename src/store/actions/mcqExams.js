@@ -1,6 +1,12 @@
 import api from 'utils/api.js'
 import { defaultOptsFetchPage } from 'utils/defaults.js'
-import { MCQEXAM_ADD, MCQEXAM_BULK_ADD, MCQEXAM_UPDATE } from './actionTypes.js'
+import {
+  MCQEXAMTRACKER_UPDATE,
+  MCQEXAM_ADD,
+  MCQEXAM_BULK_ADD,
+  MCQEXAM_UPDATE,
+  MCQSUBMISSION_BULK_ADD
+} from './actionTypes.js'
 
 export const createMCQExam = mcqExamData => async dispatch => {
   const url = `/mcqexams`
@@ -56,6 +62,58 @@ export const getAllMCQExamsForCourse = (
   if (error) throw error
 
   dispatch({ type: MCQEXAM_BULK_ADD, data })
+
+  return data
+}
+
+export const readTracker = mcqExamId => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/tracker`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMTRACKER_UPDATE, data })
+
+  return data
+}
+
+export const startTracker = mcqExamId => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/tracker`
+
+  const { data, error } = await api(url, {
+    method: 'POST'
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMTRACKER_UPDATE, data })
+
+  return data
+}
+
+export const pingTracker = mcqExamId => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/tracker/ping`
+
+  const { data, error } = await api(url, {
+    method: 'POST'
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMTRACKER_UPDATE, data })
+
+  return data
+}
+
+export const getAllSubmissions = mcqExamId => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/mcqsubmissions`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQSUBMISSION_BULK_ADD, data })
 
   return data
 }

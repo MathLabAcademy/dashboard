@@ -9,6 +9,7 @@ import { Button, Header, Segment } from 'semantic-ui-react'
 import { fetchCoursePage } from 'store/actions/courses.js'
 import { emptyArray } from 'utils/defaults.js'
 import ListItem from './ListItem.js'
+import Permit from 'components/Permit.js'
 
 function CourseList({ pagination, fetchPage }) {
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage)
@@ -19,9 +20,11 @@ function CourseList({ pagination, fetchPage }) {
         <HeaderGrid
           Left={<Header>Courses</Header>}
           Right={
-            <Button as={Link} to={`create`} color="blue">
-              Create
-            </Button>
+            <Permit teacher>
+              <Button as={Link} to={`create`} color="blue">
+                Create
+              </Button>
+            </Permit>
           }
         />
       </Segment>

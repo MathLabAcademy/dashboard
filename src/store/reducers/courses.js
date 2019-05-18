@@ -1,14 +1,23 @@
-import { get, keyBy, pickBy } from 'lodash-es'
+import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
 import {
   COURSE_ADD,
   COURSE_BULK_ADD,
   COURSE_REMOVE,
-  COURSE_UPDATE
+  COURSE_UPDATE,
+  ENROLLMENT_ADD,
+  ENROLLMENT_BULK_ADD,
+  MCQEXAM_BULK_ADD,
+  MCQEXAM_ADD
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
 
-const initialState = { byId: emptyObject, allIds: emptyArray }
+const initialState = {
+  byId: emptyObject,
+  allIds: emptyArray,
+  enrollmentsById: emptyObject,
+  mcqExamsById: emptyObject
+}
 
 const coursesReducer = (state = initialState, { type, data }) => {
   switch (type) {
@@ -45,6 +54,51 @@ const coursesReducer = (state = initialState, { type, data }) => {
             ...get(state.byId, data.id, emptyObject),
             ...data
           }
+        }
+      }
+    case ENROLLMENT_ADD:
+      return {
+        ...state,
+        enrollmentsById: {
+          ...state.enrollmentsById,
+          [data.courseId]: union(
+            get(state.enrollmentsById, data.courseId, emptyArray),
+            [data.userId]
+          )
+        }
+      }
+    case ENROLLMENT_BULK_ADD:
+      return {
+        ...state,
+        enrollmentsById: {
+          ...state.enrollmentsById,
+          ...mapValues(groupBy(data.items, 'courseId'), (items, courseId) =>
+            union(
+              get(state.enrollmentsById, courseId, emptyArray),
+              map(items, 'userId')
+            )
+          )
+        }
+      }
+    case MCQEXAM_ADD:
+      return {
+        ...state,
+        mcqExamsById: {
+          ...state.mcqExamsById,
+          [data.courseId]: union(
+            get(state.mcqExamsById, data.courseId, emptyArray),
+            [data.id]
+          )
+        }
+      }
+    case MCQEXAM_BULK_ADD:
+      return {
+        ...state,
+        mcqExamsById: {
+          ...state.mcqExamsById,
+          ...mapValues(groupBy(data.items, 'courseId'), items =>
+            map(items, 'id')
+          )
         }
       }
     default:

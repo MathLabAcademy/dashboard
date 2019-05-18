@@ -1,5 +1,6 @@
-import Form from 'components/Form/Form.js'
+import { Link } from '@reach/router'
 import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField.js'
+import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import { SlateViewer } from 'components/Slate/index.js'
 import { Formik } from 'formik'
@@ -148,6 +149,9 @@ function CourseMCQExamSetAnswers({
             Left={<Header>Set MCQ Answers</Header>}
             Right={
               <>
+                <Button as={Link} to={`..`}>
+                  Go Back
+                </Button>
                 <Button type="reset">Reset</Button>
                 <Button
                   positive

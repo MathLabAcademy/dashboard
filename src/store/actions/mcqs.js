@@ -2,6 +2,7 @@ import api from 'utils/api.js'
 import { defaultOptsFetchPage } from 'utils/defaults.js'
 import {
   MCQANSWER_BULK_ADD,
+  MCQSUBMISSION_UPDATE,
   MCQ_ADD,
   MCQ_BULK_ADD,
   MCQ_UPDATE
@@ -92,6 +93,21 @@ export const getAllMCQAnswersForExam = (
   if (error) throw error
 
   dispatch({ type: MCQANSWER_BULK_ADD, data })
+
+  return data
+}
+
+export const submit = (mcqId, submissionData) => async dispatch => {
+  const url = `/mcqs/${mcqId}/action/submit`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: submissionData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQSUBMISSION_UPDATE, data })
 
   return data
 }

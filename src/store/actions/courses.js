@@ -10,7 +10,9 @@ import {
   COURSE_PAGE_REMOVE,
   COURSE_PAGE_REQUEST,
   COURSE_PAGINATION_PURGE,
-  COURSE_UPDATE
+  COURSE_UPDATE,
+  ENROLLMENT_BULK_ADD,
+  ENROLLMENT_ADD
 } from './actionTypes.js'
 
 export const createCourse = courseData => async dispatch => {
@@ -96,4 +98,30 @@ export const fetchAllCoursePage = (
   }
 
   return true
+}
+
+export const enroll = courseId => async dispatch => {
+  const url = `/courses/${courseId}/action/enroll`
+
+  const { data, error } = await api(url, {
+    method: 'POST'
+  })
+
+  if (error) throw error
+
+  dispatch({ type: ENROLLMENT_ADD, data })
+
+  return data
+}
+
+export const getAllEnrollments = courseId => async dispatch => {
+  const url = `/courses/${courseId}/enrollments`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: ENROLLMENT_BULK_ADD, data })
+
+  return data
 }

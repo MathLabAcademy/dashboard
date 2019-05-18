@@ -19,7 +19,7 @@ const items = [
   {
     title: `Courses`,
     link: '/courses',
-    permits: ['teacher']
+    permits: ['teacher', 'student']
   }
 ]
 

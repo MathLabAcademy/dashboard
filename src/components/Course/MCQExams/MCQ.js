@@ -1,4 +1,5 @@
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit.js'
 import { SlateViewer } from 'components/Slate/index.js'
 import { sortBy } from 'lodash-es'
 import React, { useMemo } from 'react'
@@ -21,7 +22,11 @@ function MCQ({ mcq, index }) {
             <SlateViewer initialValue={mcq.text} />
           </Header>
         }
-        Right={<EditMCQ index={index} mcq={mcq} options={options} />}
+        Right={
+          <Permit teacher>
+            <EditMCQ index={index} mcq={mcq} options={options} />
+          </Permit>
+        }
       />
 
       <Segment basic>

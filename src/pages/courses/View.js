@@ -1,53 +1,28 @@
-import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit'
+import Course from 'components/Course/Main.js'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
-import { getCourse } from 'store/actions/courses.js'
-import CourseMCQExams from './mcqexams/Main.js'
+import { getCourse, getAllEnrollments } from 'store/actions/courses.js'
 
-function CourseView({ courseId, data, getData }) {
+function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
   useEffect(() => {
-    if (!data) getData(courseId)
-  }, [courseId, data, getData])
+    if (!course) getCourse(courseId)
+  }, [courseId, course, getCourse])
 
-  return (
-    <>
-      <Segment loading={!data}>
-        <HeaderGrid
-          Left={
-            <Header>
-              {get(data, 'name')}
-              <Header.Subheader>
-                {get(data, 'description')}
-                <br />
-                Price: {get(data, 'price') / 100} BDT
-              </Header.Subheader>
-            </Header>
-          }
-          Right={
-            <Permit teacher>
-              <Button as={Link} to={`edit`}>
-                Edit
-              </Button>
-            </Permit>
-          }
-        />
-      </Segment>
+  useEffect(() => {
+    getAllEnrollments(courseId)
+  }, [courseId, getAllEnrollments])
 
-      <CourseMCQExams courseId={courseId} />
-    </>
-  )
+  return <Course courseId={courseId} />
 }
 
 const mapStateToProps = ({ courses }, { courseId }) => ({
-  data: get(courses.byId, courseId)
+  course: get(courses.byId, courseId)
 })
 
 const mapDispatchToProps = {
-  getData: getCourse
+  getCourse,
+  getAllEnrollments
 }
 
 export default connect(
