@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { Grid, Header } from 'semantic-ui-react'
 import Form from './Form.js'
 
-function LogIn({ userStatus, logIn }) {
+function LogIn({ userStatus }) {
   return userStatus.authed ? (
     <Redirect to="/" noThrow />
   ) : (

@@ -26,7 +26,7 @@ function UserInfo({ user }) {
         />
       )}
 
-      <TransactionInfo user={user} title={`Transaction Info`} />
+      <TransactionInfo userId={get(user, 'id')} title={`Transaction Info`} />
     </>
   )
 }

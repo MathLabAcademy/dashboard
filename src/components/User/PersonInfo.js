@@ -5,7 +5,6 @@ import { DateTime } from 'luxon'
 import React, { memo, useState } from 'react'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
 import getPersonName from 'utils/get-person-name.js'
-import './PersonInfo.css'
 import Editor from './PersonInfoEditor.js'
 
 function PersonInfo({ userId, person, title, isGuardian }) {
@@ -22,7 +21,7 @@ function PersonInfo({ userId, person, title, isGuardian }) {
       />
     </Permit>
   ) : (
-    <Segment className="mathlab person-info">
+    <Segment>
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
@@ -31,7 +30,7 @@ function PersonInfo({ userId, person, title, isGuardian }) {
           </Permit>
         }
       />
-      <Table basic="very" compact>
+      <Table basic="very" compact className="horizontal-info">
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell collapsing content={`Name`} />

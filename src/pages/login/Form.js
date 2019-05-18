@@ -1,15 +1,11 @@
-import React, { useMemo } from 'react'
-
-import { connect } from 'react-redux'
-import { logIn } from 'store/actions/currentUser.js'
-
-import { Formik } from 'formik'
-import * as Yup from 'yup'
-
-import { Button, Message, Segment } from 'semantic-ui-react'
-
 import Form from 'components/Form/Form.js'
 import Input from 'components/Form/Input.js'
+import { Formik } from 'formik'
+import React, { useMemo } from 'react'
+import { connect } from 'react-redux'
+import { Button, Message, Segment } from 'semantic-ui-react'
+import { logIn } from 'store/actions/currentUser.js'
+import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object().shape({
@@ -18,12 +14,14 @@ const getValidationSchema = () => {
   })
 }
 
+const initialValues = { email: '', password: '' }
+
 function LogInForm({ logIn }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   return (
     <Formik
-      initialValues={{ email: '', password: '' }}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={async (values, actions) => {
         actions.setStatus(null)

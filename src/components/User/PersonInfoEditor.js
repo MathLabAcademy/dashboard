@@ -79,7 +79,7 @@ function PersonInfoEditor({
     >
       {({ isSubmitting, isValid, status }) => (
         <Form>
-          <Segment className="mathlab user-info">
+          <Segment>
             <HeaderGrid
               Left={<Header content={title} />}
               Right={
@@ -100,7 +100,7 @@ function PersonInfoEditor({
               }
             />
 
-            <Table basic="very" compact>
+            <Table basic="very" compact className="horizontal-info">
               <Table.Body>
                 {status && (
                   <Table.Row>
