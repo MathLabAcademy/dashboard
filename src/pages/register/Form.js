@@ -1,28 +1,23 @@
-import React, { useCallback, useMemo } from 'react'
-
 import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
-
-import api from 'utils/api.js'
-
+import Form from 'components/Form/Form.js'
+import Input from 'components/Form/Input.js'
 import { Formik } from 'formik'
-import * as Yup from 'yup'
-
+import React, { useCallback, useMemo } from 'react'
 import {
   Button,
   FormField,
   FormGroup,
+  Header,
   Message,
-  Segment,
-  Header
+  Segment
 } from 'semantic-ui-react'
-
-import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
+import api from 'utils/api.js'
+import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object().shape({
     email: Yup.string()
-      .email()
+      .email(`invalid email`)
       .required(`required`),
     password: Yup.string()
       .min(8, `must be at least 8 characters long`)
@@ -44,7 +39,7 @@ const getValidationSchema = () => {
       middleName: Yup.string().notRequired(),
       lastName: Yup.string().required(`required`),
       email: Yup.string()
-        .email()
+        .email(`invalid email`)
         .required(`required`),
       phone: Yup.string().test(
         'is-mobile-phone',
@@ -80,7 +75,7 @@ function RegisterForm({ onSuccess }) {
     async (values, actions) => {
       actions.setStatus(null)
 
-      const { data, error } = await api('/users/register', {
+      const { data, error } = await api('/users/action/register', {
         method: 'POST',
         body: values
       })

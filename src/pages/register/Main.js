@@ -1,10 +1,39 @@
-import { Redirect } from '@reach/router'
+import { Link, Redirect } from '@reach/router'
 import { get } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Header, Message } from 'semantic-ui-react'
+import { Button, Container, Grid, Header, Segment } from 'semantic-ui-react'
 import getPersonName from 'utils/get-person-name.js'
 import Form from './Form.js'
+
+function SuccessMessage({ data }) {
+  if (!data) return null
+
+  return (
+    <Container text as={Segment} textAlign="center">
+      <h2>Hello {getPersonName(get(data, 'Person'))}!</h2>
+      <p>You are successfully registered!</p>
+      <p>
+        We've sent a verification email to <strong>{get(data, 'email')}</strong>
+        <br />
+        Check your mailbox and verify your email address to get started!
+      </p>
+      <p>
+        <em>Didn't receive the email?</em>
+        <br />
+        <em>
+          Wait a few minutes and make sure you've checked your spam folder!
+        </em>
+      </p>
+      <p>You can login to your account now!</p>
+      <p>
+        <Button color="blue" as={Link} to={`/login`}>
+          Log In
+        </Button>
+      </p>
+    </Container>
+  )
+}
 
 function Register({ userStatus }) {
   const [data, setData] = useState(null)
@@ -22,15 +51,9 @@ function Register({ userStatus }) {
           Register
         </Header>
 
-        {data ? (
-          <Message
-            positive
-            header={`Hello ${getPersonName(get(data, 'Person'))}!`}
-            content={`You are Successfully Registered!`}
-          />
-        ) : (
-          <Form onSuccess={onSuccess} />
-        )}
+        <SuccessMessage data={data} />
+
+        {!data && <Form onSuccess={onSuccess} />}
       </Grid.Column>
     </Grid>
   )

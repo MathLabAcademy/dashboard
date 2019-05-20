@@ -75,37 +75,16 @@ export const fetchAllUserPage = (
   return true
 }
 
-export const updatePersonInfo = (
-  userId,
-  personInfo,
+export const updatePerson = (
+  personId,
+  personData,
   isCurrent = false
 ) => async dispatch => {
-  const url = `/users/${userId}/person`
+  const url = `/persons/${personId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: personInfo
-  })
-
-  if (error) throw error
-
-  if (isCurrent) dispatch({ type: CURRENT_USER_UPDATE, data })
-
-  dispatch({ type: USER_UPDATE, data })
-
-  return data
-}
-
-export const updateGuardianInfo = (
-  userId,
-  guardianInfo,
-  isCurrent = false
-) => async dispatch => {
-  const url = `/users/${userId}/person/guardian`
-
-  const { data, error } = await api(url, {
-    method: 'PATCH',
-    body: guardianInfo
+    body: personData
   })
 
   if (error) throw error

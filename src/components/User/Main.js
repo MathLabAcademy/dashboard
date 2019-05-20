@@ -3,9 +3,10 @@ import Gravatar from 'components/Gravatar.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit.js'
 import { capitalize, get } from 'lodash-es'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
+import { getUser } from 'store/actions/users.js'
 import getPersonName from 'utils/get-person-name.js'
 import AddCredit from './AddCredit.js'
 import ChangePassword from './ChangePassword.js'
@@ -14,7 +15,11 @@ import Transactions from './Transactions.js'
 
 const labeledRoles = ['admin', 'teacher']
 
-function User({ userId, user }) {
+function User({ userId, user, getUser }) {
+  const refreshUser = useCallback(() => {
+    getUser(userId)
+  }, [getUser, userId])
+
   return (
     <>
       <Segment loading={!user}>
@@ -28,17 +33,24 @@ function User({ userId, user }) {
           }
           rightClassName="grow wide"
           Right={
-            <>
-              <Header>
-                {getPersonName(get(user, 'Person'))}
-                <Header.Subheader>{get(user, 'email')}</Header.Subheader>
-              </Header>
-              <Permit userId={userId}>
-                <Button as={Link} to={`change-password`}>
-                  Change Password
-                </Button>
-              </Permit>
-            </>
+            <HeaderGrid
+              Left={
+                <>
+                  <Header>
+                    {getPersonName(get(user, 'Person'))}
+                    <Header.Subheader>{get(user, 'email')}</Header.Subheader>
+                  </Header>
+                  <Permit userId={userId}>
+                    <Button as={Link} to={`change-password`}>
+                      Change Password
+                    </Button>
+                  </Permit>
+                </>
+              }
+              Right={
+                <Button type="button" icon="refresh" onClick={refreshUser} />
+              }
+            />
           }
         />
 
@@ -63,7 +75,9 @@ const mapStateToProps = ({ users }, { userId }) => ({
   user: get(users.byId, userId)
 })
 
-const mapDispatchToProps = {}
+const mapDispatchToProps = {
+  getUser
+}
 
 export default connect(
   mapStateToProps,

@@ -5,10 +5,10 @@ import HeaderGrid from 'components/HeaderGrid.js'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
-import { updateGuardianInfo, updatePersonInfo } from 'store/actions/users.js'
+import { updatePerson } from 'store/actions/users.js'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -21,7 +21,7 @@ const getValidationSchema = () => {
     phone: Yup.string().test(
       'is-mobile-phone',
       'invalid mobile phone number',
-      phone => isMobilePhone(phone)
+      phone => (phone ? isMobilePhone(phone) : true)
     )
   })
 }
@@ -33,49 +33,50 @@ const getInitialValues = person => ({
   dob: get(person, 'dob')
     ? DateTime.fromISO(get(person, 'dob')).toISODate()
     : '',
-  email: get(person, 'email') || '',
+  email: get(person, 'xEmail') || get(person, 'email') || '',
   phone: get(person, 'phone') || ''
 })
 
 function PersonInfoEditor({
-  userId,
   person,
   title,
-  isCurrent,
   isGuardian = false,
   setOpen,
-  updatePersonInfo,
-  updateGuardianInfo
+  updatePerson
 }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
   const initialValues = useMemo(() => getInitialValues(person), [person])
+
+  const onSubmit = useCallback(
+    async (values, actions) => {
+      actions.setStatus(null)
+
+      try {
+        await updatePerson(get(person, 'id'), values)
+      } catch (err) {
+        if (err.errors) {
+          err.errors.forEach(({ param, message }) =>
+            actions.setFieldError(param, message)
+          )
+        } else if (err.message) {
+          actions.setStatus(err.message)
+        } else {
+          actions.setStatus(null)
+          console.error(err)
+        }
+      }
+
+      actions.setSubmitting(false)
+    },
+    [person, updatePerson]
+  )
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
-      onSubmit={async (values, actions) => {
-        actions.setStatus(null)
-
-        try {
-          if (isGuardian) await updateGuardianInfo(userId, values, isCurrent)
-          else await updatePersonInfo(userId, values, isCurrent)
-        } catch (err) {
-          if (err.errors) {
-            err.errors.forEach(({ param, message }) =>
-              actions.setFieldError(param, message)
-            )
-          } else if (err.message) {
-            actions.setStatus(err.message)
-          } else {
-            actions.setStatus(null)
-            console.error(err)
-          }
-        }
-
-        actions.setSubmitting(false)
-      }}
+      onSubmit={onSubmit}
     >
       {({ isSubmitting, isValid, status }) => (
         <Form>
@@ -145,13 +146,28 @@ function PersonInfoEditor({
                     </Table.Cell>
                   </Table.Row>
                 )}
+
                 <Table.Row>
-                  <Table.HeaderCell collapsing content={`Email`} />
+                  <Table.HeaderCell collapsing content={`Verified Email`} />
                   <Table.Cell>
                     <Input
                       type="email"
                       name="email"
-                      label={`Email`}
+                      label={`Verified Email`}
+                      hideLabel
+                      disabled
+                      static
+                      value={get(person, 'email')}
+                    />
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.HeaderCell collapsing content={`New Email`} />
+                  <Table.Cell>
+                    <Input
+                      type="email"
+                      name="email"
+                      label={`New Email`}
                       hideLabel
                     />
                   </Table.Cell>
@@ -171,13 +187,10 @@ function PersonInfoEditor({
   )
 }
 
-const mapStateToProps = ({ user }, { userId }) => ({
-  isCurrent: userId === get(user, 'data.id')
-})
+const mapStateToProps = null
 
 const mapDispatchToProps = {
-  updatePersonInfo,
-  updateGuardianInfo
+  updatePerson
 }
 
 export default connect(
