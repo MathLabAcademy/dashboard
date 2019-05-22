@@ -5,7 +5,8 @@ import {
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
   MCQEXAM_UPDATE,
-  MCQSUBMISSION_BULK_ADD
+  MCQSUBMISSION_BULK_ADD,
+  MCQEXAMQUESTION_BULK_ADD
 } from './actionTypes.js'
 
 export const createMCQExam = mcqExamData => async dispatch => {
@@ -102,6 +103,22 @@ export const pingTracker = mcqExamId => async dispatch => {
   if (error) throw error
 
   dispatch({ type: MCQEXAMTRACKER_UPDATE, data })
+
+  return data
+}
+
+export const getAllQuestionsForExam = (
+  mcqExamId,
+  { query = '' } = defaultOptsFetchPage
+) => async dispatch => {
+  let url = `/mcqexams/${mcqExamId}/questions`
+  if (query) url += `?${query}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMQUESTION_BULK_ADD, data })
 
   return data
 }

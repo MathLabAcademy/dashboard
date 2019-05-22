@@ -1,11 +1,13 @@
+import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
+import HeaderGrid from 'components/HeaderGrid.js'
 import { ErrorMessage, Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
+import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Message, Modal, Segment } from 'semantic-ui-react'
+import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
 
@@ -21,15 +23,16 @@ const getValidationSchema = () => {
       .of(Yup.string().required(`required`))
       .min(4)
       .max(4)
-      .required(`required`)
+      .required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer())
   })
 }
 
-const getInitialValues = mcqExamId => ({
-  mcqExamId,
+const getInitialValues = () => ({
   text: '',
   answerIndex: '0',
-  options: ['', '', '', '']
+  options: ['', '', '', ''],
+  tagIds: []
 })
 
 const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
@@ -37,10 +40,15 @@ const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
   return opts
 }, {})
 
-function AddMCQ({ mcqExamId, createMCQ }) {
-  const [open, handle] = useToggle(false)
+function MCQCreate({ createMCQ, mcqTags, navigate }) {
+  const tagOptions = useMemo(() => {
+    return zipObject(
+      mcqTags.allIds,
+      mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+    )
+  }, [mcqTags.allIds, mcqTags.byId])
 
-  const initialValues = useMemo(() => getInitialValues(mcqExamId), [mcqExamId])
+  const initialValues = useMemo(() => getInitialValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -50,7 +58,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
       try {
         await createMCQ(values)
         actions.resetForm()
-        handle.close()
+        navigate('..')
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -66,7 +74,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
 
       actions.setSubmitting(false)
     },
-    [createMCQ, handle]
+    [createMCQ, navigate]
   )
 
   return (
@@ -76,20 +84,30 @@ function AddMCQ({ mcqExamId, createMCQ }) {
       onSubmit={onSubmit}
     >
       {({ isSubmitting, isValid, values, status }) => (
-        <Modal
-          trigger={
-            <Button type="button" color="blue" onClick={handle.open}>
-              Add New MCQ
-            </Button>
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Add New MCQ</Modal.Header>
+        <Form>
+          <Segment>
+            <HeaderGrid
+              Left={<Header>Create MCQ</Header>}
+              Right={
+                <>
+                  <Button as={Link} to={`..`}>
+                    Go Back
+                  </Button>
+                  <Button type="reset">Reset</Button>
+                  <Button
+                    positive
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!isValid || isSubmitting}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
+            />
+          </Segment>
 
-          <Modal.Content>
+          <Segment>
             <Message color="yellow" hidden={!status}>
               {status}
             </Message>
@@ -117,26 +135,26 @@ function AddMCQ({ mcqExamId, createMCQ }) {
                 />
               ))}
             </Segment>
-          </Modal.Content>
 
-          <Modal.Actions>
-            <Button type="reset">Reset</Button>
-            <Button
-              positive
-              type="submit"
-              loading={isSubmitting}
-              disabled={!isValid || isSubmitting}
-            >
-              Save
-            </Button>
-          </Modal.Actions>
-        </Modal>
+            <FormSelect
+              name="tagIds"
+              label={`Tags`}
+              options={tagOptions}
+              fluid
+              multiple
+              search
+              selection
+            />
+          </Segment>
+        </Form>
       )}
     </Formik>
   )
 }
 
-const mapStateToProps = null
+const mapStateToProps = ({ mcqTags }) => ({
+  mcqTags
+})
 
 const mapDispatchToProps = {
   createMCQ
@@ -145,4 +163,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddMCQ)
+)(MCQCreate)

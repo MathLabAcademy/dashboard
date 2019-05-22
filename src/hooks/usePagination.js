@@ -4,22 +4,24 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { emptyObject } from 'utils/defaults.js'
 import usePrevious from './usePrevious.js'
 
-const defaultOptions = { maxTryCount: 3, initialQueryObject: emptyObject }
+const defaultOptions = { maxTryCount: 3, queryObject: emptyObject }
 
 function usePagination(
   pagination,
   fetchPage,
-  { maxTryCount = 3, initialQueryObject = emptyObject } = defaultOptions
+  { maxTryCount = 3, queryObject = emptyObject } = defaultOptions
 ) {
   const [tryCount, setTryCount] = useState(0)
 
   const [page, setPage] = useState(1)
   const prevPage = usePrevious(page)
 
-  const [queryObject, setQueryObject] = useState(initialQueryObject)
-
   const query = useMemo(() => {
-    return stringify(queryObject)
+    const objectToStringify = { ...queryObject }
+    if (objectToStringify.filter) {
+      objectToStringify.filter = JSON.stringify(objectToStringify.filter)
+    }
+    return stringify(objectToStringify)
   }, [queryObject])
 
   useEffect(() => {
@@ -55,7 +57,7 @@ function usePagination(
     [fetchPage, pagination.pages, query]
   )
 
-  return [[page, onPageChange], setQueryObject]
+  return [[page, onPageChange]]
 }
 
 export default usePagination

@@ -27,7 +27,7 @@ function User({ userId, user, getUser }) {
           leftClassName="auto wide"
           Left={
             <Gravatar
-              email={get(user, 'Person.email')}
+              email={get(user, 'Person.email') || get(user, 'Person.xEmail')}
               params={{ d: 'robohash' }}
             />
           }

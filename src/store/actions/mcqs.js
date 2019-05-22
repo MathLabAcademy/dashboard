@@ -1,11 +1,20 @@
 import api from 'utils/api.js'
-import { defaultOptsFetchPage } from 'utils/defaults.js'
 import {
+  defaultOptsFetchAllPages,
+  defaultOptsFetchPage
+} from 'utils/defaults.js'
+import {
+  MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
+  MCQEXAMQUESTION_ADD,
   MCQSUBMISSION_UPDATE,
   MCQ_ADD,
   MCQ_BULK_ADD,
-  MCQ_UPDATE
+  MCQ_PAGE_ADD,
+  MCQ_PAGE_REMOVE,
+  MCQ_PAGE_REQUEST,
+  MCQ_UPDATE,
+  MCQ_PAGINATION_PURGE
 } from './actionTypes.js'
 
 export const createMCQ = mcqData => async dispatch => {
@@ -18,7 +27,18 @@ export const createMCQ = mcqData => async dispatch => {
 
   if (error) throw error
 
+  dispatch({ type: MCQ_PAGINATION_PURGE })
+
   dispatch({ type: MCQ_ADD, data })
+
+  if (mcqData.mcqExamId) {
+    dispatch({
+      type: MCQEXAMQUESTION_ADD,
+      data: { mcqExamId: mcqData.mcqExamId, mcqId: data.id }
+    })
+  }
+
+  dispatch(readMCQAnswer(data.id))
 
   return data
 }
@@ -47,6 +67,20 @@ export const updateMCQ = (mcqId, mcqData) => async dispatch => {
 
   dispatch({ type: MCQ_UPDATE, data })
 
+  dispatch(readMCQAnswer(data.id))
+
+  return data
+}
+
+export const readMCQAnswer = mcqId => async dispatch => {
+  const url = `/mcqs/${mcqId}/answer`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQANSWER_ADD, data })
+
   return data
 }
 
@@ -65,25 +99,9 @@ export const setMCQAnswers = mcqAnswersData => async dispatch => {
   return data
 }
 
-export const getAllMCQsForExam = (
-  mcqExamId,
-  { query = '' } = defaultOptsFetchPage
-) => async dispatch => {
-  let url = `/mcqexams/${mcqExamId}/mcqs`
-  if (query) url += `?${query}`
-
-  const { data, error } = await api(url)
-
-  if (error) throw error
-
-  dispatch({ type: MCQ_BULK_ADD, data })
-
-  return data
-}
-
 export const getAllMCQAnswersForExam = (
   mcqExamId,
-  { query = '' } = defaultOptsFetchPage
+  { query = '' } = defaultOptsFetchAllPages
 ) => async dispatch => {
   let url = `/mcqexams/${mcqExamId}/mcqanswers`
   if (query) url += `?${query}`
@@ -108,6 +126,29 @@ export const submit = (mcqId, submissionData) => async dispatch => {
   if (error) throw error
 
   dispatch({ type: MCQSUBMISSION_UPDATE, data })
+
+  return data
+}
+
+export const fetchMCQPage = (
+  { page = 1, query = '' } = defaultOptsFetchPage,
+  storeItems = true
+) => async dispatch => {
+  dispatch({ type: MCQ_PAGE_REQUEST, page, query })
+
+  let url = `/mcqs?page=${page}`
+  if (query) url += `&${query}`
+
+  const { data, error } = await api(url)
+
+  if (error) {
+    dispatch({ type: MCQ_PAGE_REMOVE, page, query })
+    throw error
+  }
+
+  if (storeItems) dispatch({ type: MCQ_BULK_ADD, data })
+
+  dispatch({ type: MCQ_PAGE_ADD, page, data, query })
 
   return data
 }

@@ -1,14 +1,23 @@
+import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
-import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
-import { map, get, keyBy, mapValues } from 'lodash-es'
-import React, { useCallback, useMemo } from 'react'
-import { connect } from 'react-redux'
-import { Button, Message, Modal, Segment } from 'semantic-ui-react'
-import { updateMCQ } from 'store/actions/mcqs.js'
-import * as Yup from 'yup'
 import FormSelect from 'components/Form/Select.js'
+import HeaderGrid from 'components/HeaderGrid'
+import { Formik } from 'formik'
+import {
+  get,
+  isUndefined,
+  keyBy,
+  map,
+  mapValues,
+  sortBy,
+  zipObject
+} from 'lodash-es'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { connect } from 'react-redux'
+import { Button, Header, Message, Segment } from 'semantic-ui-react'
+import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs.js'
+import * as Yup from 'yup'
 
 const getValidationSchema = options => {
   const textSchema = Yup.string().required(`required`)
@@ -21,7 +30,8 @@ const getValidationSchema = options => {
       .required(`required`),
     options: Yup.object(
       mapValues(keyBy(options, 'id'), () => textSchema)
-    ).required(`required`)
+    ).required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer())
   })
 }
 
@@ -29,11 +39,30 @@ const getInitialValues = (mcq, options, answerId) => ({
   id: get(mcq, 'id'),
   text: get(mcq, 'text'),
   answerId: String(answerId || ''),
-  options: mapValues(keyBy(options, 'id'), 'text')
+  options: mapValues(keyBy(options, 'id'), 'text'),
+  tagIds: get(mcq, 'tagIds').map(String)
 })
 
-function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
-  const [open, handle] = useToggle(false)
+function MCQEdit({
+  mcqId,
+  mcq,
+  getMCQ,
+  answerId,
+  readMCQAnswer,
+  mcqTags,
+  updateMCQ
+}) {
+  useEffect(() => {
+    if (!mcq) getMCQ(mcqId)
+  }, [getMCQ, mcq, mcqId])
+
+  useEffect(() => {
+    if (isUndefined(answerId)) readMCQAnswer(mcqId)
+  }, [answerId, mcqId, readMCQAnswer])
+
+  const options = useMemo(() => {
+    return sortBy(get(mcq, 'Options'), 'id')
+  }, [mcq])
 
   const initialValues = useMemo(
     () => getInitialValues(mcq, options, answerId),
@@ -49,7 +78,6 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
 
       try {
         await updateMCQ(id, values)
-        handle.close()
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -65,7 +93,7 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
 
       actions.setSubmitting(false)
     },
-    [handle, updateMCQ]
+    [updateMCQ]
   )
 
   const answerIndexOptions = useMemo(() => {
@@ -75,6 +103,13 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
     }, {})
   }, [options])
 
+  const tagOptions = useMemo(() => {
+    return zipObject(
+      mcqTags.allIds,
+      mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+    )
+  }, [mcqTags.allIds, mcqTags.byId])
+
   return (
     <Formik
       initialValues={initialValues}
@@ -83,24 +118,29 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
       onSubmit={onSubmit}
     >
       {({ isSubmitting, isValid, values, status }) => (
-        <Modal
-          trigger={
-            <Button
-              type="button"
-              color="blue"
-              onClick={handle.open}
-              label={answerId ? null : '?'}
-              content={'Edit'}
+        <Form>
+          <Segment>
+            <HeaderGrid
+              Left={<Header>Edit MCQ #{mcqId}</Header>}
+              Right={
+                <>
+                  <Button as={Link} to={`..`}>
+                    Go Back
+                  </Button>
+                  <Button type="reset">Reset</Button>
+                  <Button
+                    positive
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={!isValid || isSubmitting}
+                  >
+                    Save
+                  </Button>
+                </>
+              }
             />
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Edit MCQ #{index + 1}</Modal.Header>
-
-          <Modal.Content>
+          </Segment>
+          <Segment>
             <Message color="yellow" hidden={!status}>
               {status}
             </Message>
@@ -122,32 +162,36 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
                 />
               ))}
             </Segment>
-          </Modal.Content>
 
-          <Modal.Actions>
-            <Button type="reset">Reset</Button>
-            <Button
-              positive
-              type="submit"
-              loading={isSubmitting}
-              disabled={!isValid || isSubmitting}
-            >
-              Save
-            </Button>
-          </Modal.Actions>
-        </Modal>
+            <FormSelect
+              name="tagIds"
+              label={`Tags`}
+              options={tagOptions}
+              fluid
+              multiple
+              search
+              selection
+            />
+          </Segment>
+        </Form>
       )}
     </Formik>
   )
 }
 
-const mapStateToProps = null
+const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => ({
+  mcq: get(mcqs.byId, mcqId),
+  answerId: get(mcqs.answerById, mcqId),
+  mcqTags
+})
 
 const mapDispatchToProps = {
+  getMCQ,
+  readMCQAnswer,
   updateMCQ
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(EditMCQ)
+)(MCQEdit)

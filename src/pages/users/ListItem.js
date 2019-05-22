@@ -19,12 +19,6 @@ function UserListItem({ id, data, getData }) {
       <HeaderGrid
         Left={
           <>
-            {!get(data, 'verified') && (
-              <Label attached="top left" color="black">
-                Unverified
-              </Label>
-            )}
-
             <Header>
               {getPersonName(get(data, 'Person'))}
               {labeledRoles.includes(get(data, 'roleId')) && (

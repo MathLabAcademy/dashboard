@@ -1,46 +1,29 @@
 import Form from 'components/Form/Form.js'
-import FormRichText from 'components/Form/RichText.js'
-import FormSelect from 'components/Form/Select.js'
-import { ErrorMessage, Formik } from 'formik'
+import FormInput from 'components/Form/Input.js'
+import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Message, Modal, Segment } from 'semantic-ui-react'
-import { createMCQ } from 'store/actions/mcqs.js'
+import { Button, Message, Modal } from 'semantic-ui-react'
+import { createTag } from 'store/actions/mcqTags.js'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    text: Yup.string().required(`required`),
-    answerIndex: Yup.number()
-      .integer()
-      .min(0)
-      .max(3)
-      .required(`required`),
-    options: Yup.array()
-      .of(Yup.string().required(`required`))
-      .min(4)
-      .max(4)
+    name: Yup.string()
+      .min(3)
       .required(`required`)
   })
 }
 
-const getInitialValues = mcqExamId => ({
-  mcqExamId,
-  text: '',
-  answerIndex: '0',
-  options: ['', '', '', '']
+const getInitialValues = () => ({
+  name: ''
 })
 
-const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
-  opts[index] = `Option ${index + 1}`
-  return opts
-}, {})
-
-function AddMCQ({ mcqExamId, createMCQ }) {
+function TagCreateModal({ createTag }) {
   const [open, handle] = useToggle(false)
 
-  const initialValues = useMemo(() => getInitialValues(mcqExamId), [mcqExamId])
+  const initialValues = useMemo(() => getInitialValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -48,7 +31,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
       actions.setStatus(null)
 
       try {
-        await createMCQ(values)
+        await createTag(values)
         actions.resetForm()
         handle.close()
       } catch (err) {
@@ -66,7 +49,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
 
       actions.setSubmitting(false)
     },
-    [createMCQ, handle]
+    [createTag, handle]
   )
 
   return (
@@ -78,45 +61,27 @@ function AddMCQ({ mcqExamId, createMCQ }) {
       {({ isSubmitting, isValid, values, status }) => (
         <Modal
           trigger={
-            <Button type="button" color="blue" onClick={handle.open}>
-              Add New MCQ
-            </Button>
+            <Button
+              type="button"
+              basic
+              color="blue"
+              icon="plus"
+              onClick={handle.open}
+            />
           }
           as={Form}
           closeIcon
           open={open}
           onClose={handle.close}
         >
-          <Modal.Header>Add New MCQ</Modal.Header>
+          <Modal.Header>New Tag</Modal.Header>
 
           <Modal.Content>
             <Message color="yellow" hidden={!status}>
               {status}
             </Message>
 
-            <FormRichText name="text" label={`Question`} />
-
-            <FormSelect
-              name="answerIndex"
-              label={'Answer'}
-              options={answerIndexOptions}
-            />
-
-            <Segment secondary>
-              <ErrorMessage
-                name={`options`}
-                component="p"
-                className="red text"
-              />
-
-              {values.options.map((_, index) => (
-                <FormRichText
-                  key={`options.${index}`}
-                  name={`options.${index}`}
-                  label={`Option ${index + 1}`}
-                />
-              ))}
-            </Segment>
+            <FormInput name="name" label={`Name`} />
           </Modal.Content>
 
           <Modal.Actions>
@@ -139,10 +104,10 @@ function AddMCQ({ mcqExamId, createMCQ }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createMCQ
+  createTag
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AddMCQ)
+)(TagCreateModal)

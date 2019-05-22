@@ -1,5 +1,6 @@
 import { get, groupBy, keyBy, mapValues, pickBy } from 'lodash-es'
 import {
+  MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
   MCQSUBMISSION_BULK_ADD,
   MCQSUBMISSION_UPDATE,
@@ -18,7 +19,7 @@ const initialState = {
   submissionsById: emptyObject
 }
 
-const mcqExamsReducer = (state = initialState, { type, data }) => {
+const mcqsReducer = (state = initialState, { type, data }) => {
   switch (type) {
     case MCQ_ADD:
       return {
@@ -53,6 +54,14 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
             ...get(state.byId, data.id, emptyObject),
             ...data
           }
+        }
+      }
+    case MCQANSWER_ADD:
+      return {
+        ...state,
+        answerById: {
+          ...state.answerById,
+          [data.mcqId]: data.mcqOptionId
         }
       }
     case MCQANSWER_BULK_ADD:
@@ -92,4 +101,4 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
   }
 }
 
-export default mcqExamsReducer
+export default mcqsReducer

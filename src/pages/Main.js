@@ -4,6 +4,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import Courses from './courses/Main.js'
 import Index from './index/Main.js'
+import MCQs from './mcqs/Main.js'
 import Profile from './profile/Main.js'
 import Users from './users/Main.js'
 
@@ -14,6 +15,7 @@ function Dashboard({ userStatus }) {
     <Router>
       <Index path="/" />
       <Courses path="courses/*" />
+      <MCQs path="mcqs/*" />
       <Profile path="profile/*" />
       <Users path="users/*" />
     </Router>

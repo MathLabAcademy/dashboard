@@ -20,6 +20,18 @@ const items = [
     title: `Courses`,
     link: '/courses',
     permits: ['teacher', 'student']
+  },
+  {
+    title: `MCQs`,
+    link: '/mcqs',
+    permits: ['teacher'],
+    items: [
+      {
+        title: `Tags`,
+        link: '/mcqs/tags',
+        permits: ['teacher']
+      }
+    ]
   }
 ]
 

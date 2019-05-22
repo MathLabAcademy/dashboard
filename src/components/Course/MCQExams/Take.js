@@ -18,12 +18,14 @@ import {
   Segment
 } from 'semantic-ui-react'
 import {
+  getAllQuestionsForExam,
   getAllSubmissions,
   pingTracker,
   readTracker,
   startTracker
 } from 'store/actions/mcqExams.js'
-import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs.js'
+import { submit as submitMCQ } from 'store/actions/mcqs.js'
+import { emptyArray } from 'utils/defaults'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
@@ -94,8 +96,9 @@ function MCQ({ mcq, index, submitMCQ, submission, readOnly }) {
 
 function MCQExamTake({
   mcqExamId,
+  mcqIds,
   mcqs,
-  getAllMCQsForExam,
+  getAllQuestionsForExam,
   tracker,
   readTracker,
   startTracker,
@@ -137,16 +140,11 @@ function MCQExamTake({
   )
 
   useEffect(() => {
-    getAllMCQsForExam(mcqExamId)
+    getAllQuestionsForExam(mcqExamId)
     getAllSubmissions(mcqExamId)
-  }, [getAllMCQsForExam, getAllSubmissions, mcqExamId])
+  }, [getAllQuestionsForExam, getAllSubmissions, mcqExamId])
 
-  const mcqIds = useMemo(() => {
-    const McqExamId = Number(mcqExamId)
-    return mcqs.allIds
-      .filter(id => get(mcqs.byId, [id, 'mcqExamId']) === McqExamId)
-      .sort()
-  }, [mcqExamId, mcqs.allIds, mcqs.byId])
+  const sortedMcqIds = useMemo(() => mcqIds.sort(), [mcqIds])
 
   const startExam = useCallback(() => {
     startTracker(mcqExamId)
@@ -180,7 +178,7 @@ function MCQExamTake({
         />
 
         {data.started &&
-          mcqIds
+          sortedMcqIds
             .map(id => get(mcqs.byId, id))
             .map((mcq, index) => (
               <React.Fragment key={index}>
@@ -205,11 +203,12 @@ function MCQExamTake({
 const mapStateToProps = ({ mcqExams, mcqs, user }, { mcqExamId }) => ({
   currentUserId: user.data.id,
   mcqs,
+  mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
   tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id])
 })
 
 const mapDispatchToProps = {
-  getAllMCQsForExam,
+  getAllQuestionsForExam,
   readTracker,
   startTracker,
   pingTracker,

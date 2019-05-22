@@ -6,8 +6,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getMCQExam } from 'store/actions/mcqExams.js'
-import Questions from './Questions.js'
-import SetAnswers from './SetAnswers.js'
+import TeacherView from './TeacherView.js'
 import TakeExam from './Take.js'
 
 function View({ courseId, mcqExamId }) {
@@ -17,7 +16,7 @@ function View({ courseId, mcqExamId }) {
         <TakeExam courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
       <Permit teacher>
-        <Questions courseId={courseId} mcqExamId={mcqExamId} />
+        <TeacherView courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
     </>
   )
@@ -52,7 +51,6 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
 
       <Router>
         <View path="/" courseId={courseId} />
-        <SetAnswers path="set-answers" courseId={courseId} />
       </Router>
     </>
   )

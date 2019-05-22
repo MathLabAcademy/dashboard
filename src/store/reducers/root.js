@@ -5,6 +5,7 @@ import user from './currentUser.js'
 import errorBoundary from './errorBoundary.js'
 import mcqExams from './mcqExams.js'
 import mcqs from './mcqs.js'
+import mcqTags from './mcqTags.js'
 import pagination from './pagination.js'
 import transactions from './transactions.js'
 import ui from './ui.js'
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   errorBoundary,
   mcqExams,
   mcqs,
+  mcqTags,
   pagination,
   transactions,
   ui,
