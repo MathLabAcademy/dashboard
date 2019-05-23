@@ -2,12 +2,16 @@ import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit.js'
 import { SlateViewer } from 'components/Slate/index.js'
 import useToggle from 'hooks/useToggle.js'
-import { get, sortBy } from 'lodash-es'
+import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 import { getAllQuestionsForExam } from 'store/actions/mcqExams.js'
-import { getAllMCQAnswersForExam, getMCQ } from 'store/actions/mcqs.js'
+import {
+  getAllMCQAnswersForExam,
+  getMCQ,
+  readMCQAnswer
+} from 'store/actions/mcqs.js'
 import { emptyArray } from 'utils/defaults.js'
 import AddMCQ from './ActionModals/AddMCQ.js'
 import EditMCQ from './ActionModals/EditMCQ.js'
@@ -15,7 +19,11 @@ import PickMCQ from './ActionModals/PickMCQ.js'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
-function _MCQ({ mcqId, mcq, index, answerId, getMCQ }) {
+function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
+  useEffect(() => {
+    if (isUndefined(answerId)) readMCQAnswer(mcqId)
+  }, [answerId, mcqId, readMCQAnswer])
+
   const [open, handler] = useToggle(false)
 
   useEffect(() => {
@@ -77,7 +85,8 @@ const MCQ = connect(
     answerId: get(mcqs.answerById, mcqId)
   }),
   {
-    getMCQ
+    getMCQ,
+    readMCQAnswer
   }
 )(_MCQ)
 

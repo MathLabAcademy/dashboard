@@ -13,6 +13,7 @@ import * as Yup from 'yup'
 
 const getInitialValues = data => ({
   date: DateTime.fromISO(get(data, 'date')).toISODate() || '',
+  duration: get(data, 'duration') / 60,
   name: get(data, 'name') || '',
   description: get(data, 'description') || ''
 })
@@ -22,18 +23,15 @@ const getValidationSchema = () => {
     date: Yup.date()
       .min(DateTime.local().toISODate(), `date already passed`)
       .required(`required`),
+    duration: Yup.number()
+      .integer()
+      .positive(),
     name: Yup.string().notRequired(),
     description: Yup.string().notRequired()
   })
 }
 
-function CourseMCQExamEdit({
-  courseId,
-  mcqExamId,
-  data,
-  getData,
-  updateMCQExam
-}) {
+function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
   useEffect(() => {
     if (!data) getData(mcqExamId)
   }, [data, getData, mcqExamId])
@@ -42,9 +40,12 @@ function CourseMCQExamEdit({
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async (values, actions) => {
+    async ({ duration, ...values }, actions) => {
       try {
-        await updateMCQExam(mcqExamId, values)
+        await updateMCQExam(mcqExamId, {
+          ...values,
+          duration: duration * 60 // minutes -> seconds
+        })
         actions.setStatus(null)
       } catch (err) {
         if (err.errors) {
@@ -101,6 +102,13 @@ function CourseMCQExamEdit({
             </Message>
 
             <FormField type="date" id="date" name="date" label={`Date`} />
+
+            <FormField
+              type="number"
+              name="duration"
+              label={`Duration (minutes)`}
+              step="5"
+            />
 
             <FormField id="name" name="name" label={`Name`} />
 

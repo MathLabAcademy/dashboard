@@ -6,7 +6,8 @@ import {
   MCQEXAM_BULK_ADD,
   MCQEXAM_UPDATE,
   MCQSUBMISSION_BULK_ADD,
-  MCQEXAMQUESTION_BULK_ADD
+  MCQEXAMQUESTION_BULK_ADD,
+  MCQEXAMQUESTION_ADD
 } from './actionTypes.js'
 
 export const createMCQExam = mcqExamData => async dispatch => {
@@ -103,6 +104,24 @@ export const pingTracker = mcqExamId => async dispatch => {
   if (error) throw error
 
   dispatch({ type: MCQEXAMTRACKER_UPDATE, data })
+
+  return data
+}
+
+export const addQuestionToMCQExam = (
+  mcqExamId,
+  mcqExamQuestionData
+) => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/action/add-question`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: mcqExamQuestionData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMQUESTION_ADD, data })
 
   return data
 }

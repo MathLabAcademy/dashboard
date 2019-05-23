@@ -15,7 +15,8 @@ import {
   Modal,
   Segment
 } from 'semantic-ui-react'
-import { createMCQ, getMCQ } from 'store/actions/mcqs.js'
+import { addQuestionToMCQExam } from 'store/actions/mcqExams.js'
+import { getMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
 
 function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
@@ -25,22 +26,22 @@ function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
     return get(mcqs.byId, mcqId)
   }, [mcqId, mcqs.byId])
 
-  const showMCQ = useCallback(() => {
+  const showMCQ = useCallback(async () => {
     if (!ref.current) return
 
     const id = ref.current.inputRef.current.value
 
     const mcq = get(mcqs.byId, id)
 
-    if (!id || mcq) {
+    try {
+      if (id && !mcq) await getMCQ(id)
+
       setFieldValue(name, id)
       setFieldError(name)
-    } else {
-      getMCQ(id).catch(err => {
-        if (err.status === 404) {
-          setFieldError(name, 'Not Found!')
-        } else throw err
-      })
+    } catch (err) {
+      if (err.status === 404) {
+        setFieldError(name, 'Not Found!')
+      } else throw err
     }
   }, [getMCQ, mcqs.byId, name, setFieldError, setFieldValue])
 
@@ -89,7 +90,7 @@ const getInitialValues = () => ({
   mcqId: ''
 })
 
-function PickMCQ({ mcqExamId, mcqIds, addMCQToExam }) {
+function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
   const [open, handle] = useToggle(false)
 
   const initialValues = useMemo(() => getInitialValues(mcqExamId), [mcqExamId])
@@ -100,7 +101,7 @@ function PickMCQ({ mcqExamId, mcqIds, addMCQToExam }) {
       actions.setStatus(null)
 
       try {
-        await addMCQToExam(mcqExamId, values)
+        await addQuestionToMCQExam(mcqExamId, values)
         actions.resetForm()
       } catch (err) {
         if (err.errors) {
@@ -117,7 +118,7 @@ function PickMCQ({ mcqExamId, mcqIds, addMCQToExam }) {
 
       actions.setSubmitting(false)
     },
-    [addMCQToExam, mcqExamId]
+    [addQuestionToMCQExam, mcqExamId]
   )
 
   return (
@@ -194,7 +195,7 @@ function PickMCQ({ mcqExamId, mcqIds, addMCQToExam }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createMCQ
+  addQuestionToMCQExam
 }
 
 export default connect(
