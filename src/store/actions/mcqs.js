@@ -13,8 +13,8 @@ import {
   MCQ_PAGE_ADD,
   MCQ_PAGE_REMOVE,
   MCQ_PAGE_REQUEST,
-  MCQ_UPDATE,
-  MCQ_PAGINATION_PURGE
+  MCQ_PAGINATION_PURGE,
+  MCQ_UPDATE
 } from './actionTypes.js'
 
 export const createMCQ = mcqData => async dispatch => {
@@ -72,6 +72,22 @@ export const updateMCQ = (mcqId, mcqData) => async dispatch => {
   return data
 }
 
+export const getAllMCQsForExam = (
+  mcqExamId,
+  { query = '' } = defaultOptsFetchAllPages
+) => async dispatch => {
+  let url = `/mcqexams/${mcqExamId}/mcqs`
+  if (query) url += `?${query}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQ_BULK_ADD, data })
+
+  return data
+}
+
 export const readMCQAnswer = mcqId => async dispatch => {
   const url = `/mcqs/${mcqId}/answer`
 
@@ -115,8 +131,8 @@ export const getAllMCQAnswersForExam = (
   return data
 }
 
-export const submit = (mcqId, submissionData) => async dispatch => {
-  const url = `/mcqs/${mcqId}/action/submit`
+export const submit = (mcqExamId, mcqId, submissionData) => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/mcqs/${mcqId}/action/submit`
 
   const { data, error } = await api(url, {
     method: 'POST',

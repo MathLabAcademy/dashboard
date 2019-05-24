@@ -24,24 +24,32 @@ import {
   readTracker,
   startTracker
 } from 'store/actions/mcqExams.js'
-import { submit as submitMCQ } from 'store/actions/mcqs.js'
+import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs.js'
 import { emptyArray } from 'utils/defaults'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
-function MCQ({ mcq, index, submitMCQ, submission, readOnly }) {
+function _MCQ({
+  index,
+  mcqExamId,
+  mcqId,
+  mcq,
+  submitMCQ,
+  submission,
+  readOnly
+}) {
   const [error, setError] = useState(null)
   const timer = useRef(null)
 
   const options = useMemo(() => {
-    return sortBy(mcq.Options, 'id')
-  }, [mcq.Options])
+    return sortBy(get(mcq, 'Options', emptyArray), 'id')
+  }, [mcq])
 
   const handleOptionSelect = useCallback(
     async (_, { value }) => {
       try {
         if (value !== get(submission, 'mcqOptionId')) {
-          await submitMCQ(mcq.id, { mcqOptionId: value })
+          await submitMCQ(mcqExamId, mcqId, { mcqOptionId: value })
         }
       } catch (err) {
         if (err.message) {
@@ -51,7 +59,7 @@ function MCQ({ mcq, index, submitMCQ, submission, readOnly }) {
         } else throw err
       }
     },
-    [mcq.id, submission, submitMCQ]
+    [mcqExamId, mcqId, submission, submitMCQ]
   )
 
   return (
@@ -60,7 +68,7 @@ function MCQ({ mcq, index, submitMCQ, submission, readOnly }) {
         Left={
           <Header>
             <Header.Subheader>#{index + 1}</Header.Subheader>
-            <SlateViewer initialValue={mcq.text} />
+            <SlateViewer initialValue={get(mcq, 'text')} />
           </Header>
         }
       />
@@ -94,21 +102,27 @@ function MCQ({ mcq, index, submitMCQ, submission, readOnly }) {
   )
 }
 
+const MCQ = connect(
+  ({ mcqExams, mcqs, user }, { mcqExamId, mcqId }) => ({
+    mcq: get(mcqs.byId, mcqId),
+    submission: get(mcqExams.submissionsById, [mcqExamId, user.data.id, mcqId])
+  }),
+  { submitMCQ }
+)(_MCQ)
+
 function MCQExamTake({
   mcqExamId,
   mcqIds,
-  mcqs,
   getAllQuestionsForExam,
   tracker,
   readTracker,
   startTracker,
   pingTracker,
-  submitMCQ,
-  currentUserId,
+  getAllMCQsForExam,
   getAllSubmissions
 }) {
   useEffect(() => {
-    readTracker(mcqExamId).catch(() => {})
+    readTracker(mcqExamId)
   }, [mcqExamId, readTracker])
 
   const data = useMemo(() => {
@@ -127,6 +141,10 @@ function MCQExamTake({
 
     return data
   }, [tracker])
+
+  useEffect(() => {
+    if (data.started) getAllMCQsForExam(mcqExamId)
+  }, [data.started, getAllMCQsForExam, mcqExamId])
 
   const [countdown] = useCountdown({
     endTime: get(tracker, 'end')
@@ -178,31 +196,23 @@ function MCQExamTake({
         />
 
         {data.started &&
-          sortedMcqIds
-            .map(id => get(mcqs.byId, id))
-            .map((mcq, index) => (
-              <React.Fragment key={index}>
-                <Divider section />
-                <MCQ
-                  index={index}
-                  mcq={mcq}
-                  submitMCQ={submitMCQ}
-                  submission={get(mcqs.submissionsById, [
-                    mcq.id,
-                    currentUserId
-                  ])}
-                  readOnly={!countdown}
-                />
-              </React.Fragment>
-            ))}
+          sortedMcqIds.map((mcqId, index) => (
+            <React.Fragment key={index}>
+              <Divider section />
+              <MCQ
+                index={index}
+                mcqExamId={mcqExamId}
+                mcqId={mcqId}
+                readOnly={!countdown}
+              />
+            </React.Fragment>
+          ))}
       </Segment>
     </Permit>
   )
 }
 
-const mapStateToProps = ({ mcqExams, mcqs, user }, { mcqExamId }) => ({
-  currentUserId: user.data.id,
-  mcqs,
+const mapStateToProps = ({ mcqExams, user }, { mcqExamId }) => ({
   mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
   tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id])
 })
@@ -212,7 +222,7 @@ const mapDispatchToProps = {
   readTracker,
   startTracker,
   pingTracker,
-  submitMCQ,
+  getAllMCQsForExam,
   getAllSubmissions
 }
 

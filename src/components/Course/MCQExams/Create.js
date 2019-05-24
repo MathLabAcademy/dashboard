@@ -1,6 +1,6 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
-import FormField from 'components/Form/Input.js'
+import FormInput from 'components/Form/Input.js'
 import HeaderGrid from 'components/HeaderGrid'
 import { Formik } from 'formik'
 import { DateTime } from 'luxon'
@@ -97,18 +97,18 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
               {status}
             </Message>
 
-            <FormField type="date" name="date" label={`Date`} />
+            <FormInput type="date" name="date" label={`Date`} />
 
-            <FormField
+            <FormInput
               type="number"
               name="duration"
               label={`Duration (minutes)`}
               step="5"
             />
 
-            <FormField name="name" label={`Name`} />
+            <FormInput name="name" label={`Name`} />
 
-            <FormField
+            <FormInput
               id="description"
               name="description"
               label={`Description`}

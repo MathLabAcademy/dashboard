@@ -1,4 +1,4 @@
-import { get, keyBy, pickBy, union, map, mapValues, groupBy } from 'lodash-es'
+import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
 import {
   MCQEXAMQUESTION_ADD,
   MCQEXAMQUESTION_BULK_ADD,
@@ -6,7 +6,9 @@ import {
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
   MCQEXAM_REMOVE,
-  MCQEXAM_UPDATE
+  MCQEXAM_UPDATE,
+  MCQSUBMISSION_BULK_ADD,
+  MCQSUBMISSION_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -15,7 +17,8 @@ const initialState = {
   byId: emptyObject,
   allIds: emptyArray,
   trackersById: emptyObject,
-  questionsById: emptyObject
+  questionsById: emptyObject,
+  submissionsById: emptyObject
 }
 
 const mcqExamsReducer = (state = initialState, { type, data }) => {
@@ -90,6 +93,43 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
               ...data
             }
           }
+        }
+      }
+    case MCQSUBMISSION_UPDATE:
+      return {
+        ...state,
+        submissionsById: {
+          ...state.submissionsById,
+          [data.mcqExamId]: {
+            ...get(state.submissionsById, data.mcqExamId, emptyObject),
+            [data.userId]: {
+              ...get(
+                state.submissionsById,
+                [data.mcqExamId, data.userId],
+                emptyObject
+              ),
+              [data.mcqId]: {
+                ...data
+              }
+            }
+          }
+        }
+      }
+    case MCQSUBMISSION_BULK_ADD:
+      return {
+        ...state,
+        submissionsById: {
+          ...state.submissionsById,
+          ...mapValues(
+            groupBy(data.items, 'mcqExamId'),
+            (items, mcqExamId) => ({
+              ...get(state.submissionsById, mcqExamId, emptyObject),
+              ...mapValues(groupBy(items, 'userId'), (items, userId) => ({
+                ...get(state.submissionsById, [mcqExamId, userId], emptyObject),
+                ...mapValues(groupBy(items, 'mcqId'), items => items[0])
+              }))
+            })
+          )
         }
       }
     default:
