@@ -6,6 +6,7 @@ import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults.js'
+import CourseCQExams from './CQExams/Main.js'
 import CourseMCQExams from './MCQExams/Main.js'
 
 import Enroll from './Enroll.js'
@@ -49,6 +50,7 @@ function Course({ courseId, course, enrollments, currentUser }) {
         />
       </Segment>
 
+      <CourseCQExams courseId={courseId} />
       <CourseMCQExams courseId={courseId} />
 
       <Router>

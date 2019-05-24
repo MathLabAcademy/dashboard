@@ -4,10 +4,12 @@ import {
   COURSE_BULK_ADD,
   COURSE_REMOVE,
   COURSE_UPDATE,
+  CQEXAM_ADD,
+  CQEXAM_BULK_ADD,
   ENROLLMENT_ADD,
   ENROLLMENT_BULK_ADD,
-  MCQEXAM_BULK_ADD,
-  MCQEXAM_ADD
+  MCQEXAM_ADD,
+  MCQEXAM_BULK_ADD
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -16,6 +18,7 @@ const initialState = {
   byId: emptyObject,
   allIds: emptyArray,
   enrollmentsById: emptyObject,
+  cqExamsById: emptyObject,
   mcqExamsById: emptyObject
 }
 
@@ -77,6 +80,27 @@ const coursesReducer = (state = initialState, { type, data }) => {
               get(state.enrollmentsById, courseId, emptyArray),
               map(items, 'userId')
             )
+          )
+        }
+      }
+    case CQEXAM_ADD:
+      return {
+        ...state,
+        cqExamsById: {
+          ...state.cqExamsById,
+          [data.courseId]: union(
+            get(state.cqExamsById, data.courseId, emptyArray),
+            [data.id]
+          )
+        }
+      }
+    case CQEXAM_BULK_ADD:
+      return {
+        ...state,
+        cqExamsById: {
+          ...state.cqExamsById,
+          ...mapValues(groupBy(data.items, 'courseId'), items =>
+            map(items, 'id')
           )
         }
       }

@@ -1,5 +1,5 @@
-import { dispatchToStore } from 'store/index.js'
 import { setErrorBoundaryRootError } from 'store/actions/errorBoundary.js'
+import { dispatchToStore } from 'store/index.js'
 
 async function api(endpoint, options = {}) {
   const Response = {
@@ -11,13 +11,13 @@ async function api(endpoint, options = {}) {
   options = Object.assign({ credentials: 'include', method: 'GET' }, options)
   options.method = options.method.toUpperCase()
   options.headers = Object.assign(
-    {
-      'content-type': 'application/json'
-    },
+    { 'content-type': 'application/json' },
     options.headers
   )
 
-  if (!['string', 'undefined'].includes(typeof options.body)) {
+  if (options.body instanceof FormData) {
+    delete options.headers['content-type']
+  } else if (!['string', 'undefined'].includes(typeof options.body)) {
     options.body = JSON.stringify(options.body)
   }
 
