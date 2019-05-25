@@ -1,4 +1,5 @@
 import { Link } from '@reach/router'
+import FormCheckbox from 'components/Form/Checkbox.js'
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
@@ -10,7 +11,6 @@ import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
 import { enroll } from 'store/actions/courses.js'
 import { emptyArray } from 'utils/defaults.js'
 import * as Yup from 'yup'
-import FormCheckbox from 'components/Form/Checkbox.js'
 
 const getValidationSchema = () => {
   return Yup.object({

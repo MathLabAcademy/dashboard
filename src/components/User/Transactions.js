@@ -1,4 +1,5 @@
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect, useMemo } from 'react'
@@ -19,7 +20,7 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
   }, [transactions.allIds, transactions.byId, userId])
 
   return (
-    <>
+    <Permit admin teacher userId={userId}>
       <Segment>
         <HeaderGrid Left={<Header>Transaction History</Header>} />
       </Segment>
@@ -57,7 +58,7 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
             ))}
         </Table.Body>
       </Table>
-    </>
+    </Permit>
   )
 }
 

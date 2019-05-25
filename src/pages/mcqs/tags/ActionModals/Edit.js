@@ -1,13 +1,14 @@
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
+import { get } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
 import { updateTag } from 'store/actions/mcqTags.js'
 import * as Yup from 'yup'
-import { get } from 'lodash-es'
 
 const getValidationSchema = () => {
   return Yup.object({
@@ -54,51 +55,53 @@ function TagCreateModal({ tagId, tag, updateTag }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, values, status }) => (
-        <Modal
-          trigger={
-            <Button
-              type="button"
-              basic
-              color="blue"
-              icon="edit outline"
-              onClick={handle.open}
-            />
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Edit Tag: {get(tag, 'name')}</Modal.Header>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, values, status }) => (
+          <Modal
+            trigger={
+              <Button
+                type="button"
+                basic
+                color="blue"
+                icon="edit outline"
+                onClick={handle.open}
+              />
+            }
+            as={Form}
+            closeIcon
+            open={open}
+            onClose={handle.close}
+          >
+            <Modal.Header>Edit Tag: {get(tag, 'name')}</Modal.Header>
 
-          <Modal.Content>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
+            <Modal.Content>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <FormInput name="name" label={`Name`} />
-          </Modal.Content>
+              <FormInput name="name" label={`Name`} />
+            </Modal.Content>
 
-          <Modal.Actions>
-            <Button type="reset">Reset</Button>
-            <Button
-              positive
-              type="submit"
-              loading={isSubmitting}
-              disabled={!isValid || isSubmitting}
-            >
-              Save
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      )}
-    </Formik>
+            <Modal.Actions>
+              <Button type="reset">Reset</Button>
+              <Button
+                positive
+                type="submit"
+                loading={isSubmitting}
+                disabled={!isValid || isSubmitting}
+              >
+                Save
+              </Button>
+            </Modal.Actions>
+          </Modal>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

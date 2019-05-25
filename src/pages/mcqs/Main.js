@@ -20,7 +20,7 @@ function MCQs({ mcqTags, mcqTagsPagination, fetchAllTagPage }) {
   }, [fetchAllTagPage, mcqTags.allIds.length, mcqTagsPagination.totalItems])
 
   return (
-    <Permit teacher>
+    <Permit admin teacher>
       <Router>
         <List path="/" />
         <Tags path="tags/*" />

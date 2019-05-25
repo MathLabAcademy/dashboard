@@ -131,6 +131,7 @@ function PersonInfo({ userId, person, title, isGuardian }) {
   return editing ? (
     <Permit admin userId={userId}>
       <Editor
+        userId={userId}
         person={person}
         title={title}
         isGuardian={isGuardian}

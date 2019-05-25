@@ -3,6 +3,7 @@ import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
 import HeaderGrid from 'components/HeaderGrid.js'
+import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
@@ -78,77 +79,79 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, values, status }) => (
-        <Form>
-          <Segment>
-            <HeaderGrid
-              Left={<Header>Create MCQ</Header>}
-              Right={
-                <>
-                  <Button as={Link} to={`..`}>
-                    Go Back
-                  </Button>
-                  <Button type="reset">Reset</Button>
-                  <Button
-                    positive
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={!isValid || isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </>
-              }
-            />
-          </Segment>
-
-          <Segment>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
-
-            <FormRichText name="text" label={`Question`} />
-
-            <FormSelect
-              name="answerIndex"
-              label={'Answer'}
-              options={answerIndexOptions}
-            />
-
-            <Segment secondary>
-              <ErrorMessage
-                name={`options`}
-                component="p"
-                className="red text"
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, values, status }) => (
+          <Form>
+            <Segment>
+              <HeaderGrid
+                Left={<Header>Create MCQ</Header>}
+                Right={
+                  <>
+                    <Button as={Link} to={`..`}>
+                      Go Back
+                    </Button>
+                    <Button type="reset">Reset</Button>
+                    <Button
+                      positive
+                      type="submit"
+                      loading={isSubmitting}
+                      disabled={!isValid || isSubmitting}
+                    >
+                      Save
+                    </Button>
+                  </>
+                }
               />
-
-              {values.options.map((_, index) => (
-                <FormRichText
-                  key={`options.${index}`}
-                  name={`options.${index}`}
-                  label={`Option ${index + 1}`}
-                />
-              ))}
             </Segment>
 
-            <FormSelect
-              name="tagIds"
-              label={`Tags`}
-              options={tagOptions}
-              fluid
-              multiple
-              search
-              selection
-            />
-          </Segment>
-        </Form>
-      )}
-    </Formik>
+            <Segment>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
+
+              <FormRichText name="text" label={`Question`} />
+
+              <FormSelect
+                name="answerIndex"
+                label={'Answer'}
+                options={answerIndexOptions}
+              />
+
+              <Segment secondary>
+                <ErrorMessage
+                  name={`options`}
+                  component="p"
+                  className="red text"
+                />
+
+                {values.options.map((_, index) => (
+                  <FormRichText
+                    key={`options.${index}`}
+                    name={`options.${index}`}
+                    label={`Option ${index + 1}`}
+                  />
+                ))}
+              </Segment>
+
+              <FormSelect
+                name="tagIds"
+                label={`Tags`}
+                options={tagOptions}
+                fluid
+                multiple
+                search
+                selection
+              />
+            </Segment>
+          </Form>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

@@ -21,7 +21,7 @@ function TransactionInfo({ userId, user, title, readCredit }) {
   }, [readCredit, userId])
 
   return (
-    <Segment className="mathlab user-info">
+    <Segment>
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
@@ -34,7 +34,7 @@ function TransactionInfo({ userId, user, title, readCredit }) {
                 </Button>
               </Permit>
             )}
-            <Permit teacher userId={get(user, 'id')}>
+            <Permit admin teacher userId={userId}>
               <Button as={Link} to={'transactions'}>
                 Transactions
               </Button>
@@ -43,7 +43,7 @@ function TransactionInfo({ userId, user, title, readCredit }) {
         }
       />
 
-      <Table basic="very" compact>
+      <Table basic="very" compact className="horizontal-info">
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell collapsing content={`Credit`} />

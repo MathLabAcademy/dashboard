@@ -36,15 +36,17 @@ function MCQView({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
           </Header>
         }
         Right={
-          <Permit teacher>
+          <>
             {!answerId && <Label color="yellow" content={`need answer`} />}
             <Button as={Link} to={`..`}>
               Go Back
             </Button>
-            <Button as={Link} to={`edit`}>
-              Edit
-            </Button>
-          </Permit>
+            <Permit teacher>
+              <Button as={Link} to={`edit`}>
+                Edit
+              </Button>
+            </Permit>
+          </>
         }
       />
 

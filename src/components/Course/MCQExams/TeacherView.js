@@ -104,7 +104,7 @@ function CourseMCQExamTeacherView({
   const sortedMcqIds = useMemo(() => mcqIds.sort(), [mcqIds])
 
   return (
-    <Permit teacher>
+    <Permit admin teacher>
       <Segment>
         <HeaderGrid Left={<Header>Multiple Choice Questions</Header>} />
 

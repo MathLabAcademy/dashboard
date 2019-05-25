@@ -1,6 +1,7 @@
 import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
+import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import React, { useCallback, useMemo } from 'react'
@@ -70,69 +71,71 @@ function AddMCQ({ mcqExamId, createMCQ }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, values, status }) => (
-        <Modal
-          trigger={
-            <Button type="button" color="blue" onClick={handle.open}>
-              Add New MCQ
-            </Button>
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Add New MCQ</Modal.Header>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, values, status }) => (
+          <Modal
+            trigger={
+              <Button type="button" color="blue" onClick={handle.open}>
+                Add New MCQ
+              </Button>
+            }
+            as={Form}
+            closeIcon
+            open={open}
+            onClose={handle.close}
+          >
+            <Modal.Header>Add New MCQ</Modal.Header>
 
-          <Modal.Content>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
+            <Modal.Content>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <FormRichText name="text" label={`Question`} />
+              <FormRichText name="text" label={`Question`} />
 
-            <FormSelect
-              name="answerIndex"
-              label={'Answer'}
-              options={answerIndexOptions}
-            />
-
-            <Segment secondary>
-              <ErrorMessage
-                name={`options`}
-                component="p"
-                className="red text"
+              <FormSelect
+                name="answerIndex"
+                label={'Answer'}
+                options={answerIndexOptions}
               />
 
-              {values.options.map((_, index) => (
-                <FormRichText
-                  key={`options.${index}`}
-                  name={`options.${index}`}
-                  label={`Option ${index + 1}`}
+              <Segment secondary>
+                <ErrorMessage
+                  name={`options`}
+                  component="p"
+                  className="red text"
                 />
-              ))}
-            </Segment>
-          </Modal.Content>
 
-          <Modal.Actions>
-            <Button type="reset">Reset</Button>
-            <Button
-              positive
-              type="submit"
-              loading={isSubmitting}
-              disabled={!isValid || isSubmitting}
-            >
-              Save
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      )}
-    </Formik>
+                {values.options.map((_, index) => (
+                  <FormRichText
+                    key={`options.${index}`}
+                    name={`options.${index}`}
+                    label={`Option ${index + 1}`}
+                  />
+                ))}
+              </Segment>
+            </Modal.Content>
+
+            <Modal.Actions>
+              <Button type="reset">Reset</Button>
+              <Button
+                positive
+                type="submit"
+                loading={isSubmitting}
+                disabled={!isValid || isSubmitting}
+              >
+                Save
+              </Button>
+            </Modal.Actions>
+          </Modal>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

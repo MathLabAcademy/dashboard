@@ -28,7 +28,7 @@ function CourseMCQExamList({
   }, [currentUser.id, currentUser.roleId, enrollments])
 
   return (
-    <Permit teacher student>
+    <Permit admin teacher student>
       {isEnrolled && (
         <Segment>
           <HeaderGrid

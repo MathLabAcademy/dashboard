@@ -8,7 +8,7 @@ import View from './View.js'
 
 function Courses() {
   return (
-    <Permit teacher student>
+    <Permit admin teacher student>
       <Router>
         <List path="/" />
         <Create path="/create" />

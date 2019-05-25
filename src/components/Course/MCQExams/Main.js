@@ -8,7 +8,7 @@ import View from './View.js'
 
 function CourseMCQExams({ courseId }) {
   return (
-    <Permit teacher student>
+    <Permit admin teacher student>
       <Router>
         <List path="/" courseId={courseId} linkToBase="mcqexams/" />
         <List path="mcqexams" courseId={courseId} linkToBase="" />

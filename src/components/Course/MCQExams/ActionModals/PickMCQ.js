@@ -1,5 +1,6 @@
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { SlateViewer } from 'components/Slate'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
@@ -122,73 +123,75 @@ function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({
-        isSubmitting,
-        isValid,
-        values,
-        errors,
-        status,
-        setFieldValue,
-        setFieldError
-      }) => (
-        <Modal
-          trigger={
-            <Button type="button" color="blue" onClick={handle.open}>
-              Pick MCQ
-            </Button>
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Pick MCQ</Modal.Header>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({
+          isSubmitting,
+          isValid,
+          values,
+          errors,
+          status,
+          setFieldValue,
+          setFieldError
+        }) => (
+          <Modal
+            trigger={
+              <Button type="button" color="blue" onClick={handle.open}>
+                Pick MCQ
+              </Button>
+            }
+            as={Form}
+            closeIcon
+            open={open}
+            onClose={handle.close}
+          >
+            <Modal.Header>Pick MCQ</Modal.Header>
 
-          <Modal.Content>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
+            <Modal.Content>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <Picker
-              name="mcqId"
-              mcqId={values.mcqId}
-              setFieldValue={setFieldValue}
-              setFieldError={setFieldError}
-            />
-          </Modal.Content>
+              <Picker
+                name="mcqId"
+                mcqId={values.mcqId}
+                setFieldValue={setFieldValue}
+                setFieldError={setFieldError}
+              />
+            </Modal.Content>
 
-          <Modal.Actions>
-            <HeaderGrid
-              Left={
-                <Message
-                  color="yellow"
-                  hidden={!errors.mcqId}
-                  content={errors.mcqId}
-                />
-              }
-              Right={
-                <>
-                  <Button type="reset">Reset</Button>
-                  <Button
-                    positive
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={!isValid || isSubmitting}
-                  >
-                    Pick
-                  </Button>
-                </>
-              }
-            />
-          </Modal.Actions>
-        </Modal>
-      )}
-    </Formik>
+            <Modal.Actions>
+              <HeaderGrid
+                Left={
+                  <Message
+                    color="yellow"
+                    hidden={!errors.mcqId}
+                    content={errors.mcqId}
+                  />
+                }
+                Right={
+                  <>
+                    <Button type="reset">Reset</Button>
+                    <Button
+                      positive
+                      type="submit"
+                      loading={isSubmitting}
+                      disabled={!isValid || isSubmitting}
+                    >
+                      Pick
+                    </Button>
+                  </>
+                }
+              />
+            </Modal.Actions>
+          </Modal>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

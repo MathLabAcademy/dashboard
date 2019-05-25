@@ -2,6 +2,7 @@ import { Link } from '@reach/router'
 import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField.js'
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid.js'
+import Permit from 'components/Permit'
 import { SlateViewer } from 'components/Slate/index.js'
 import { Formik } from 'formik'
 import { get, map, sortBy } from 'lodash-es'
@@ -30,7 +31,7 @@ function MCQ({ mcq, index }) {
   }, [mcq.Options])
 
   return (
-    <>
+    <Permit teacher>
       <HeaderGrid
         Left={
           <Header>
@@ -58,7 +59,7 @@ function MCQ({ mcq, index }) {
           ))}
         </Grid>
       </Segment>
-    </>
+    </Permit>
   )
 }
 

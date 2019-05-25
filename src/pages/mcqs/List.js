@@ -11,6 +11,7 @@ import { fetchMCQPage } from 'store/actions/mcqs.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import formatDropdownOptions from 'utils/format-dropdown-options.js'
 import ListItem from './ListItem.js'
+import Permit from 'components/Permit.js'
 
 function MCQList({ pagination, fetchPage, mcqTags }) {
   const tagsRef = useRef()
@@ -52,9 +53,11 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
           Left={<Header>Multiple Choice Questions</Header>}
           Right={
             <>
-              <Button as={Link} to={`create`} color="blue">
-                Create
-              </Button>
+              <Permit teacher>
+                <Button as={Link} to={`create`} color="blue">
+                  Create
+                </Button>
+              </Permit>
               <Button
                 type="button"
                 icon="tags"

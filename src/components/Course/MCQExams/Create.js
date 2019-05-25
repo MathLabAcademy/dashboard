@@ -2,6 +2,7 @@ import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { DateTime } from 'luxon'
 import React, { useCallback, useMemo } from 'react'
@@ -63,60 +64,62 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, status }) => (
-        <Form>
-          <Segment>
-            <HeaderGrid
-              Left={<Header>New MCQ Exam:</Header>}
-              Right={
-                <>
-                  <Button as={Link} to="..">
-                    Cancel
-                  </Button>
-                  <Button type="reset">Reset</Button>
-                  <Button
-                    positive
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={!isValid || isSubmitting}
-                  >
-                    Create
-                  </Button>
-                </>
-              }
-            />
-          </Segment>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, status }) => (
+          <Form>
+            <Segment>
+              <HeaderGrid
+                Left={<Header>New MCQ Exam:</Header>}
+                Right={
+                  <>
+                    <Button as={Link} to="..">
+                      Cancel
+                    </Button>
+                    <Button type="reset">Reset</Button>
+                    <Button
+                      positive
+                      type="submit"
+                      loading={isSubmitting}
+                      disabled={!isValid || isSubmitting}
+                    >
+                      Create
+                    </Button>
+                  </>
+                }
+              />
+            </Segment>
 
-          <Segment>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
+            <Segment>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <FormInput type="date" name="date" label={`Date`} />
+              <FormInput type="date" name="date" label={`Date`} />
 
-            <FormInput
-              type="number"
-              name="duration"
-              label={`Duration (minutes)`}
-              step="5"
-            />
+              <FormInput
+                type="number"
+                name="duration"
+                label={`Duration (minutes)`}
+                step="5"
+              />
 
-            <FormInput name="name" label={`Name`} />
+              <FormInput name="name" label={`Name`} />
 
-            <FormInput
-              id="description"
-              name="description"
-              label={`Description`}
-            />
-          </Segment>
-        </Form>
-      )}
-    </Formik>
+              <FormInput
+                id="description"
+                name="description"
+                label={`Description`}
+              />
+            </Segment>
+          </Form>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

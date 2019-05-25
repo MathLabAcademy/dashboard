@@ -3,6 +3,7 @@ import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
 import FormTextArea from 'components/Form/TextArea.js'
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -62,58 +63,60 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   )
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      enableReinitialize
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, status }) => (
-        <Form>
-          <Segment>
-            <HeaderGrid
-              Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
-              Right={
-                <>
-                  <Button as={Link} to="..">
-                    Go Back
-                  </Button>
-                  <Button type="reset">Reset</Button>
-                  <Button
-                    positive
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={!isValid || isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </>
-              }
-            />
-          </Segment>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, status }) => (
+          <Form>
+            <Segment>
+              <HeaderGrid
+                Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
+                Right={
+                  <>
+                    <Button as={Link} to="..">
+                      Go Back
+                    </Button>
+                    <Button type="reset">Reset</Button>
+                    <Button
+                      positive
+                      type="submit"
+                      loading={isSubmitting}
+                      disabled={!isValid || isSubmitting}
+                    >
+                      Save
+                    </Button>
+                  </>
+                }
+              />
+            </Segment>
 
-          <Segment>
-            {status ? <Message color="yellow">{status}</Message> : null}
+            <Segment>
+              {status ? <Message color="yellow">{status}</Message> : null}
 
-            <FormInput id="name" name="name" label={`Name`} />
+              <FormInput id="name" name="name" label={`Name`} />
 
-            <FormTextArea
-              id="description"
-              name="description"
-              label={`Description`}
-            />
+              <FormTextArea
+                id="description"
+                name="description"
+                label={`Description`}
+              />
 
-            <FormInput
-              type="number"
-              step="100"
-              id="price"
-              name="price"
-              label={`Price (BDT)`}
-            />
-          </Segment>
-        </Form>
-      )}
-    </Formik>
+              <FormInput
+                type="number"
+                step="100"
+                id="price"
+                name="price"
+                label={`Price (BDT)`}
+              />
+            </Segment>
+          </Form>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

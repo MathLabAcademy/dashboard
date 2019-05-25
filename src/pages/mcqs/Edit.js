@@ -3,6 +3,7 @@ import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
 import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import {
   get,
@@ -111,71 +112,73 @@ function MCQEdit({
   }, [mcqTags.allIds, mcqTags.byId])
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      enableReinitialize
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, values, status }) => (
-        <Form>
-          <Segment>
-            <HeaderGrid
-              Left={<Header>Edit MCQ #{mcqId}</Header>}
-              Right={
-                <>
-                  <Button as={Link} to={`..`}>
-                    Go Back
-                  </Button>
-                  <Button type="reset">Reset</Button>
-                  <Button
-                    positive
-                    type="submit"
-                    loading={isSubmitting}
-                    disabled={!isValid || isSubmitting}
-                  >
-                    Save
-                  </Button>
-                </>
-              }
-            />
-          </Segment>
-          <Segment>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
-
-            <FormRichText name="text" label={`Question`} />
-
-            <FormSelect
-              name="answerId"
-              label={`Answer`}
-              options={answerIndexOptions}
-            />
-
-            <Segment secondary>
-              {Object.keys(values.options).map((mcqOptionId, index) => (
-                <FormRichText
-                  key={`options.${mcqOptionId}`}
-                  name={`options.${mcqOptionId}`}
-                  label={`Option ${index + 1}`}
-                />
-              ))}
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, values, status }) => (
+          <Form>
+            <Segment>
+              <HeaderGrid
+                Left={<Header>Edit MCQ #{mcqId}</Header>}
+                Right={
+                  <>
+                    <Button as={Link} to={`..`}>
+                      Go Back
+                    </Button>
+                    <Button type="reset">Reset</Button>
+                    <Button
+                      positive
+                      type="submit"
+                      loading={isSubmitting}
+                      disabled={!isValid || isSubmitting}
+                    >
+                      Save
+                    </Button>
+                  </>
+                }
+              />
             </Segment>
+            <Segment>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <FormSelect
-              name="tagIds"
-              label={`Tags`}
-              options={tagOptions}
-              fluid
-              multiple
-              search
-              selection
-            />
-          </Segment>
-        </Form>
-      )}
-    </Formik>
+              <FormRichText name="text" label={`Question`} />
+
+              <FormSelect
+                name="answerId"
+                label={`Answer`}
+                options={answerIndexOptions}
+              />
+
+              <Segment secondary>
+                {Object.keys(values.options).map((mcqOptionId, index) => (
+                  <FormRichText
+                    key={`options.${mcqOptionId}`}
+                    name={`options.${mcqOptionId}`}
+                    label={`Option ${index + 1}`}
+                  />
+                ))}
+              </Segment>
+
+              <FormSelect
+                name="tagIds"
+                label={`Tags`}
+                options={tagOptions}
+                fluid
+                multiple
+                search
+                selection
+              />
+            </Segment>
+          </Form>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 

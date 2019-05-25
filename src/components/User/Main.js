@@ -21,7 +21,7 @@ function User({ userId, user, getUser }) {
   }, [getUser, userId])
 
   return (
-    <>
+    <Permit admin teacher userId={userId}>
       <Segment loading={!user}>
         <HeaderGrid
           leftClassName="auto wide"
@@ -67,7 +67,7 @@ function User({ userId, user, getUser }) {
         <Transactions path="transactions" userId={userId} />
         <ChangePassword path="change-password" userId={userId} />
       </Router>
-    </>
+    </Permit>
   )
 }
 

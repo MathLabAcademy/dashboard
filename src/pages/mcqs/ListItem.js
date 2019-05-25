@@ -31,15 +31,17 @@ function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
             </Header>
           }
           Right={
-            <Permit teacher>
+            <>
               {!answerId && <Label color="yellow" content={`need answer`} />}
-              <Button as={Link} to={`${mcqId}/edit`}>
-                Edit
-              </Button>
+              <Permit teacher>
+                <Button as={Link} to={`${mcqId}/edit`}>
+                  Edit
+                </Button>
+              </Permit>
               <Button color="blue" as={Link} to={`${mcqId}`}>
                 Open
               </Button>
-            </Permit>
+            </>
           }
         />
 

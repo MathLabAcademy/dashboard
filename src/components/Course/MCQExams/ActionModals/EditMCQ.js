@@ -1,14 +1,15 @@
 import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
+import FormSelect from 'components/Form/Select.js'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
-import { map, get, keyBy, mapValues } from 'lodash-es'
+import { get, keyBy, map, mapValues } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal, Segment } from 'semantic-ui-react'
 import { updateMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
-import FormSelect from 'components/Form/Select.js'
 
 const getValidationSchema = options => {
   const textSchema = Yup.string().required(`required`)
@@ -76,68 +77,70 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
   }, [options])
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      enableReinitialize
-      onSubmit={onSubmit}
-    >
-      {({ isSubmitting, isValid, values, status }) => (
-        <Modal
-          trigger={
-            <Button
-              type="button"
-              color="blue"
-              onClick={handle.open}
-              label={answerId ? null : '?'}
-              content={'Edit'}
-            />
-          }
-          as={Form}
-          closeIcon
-          open={open}
-          onClose={handle.close}
-        >
-          <Modal.Header>Edit MCQ #{index + 1}</Modal.Header>
+    <Permit teacher>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={onSubmit}
+      >
+        {({ isSubmitting, isValid, values, status }) => (
+          <Modal
+            trigger={
+              <Button
+                type="button"
+                color="blue"
+                onClick={handle.open}
+                label={answerId ? null : '?'}
+                content={'Edit'}
+              />
+            }
+            as={Form}
+            closeIcon
+            open={open}
+            onClose={handle.close}
+          >
+            <Modal.Header>Edit MCQ #{index + 1}</Modal.Header>
 
-          <Modal.Content>
-            <Message color="yellow" hidden={!status}>
-              {status}
-            </Message>
+            <Modal.Content>
+              <Message color="yellow" hidden={!status}>
+                {status}
+              </Message>
 
-            <FormRichText name="text" label={`Question`} />
+              <FormRichText name="text" label={`Question`} />
 
-            <FormSelect
-              name="answerId"
-              label={`Answer`}
-              options={answerIndexOptions}
-            />
+              <FormSelect
+                name="answerId"
+                label={`Answer`}
+                options={answerIndexOptions}
+              />
 
-            <Segment secondary>
-              {Object.keys(values.options).map((mcqOptionId, index) => (
-                <FormRichText
-                  key={`options.${mcqOptionId}`}
-                  name={`options.${mcqOptionId}`}
-                  label={`Option ${index + 1}`}
-                />
-              ))}
-            </Segment>
-          </Modal.Content>
+              <Segment secondary>
+                {Object.keys(values.options).map((mcqOptionId, index) => (
+                  <FormRichText
+                    key={`options.${mcqOptionId}`}
+                    name={`options.${mcqOptionId}`}
+                    label={`Option ${index + 1}`}
+                  />
+                ))}
+              </Segment>
+            </Modal.Content>
 
-          <Modal.Actions>
-            <Button type="reset">Reset</Button>
-            <Button
-              positive
-              type="submit"
-              loading={isSubmitting}
-              disabled={!isValid || isSubmitting}
-            >
-              Save
-            </Button>
-          </Modal.Actions>
-        </Modal>
-      )}
-    </Formik>
+            <Modal.Actions>
+              <Button type="reset">Reset</Button>
+              <Button
+                positive
+                type="submit"
+                loading={isSubmitting}
+                disabled={!isValid || isSubmitting}
+              >
+                Save
+              </Button>
+            </Modal.Actions>
+          </Modal>
+        )}
+      </Formik>
+    </Permit>
   )
 }
 
