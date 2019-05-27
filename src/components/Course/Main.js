@@ -1,10 +1,11 @@
 import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
+import { SlateViewer } from 'components/Slate/index.js'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
+import { Button, Header, Segment, Table } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults.js'
 import CourseCQExams from './CQExams/Main.js'
 import Enroll from './Enroll.js'
@@ -19,16 +20,7 @@ function Course({ courseId, course, enrollments, currentUser }) {
     <>
       <Segment loading={!course}>
         <HeaderGrid
-          Left={
-            <Header>
-              {get(course, 'name')}
-              <Header.Subheader>
-                {get(course, 'description')}
-                <br />
-                Price: {get(course, 'price') / 100} BDT
-              </Header.Subheader>
-            </Header>
-          }
+          Left={<Header>{get(course, 'name')}</Header>}
           Right={
             <>
               <Permit teacher>
@@ -47,6 +39,25 @@ function Course({ courseId, course, enrollments, currentUser }) {
             </>
           }
         />
+      </Segment>
+
+      <Segment>
+        <Table basic="very" compact className="horizontal-info">
+          <Table.Body>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Desccription`} />
+              <Table.Cell
+                content={
+                  <SlateViewer initialValue={get(course, 'description')} />
+                }
+              />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Price`} />
+              <Table.Cell content={`${get(course, 'price') / 100} BDT`} />
+            </Table.Row>
+          </Table.Body>
+        </Table>
       </Segment>
 
       <CourseCQExams courseId={courseId} />

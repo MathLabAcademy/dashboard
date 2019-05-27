@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
-import FormTextArea from 'components/Form/TextArea.js'
+import FormRichText from 'components/Form/RichText'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
@@ -99,11 +99,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
 
               <FormInput id="name" name="name" label={`Name`} />
 
-              <FormTextArea
-                id="description"
-                name="description"
-                label={`Description`}
-              />
+              <FormRichText name="description" label={`Description`} />
 
               <FormInput
                 type="number"
