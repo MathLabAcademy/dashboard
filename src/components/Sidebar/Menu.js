@@ -32,6 +32,11 @@ const items = [
         permits: ['admin', 'teacher']
       }
     ]
+  },
+  {
+    title: `Batches`,
+    link: '/batches',
+    permits: ['admin', 'teacher']
   }
 ]
 

@@ -45,7 +45,7 @@ function SlateEditor({ editorRef, initialValue, readOnly }) {
     <>
       <SlateEditorToolbar editor={editorRef.current} />
       <Segment>
-        <Container text>
+        <Container>
           <Editor
             onChange={onChange}
             ref={editorRef}

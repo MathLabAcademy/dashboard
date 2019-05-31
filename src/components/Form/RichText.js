@@ -1,8 +1,8 @@
-import HeaderGrid from 'components/HeaderGrid';
-import SlateEditor, { SlateViewer } from 'components/Slate/index.js';
-import { ErrorMessage, Field, getIn } from 'formik';
-import React, { useRef, useState } from 'react';
-import { Button, FormField, Segment } from 'semantic-ui-react';
+import HeaderGrid from 'components/HeaderGrid'
+import SlateEditor, { SlateViewer } from 'components/Slate/index.js'
+import { ErrorMessage, Field, getIn } from 'formik'
+import React, { useRef, useState } from 'react'
+import { Button, FormField, Segment } from 'semantic-ui-react'
 
 function RichTextField({
   field: { name, value },
