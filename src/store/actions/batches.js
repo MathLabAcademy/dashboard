@@ -10,8 +10,10 @@ import {
   BATCHCLASS_UPDATE,
   BATCHFEE_ADD,
   BATCHFEE_BULK_ADD,
+  BATCHFEE_REMOVE,
   BATCHPAYMENT_ADD,
   BATCHPAYMENT_BULK_ADD,
+  BATCHPAYMENT_REMOVE,
   BATCHSTUDENT_ADD,
   BATCHSTUDENT_BULK_ADD,
   BATCHSTUDENT_NEXT_ID_SET,
@@ -19,8 +21,7 @@ import {
   BATCHSTUDENT_PAGE_REMOVE,
   BATCHSTUDENT_PAGE_REQUEST,
   BATCHSTUDENT_PAGINATION_PURGE,
-  BATCHSTUDENT_UPDATE,
-  BATCHPAYMENT_REMOVE
+  BATCHSTUDENT_UPDATE
 } from './actionTypes.js'
 
 export const createBatchClass = batchClassData => async dispatch => {
@@ -108,6 +109,24 @@ export const setBatchClassFee = (
   if (error) throw error
 
   dispatch({ type: BATCHFEE_ADD, data })
+
+  return data
+}
+
+export const unsetBatchClassFee = (
+  batchClassId,
+  year,
+  month
+) => async dispatch => {
+  const url = `/batches/classes/${batchClassId}/fees/${year}/${month}`
+
+  const { data, error } = await api(url, {
+    method: 'DELETE'
+  })
+
+  if (error) throw error
+
+  dispatch({ type: BATCHFEE_REMOVE, data })
 
   return data
 }

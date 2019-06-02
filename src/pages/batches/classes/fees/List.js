@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchClassFeesForYear } from 'store/actions/batches.js'
 import SetFee from './ActionModals/SetFee.js'
+import UnsetFee from './ActionModals/UnsetFee.js'
 
 const months = Info.months()
 
@@ -23,6 +24,12 @@ function _ListItemRow({ batchClassId, year, month, monthName, batchFee }) {
       <Table.Cell collapsing>{amount}</Table.Cell>
       <Table.Cell textAlign="right">
         <Permit teacher>
+          <UnsetFee
+            batchClassId={batchClassId}
+            year={year}
+            month={month}
+            monthName={monthName}
+          />
           <SetFee
             batchClassId={batchClassId}
             year={year}

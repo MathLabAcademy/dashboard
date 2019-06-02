@@ -141,7 +141,7 @@ function BatchCourseStudentPayments({
                     monthName={monthName}
                   />
                 )}
-                {payment && fee && (
+                {payment && (
                   <ClearMonthPaid
                     batchPaymentId={get(payment, 'id')}
                     batchClassId={batchClassId}

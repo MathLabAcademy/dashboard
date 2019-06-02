@@ -15,7 +15,8 @@ import {
   BATCHSTUDENT_BULK_ADD,
   BATCHSTUDENT_NEXT_ID_SET,
   BATCHSTUDENT_REMOVE,
-  BATCHSTUDENT_UPDATE
+  BATCHSTUDENT_UPDATE,
+  BATCHFEE_REMOVE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -100,6 +101,24 @@ const batchClassesReducer = (state = initialClassesState, { type, data }) => {
               }))
             })
           )
+        }
+      }
+    case BATCHFEE_REMOVE:
+      return {
+        ...state,
+        feesById: {
+          ...state.feesById,
+          [data.batchClassId]: {
+            ...get(state.feesById, data.batchClassId, emptyObject),
+            [data.year]: {
+              ...get(
+                state.feesById,
+                [data.batchClassId, data.year],
+                emptyObject
+              ),
+              [data.month]: undefined
+            }
+          }
         }
       }
     default:
