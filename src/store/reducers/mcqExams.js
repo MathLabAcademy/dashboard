@@ -44,7 +44,7 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
     case MCQEXAM_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case MCQEXAM_UPDATE:

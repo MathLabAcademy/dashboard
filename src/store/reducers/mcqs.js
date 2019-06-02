@@ -39,7 +39,7 @@ const mcqsReducer = (state = initialState, { type, data }) => {
     case MCQ_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case MCQ_UPDATE:

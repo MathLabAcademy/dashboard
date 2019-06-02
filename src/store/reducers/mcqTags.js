@@ -36,7 +36,7 @@ const mcqTagsReducer = (state = initialState, { type, data }) => {
     case MCQTAG_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case MCQTAG_UPDATE:

@@ -45,7 +45,7 @@ const coursesReducer = (state = initialState, { type, data }) => {
     case COURSE_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case COURSE_UPDATE:

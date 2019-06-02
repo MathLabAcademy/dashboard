@@ -51,7 +51,7 @@ const batchClassesReducer = (state = initialClassesState, { type, data }) => {
     case BATCHCLASS_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case BATCHCLASS_UPDATE:
@@ -142,7 +142,7 @@ const batchStudentsReducer = (
     case BATCHSTUDENT_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case BATCHSTUDENT_UPDATE:
@@ -222,7 +222,7 @@ const batchPaymentsReducer = (state = initialPaymentsState, { type, data }) => {
     case BATCHPAYMENT_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, id => id !== data.id),
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
         allIds: ids.remove(state.allIds, data)
       }
     case BATCHPAYMENT_UPDATE:

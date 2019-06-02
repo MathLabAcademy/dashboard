@@ -6,12 +6,11 @@ import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import {
   getAllBatchClassFeesForYear,
-  getAllBatchStudentPayments,
-  setBatchStudentPaymentMonthPaid
+  getAllBatchStudentPayments
 } from 'store/actions/batches.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
-
 import SetMonthPaid from '../ActionModals/SetMonthPaid.js'
+import ClearMonthPaid from '../ActionModals/ClearMonthPaid.js'
 
 const months = Info.months()
 
@@ -135,6 +134,16 @@ function BatchCourseStudentPayments({
               <Table.Cell collapsing>
                 {!payment && fee && (
                   <SetMonthPaid
+                    batchClassId={batchClassId}
+                    batchStudentId={batchStudentId}
+                    year={year}
+                    month={month}
+                    monthName={monthName}
+                  />
+                )}
+                {payment && fee && (
+                  <ClearMonthPaid
+                    batchPaymentId={get(payment, 'id')}
                     batchClassId={batchClassId}
                     batchStudentId={batchStudentId}
                     year={year}
