@@ -2,20 +2,22 @@ import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
 import FormRichText from 'components/Form/RichText'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import { get } from 'lodash-es'
+import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getCourse, updateCourse } from 'store/actions/courses.js'
 import * as Yup from 'yup'
 
-const getInitialValues = data => ({
-  name: get(data, 'name') || '',
-  description: get(data, 'description') || '',
-  price: (get(data, 'price') || 0) / 100
+const getInitialValues = course => ({
+  name: get(course, 'name') || '',
+  description: get(course, 'description') || '',
+  price: (get(course, 'price') || 0) / 100,
+  tagIds: get(course, 'tagIds').map(String)
 })
 
 const getValidationSchema = () => {
@@ -24,26 +26,28 @@ const getValidationSchema = () => {
     description: Yup.string().required(`required`),
     price: Yup.number()
       .integer()
-      .required(`required`)
+      .required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer())
   })
 }
 
-function CourseEdit({ courseId, data, getData, updateCourse }) {
+function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
   useEffect(() => {
-    if (!data) getData(courseId)
-  }, [courseId, data, getData])
+    if (!course) getCourse(courseId)
+  }, [courseId, course, getCourse])
 
-  const initialValues = useMemo(() => getInitialValues(data), [data])
+  const initialValues = useMemo(() => getInitialValues(course), [course])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
     async ({ price, ...values }, actions) => {
+      actions.setStatus(null)
+
       try {
         await updateCourse(courseId, {
           price: price * 100,
           ...values
         })
-        actions.setStatus(null)
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -62,6 +66,13 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
     [courseId, updateCourse]
   )
 
+  const tagOptions = useMemo(() => {
+    return zipObject(
+      courseTags.allIds,
+      courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+    )
+  }, [courseTags.allIds, courseTags.byId])
+
   return (
     <Permit teacher>
       <Formik
@@ -74,7 +85,7 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header as="h2">Edit Course #{get(data, 'id')}:</Header>}
+                Left={<Header as="h2">Edit Course #{courseId}:</Header>}
                 Right={
                   <>
                     <Button as={Link} to="..">
@@ -108,6 +119,16 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
                 name="price"
                 label={`Price (BDT)`}
               />
+
+              <FormSelect
+                name="tagIds"
+                label={`Tags`}
+                options={tagOptions}
+                fluid
+                multiple
+                search
+                selection
+              />
             </Segment>
           </Form>
         )}
@@ -116,12 +137,13 @@ function CourseEdit({ courseId, data, getData, updateCourse }) {
   )
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  data: get(courses.byId, courseId)
+const mapStateToProps = ({ courses, courseTags }, { courseId }) => ({
+  course: get(courses.byId, courseId),
+  courseTags
 })
 
 const mapDispatchToProps = {
-  getData: getCourse,
+  getCourse,
   updateCourse
 }
 

@@ -5,7 +5,7 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Header, Segment } from 'semantic-ui-react'
-import { fetchTagPage } from 'store/actions/mcqTags.js'
+import { fetchTagPage } from 'store/actions/courseTags.js'
 import { emptyArray } from 'utils/defaults.js'
 import Create from './ActionModals/Create.js'
 import Edit from './ActionModals/Edit.js'
@@ -21,8 +21,8 @@ function _TagListItem({ tagId, tag }) {
   )
 }
 
-const ListItem = connect(({ mcqTags }, { tagId }) => ({
-  tag: get(mcqTags.byId, tagId)
+const ListItem = connect(({ courseTags }, { tagId }) => ({
+  tag: get(courseTags.byId, tagId)
 }))(_TagListItem)
 
 const queryObject = { length: 40 }
@@ -35,7 +35,7 @@ function TagList({ pagination, fetchPage }) {
   return (
     <>
       <Segment>
-        <HeaderGrid Left={<Header>MCQ Tags</Header>} />
+        <HeaderGrid Left={<Header>Course Tags</Header>} />
       </Segment>
 
       <Segment basic>
@@ -63,7 +63,7 @@ function TagList({ pagination, fetchPage }) {
   )
 }
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.mcqTags
+  pagination: pagination.courseTags
 })
 
 const mapDispatchToProps = {

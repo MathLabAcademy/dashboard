@@ -16,6 +16,10 @@ import {
   BATCHSTUDENT_PAGE_REMOVE,
   BATCHSTUDENT_PAGE_REQUEST,
   BATCHSTUDENT_PAGINATION_PURGE,
+  COURSETAG_PAGE_ADD,
+  COURSETAG_PAGE_REMOVE,
+  COURSETAG_PAGE_REQUEST,
+  COURSETAG_PAGINATION_PURGE,
   COURSE_PAGE_ADD,
   COURSE_PAGE_REMOVE,
   COURSE_PAGE_REQUEST,
@@ -70,6 +74,13 @@ const courses = getPaginationReducer({
   PURGE: COURSE_PAGINATION_PURGE
 })
 
+const courseTags = getPaginationReducer({
+  ADD: COURSETAG_PAGE_ADD,
+  REMOVE: COURSETAG_PAGE_REMOVE,
+  REQUEST: COURSETAG_PAGE_REQUEST,
+  PURGE: COURSETAG_PAGINATION_PURGE
+})
+
 const mcqs = getPaginationReducer({
   ADD: MCQ_PAGE_ADD,
   REMOVE: MCQ_PAGE_REMOVE,
@@ -97,6 +108,7 @@ const paginationReducer = combineReducers({
   // batchPayments,
   batchStudents,
   courses,
+  courseTags,
   mcqs,
   mcqTags,
   users

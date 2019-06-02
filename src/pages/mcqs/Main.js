@@ -6,18 +6,18 @@ import { fetchAllTagPage } from 'store/actions/mcqTags.js'
 import Create from './Create.js'
 import Edit from './Edit.js'
 import List from './List.js'
-import View from './View.js'
 import Tags from './tags/Main.js'
+import View from './View.js'
 
-function MCQs({ mcqTags, mcqTagsPagination, fetchAllTagPage }) {
+function MCQs({ tags, tagsPagination, fetchAllTagPage }) {
   useEffect(() => {
     if (
-      !mcqTagsPagination.totalItems ||
-      mcqTagsPagination.totalItems !== mcqTags.allIds.length
+      !tagsPagination.totalItems ||
+      tagsPagination.totalItems !== tags.allIds.length
     ) {
       fetchAllTagPage({ query: 'length=40' })
     }
-  }, [fetchAllTagPage, mcqTags.allIds.length, mcqTagsPagination.totalItems])
+  }, [fetchAllTagPage, tags.allIds.length, tagsPagination.totalItems])
 
   return (
     <Permit admin teacher>
@@ -33,8 +33,8 @@ function MCQs({ mcqTags, mcqTagsPagination, fetchAllTagPage }) {
 }
 
 const mapStateToProps = ({ mcqTags, pagination }) => ({
-  mcqTags,
-  mcqTagsPagination: pagination.mcqTags
+  tags: mcqTags,
+  tagsPagination: pagination.mcqTags
 })
 
 const mapDispatchToProps = {

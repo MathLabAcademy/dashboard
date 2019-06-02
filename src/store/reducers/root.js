@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import { CURRENT_USER_REMOVE } from 'store/actions/actionTypes.js'
 import batches from './batches.js'
 import courses from './courses.js'
+import courseTags from './courseTags.js'
 import cqExams from './cqExams.js'
 import user from './currentUser.js'
 import errorBoundary from './errorBoundary.js'
@@ -16,6 +17,7 @@ import users from './users.js'
 const rootReducer = combineReducers({
   batches,
   courses,
+  courseTags,
   cqExams,
   user,
   errorBoundary,

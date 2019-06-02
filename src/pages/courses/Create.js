@@ -2,9 +2,11 @@ import { Link } from '@reach/router'
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
 import FormRichText from 'components/Form/RichText'
+import FormSelect from 'components/Form/Select.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
+import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
@@ -14,7 +16,8 @@ import * as Yup from 'yup'
 const getInitialValues = () => ({
   name: '',
   description: '',
-  price: 0
+  price: 0,
+  tagIds: []
 })
 
 const getValidationSchema = () => {
@@ -23,23 +26,33 @@ const getValidationSchema = () => {
     description: Yup.string().required(`required`),
     price: Yup.number()
       .integer()
-      .required(`required`)
+      .required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer())
   })
 }
 
-function CourseCreate({ createCourse, navigate }) {
+function CourseCreate({ createCourse, courseTags, navigate }) {
+  const tagOptions = useMemo(() => {
+    return zipObject(
+      courseTags.allIds,
+      courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+    )
+  }, [courseTags.allIds, courseTags.byId])
+
   const initialValues = useMemo(() => getInitialValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
     async ({ price, ...values }, actions) => {
+      actions.setStatus(null)
+
       try {
         await createCourse({
           price: price * 100,
           ...values
         })
-        actions.setStatus(null)
-        navigate('/courses')
+        actions.resetForm()
+        navigate('..')
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -103,6 +116,16 @@ function CourseCreate({ createCourse, navigate }) {
                 name="price"
                 label={`Price (BDT)`}
               />
+
+              <FormSelect
+                name="tagIds"
+                label={`Tags`}
+                options={tagOptions}
+                fluid
+                multiple
+                search
+                selection
+              />
             </Segment>
           </Form>
         )}
@@ -111,7 +134,9 @@ function CourseCreate({ createCourse, navigate }) {
   )
 }
 
-const mapStateToProps = null
+const mapStateToProps = ({ courseTags }) => ({
+  courseTags
+})
 
 const mapDispatchToProps = {
   createCourse

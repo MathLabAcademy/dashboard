@@ -1,18 +1,50 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Switcher from 'components/Pagination/Switcher.js'
-import usePagination from 'hooks/usePagination.js'
-import { get } from 'lodash-es'
-import React from 'react'
-import { connect } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
-import { fetchCoursePage } from 'store/actions/courses.js'
-import { emptyArray } from 'utils/defaults.js'
-import ListItem from './ListItem.js'
 import Permit from 'components/Permit.js'
+import usePagination from 'hooks/usePagination.js'
+import useToggle from 'hooks/useToggle.js'
+import { get, zipObject } from 'lodash-es'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { connect } from 'react-redux'
+import { Button, Dropdown, Header, Segment } from 'semantic-ui-react'
+import { fetchCoursePage } from 'store/actions/courses.js'
+import { emptyArray, emptyObject } from 'utils/defaults.js'
+import formatDropdownOptions from 'utils/format-dropdown-options.js'
+import ListItem from './ListItem.js'
 
-function CourseList({ pagination, fetchPage }) {
-  const [[page, handlePageChange]] = usePagination(pagination, fetchPage)
+function CourseList({ pagination, fetchPage, courseTags }) {
+  const tagsRef = useRef()
+  const [open, handler] = useToggle(false)
+
+  const [queryObject, setQueryObject] = useState({ length: 20 })
+
+  const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
+    queryObject
+  })
+
+  const filterByTags = useCallback(() => {
+    if (!tagsRef.current) return
+
+    const value = tagsRef.current.state.value
+
+    setQueryObject(obj => ({
+      ...obj,
+      filter: {
+        ...get(obj, 'filter', emptyObject),
+        tagIds: value.length ? { '@>': value.map(Number) } : undefined
+      }
+    }))
+  }, [])
+
+  const tagOptions = useMemo(() => {
+    return formatDropdownOptions(
+      zipObject(
+        courseTags.allIds,
+        courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+      )
+    )
+  }, [courseTags.allIds, courseTags.byId])
 
   return (
     <>
@@ -20,14 +52,39 @@ function CourseList({ pagination, fetchPage }) {
         <HeaderGrid
           Left={<Header>Courses</Header>}
           Right={
-            <Permit teacher>
-              <Button as={Link} to={`create`} color="blue">
-                Create
-              </Button>
-            </Permit>
+            <>
+              <Permit teacher>
+                <Button as={Link} to={`create`} color="blue">
+                  Create
+                </Button>
+              </Permit>
+              <Button
+                type="button"
+                icon="tags"
+                active={open}
+                onClick={handler.toggle}
+              />
+            </>
           }
         />
       </Segment>
+
+      {open && (
+        <Segment>
+          <Button fluid labelPosition="left" as="div">
+            <Dropdown
+              ref={tagsRef}
+              fluid
+              multiple
+              search
+              selection
+              options={tagOptions}
+              className="label"
+            />
+            <Button type="button" icon="filter" onClick={filterByTags} />
+          </Button>
+        </Segment>
+      )}
 
       {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
         <ListItem key={id} id={id} />
@@ -42,8 +99,9 @@ function CourseList({ pagination, fetchPage }) {
   )
 }
 
-const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.courses
+const mapStateToProps = ({ pagination, courseTags }) => ({
+  pagination: pagination.courses,
+  courseTags
 })
 
 const mapDispatchToProps = {
