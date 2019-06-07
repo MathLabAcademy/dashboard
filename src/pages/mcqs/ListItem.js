@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import { get, isUndefined } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
@@ -27,7 +27,7 @@ function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
           Left={
             <Header>
               <Header.Subheader>ID: #{mcqId}</Header.Subheader>
-              <SlateViewer initialValue={get(mcq, 'text')} />
+              <DraftViewer rawValue={get(mcq, 'text')} />
             </Header>
           }
           Right={

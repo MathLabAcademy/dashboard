@@ -1,7 +1,7 @@
 import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -47,9 +47,7 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
             <Table.Row>
               <Table.HeaderCell collapsing content={`Desccription`} />
               <Table.Cell
-                content={
-                  <SlateViewer initialValue={get(course, 'description')} />
-                }
+                content={<DraftViewer rawValue={get(course, 'description')} />}
               />
             </Table.Row>
             <Table.Row>

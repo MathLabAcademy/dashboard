@@ -1,6 +1,6 @@
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import useCountdown from 'hooks/useCountdown.js'
 import useInterval from 'hooks/useInterval.js'
 import { get, sortBy } from 'lodash-es'
@@ -68,7 +68,7 @@ function _MCQ({
         Left={
           <Header>
             <Header.Subheader>#{index + 1}</Header.Subheader>
-            <SlateViewer initialValue={get(mcq, 'text')} />
+            <DraftViewer rawValue={get(mcq, 'text')} />
           </Header>
         }
       />
@@ -84,7 +84,7 @@ function _MCQ({
                 label={
                   <label htmlFor={option.id}>
                     {optionLetters[index]}.{' '}
-                    <SlateViewer initialValue={option.text} inline />
+                    <DraftViewer rawValue={option.text} inline />
                   </label>
                 }
                 disabled={readOnly}

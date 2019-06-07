@@ -1,8 +1,9 @@
 import HeaderGrid from 'components/HeaderGrid'
-import SlateEditor, { SlateViewer } from 'components/Slate/index.js'
+import RichEditor from 'draft/index.js'
 import { ErrorMessage, Field, getIn } from 'formik'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, FormField, Segment } from 'semantic-ui-react'
+import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 
 function RichTextField({
   field: { name, value },
@@ -13,7 +14,19 @@ function RichTextField({
   isStatic,
   disabled
 }) {
-  const editor = useRef(null)
+  const [editorState, setEditorState] = useState(
+    value
+      ? EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
+      : EditorState.createEmpty()
+  )
+
+  useEffect(() => {
+    setEditorState(
+      value
+        ? EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
+        : EditorState.createEmpty()
+    )
+  }, [value])
 
   const [editing, setEditing] = useState(false)
 
@@ -45,8 +58,9 @@ function RichTextField({
               disabled={disabled}
               onClick={() => {
                 if (editing) {
-                  const newValue = editor.current.value.document.text.trim()
-                    ? JSON.stringify(editor.current.value.toJSON())
+                  const contentState = editorState.getCurrentContent()
+                  const newValue = contentState.hasText()
+                    ? JSON.stringify(convertToRaw(contentState))
                     : ''
                   form.setFieldValue(name, newValue)
                   setEditing(false)
@@ -60,11 +74,11 @@ function RichTextField({
       />
 
       <Segment>
-        {editing ? (
-          <SlateEditor ref={editor} initialValue={value} />
-        ) : (
-          <SlateViewer id={id} initialValue={value} />
-        )}
+        <RichEditor
+          editorState={editorState}
+          setEditorState={setEditorState}
+          readOnly={!editing}
+        />
       </Segment>
 
       <ErrorMessage name={name} component="p" className="red text" />

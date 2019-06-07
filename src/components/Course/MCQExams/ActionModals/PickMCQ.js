@@ -1,7 +1,7 @@
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { SlateViewer } from 'components/Slate'
+import { DraftViewer } from 'draft/index.js'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import { get } from 'lodash-es'
@@ -65,7 +65,7 @@ function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
         <Segment basic>
           <Header>
             <Header.Subheader>ID: #{mcqId}</Header.Subheader>
-            <SlateViewer initialValue={mcq.text} />
+            <DraftViewer rawValue={mcq.text} />
           </Header>
         </Segment>
       )}

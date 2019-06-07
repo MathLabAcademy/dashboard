@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -32,7 +32,7 @@ function MCQView({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
         Left={
           <Header>
             <Header.Subheader>ID: #{mcqId}</Header.Subheader>
-            <SlateViewer initialValue={mcq.text} />
+            <DraftViewer rawValue={mcq.text} />
           </Header>
         }
         Right={
@@ -55,7 +55,7 @@ function MCQView({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
           {options.map((option, index) => (
             <Grid.Column key={option.id}>
               {optionLetters[index]}.{' '}
-              <SlateViewer initialValue={option.text} inline />{' '}
+              <DraftViewer rawValue={option.text} inline />{' '}
               {option.id === answerId && <Icon name="check" color="green" />}
             </Grid.Column>
           ))}

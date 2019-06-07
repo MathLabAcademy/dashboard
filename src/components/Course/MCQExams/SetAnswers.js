@@ -3,7 +3,7 @@ import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField.j
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import { Formik } from 'formik'
 import { get, map, sortBy } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -36,7 +36,7 @@ function MCQ({ mcq, index }) {
         Left={
           <Header>
             <Header.Subheader>#{index + 1}</Header.Subheader>
-            <SlateViewer initialValue={mcq.text} />
+            <DraftViewer rawValue={mcq.text} />
           </Header>
         }
       />
@@ -51,7 +51,7 @@ function MCQ({ mcq, index }) {
                 label={
                   <>
                     {optionLetters[index]}.{' '}
-                    <SlateViewer initialValue={option.text} inline />
+                    <DraftViewer rawValue={option.text} inline />
                   </>
                 }
               />

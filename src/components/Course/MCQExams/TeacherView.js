@@ -1,6 +1,6 @@
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit.js'
-import { SlateViewer } from 'components/Slate/index.js'
+import { DraftViewer } from 'draft/index.js'
 import useToggle from 'hooks/useToggle.js'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
@@ -42,7 +42,7 @@ function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
         Left={
           <Header>
             <Header.Subheader>#{index + 1}</Header.Subheader>
-            <SlateViewer initialValue={mcq.text} />
+            <DraftViewer rawValue={mcq.text} />
           </Header>
         }
         Right={
@@ -68,7 +68,7 @@ function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
             {options.map((option, index) => (
               <Grid.Column key={option.id}>
                 {optionLetters[index]}.{' '}
-                <SlateViewer initialValue={option.text} inline />{' '}
+                <DraftViewer rawValue={option.text} inline />{' '}
                 {option.id === answerId && <Icon name="check" color="green" />}
               </Grid.Column>
             ))}
