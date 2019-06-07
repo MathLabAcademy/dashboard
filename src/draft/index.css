@@ -1,0 +1,38 @@
+.RichEditor-controls {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.RichEditor-editor {
+  cursor: text;
+  font-size: 16px;
+}
+
+.RichEditor-active.RichEditor-editor .public-DraftEditorPlaceholder-root,
+.RichEditor-active.RichEditor-editor .public-DraftEditor-content {
+  padding-top: 15px;
+}
+
+.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
+  display: none;
+}
+
+.RichEditor-editor .RichEditor-blockquote {
+  border-left: 5px solid #eee;
+  color: #666;
+  font-family: 'Hoefler Text', 'Georgia', serif;
+  font-style: italic;
+  margin: 16px 0;
+  padding: 10px 20px;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  font-family: 'Inconsolata', 'Menlo', 'Consolas', monospace;
+  font-size: 16px;
+  padding: 0.5em;
+}
+
+.RichEditor-editor .public-DraftStyleDefault-pre pre {
+  margin: 0;
+}
