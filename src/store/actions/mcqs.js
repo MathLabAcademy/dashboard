@@ -7,6 +7,10 @@ import {
   MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
   MCQEXAMQUESTION_ADD,
+  MCQIMAGE_ADD,
+  MCQIMAGE_BULK_ADD,
+  MCQIMAGE_TMP_ADD,
+  MCQIMAGE_TMP_BULK_ADD,
   MCQSUBMISSION_UPDATE,
   MCQ_ADD,
   MCQ_BULK_ADD,
@@ -165,6 +169,74 @@ export const fetchMCQPage = (
   if (storeItems) dispatch({ type: MCQ_BULK_ADD, data })
 
   dispatch({ type: MCQ_PAGE_ADD, page, data, query })
+
+  return data
+}
+
+export const getAllMCQImages = mcqId => async dispatch => {
+  const url = `/mcqs/${mcqId}/images`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQIMAGE_BULK_ADD, data })
+
+  return data
+}
+
+export const getAllMCQTmpImages = () => async dispatch => {
+  const url = `/mcqs/tmp/images`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: MCQIMAGE_TMP_BULK_ADD, data })
+
+  return data
+}
+
+export const uploadMCQImage = (mcqId, mcqImageData) => async dispatch => {
+  const url = `/mcqs/${mcqId}/images`
+
+  const body = new FormData()
+
+  for (const [key, value] of Object.entries(mcqImageData)) {
+    if (value instanceof File) body.set(key, value, value.name)
+    else body.set(key, value)
+  }
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQIMAGE_ADD, data })
+
+  return data
+}
+
+export const uploadMCQTmpImage = mcqImageData => async dispatch => {
+  const url = `/mcqs/tmp/images`
+
+  const body = new FormData()
+
+  for (const [key, value] of Object.entries(mcqImageData)) {
+    if (value instanceof File) body.set(key, value, value.name)
+    else body.set(key, value)
+  }
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQIMAGE_TMP_ADD, data })
 
   return data
 }

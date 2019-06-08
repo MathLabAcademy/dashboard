@@ -16,9 +16,12 @@ import {
 } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Message, Segment } from 'semantic-ui-react'
+import { Button, Header, Message, Segment, Modal } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
+
+import ImageGalleryModal from 'components/MCQs/ImageGalleryModal.js'
+import useToggle from 'hooks/useToggle'
 
 const getValidationSchema = options => {
   const textSchema = Yup.string().required(`required`)
@@ -111,6 +114,8 @@ function MCQEdit({
     )
   }, [mcqTags.allIds, mcqTags.byId])
 
+  const [galleryOpen, galleryHandler] = useToggle(false)
+
   return (
     <Permit teacher>
       <Formik
@@ -126,6 +131,24 @@ function MCQEdit({
                 Left={<Header>Edit MCQ #{mcqId}</Header>}
                 Right={
                   <>
+                    <Modal
+                      closeIcon
+                      open={galleryOpen}
+                      onClose={galleryHandler.close}
+                      trigger={
+                        <Button
+                          type="button"
+                          icon="images"
+                          onClick={galleryHandler.open}
+                        />
+                      }
+                    >
+                      <Modal.Header>MCQ Image Gallery</Modal.Header>
+                      <Modal.Content>
+                        <ImageGalleryModal mcqId={mcqId} />
+                      </Modal.Content>
+                    </Modal>
+
                     <Button as={Link} to={`..`}>
                       Go Back
                     </Button>

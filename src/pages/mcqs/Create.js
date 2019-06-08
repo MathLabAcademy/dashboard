@@ -3,12 +3,14 @@ import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
 import HeaderGrid from 'components/HeaderGrid.js'
+import TmpImageGalleryModal from 'components/MCQs/TmpImageGalleryModal'
 import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
+import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Message, Segment } from 'semantic-ui-react'
+import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
 import { createMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
 
@@ -78,6 +80,8 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
     [createMCQ, navigate]
   )
 
+  const [galleryOpen, galleryHandler] = useToggle(false)
+
   return (
     <Permit teacher>
       <Formik
@@ -92,6 +96,23 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
                 Left={<Header>Create MCQ</Header>}
                 Right={
                   <>
+                    <Modal
+                      closeIcon
+                      open={galleryOpen}
+                      onClose={galleryHandler.close}
+                      trigger={
+                        <Button
+                          type="button"
+                          icon="images"
+                          onClick={galleryHandler.open}
+                        />
+                      }
+                    >
+                      <Modal.Header>Temporary Images</Modal.Header>
+                      <Modal.Content>
+                        <TmpImageGalleryModal />
+                      </Modal.Content>
+                    </Modal>
                     <Button as={Link} to={`..`}>
                       Go Back
                     </Button>

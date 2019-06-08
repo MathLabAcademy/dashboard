@@ -1,12 +1,14 @@
 import Form from 'components/Form/Form.js'
 import FormRichText from 'components/Form/RichText.js'
 import FormSelect from 'components/Form/Select.js'
+import HeaderGrid from 'components/HeaderGrid'
+import TmpImageGalleryModal from 'components/MCQs/TmpImageGalleryModal'
 import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Message, Modal, Segment } from 'semantic-ui-react'
+import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
 import { createMCQ } from 'store/actions/mcqs.js'
 import * as Yup from 'yup'
 
@@ -70,6 +72,8 @@ function AddMCQ({ mcqExamId, createMCQ }) {
     [createMCQ, handle]
   )
 
+  const [galleryOpen, galleryHandler] = useToggle(false)
+
   return (
     <Permit teacher>
       <Formik
@@ -89,7 +93,30 @@ function AddMCQ({ mcqExamId, createMCQ }) {
             open={open}
             onClose={handle.close}
           >
-            <Modal.Header>Add New MCQ</Modal.Header>
+            <Modal.Header>
+              <HeaderGrid
+                Left={<Header>Add New MCQ</Header>}
+                Right={
+                  <Modal
+                    closeIcon
+                    open={galleryOpen}
+                    onClose={galleryHandler.close}
+                    trigger={
+                      <Button
+                        type="button"
+                        icon="images"
+                        onClick={galleryHandler.open}
+                      />
+                    }
+                  >
+                    <Modal.Header>Temporary Images</Modal.Header>
+                    <Modal.Content>
+                      <TmpImageGalleryModal />
+                    </Modal.Content>
+                  </Modal>
+                }
+              />
+            </Modal.Header>
 
             <Modal.Content>
               <Message color="yellow" hidden={!status}>
