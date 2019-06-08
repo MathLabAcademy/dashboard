@@ -6,4 +6,6 @@ const inlineTeXDecorator = {
   component: InlineTeX
 }
 
-export default inlineTeXDecorator
+const decorators = [inlineTeXDecorator]
+
+export default decorators

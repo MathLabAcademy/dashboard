@@ -1,7 +1,7 @@
 import HeaderGrid from 'components/HeaderGrid'
 import RichEditor from 'draft/index.js'
 import { ErrorMessage, Field, getIn } from 'formik'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Button, FormField, Segment } from 'semantic-ui-react'
 import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 
@@ -14,19 +14,7 @@ function RichTextField({
   isStatic,
   disabled
 }) {
-  const [editorState, setEditorState] = useState(
-    value
-      ? EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
-      : EditorState.createEmpty()
-  )
-
-  useEffect(() => {
-    setEditorState(
-      value
-        ? EditorState.createWithContent(convertFromRaw(JSON.parse(value)))
-        : EditorState.createEmpty()
-    )
-  }, [value])
+  const storeRef = useRef()
 
   const [editing, setEditing] = useState(false)
 
@@ -57,7 +45,10 @@ function RichTextField({
               icon={editing ? 'check' : 'edit'}
               disabled={disabled}
               onClick={() => {
+                if (!storeRef.current) return
+
                 if (editing) {
+                  const editorState = storeRef.current().getEditorState()
                   const contentState = editorState.getCurrentContent()
                   const newValue = contentState.hasText()
                     ? JSON.stringify(convertToRaw(contentState))
@@ -74,11 +65,7 @@ function RichTextField({
       />
 
       <Segment>
-        <RichEditor
-          editorState={editorState}
-          setEditorState={setEditorState}
-          readOnly={!editing}
-        />
+        <RichEditor rawState={value} readOnly={!editing} storeRef={storeRef} />
       </Segment>
 
       <ErrorMessage name={name} component="p" className="red text" />

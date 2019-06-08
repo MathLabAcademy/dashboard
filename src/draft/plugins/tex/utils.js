@@ -1,7 +1,25 @@
 import { EditorState, SelectionState } from 'draft-js'
+import TeXBlock from './TeXBlock.js'
 
 const ArrowLeft = 37
 const ArrowRight = 39
+
+export function blockRendererFn(block, getStore, next) {
+  const isAtomic = block.getType() === 'atomic'
+  const isTexBlock = block.getData().get('atomic') === 'texblock'
+
+  if (isAtomic && isTexBlock) {
+    return {
+      component: TeXBlock,
+      editable: false,
+      props: {
+        getStore
+      }
+    }
+  }
+
+  return next()
+}
 
 export function keyBindingFn(event, getStore, next) {
   const store = getStore()
