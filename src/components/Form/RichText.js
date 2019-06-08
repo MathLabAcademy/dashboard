@@ -1,9 +1,9 @@
 import HeaderGrid from 'components/HeaderGrid'
+import { convertToRaw } from 'draft-js'
 import RichEditor from 'draft/index.js'
 import { ErrorMessage, Field, getIn } from 'formik'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, FormField, Segment } from 'semantic-ui-react'
-import { EditorState, convertToRaw, convertFromRaw } from 'draft-js'
 
 function RichTextField({
   field: { name, value },

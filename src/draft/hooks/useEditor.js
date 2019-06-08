@@ -22,15 +22,15 @@ function useEditor(rawState, _readOnly, plugins) {
   const getEditorState = useCallback(() => editorState, [editorState])
   const getReadOnly = useCallback(() => readOnly, [readOnly])
 
-  const pluginStore = useInstance({
+  const store = useInstance({
     getEditorRef: () => editor.current,
     setEditorState,
     setReadOnly
   })
-  pluginStore.getEditorState = getEditorState
-  pluginStore.getReadOnly = getReadOnly
+  store.getEditorState = getEditorState
+  store.getReadOnly = getReadOnly
 
-  const getStore = useCallback(() => pluginStore, [pluginStore])
+  const getStore = useCallback(() => store, [store])
 
   const editorProps = useProps(getStore, plugins)
   const decorator = useDecorator(getStore, plugins)

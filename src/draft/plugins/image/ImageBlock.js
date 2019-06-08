@@ -2,9 +2,8 @@ import useToggle from 'hooks/useToggle.js'
 import React, { useMemo } from 'react'
 import { Modal } from 'semantic-ui-react'
 import Editor from './Editor.js'
-import TeX from './TeX.js'
 
-function TeXBlock({ block, blockProps: { getStore }, contentState }) {
+function ImageBlock({ block, blockProps: { getStore }, contentState }) {
   const [open, handler] = useToggle(false)
 
   const readOnly = getStore().getReadOnly()
@@ -13,19 +12,25 @@ function TeXBlock({ block, blockProps: { getStore }, contentState }) {
     const blockData = block.getData()
 
     return {
-      tex: blockData.get('tex'),
-      type: blockData.get('type')
+      src: blockData.get('src'),
+      caption: blockData.get('caption')
     }
   }, [block])
 
   return readOnly ? (
-    <TeX data={data} />
+    <img src={`/api${data.src}`} alt={data.caption} />
   ) : (
     <Modal
       closeIcon
       open={open}
       onClose={handler.close}
-      trigger={<TeX data={data} onClick={handler.open} />}
+      trigger={
+        <img
+          src={`/api${data.src}`}
+          alt={data.caption}
+          onClick={handler.open}
+        />
+      }
     >
       <Editor
         toUpdate
@@ -38,4 +43,4 @@ function TeXBlock({ block, blockProps: { getStore }, contentState }) {
   )
 }
 
-export default TeXBlock
+export default ImageBlock

@@ -15,6 +15,8 @@ function InlineTeX({
 }) {
   const [open, handler] = useToggle(false)
 
+  const readOnly = getStore().getReadOnly()
+
   const data = useMemo(() => {
     const entity = contentState.getEntity(entityKey)
 
@@ -26,7 +28,9 @@ function InlineTeX({
     }
   }, [contentState, entityKey])
 
-  return (
+  return readOnly ? (
+    <TeX data={data} data-offset-key={offsetKey} />
+  ) : (
     <Modal
       closeIcon
       open={open}

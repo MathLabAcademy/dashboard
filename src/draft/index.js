@@ -1,5 +1,6 @@
 import { Editor } from 'draft-js'
 import 'draft-js/dist/Draft.css'
+import * as ImagePlugin from 'draft/plugins/image/index.js'
 import * as TeXPlugin from 'draft/plugins/tex/index.js'
 import React, { useCallback, useEffect } from 'react'
 import Controls from './Controls.js'
@@ -24,7 +25,7 @@ function blockStyleFn(block) {
   }
 }
 
-const plugins = [TeXPlugin]
+const plugins = [TeXPlugin, ImagePlugin]
 
 export function DraftViewer({ rawValue, inline }) {
   return (
@@ -81,6 +82,7 @@ function DraftEditor({ rawState, readOnly: _readOnly, storeRef, style }) {
         {!_readOnly && (
           <Controls editorState={editorState} setEditorState={setEditorState}>
             <TeXPlugin.Button getStore={getStore} />
+            <ImagePlugin.Button getStore={getStore} />
           </Controls>
         )}
 

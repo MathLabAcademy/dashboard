@@ -83,13 +83,15 @@ const getHandleKeyCommand = (getStore, pluginHandleKeyCommands = []) => (
 
 function useProps(getStore, plugins) {
   const { blockRendererFns, handleKeyCommands, keyBindingFns } = useMemo(() => {
-    const blockRendererFns = plugins.map(
-      ({ blockRendererFn }) => blockRendererFn
-    )
-    const handleKeyCommands = plugins.map(
-      ({ handleKeyCommand }) => handleKeyCommand
-    )
-    const keyBindingFns = plugins.map(({ keyBindingFn }) => keyBindingFn)
+    const blockRendererFns = plugins
+      .map(({ blockRendererFn }) => blockRendererFn)
+      .filter(Boolean)
+    const handleKeyCommands = plugins
+      .map(({ handleKeyCommand }) => handleKeyCommand)
+      .filter(Boolean)
+    const keyBindingFns = plugins
+      .map(({ keyBindingFn }) => keyBindingFn)
+      .filter(Boolean)
 
     return { blockRendererFns, handleKeyCommands, keyBindingFns }
   }, [plugins])

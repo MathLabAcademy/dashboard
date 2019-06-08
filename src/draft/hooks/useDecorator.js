@@ -5,13 +5,16 @@ function useDecorator(getStore, plugins) {
   const compositeDecorator = useMemo(() => {
     const decoratorProps = { props: { getStore } }
 
-    const decoratorsList = plugins.reduce((decoratorsList, { decorators }) => {
-      for (const decorator of decorators) {
-        decoratorsList.push(Object.assign({}, decoratorProps, decorator))
-      }
+    const decoratorsList = plugins.reduce(
+      (decoratorsList, { decorators = [] }) => {
+        for (const decorator of decorators) {
+          decoratorsList.push(Object.assign({}, decoratorProps, decorator))
+        }
 
-      return decoratorsList
-    }, [])
+        return decoratorsList
+      },
+      []
+    )
 
     return new CompositeDecorator(decoratorsList)
   }, [getStore, plugins])
