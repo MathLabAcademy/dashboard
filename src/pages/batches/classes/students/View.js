@@ -65,6 +65,10 @@ function BatchClassStudent({
                 }
               />
             </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Waiver`} />
+              <Table.Cell content={`${get(batchStudent, 'waiver', 0)}%`} />
+            </Table.Row>
           </Table.Body>
         </Table>
       </Segment>

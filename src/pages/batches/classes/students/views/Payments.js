@@ -9,8 +9,8 @@ import {
   getAllBatchStudentPayments
 } from 'store/actions/batches.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
-import SetMonthPaid from '../ActionModals/SetMonthPaid.js'
 import ClearMonthPaid from '../ActionModals/ClearMonthPaid.js'
+import RecordMonthPayment from '../ActionModals/RecordMonthPayment.js'
 
 const months = Info.months()
 
@@ -127,13 +127,13 @@ function BatchCourseStudentPayments({
                 {payment
                   ? get(payment, 'amount') / 100
                   : fee
-                  ? get(fee, 'amount') / 100
+                  ? `[${get(fee, 'amount') / 100}]`
                   : '———'}
               </Table.Cell>
               <Table.Cell>{get(payment, 'note')}</Table.Cell>
               <Table.Cell collapsing>
                 {!payment && fee && (
-                  <SetMonthPaid
+                  <RecordMonthPayment
                     batchClassId={batchClassId}
                     batchStudentId={batchStudentId}
                     year={year}
@@ -141,7 +141,7 @@ function BatchCourseStudentPayments({
                     monthName={monthName}
                   />
                 )}
-                {payment && (
+                {payment && get(payment, 'transactionTypeId') === 'CASH' && (
                   <ClearMonthPaid
                     batchPaymentId={get(payment, 'id')}
                     batchClassId={batchClassId}

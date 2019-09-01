@@ -92,6 +92,8 @@ function FormModal({
         />
 
         <FormCheckbox name="active" label={`Active`} />
+
+        <FormInput name="waiver" label={`% Waiver`} />
       </Modal.Content>
 
       <Modal.Actions>
@@ -132,7 +134,12 @@ const getValidationSchema = () => {
         phone ? isMobilePhone(phone) : true
       )
       .notRequired(),
-    active: Yup.boolean().required(`required`)
+    active: Yup.boolean().required(`required`),
+    waiver: Yup.number()
+      .integer()
+      .min(0)
+      .max(100)
+      .required(`required`)
   })
 }
 
@@ -142,7 +149,8 @@ const getInitialValues = year => ({
   fullName: '',
   phone: '',
   guardianPhone: '',
-  active: true
+  active: true,
+  waiver: 0
 })
 
 function BatchCourseStudentAddModal({

@@ -25,7 +25,12 @@ const getValidationSchema = () => {
         phone ? isMobilePhone(phone) : true
       )
       .notRequired(),
-    active: Yup.boolean().required(`required`)
+    active: Yup.boolean().required(`required`),
+    waiver: Yup.number()
+      .integer()
+      .min(0)
+      .max(100)
+      .required(`required`)
   })
 }
 
@@ -33,7 +38,8 @@ const getInitialValues = batchStudent => ({
   fullName: get(batchStudent, 'fullName', ''),
   phone: get(batchStudent, 'phone') || '',
   guardianPhone: get(batchStudent, 'guardianPhone') || '',
-  active: get(batchStudent, 'active', false)
+  active: get(batchStudent, 'active', false),
+  waiver: get(batchStudent, 'waiver', 0)
 })
 
 function BatchCourseStudentAddModal({
@@ -114,6 +120,8 @@ function BatchCourseStudentAddModal({
               />
 
               <FormCheckbox name="active" label={`Active`} />
+
+              <FormInput name="waiver" label={`% Waiver`} />
             </Modal.Content>
 
             <Modal.Actions>
