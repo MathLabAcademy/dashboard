@@ -1,6 +1,6 @@
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit.js'
-import { DraftViewer } from 'draft/index.js'
+import { DraftViewer } from 'components/Draft/index.js'
 import useToggle from 'hooks/useToggle.js'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'

@@ -1,6 +1,6 @@
 import { convertFromRaw, EditorState } from 'draft-js'
-import useDecorator from 'draft/hooks/useDecorator'
-import useProps from 'draft/hooks/useProps'
+import useDecorator from '_draft/hooks/useDecorator'
+import useProps from '_draft/hooks/useProps'
 import useInstance from 'hooks/useInstance'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 

@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit.js'
-import { DraftViewer } from 'draft/index.js'
+import { DraftViewer } from 'components/Draft/index.js'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'

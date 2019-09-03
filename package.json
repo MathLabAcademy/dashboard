@@ -14,6 +14,8 @@
   },
   "dependencies": {
     "@craco/craco": "^5.0.2",
+    "@draft-js-modules/editor": "^0.1.0",
+    "@draft-js-modules/katex": "^0.1.0",
     "@lingui/core": "^2.7.4",
     "@lingui/macro": "^2.7.4",
     "@lingui/react": "^2.7.4",

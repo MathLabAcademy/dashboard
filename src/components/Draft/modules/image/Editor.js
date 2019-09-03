@@ -1,19 +1,20 @@
 import { EditorState, Modifier, SelectionState } from 'draft-js'
-import insertAtomicBlock from 'draft/modifiers/insertAtomicBlock'
-import removeBlock from 'draft/modifiers/removeBlock'
+import insertAtomicBlock from 'components/Draft/modifiers/insertAtomicBlock'
+import removeBlock from 'components/Draft/modifiers/removeBlock'
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react'
 import {
   Button,
   Form,
   FormField,
+  FormGroup,
   Grid,
   Image,
   Input,
   Modal,
   Placeholder,
-  Segment,
-  FormGroup
+  Segment
 } from 'semantic-ui-react'
+import { __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__ } from './constants'
 
 const defaultState = {
   src: '',
@@ -38,12 +39,11 @@ function reducer(state, { type, data }) {
   }
 }
 
-function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
+function ImageEditor({ toUpdate, block, contentState, store, onClose }) {
   useEffect(() => {
-    const store = getStore()
     store.setReadOnly(true)
     return () => store.setReadOnly(false)
-  }, [getStore])
+  }, [store])
 
   const initialState = useMemo(() => {
     if (!toUpdate) return getIntialState()
@@ -69,17 +69,16 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
   const onRemove = useCallback(() => {
     if (!toUpdate) return
 
-    const store = getStore()
-
     const blockKey = block.getKey()
-    store.setEditorState(editorState => removeBlock(editorState, blockKey))
+
+    const newEditorState = removeBlock(store.getEditorState(), blockKey)
+
+    store.setEditorState(newEditorState)
 
     onClose()
-  }, [block, getStore, onClose, toUpdate])
+  }, [block, store, onClose, toUpdate])
 
   const handleUpdate = useCallback(() => {
-    const store = getStore()
-
     const blockKey = block.getKey()
 
     const contentBlock = contentState.getBlockForKey(blockKey)
@@ -95,22 +94,26 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
       { src: state.src, caption: state.caption }
     )
 
-    store.setEditorState(editorState =>
-      EditorState.push(editorState, newContentState, 'change-block-data')
+    const newEditorState = EditorState.push(
+      store.getEditorState(),
+      newContentState,
+      'change-block-data'
     )
-  }, [block, contentState, getStore, state.caption, state.src])
+
+    store.setEditorState(newEditorState)
+  }, [block, contentState, store, state.caption, state.src])
 
   const handleInsert = useCallback(() => {
-    const store = getStore()
-
     const data = {
       src: state.src,
       caption: state.caption,
-      atomic: 'image'
+      type: __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__
     }
 
-    store.setEditorState(editorState => insertAtomicBlock(editorState, data))
-  }, [getStore, state.caption, state.src])
+    const newEditorState = insertAtomicBlock(store.getEditorState(), data)
+
+    store.setEditorState(newEditorState)
+  }, [store, state.caption, state.src])
 
   const onSubmit = useCallback(() => {
     if (toUpdate) handleUpdate()

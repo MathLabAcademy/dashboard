@@ -1,6 +1,6 @@
 import HeaderGrid from 'components/HeaderGrid'
 import { convertToRaw } from 'draft-js'
-import RichEditor from 'draft/index.js'
+import RichEditor from 'components/Draft/index.js'
 import { ErrorMessage, Field, getIn } from 'formik'
 import React, { useRef, useState } from 'react'
 import { Button, FormField, Segment } from 'semantic-ui-react'
@@ -53,6 +53,7 @@ function RichTextField({
                   const newValue = contentState.hasText()
                     ? JSON.stringify(convertToRaw(contentState))
                     : ''
+                  console.log(newValue)
                   form.setFieldValue(name, newValue)
                   setEditing(false)
                 } else {

@@ -1,7 +1,7 @@
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'draft/index.js'
+import { DraftViewer } from 'components/Draft/index.js'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
 import { get } from 'lodash-es'

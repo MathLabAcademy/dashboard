@@ -3,7 +3,7 @@ import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField.j
 import Form from 'components/Form/Form.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'draft/index.js'
+import { DraftViewer } from 'components/Draft/index.js'
 import { Formik } from 'formik'
 import { get, map, sortBy } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'

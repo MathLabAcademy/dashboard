@@ -1,7 +1,7 @@
 import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'draft/index.js'
+import { DraftViewer } from 'components/Draft/index.js'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -45,7 +45,7 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
         <Table basic="very" compact className="horizontal-info">
           <Table.Body>
             <Table.Row>
-              <Table.HeaderCell collapsing content={`Desccription`} />
+              <Table.HeaderCell collapsing content={`Description`} />
               <Table.Cell
                 content={<DraftViewer rawValue={get(course, 'description')} />}
               />

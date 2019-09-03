@@ -1,0 +1,1 @@
+export const __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__ = '__MLDJS_IMAGE__'

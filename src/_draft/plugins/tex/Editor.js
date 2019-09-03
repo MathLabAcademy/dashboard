@@ -1,7 +1,7 @@
 import { EditorState, Modifier, SelectionState } from 'draft-js'
-import insertAtomicBlock from 'draft/modifiers/insertAtomicBlock.js'
-import insertEntity from 'draft/modifiers/insertEntity.js'
-import removeBlock from 'draft/modifiers/removeBlock.js'
+import insertAtomicBlock from '_draft/modifiers/insertAtomicBlock.js'
+import insertEntity from '_draft/modifiers/insertEntity.js'
+import removeBlock from '_draft/modifiers/removeBlock.js'
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react'
 import {
   Button,
@@ -14,7 +14,7 @@ import {
   TextArea
 } from 'semantic-ui-react'
 import TeX from './TeX.js'
-import removeEntity from 'draft/modifiers/removeEntity.js'
+import removeEntity from '_draft/modifiers/removeEntity.js'
 
 const defaultState = {
   tex: '',
