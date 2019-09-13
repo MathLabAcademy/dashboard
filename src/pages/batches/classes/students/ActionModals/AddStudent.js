@@ -81,7 +81,8 @@ function FormModal({
           />
         </FormGroup>
 
-        <FormInput name="fullName" label={`Name`} />
+        <FormInput name="fullName" label={`Full Name`} />
+        <FormInput name="shortName" label={`Short Name`} />
 
         <FormInput name="phone" label={`Mobile Number`} icon="phone" />
 
@@ -124,6 +125,7 @@ const getValidationSchema = () => {
       .max(999)
       .required(`required`),
     fullName: Yup.string().required(`required`),
+    shortName: Yup.string().required(`required`),
     phone: Yup.string()
       .test('is-mobile-phone', 'invalid mobile phone number', phone =>
         phone ? isMobilePhone(phone) : true

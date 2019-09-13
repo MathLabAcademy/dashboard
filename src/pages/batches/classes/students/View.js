@@ -37,8 +37,12 @@ function BatchClassStudent({
               <Table.Cell content={get(batchStudent, 'id')} />
             </Table.Row>
             <Table.Row>
-              <Table.HeaderCell collapsing content={`Name`} />
+              <Table.HeaderCell collapsing content={`Full Name`} />
               <Table.Cell content={get(batchStudent, 'fullName')} />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Short Name`} />
+              <Table.Cell content={get(batchStudent, 'shortName')} />
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell collapsing content={`Mobile Number`} />

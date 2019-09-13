@@ -15,6 +15,7 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     fullName: Yup.string().required(`required`),
+    shortName: Yup.string().required(`required`),
     phone: Yup.string()
       .test('is-mobile-phone', 'invalid mobile phone number', phone =>
         phone ? isMobilePhone(phone) : true
@@ -36,6 +37,7 @@ const getValidationSchema = () => {
 
 const getInitialValues = batchStudent => ({
   fullName: get(batchStudent, 'fullName', ''),
+  shortName: get(batchStudent, 'shortName', ''),
   phone: get(batchStudent, 'phone') || '',
   guardianPhone: get(batchStudent, 'guardianPhone') || '',
   active: get(batchStudent, 'active', false),
@@ -109,7 +111,8 @@ function BatchCourseStudentAddModal({
                 {status}
               </Message>
 
-              <FormInput name="fullName" label={`Name`} />
+              <FormInput name="fullName" label={`Full Name`} />
+              <FormInput name="shortName" label={`Short Name`} />
 
               <FormInput name="phone" label={`Mobile Number`} icon="phone" />
 
