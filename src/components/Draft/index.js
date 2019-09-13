@@ -1,12 +1,12 @@
 import { Editor } from '@draft-js-modules/editor'
 import { getKaTeXModule } from '@draft-js-modules/katex'
-import 'draft-js/dist/Draft.css'
 import '@draft-js-modules/katex/dist/styles.css'
 import { convertFromRaw, EditorState } from 'draft-js'
+import 'draft-js/dist/Draft.css'
 import 'katex/dist/katex.min.css'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { getImageModule, Button as ImageButton } from './modules/image'
+import React, { useEffect, useRef, useState } from 'react'
 import Controls from './Controls'
+import { Button as ImageButton, getImageModule } from './modules/image'
 
 const KaTeXModule = getKaTeXModule()
 const ImageModule = getImageModule()
