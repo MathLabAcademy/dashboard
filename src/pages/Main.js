@@ -15,7 +15,7 @@ function Dashboard({ userStatus }) {
   ) : userStatus.authed ? (
     <Router>
       <Index path="/" />
-      <Batches path="batches/*" />
+      {/* <Batches path="batches/*" /> */}
       <Courses path="courses/*" />
       <MCQs path="mcqs/*" />
       <Profile path="profile/*" />

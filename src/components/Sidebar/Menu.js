@@ -39,12 +39,24 @@ const items = [
         permits: ['admin', 'teacher']
       }
     ]
-  },
-  {
-    title: `Batches`,
-    link: '/batches',
-    permits: ['admin', 'teacher']
   }
+  // {
+  //   title: `Batches`,
+  //   link: '/batches',
+  //   permits: ['admin', 'teacher'],
+  //   items: [
+  //     {
+  //       title: `Classes`,
+  //       link: '/batches/classes',
+  //       permits: ['admin', 'teacher']
+  //     },
+  //     {
+  //       title: `Courses`,
+  //       link: '/batches/courses',
+  //       permits: ['admin', 'teacher']
+  //     }
+  //   ]
+  // }
 ]
 
 function SidebarMenu({ sidebarVisible }) {
