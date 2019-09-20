@@ -1,48 +1,51 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import Permit from 'components/Permit.js'
-import usePagination from 'hooks/usePagination.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
 import {
-  fetchBatchStudentPage,
+  fetchBatchCourseEnrollmentPage,
   getBatchStudent
-} from 'store/actions/batches.js'
-import { emptyArray } from 'utils/defaults.js'
-import AddStudent from './ActionModals/AddStudent.js'
-import EditStudent from './ActionModals/EditStudent.js'
+} from 'store/actions/batches'
+import { emptyArray } from 'utils/defaults'
+import AddEnrollment from './ActionModals/AddEnrollment'
+// import EditStudent from './ActionModals/EditStudent.js'
 
 function _ListItemRow({
-  batchStudentId,
-  batchStudent,
+  batchCourseEnrollmentId,
+  courseEnrollment,
+  studentId,
+  student,
   getBatchStudent,
   linkToBase
 }) {
   useEffect(() => {
-    if (!batchStudent) getBatchStudent(batchStudentId)
-  }, [batchStudent, batchStudentId, getBatchStudent])
+    if (studentId && !student) getBatchStudent(studentId)
+  }, [student, studentId, getBatchStudent])
 
   return (
     <Table.Row>
-      <Table.Cell>{String(batchStudentId).padStart(7, '0')}</Table.Cell>
-      <Table.Cell>{get(batchStudent, 'fullName')}</Table.Cell>
-      <Table.Cell>{get(batchStudent, 'phone')}</Table.Cell>
-      <Table.Cell>{get(batchStudent, 'guardianPhone')}</Table.Cell>
+      <Table.Cell>{batchCourseEnrollmentId}</Table.Cell>
+      <Table.Cell>{get(student, 'fullName')}</Table.Cell>
       <Table.Cell collapsing textAlign="center">
         <Icon
-          name={get(batchStudent, 'active') ? 'check' : 'close'}
-          color={get(batchStudent, 'active') ? 'green' : 'red'}
+          name={get(courseEnrollment, 'active') ? 'check' : 'close'}
+          color={get(courseEnrollment, 'active') ? 'green' : 'red'}
         />
       </Table.Cell>
       <Table.Cell collapsing>
-        <Permit teacher>
-          <EditStudent batchStudentId={batchStudentId} />
-        </Permit>
+        {/* <Permit teacher> */}
+        {/* <EditStudent batchStudentId={batchStudentId} /> */}
+        {/* </Permit> */}
 
-        <Button as={Link} to={`${linkToBase}${batchStudentId}`} color="blue">
+        <Button
+          as={Link}
+          to={`${linkToBase}${batchCourseEnrollmentId}`}
+          color="blue"
+        >
           Open
         </Button>
       </Table.Cell>
@@ -51,14 +54,27 @@ function _ListItemRow({
 }
 
 const ListItemRow = connect(
-  ({ batches }, { batchStudentId }) => ({
-    batchStudent: get(batches.students.byId, batchStudentId)
-  }),
+  ({ batches }, { batchCourseEnrollmentId }) => {
+    const courseEnrollment = get(
+      batches.courseEnrollments.byId,
+      batchCourseEnrollmentId
+    )
+
+    const studentId = get(courseEnrollment, 'batchStudentId', null)
+
+    const student = get(batches.students.byId, studentId, null)
+
+    return {
+      courseEnrollment,
+      studentId,
+      student
+    }
+  },
   { getBatchStudent }
 )(_ListItemRow)
 
-function BatchClassStudentList({
-  batchClassId,
+function BatchCourseStudentList({
+  batchCourseId,
   pagination,
   fetchPage,
   linkToBase
@@ -76,10 +92,11 @@ function BatchClassStudentList({
   const queryObject = useMemo(() => {
     return {
       filter: {
+        batchCourseId: { '=': batchCourseId },
         year: { '=': year }
       }
     }
-  }, [year])
+  }, [batchCourseId, year])
 
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
     queryObject
@@ -89,7 +106,7 @@ function BatchClassStudentList({
     <>
       <Segment>
         <HeaderGrid
-          Left={<Header>Batch Students</Header>}
+          Left={<Header>Batch Course Enrollments</Header>}
           Right={
             <Button as={Link} to={`..`}>
               Go Back
@@ -102,10 +119,10 @@ function BatchClassStudentList({
         <Table.Header fullWidth>
           <Table.Row>
             <Table.HeaderCell colSpan="2">
-              <AddStudent batchClassId={batchClassId} year={year} />
+              <AddEnrollment batchCourseId={batchCourseId} year={year} />
             </Table.HeaderCell>
-            <Table.HeaderCell colSpan="2" />
-            <Table.HeaderCell colSpan="2" textAlign="right">
+            <Table.HeaderCell colSpan="1" />
+            <Table.HeaderCell colSpan="1" textAlign="right">
               <Input
                 ref={yearRef}
                 defaultValue={year}
@@ -130,8 +147,6 @@ function BatchClassStudentList({
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
             <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Phone</Table.HeaderCell>
-            <Table.HeaderCell>Guardian's Phone</Table.HeaderCell>
             <Table.HeaderCell collapsing textAlign="center">
               Active
             </Table.HeaderCell>
@@ -141,7 +156,11 @@ function BatchClassStudentList({
 
         <Table.Body>
           {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
-            <ListItemRow key={id} batchStudentId={id} linkToBase={linkToBase} />
+            <ListItemRow
+              key={id}
+              batchCourseEnrollmentId={id}
+              linkToBase={linkToBase}
+            />
           ))}
         </Table.Body>
       </Table>
@@ -156,14 +175,14 @@ function BatchClassStudentList({
 }
 
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.batchStudents
+  pagination: pagination.batchCourseEnrollments
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchBatchStudentPage
+  fetchPage: fetchBatchCourseEnrollmentPage
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchClassStudentList)
+)(BatchCourseStudentList)

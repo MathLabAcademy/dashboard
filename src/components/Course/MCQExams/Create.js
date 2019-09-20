@@ -27,8 +27,8 @@ const getValidationSchema = () => {
     duration: Yup.number()
       .integer()
       .positive(),
-    name: Yup.string().notRequired(),
-    description: Yup.string().notRequired()
+    name: Yup.string().required(`required`),
+    description: Yup.string().required(`required`)
   })
 }
 

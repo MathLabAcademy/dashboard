@@ -1,35 +1,33 @@
 import { Link, Router } from '@reach/router'
-import Gravatar from 'components/Gravatar.js'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
+import Gravatar from 'components/Gravatar'
+import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { capitalize, get } from 'lodash-es'
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
-import { getUser } from 'store/actions/users.js'
-import getPersonName from 'utils/get-person-name.js'
-import AddCredit from './AddCredit.js'
-import ChangePassword from './ChangePassword.js'
-import Info from './Info.js'
-import Transactions from './Transactions.js'
+import { getUser } from 'store/actions/users'
+import AddCredit from './AddCredit'
+import ChangePassword from './ChangePassword'
+import Info from './Info'
+import Transactions from './Transactions'
 
-const labeledRoles = ['admin', 'teacher']
+const labeledRoles = ['teacher']
 
 function User({ userId, user, getUser }) {
   const refreshUser = useCallback(() => {
     getUser(userId)
   }, [getUser, userId])
 
+  const email = get(user, 'Person.email') || get(user, 'Person.emailTrx')
+
   return (
-    <Permit admin teacher userId={userId}>
+    <Permit teacher userId={userId}>
       <Segment loading={!user}>
         <HeaderGrid
           leftClassName="auto wide"
           Left={
-            <Gravatar
-              email={get(user, 'Person.email') || get(user, 'Person.xEmail')}
-              params={{ d: 'robohash' }}
-            />
+            email ? <Gravatar email={email} params={{ d: 'robohash' }} /> : null
           }
           rightClassName="grow wide"
           Right={
@@ -37,8 +35,10 @@ function User({ userId, user, getUser }) {
               Left={
                 <>
                   <Header>
-                    {getPersonName(get(user, 'Person'))}
-                    <Header.Subheader>{get(user, 'email')}</Header.Subheader>
+                    {get(user, 'Person.fullName')}
+                    <Header.Subheader>
+                      {get(user, 'Person.email')}
+                    </Header.Subheader>
                   </Header>
                   <Permit userId={userId}>
                     <Button as={Link} to={`change-password`}>

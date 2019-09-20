@@ -1,14 +1,14 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { Info } from 'luxon'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
-import { getAllBatchClassFeesForYear } from 'store/actions/batches.js'
-import SetFee from './ActionModals/SetFee.js'
-import UnsetFee from './ActionModals/UnsetFee.js'
+import { getAllBatchClassFeesForYear } from 'store/actions/batches'
+import SetFee from './ActionModals/SetFee'
+import UnsetFee from './ActionModals/UnsetFee'
 
 const months = Info.months()
 
@@ -133,9 +133,7 @@ function BatchClassFeeList({
   )
 }
 
-const mapStateToProps = ({ batches }, { batchClassId }) => ({
-  batchClassFees: get(batches.classes.feesById, batchClassId)
-})
+const mapStateToProps = () => null
 
 const mapDispatchToProps = {
   getAllBatchClassFeesForYear

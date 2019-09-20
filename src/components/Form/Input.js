@@ -26,7 +26,7 @@ const FormInput = ({
       {({ field, form }) => (
         <FormField
           disabled={props.disabled}
-          error={Boolean(getIn(form.errors, name))}
+          error={isStatic ? null : Boolean(getIn(form.errors, name))}
           className={isStatic ? 'static' : ''}
         >
           <label htmlFor={id} className={hideLabel ? 'sr-only' : ''}>
@@ -40,7 +40,9 @@ const FormInput = ({
             {...iconProps}
             {...props}
           />
-          <ErrorMessage name={name} component="p" className="red text" />
+          {!isStatic && (
+            <ErrorMessage name={name} component="p" className="red text" />
+          )}
         </FormField>
       )}
     </Field>

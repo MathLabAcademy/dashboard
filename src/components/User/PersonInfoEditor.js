@@ -1,7 +1,6 @@
-import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
-import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
-import HeaderGrid from 'components/HeaderGrid.js'
+import Form from 'components/Form/Form'
+import Input from 'components/Form/Input'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
@@ -9,40 +8,31 @@ import { DateTime } from 'luxon'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
-import { updatePerson } from 'store/actions/users.js'
+import { updatePerson } from 'store/actions/users'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    firstName: Yup.string().required(`required`),
-    middleName: Yup.string().notRequired(),
-    lastName: Yup.string().required(`required`),
-    dob: Yup.date().notRequired(),
-    email: Yup.string().email(),
-    phone: Yup.string().test(
-      'is-mobile-phone',
-      'invalid mobile phone number',
-      phone => (phone ? isMobilePhone(phone) : true)
-    )
+    fullName: Yup.string().required(`required`),
+    shortName: Yup.string().required(`required`),
+    dob: Yup.date().notRequired()
   })
 }
 
 const getInitialValues = person => ({
-  firstName: get(person, 'firstName') || '',
-  middleName: get(person, 'middleName') || '',
-  lastName: get(person, 'lastName') || '',
+  fullName: get(person, 'fullName') || '',
+  shortName: get(person, 'shortName') || '',
   dob: get(person, 'dob')
     ? DateTime.fromISO(get(person, 'dob')).toISODate()
-    : '',
-  email: get(person, 'xEmail') || get(person, 'email') || '',
-  phone: get(person, 'phone') || ''
+    : ''
 })
 
 function PersonInfoEditor({
   userId,
   person,
   title,
-  isGuardian = false,
+  isCurrent,
+  isGuardian,
   setOpen,
   updatePerson
 }) {
@@ -54,7 +44,7 @@ function PersonInfoEditor({
       actions.setStatus(null)
 
       try {
-        await updatePerson(get(person, 'id'), values)
+        await updatePerson(userId, values, { isCurrent, isGuardian })
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -70,11 +60,11 @@ function PersonInfoEditor({
 
       actions.setSubmitting(false)
     },
-    [person, updatePerson]
+    [userId, isCurrent, isGuardian, updatePerson]
   )
 
   return (
-    <Permit admin userId={userId}>
+    <Permit teacher userId={userId}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -118,27 +108,19 @@ function PersonInfoEditor({
                   )}
 
                   <Table.Row>
-                    <Table.HeaderCell collapsing content={`First Name`} />
+                    <Table.HeaderCell collapsing content={`Full Name`} />
                     <Table.Cell>
-                      <Input name="firstName" label={`First Name`} hideLabel />
+                      <Input name="fullName" label={`Full Name`} hideLabel />
                     </Table.Cell>
                   </Table.Row>
+
                   <Table.Row>
-                    <Table.HeaderCell collapsing content={`Middle Name`} />
+                    <Table.HeaderCell collapsing content={`Short Name`} />
                     <Table.Cell>
-                      <Input
-                        name="middleName"
-                        label={`Middle Name`}
-                        hideLabel
-                      />
+                      <Input name="shortName" label={`Short Name`} hideLabel />
                     </Table.Cell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell collapsing content={`Last Name`} />
-                    <Table.Cell>
-                      <Input name="lastName" label={`Last Name`} hideLabel />
-                    </Table.Cell>
-                  </Table.Row>
+
                   {!isGuardian && (
                     <Table.Row>
                       <Table.HeaderCell collapsing content={`Date of Birth`} />
@@ -153,38 +135,6 @@ function PersonInfoEditor({
                       </Table.Cell>
                     </Table.Row>
                   )}
-
-                  <Table.Row>
-                    <Table.HeaderCell collapsing content={`Verified Email`} />
-                    <Table.Cell>
-                      <Input
-                        type="email"
-                        name="email"
-                        label={`Verified Email`}
-                        hideLabel
-                        disabled
-                        static
-                        value={get(person, 'email')}
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell collapsing content={`New Email`} />
-                    <Table.Cell>
-                      <Input
-                        type="email"
-                        name="email"
-                        label={`New Email`}
-                        hideLabel
-                      />
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell collapsing content={`Mobile Phone`} />
-                    <Table.Cell>
-                      <Input name="phone" label={`Mobile Phone`} hideLabel />
-                    </Table.Cell>
-                  </Table.Row>
                 </Table.Body>
               </Table>
             </Segment>
@@ -195,7 +145,9 @@ function PersonInfoEditor({
   )
 }
 
-const mapStateToProps = null
+const mapStateToProps = ({ user }, { userId }) => ({
+  isCurrent: get(user, 'id') === userId
+})
 
 const mapDispatchToProps = {
   updatePerson

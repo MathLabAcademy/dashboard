@@ -11,7 +11,7 @@ import {
   Message,
   Segment
 } from 'semantic-ui-react'
-import api from 'utils/api.js'
+import api from 'utils/api'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -25,44 +25,40 @@ const getValidationSchema = () => {
     passwordConfirmation: Yup.string()
       .oneOf([Yup.ref('password'), null], `recheck password`)
       .required(`required`),
-    firstName: Yup.string().required(`required`),
-    middleName: Yup.string().notRequired(),
-    lastName: Yup.string().required(`required`),
+    fullName: Yup.string().required(`required`),
+    shortName: Yup.string().required(`required`),
     dob: Yup.date().notRequired(),
     phone: Yup.string().test(
       'is-mobile-phone',
       'invalid mobile phone number',
-      phone => isMobilePhone(phone)
+      phone => (phone ? isMobilePhone(phone) : true)
     ),
-    guardian: Yup.object({
-      firstName: Yup.string().required(`required`),
-      middleName: Yup.string().notRequired(),
-      lastName: Yup.string().required(`required`),
+    Guardian: Yup.object({
+      fullName: Yup.string().required(`required`),
+      shortName: Yup.string().required(`required`),
       email: Yup.string()
         .email(`invalid email`)
-        .required(`required`),
+        .notRequired(),
       phone: Yup.string().test(
         'is-mobile-phone',
         'invalid mobile phone number',
-        phone => isMobilePhone(phone)
+        phone => (phone ? isMobilePhone(phone) : true)
       )
     })
   })
 }
 
 const initialValues = {
-  email: '',
   password: '',
   passwordConfirmation: '',
-  firstName: '',
-  middleName: '',
-  lastName: '',
+  fullName: '',
+  shortName: '',
   dob: '',
+  email: '',
   phone: '',
-  guardian: {
-    firstName: '',
-    middleName: '',
-    lastName: '',
+  Guardian: {
+    fullName: '',
+    shortName: '',
     email: '',
     phone: ''
   }
@@ -112,11 +108,9 @@ function RegisterForm({ onSuccess }) {
           </Message>
 
           <Segment>
-            <FormGroup widths="equal">
-              <Input name="firstName" label={`First Name`} icon="user" />
-              <Input name="middleName" label={`Middle Name`} icon="user" />
-              <Input name="lastName" label={`Last Name`} icon="user" />
-            </FormGroup>
+            <Input name="fullName" label={`Full Name`} icon="user" />
+
+            <Input name="shortName" label={`Short Name`} icon="user" />
 
             <Input
               type="date"
@@ -151,37 +145,27 @@ function RegisterForm({ onSuccess }) {
               icon="lock"
             />
 
-            <Segment basic secondary>
+            <Segment secondary>
               <Header>Guardian's Information</Header>
 
-              <FormGroup widths="equal">
-                <Input
-                  name="guardian.firstName"
-                  label={`First Name`}
-                  icon="user"
-                />
-                <Input
-                  name="guardian.middleName"
-                  label={`Middle Name`}
-                  icon="user"
-                />
-                <Input
-                  name="guardian.lastName"
-                  label={`Last Name`}
-                  icon="user"
-                />
-              </FormGroup>
+              <Input name="Guardian.fullName" label={`Full Name`} icon="user" />
+
+              <Input
+                name="Guardian.shortName"
+                label={`Short Name`}
+                icon="user"
+              />
 
               <FormGroup widths="equal">
                 <Input
-                  name="guardian.email"
+                  name="Guardian.email"
                   type="email"
                   label={`Email`}
                   icon="envelope"
                 />
 
                 <Input
-                  name="guardian.phone"
+                  name="Guardian.phone"
                   label={`Mobile Phone Number`}
                   icon="phone"
                 />

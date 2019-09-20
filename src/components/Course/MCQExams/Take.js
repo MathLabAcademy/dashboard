@@ -125,6 +125,7 @@ function MCQExamTake({
     readTracker(mcqExamId)
   }, [mcqExamId, readTracker])
 
+  console.log(tracker)
   const data = useMemo(() => {
     const data = { started: false, ended: false }
 
@@ -135,6 +136,8 @@ function MCQExamTake({
     const now = DateTime.local()
     const start = DateTime.fromISO(tracker.start)
     const end = DateTime.fromISO(tracker.end)
+
+    console.log(now, start, end)
 
     data.started = now >= start
     data.ended = now > end
@@ -168,6 +171,7 @@ function MCQExamTake({
     startTracker(mcqExamId)
   }, [mcqExamId, startTracker])
 
+  console.log(data)
   return (
     <Permit student>
       <Segment>

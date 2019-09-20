@@ -1,21 +1,24 @@
-import { Link, Redirect } from '@reach/router'
+import { Link } from '@reach/router'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Container, Segment } from 'semantic-ui-react'
-import api from 'utils/api.js'
+import api from 'utils/api'
 
-function EmailVerification({ personId, token, userStatus }) {
+function EmailVerification({ token, userStatus, forGuardian }) {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [verified, setVerified] = useState(false)
 
   const tryToVerify = useCallback(async () => {
-    const { error } = await api('/users/action/verify-email', {
+    const url = forGuardian
+      ? '/users/action/verify-guardian-email'
+      : '/users/action/verify-email'
+
+    const { error } = await api(url, {
       method: 'POST',
       body: {
-        personId,
-        token
+        encodedToken: token
       }
     })
 
@@ -37,22 +40,20 @@ function EmailVerification({ personId, token, userStatus }) {
     } else {
       setVerified(true)
     }
-  }, [personId, token])
+  }, [token, forGuardian])
 
   useEffect(() => {
-    if (!userStatus.authed) {
-      setTimeout(() => tryToVerify(), 750)
-    }
-  }, [tryToVerify, userStatus.authed])
+    setTimeout(() => tryToVerify(), 750)
+  }, [tryToVerify])
 
-  return userStatus.authed ? (
-    <Redirect to="/" noThrow />
-  ) : (
+  console.log(userStatus)
+
+  return (
     <Container text textAlign="center" as={Segment}>
       {loading && <p>Trying to verify your email address...</p>}
       {verified && (
         <>
-          <p>Your email is verified! You can Log In now...</p>
+          <p>Your email is verified!</p>
           <p>
             <Button color="blue" as={Link} to="/login">
               Log In

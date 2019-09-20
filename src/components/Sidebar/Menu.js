@@ -14,37 +14,42 @@ const items = [
   {
     title: `Users`,
     link: '/users',
-    permits: ['admin', 'teacher']
+    permits: ['teacher']
   },
   {
     title: `Courses`,
     link: '/courses',
-    permits: ['admin', 'teacher', 'student'],
+    permits: ['teacher', 'student'],
     items: [
       {
         title: `Tags`,
         link: '/courses/tags',
-        permits: ['admin', 'teacher']
+        permits: ['teacher']
       }
     ]
   },
   {
     title: `MCQs`,
     link: '/mcqs',
-    permits: ['admin', 'teacher'],
+    permits: ['teacher'],
     items: [
       {
         title: `Tags`,
         link: '/mcqs/tags',
-        permits: ['admin', 'teacher']
+        permits: ['teacher']
       }
     ]
   },
   {
-    title: `Batches`,
-    link: '/batches',
-    permits: ['admin', 'teacher']
+    title: `Batch Classes`,
+    link: '/batchclasses',
+    permits: ['teacher']
   }
+  // {
+  //   title: `Batch Courses`,
+  //   link: '/batchcourses',
+  //   permits: ['teacher']
+  // }
 ]
 
 function SidebarMenu({ sidebarVisible }) {

@@ -1,13 +1,12 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import { capitalize, get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
-import { getUser } from 'store/actions/users.js'
-import getPersonName from 'utils/get-person-name.js'
+import { getUser } from 'store/actions/users'
 
-const labeledRoles = ['admin', 'teacher']
+const labeledRoles = ['teacher']
 
 function UserListItem({ id, data, getData }) {
   useEffect(() => {
@@ -20,14 +19,14 @@ function UserListItem({ id, data, getData }) {
         Left={
           <>
             <Header>
-              {getPersonName(get(data, 'Person'))}
+              {get(data, 'Person.fullName')}
               {labeledRoles.includes(get(data, 'roleId')) && (
                 <Label color="black" size="tiny">
                   {capitalize(get(data, 'roleId'))}
                 </Label>
               )}
 
-              <Header.Subheader>{get(data, 'email')}</Header.Subheader>
+              <Header.Subheader>{get(data, 'Person.email')}</Header.Subheader>
             </Header>
           </>
         }

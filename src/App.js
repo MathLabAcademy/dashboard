@@ -37,7 +37,11 @@ function App({ checkAuthStatus, userStatus }) {
             <Dashboard path="/*" />
             <LogIn path="/login" />
             <Register path="/register" />
-            <EmailVerification path="/email-verification/:personId/:token" />
+            <EmailVerification path="/verify-email/:token" />
+            <EmailVerification
+              path="/verify-guardian-email/:token"
+              forGuardian
+            />
             <ForgotPassword path="/forgot-password/*" />
           </Router>
         </Segment>

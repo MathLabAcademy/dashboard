@@ -13,9 +13,8 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
   }, [getAllTransactionsForUser, userId])
 
   const transactionIds = useMemo(() => {
-    const UserId = Number(userId)
     return transactions.allIds.filter(
-      id => get(transactions.byId, [id, 'userId']) === UserId
+      id => get(transactions.byId, [id, 'userId']) === userId
     )
   }, [transactions.allIds, transactions.byId, userId])
 

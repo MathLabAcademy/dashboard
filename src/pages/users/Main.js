@@ -1,8 +1,8 @@
 import { Router } from '@reach/router'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import React from 'react'
-import List from './List.js'
-import View from './View.js'
+import List from './List'
+import View from './View'
 
 function Users() {
   return (
@@ -10,6 +10,7 @@ function Users() {
       <Router>
         <List path="/" />
         <View path="/:userId/*" />
+        <View path="/onsite/:userId/*" onsite={true} />
       </Router>
     </Permit>
   )

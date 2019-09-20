@@ -1,29 +1,27 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
-import HeaderGrid from 'components/HeaderGrid.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { addCredit } from 'store/actions/users.js'
+import { addCredit } from 'store/actions/users'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
     amount: Yup.number()
       .integer()
-      .required(`required`),
-    note: Yup.string().max(255, `too long`)
+      .required(`required`)
   })
 }
 
 const getInitialValues = user => ({
   credit: get(user, 'credit') / 100,
-  amount: 0,
-  note: ''
+  amount: 0
 })
 
 function UserAddCredit({ userId, user, addCredit, navigate }) {
@@ -31,13 +29,12 @@ function UserAddCredit({ userId, user, addCredit, navigate }) {
   const initialValues = useMemo(() => getInitialValues(user), [user])
 
   const onSubmit = useCallback(
-    async ({ amount, ...values }, actions) => {
+    async ({ amount }, actions) => {
       actions.setStatus(null)
 
       try {
         await addCredit(userId, {
-          amount: amount * 100,
-          ...values
+          amount: amount * 100
         })
         navigate('..')
       } catch (err) {
@@ -109,7 +106,9 @@ function UserAddCredit({ userId, user, addCredit, navigate }) {
                 label={`Amount to Add`}
               />
 
-              <FormInput name="note" label={`Note`} />
+              <Message compact color="red" as={'strong'}>
+                Be sure, this can not be undone!
+              </Message>
             </Segment>
           </Form>
         )}

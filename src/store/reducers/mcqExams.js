@@ -83,6 +83,7 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
         }
       }
     case MCQEXAMTRACKER_UPDATE:
+      console.log(data)
       return {
         ...state,
         trackersById: {

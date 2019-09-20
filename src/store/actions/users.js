@@ -1,20 +1,18 @@
 import api from 'utils/api.js'
-
+import {
+  defaultOptsFetchAllPages,
+  defaultOptsFetchPage
+} from 'utils/defaults.js'
 import {
   CURRENT_USER_UPDATE,
-  USER_UPDATE,
+  ENROLLMENT_BULK_ADD,
   USER_ADD,
-  USER_PAGE_REQUEST,
   USER_BULK_ADD,
   USER_PAGE_ADD,
   USER_PAGE_REMOVE,
-  ENROLLMENT_BULK_ADD
+  USER_PAGE_REQUEST,
+  USER_UPDATE
 } from './actionTypes.js'
-
-import {
-  defaultOptsFetchPage,
-  defaultOptsFetchAllPages
-} from 'utils/defaults.js'
 
 const addUser = data => ({
   type: USER_ADD,
@@ -75,12 +73,58 @@ export const fetchAllUserPage = (
   return true
 }
 
-export const updatePerson = (
-  personId,
-  personData,
-  isCurrent = false
+export const updateEmail = (
+  userId,
+  emailData,
+  { isGuardian, isCurrent }
 ) => async dispatch => {
-  const url = `/persons/${personId}`
+  const url = isGuardian
+    ? `/users/${userId}/person/guardian/email`
+    : `/users/${userId}/person/email`
+
+  const { data, error } = await api(url, {
+    method: 'PATCH',
+    body: emailData
+  })
+  if (error) throw error
+
+  if (isCurrent) dispatch({ type: CURRENT_USER_UPDATE, data })
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
+export const updatePhone = (
+  userId,
+  phoneData,
+  { isGuardian, isCurrent }
+) => async dispatch => {
+  const url = isGuardian
+    ? `/users/${userId}/person/guardian/phone`
+    : `/users/${userId}/person/phone`
+
+  const { data, error } = await api(url, {
+    method: 'PATCH',
+    body: phoneData
+  })
+  if (error) throw error
+
+  if (isCurrent) dispatch({ type: CURRENT_USER_UPDATE, data })
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
+export const updatePerson = (
+  userId,
+  personData,
+  { isGuardian, isCurrent }
+) => async dispatch => {
+  const url = isGuardian
+    ? `/users/${userId}/person/guardian`
+    : `/users/${userId}/person`
 
   const { data, error } = await api(url, {
     method: 'PATCH',

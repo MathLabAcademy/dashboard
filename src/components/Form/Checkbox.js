@@ -7,6 +7,7 @@ const FormCheckbox = ({
   name,
   type,
   label,
+  hideLabel = false,
   static: isStatic = false,
   ...props
 }) => {
@@ -25,7 +26,11 @@ const FormCheckbox = ({
             id={id}
             type={type}
             checked={value}
-            label={<label htmlFor={id}>{label}</label>}
+            label={
+              <label htmlFor={id}>
+                <span className={hideLabel ? 'sr-only' : ''}>{label}</span>
+              </label>
+            }
             {...props}
           />
           <ErrorMessage name={name} component="p" className="red text" />

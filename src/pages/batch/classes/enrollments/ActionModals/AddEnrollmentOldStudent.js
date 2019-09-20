@@ -1,53 +1,49 @@
-import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
 import FormCheckbox from 'components/Form/Checkbox.js'
 import Form from 'components/Form/Form.js'
 import FormInput from 'components/Form/Input.js'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle.js'
+import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, FormGroup, Message, Modal } from 'semantic-ui-react'
 import {
-  createBatchStudent,
-  getBatchStudentNextId
+  createBatchClassEnrollmentForOldStudent,
+  getBatchClassEnrollmentNextSerial
 } from 'store/actions/batches.js'
+import { emptyObject } from 'utils/defaults'
 import * as Yup from 'yup'
 
 function FormModal({
-  batchClassId,
-  getBatchStudentNextId,
   open,
   handle,
-  formik: { isSubmitting, isValid, values, status, setFieldValue }
+  formik: { isSubmitting, isValid, values, status, setFieldValue },
+  batchClassId,
+  nextSerials,
+  getBatchClassEnrollmentNextSerial
 }) {
-  const nextIdQuery = useMemo(() => {
-    return `filter=${JSON.stringify({
-      year: { '=': Number(values.year) },
-      batchClassId: { '=': Number(batchClassId) }
-    })}`
-  }, [batchClassId, values.year])
-
   useEffect(() => {
     if (open) {
-      getBatchStudentNextId({ query: nextIdQuery }).then(id => {
-        setFieldValue(
-          'serial',
-          Number(
-            String(id)
-              .padStart(7, '0')
-              .substring(4, 7)
-          )
-        )
-      })
+      getBatchClassEnrollmentNextSerial(batchClassId, values.year).then(
+        ({ serial }) => {
+          setFieldValue('serial', serial)
+        }
+      )
     }
-  }, [getBatchStudentNextId, nextIdQuery, open, setFieldValue])
+  }, [
+    getBatchClassEnrollmentNextSerial,
+    batchClassId,
+    values.year,
+    open,
+    setFieldValue
+  ])
 
   return (
     <Modal
       trigger={
         <Button type="button" color="blue" onClick={handle.open}>
-          Add Student
+          Old Student
         </Button>
       }
       as={Form}
@@ -55,12 +51,14 @@ function FormModal({
       open={open}
       onClose={handle.close}
     >
-      <Modal.Header>Add Student</Modal.Header>
+      <Modal.Header>Add Enrollment</Modal.Header>
 
       <Modal.Content>
         <Message color="yellow" hidden={!status}>
           {status}
         </Message>
+
+        <FormInput name="oldEnrollmentId" label={`Old Enrollment ID`} />
 
         <FormGroup widths="equal">
           <FormInput
@@ -75,22 +73,11 @@ function FormModal({
             type="number"
             name="serial"
             label={`Serial`}
-            min="0"
+            min={get(nextSerials, [values.year, 'serial'], 1)}
             max="999"
             step="1"
           />
         </FormGroup>
-
-        <FormInput name="fullName" label={`Full Name`} />
-        <FormInput name="shortName" label={`Short Name`} />
-
-        <FormInput name="phone" label={`Mobile Number`} icon="phone" />
-
-        <FormInput
-          name="guardianPhone"
-          label={`Guardian's Mobile Number`}
-          icon="phone"
-        />
 
         <FormCheckbox name="active" label={`Active`} />
 
@@ -105,7 +92,7 @@ function FormModal({
           loading={isSubmitting}
           disabled={!isValid || isSubmitting}
         >
-          Save
+          Enroll
         </Button>
       </Modal.Actions>
     </Modal>
@@ -114,6 +101,9 @@ function FormModal({
 
 const getValidationSchema = () => {
   return Yup.object({
+    oldEnrollmentId: Yup.number()
+      .integer()
+      .required(`required`),
     year: Yup.number()
       .integer()
       .min(2000)
@@ -121,21 +111,9 @@ const getValidationSchema = () => {
       .required(`required`),
     serial: Yup.number()
       .integer()
-      .min(0)
+      .min(1)
       .max(999)
       .required(`required`),
-    fullName: Yup.string().required(`required`),
-    shortName: Yup.string().required(`required`),
-    phone: Yup.string()
-      .test('is-mobile-phone', 'invalid mobile phone number', phone =>
-        phone ? isMobilePhone(phone) : true
-      )
-      .notRequired(),
-    guardianPhone: Yup.string()
-      .test('is-mobile-phone', 'invalid mobile phone number', phone =>
-        phone ? isMobilePhone(phone) : true
-      )
-      .notRequired(),
     active: Yup.boolean().required(`required`),
     waiver: Yup.number()
       .integer()
@@ -146,21 +124,19 @@ const getValidationSchema = () => {
 }
 
 const getInitialValues = year => ({
+  oldEnrollmentId: '',
   year: year || new Date().getFullYear(),
   serial: '',
-  fullName: '',
-  phone: '',
-  guardianPhone: '',
   active: true,
   waiver: 0
 })
 
-function BatchCourseStudentAddModal({
+function BatchClassEnrollmentAddOldStudentModal({
   batchClassId,
   year,
-  createBatchStudent,
-  nextId,
-  getBatchStudentNextId
+  nextSerials,
+  createBatchClassEnrollmentForOldStudent,
+  getBatchClassEnrollmentNextSerial
 }) {
   const [open, handle] = useToggle(false)
 
@@ -168,24 +144,20 @@ function BatchCourseStudentAddModal({
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async ({ year, serial, ...values }, actions) => {
+    async (values, actions) => {
       actions.setStatus(null)
 
-      const id = Number(
-        `${String(year).substring(2, 4)}${String(batchClassId).padStart(
-          2,
-          '0'
-        )}${String(serial).padStart(3, '0')}`
-      )
-
       try {
-        await createBatchStudent({ id, ...values })
+        await createBatchClassEnrollmentForOldStudent({
+          batchClassId,
+          ...values
+        })
         actions.resetForm()
         handle.close()
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
-            param === 'id'
+            param === 'batchClassId'
               ? actions.setStatus(`${param}: ${message}`)
               : actions.setFieldError(param, message)
           )
@@ -199,7 +171,7 @@ function BatchCourseStudentAddModal({
 
       actions.setSubmitting(false)
     },
-    [batchClassId, createBatchStudent, handle]
+    [batchClassId, createBatchClassEnrollmentForOldStudent, handle]
   )
 
   return (
@@ -216,8 +188,10 @@ function BatchCourseStudentAddModal({
             open={open}
             handle={handle}
             batchClassId={batchClassId}
-            nextId={nextId}
-            getBatchStudentNextId={getBatchStudentNextId}
+            nextSerials={nextSerials}
+            getBatchClassEnrollmentNextSerial={
+              getBatchClassEnrollmentNextSerial
+            }
           />
         )}
       </Formik>
@@ -225,16 +199,20 @@ function BatchCourseStudentAddModal({
   )
 }
 
-const mapStateToProps = ({ batches }) => ({
-  nextId: batches.students.nextId
+const mapStateToProps = ({ batches }, { batchClassId }) => ({
+  nextSerials: get(
+    batches.classes.byId,
+    [batchClassId, 'nextSerials'],
+    emptyObject
+  )
 })
 
 const mapDispatchToProps = {
-  createBatchStudent,
-  getBatchStudentNextId
+  createBatchClassEnrollmentForOldStudent,
+  getBatchClassEnrollmentNextSerial
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchCourseStudentAddModal)
+)(BatchClassEnrollmentAddOldStudentModal)

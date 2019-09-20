@@ -5,7 +5,6 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Icon, Segment, Table } from 'semantic-ui-react'
 import { getBatchStudent } from 'store/actions/batches.js'
-import Payments from './views/Payments.js'
 
 function BatchClassStudent({
   batchClassId,
@@ -76,8 +75,6 @@ function BatchClassStudent({
           </Table.Body>
         </Table>
       </Segment>
-
-      <Payments batchClassId={batchClassId} batchStudentId={batchStudentId} />
     </>
   )
 }

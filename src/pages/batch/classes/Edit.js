@@ -25,8 +25,7 @@ function BatchClassEdit({
   batchClassId,
   batchClass,
   getBatchClass,
-  updateBatchClass,
-  navigate
+  updateBatchClass
 }) {
   useEffect(() => {
     if (!batchClass) getBatchClass(batchClassId)

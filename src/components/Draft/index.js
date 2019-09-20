@@ -48,8 +48,6 @@ function DraftEditor({ rawState, readOnly, style, storeRef }) {
   //   store.current.getEditor().focus()
   // }, [])
 
-  console.log(`${Date.now()} `, editorState)
-
   return (
     <div style={style}>
       {!readOnly && (

@@ -6,7 +6,7 @@ function Permit({ children, currentUser, userId, ...roleIds }) {
 
   if (!allowedRoleIds.length && !userId) return children
 
-  if (+userId === get(currentUser, 'id')) return children
+  if (userId === get(currentUser, 'id')) return children
 
   if (allowedRoleIds.includes(get(currentUser, 'roleId'))) return children
 
