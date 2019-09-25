@@ -1,5 +1,5 @@
 [build]
-command = 'sed -i "s|{API_URL}|${REACT_APP_API_URL}|g" netlify.toml && npm run build'
+command = 'sed -i "s|{API_URL}|${REACT_APP_API_URL}|g" netlify.toml && yarn build'
 publish = "build"
 
 [[redirects]]

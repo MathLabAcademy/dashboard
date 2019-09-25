@@ -894,7 +894,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@craco/craco@^5.0.2":
+"@craco/craco@^5.5.0":
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-5.5.0.tgz#081b25522d866fbc14b80fe61517f2f10e3e4499"
   integrity sha512-VN4pkBku4OmB8DHT/COGfmk4DKIyBDqM8KeGX6jGqsqxhxIf8OI1ULKNtenwvdKTx3XrYMEr0ya4n3VBu8CXew==
@@ -1230,6 +1230,13 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
+
+"@semantic-ui-react/craco-less@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@semantic-ui-react/craco-less/-/craco-less-1.1.0.tgz#c5b2c561dd65fbb9fccf100100e496a18a977e34"
+  integrity sha512-+Zj9U8BqD/wOsKiO2wej/qCkCpaXs3z2MfHYjrpsA+oa9e2B39rkSHGOq6+Vm6w1aYpsy1M1vtZzNVtq2Lcz+g==
+  dependencies:
+    craco-less "^1.12.0"
 
 "@semantic-ui-react/event-stack@^3.1.0":
   version "3.1.0"
@@ -2996,7 +3003,7 @@ cosmiconfig@^5.0.0, cosmiconfig@^5.2.0, cosmiconfig@^5.2.1:
     js-yaml "^3.13.1"
     parse-json "^4.0.0"
 
-craco-less@^1.7.0:
+craco-less@^1.12.0:
   version "1.12.0"
   resolved "https://registry.yarnpkg.com/craco-less/-/craco-less-1.12.0.tgz#6224529012eb0fcd6ba8e2827df9d80e92509838"
   integrity sha512-SnBxK8kVVi9EalCdLqWMCiBM9nRlxSGh/6AfMF3CqtPZ//8iUBvBHNtfSHMngK3eKkwBFjx3eGAr/6uElPXAFQ==

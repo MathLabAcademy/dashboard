@@ -1,13 +1,10 @@
-import './styles/semantic/semantic.less'
-import './index.css'
-
 import React from 'react'
 import ReactDOM from 'react-dom'
-import * as serviceWorker from './serviceWorker.js'
-
-import Root from './Root.js'
-
+import 'semantic-ui-less/semantic.less'
 import { store } from 'store/index.js'
+import './index.css'
+import Root from './Root.js'
+import * as serviceWorker from './serviceWorker.js'
 
 ReactDOM.render(<Root store={store} />, document.getElementById('root'))
 
