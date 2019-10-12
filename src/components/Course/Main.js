@@ -1,15 +1,49 @@
 import { Link, Router } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import { DraftViewer } from 'components/Draft'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft/index.js'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Segment, Table, Label } from 'semantic-ui-react'
-import { emptyArray } from 'utils/defaults.js'
-import CourseCQExams from './CQExams/Main.js'
-import Enroll from './Enroll.js'
-import CourseMCQExams from './MCQExams/Main.js'
+import { Button, Header, Label, Segment, Table } from 'semantic-ui-react'
+import { emptyArray } from 'utils/defaults'
+import CourseCQExams from './CQExams/Main'
+import Enroll from './Enroll'
+import CourseMCQExams from './MCQExams/Main'
+
+function CourseInfo({ course, courseTags }) {
+  return (
+    <Segment>
+      <Table basic="very" compact className="horizontal-info">
+        <Table.Body>
+          <Table.Row>
+            <Table.HeaderCell collapsing content={`Description`} />
+            <Table.Cell
+              content={<DraftViewer rawValue={get(course, 'description')} />}
+            />
+          </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell collapsing content={`Price`} />
+            <Table.Cell content={`${get(course, 'price') / 100} BDT`} />
+          </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell collapsing content={`Tags`} />
+            <Table.Cell>
+              {get(course, 'tagIds', emptyArray).map(id => (
+                <Label
+                  key={id}
+                  color="black"
+                  size="tiny"
+                  content={get(courseTags.byId, [id, 'name'])}
+                />
+              ))}
+            </Table.Cell>
+          </Table.Row>
+        </Table.Body>
+      </Table>
+    </Segment>
+  )
+}
 
 function Course({ courseId, course, courseTags, enrollments, currentUser }) {
   const isEnrolled = useMemo(() => {
@@ -41,42 +75,13 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
         />
       </Segment>
 
-      <Segment>
-        <Table basic="very" compact className="horizontal-info">
-          <Table.Body>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Description`} />
-              <Table.Cell
-                content={<DraftViewer rawValue={get(course, 'description')} />}
-              />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Price`} />
-              <Table.Cell content={`${get(course, 'price') / 100} BDT`} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Tags`} />
-              <Table.Cell>
-                {get(course, 'tagIds', emptyArray).map(id => (
-                  <Label
-                    key={id}
-                    color="black"
-                    size="tiny"
-                    content={get(courseTags.byId, [id, 'name'])}
-                  />
-                ))}
-              </Table.Cell>
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </Segment>
+      <Router>
+        <CourseInfo path="/" course={course} courseTags={courseTags} />
+        <Enroll path="enroll" courseId={courseId} />
+      </Router>
 
       <CourseCQExams courseId={courseId} />
       <CourseMCQExams courseId={courseId} />
-
-      <Router>
-        <Enroll path="enroll" courseId={courseId} />
-      </Router>
     </>
   )
 }

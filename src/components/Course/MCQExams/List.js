@@ -6,8 +6,8 @@ import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getAllMCQExamsForCourse } from 'store/actions/mcqExams.js'
-import ListItem from './ListItem.js'
 import { emptyArray } from 'utils/defaults.js'
+import ListItem from './ListItem.js'
 
 function CourseMCQExamList({
   courseId,
