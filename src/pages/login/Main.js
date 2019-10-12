@@ -3,7 +3,8 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Header } from 'semantic-ui-react'
-import Form from './Form.js'
+import EmailLoginForm from './EmailLoginForm'
+import PhoneLoginForm from './PhoneLoginForm'
 
 function LogIn({ userStatus }) {
   return userStatus.authed ? (
@@ -17,10 +18,16 @@ function LogIn({ userStatus }) {
         style={{ maxWidth: '512px' }}
       >
         <Header as="h2" textAlign="center">
-          Log In
+          Login with Email
         </Header>
 
-        <Form />
+        <EmailLoginForm />
+
+        <Header as="h2" textAlign="center">
+          Login with Phone
+        </Header>
+
+        <PhoneLoginForm />
       </Grid.Column>
     </Grid>
   )

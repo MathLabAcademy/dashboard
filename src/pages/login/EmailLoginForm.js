@@ -23,7 +23,7 @@ const getValidationSchema = () => {
 
 const initialValues = { email: '', password: '' }
 
-function LogInForm({ logIn }) {
+function EmailLogInForm({ logIn }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -109,4 +109,4 @@ const mapDispatchToProps = {
 export default connect(
   null,
   mapDispatchToProps
-)(LogInForm)
+)(EmailLogInForm)

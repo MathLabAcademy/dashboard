@@ -1,4 +1,4 @@
-import api from 'utils/api.js'
+import api from 'utils/api'
 import {
   CURRENT_USER_LOGIN_REQUEST,
   CURRENT_USER_REMOVE,
@@ -10,6 +10,26 @@ export const logIn = loginData => async dispatch => {
     dispatch({ type: CURRENT_USER_LOGIN_REQUEST })
 
     const { data, error } = await api('/auth/login', {
+      method: 'POST',
+      body: loginData
+    })
+
+    if (error) throw error
+
+    dispatch({ type: CURRENT_USER_UPDATE, data })
+
+    return data
+  } catch (err) {
+    dispatch({ type: CURRENT_USER_REMOVE })
+    throw err
+  }
+}
+
+export const loginWithPhone = loginData => async dispatch => {
+  try {
+    dispatch({ type: CURRENT_USER_LOGIN_REQUEST })
+
+    const { data, error } = await api('/auth/login/phone', {
       method: 'POST',
       body: loginData
     })
