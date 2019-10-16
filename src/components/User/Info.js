@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import AddGuardian from './AddGuardian'
 import ContactInfo from 'components/User/ContactInfo'
 
-function UserInfo({ userId, user }) {
+function UserInfo({ userId, user, refreshUser }) {
   const isStudent = useMemo(() => /^student/.test(get(user, 'roleId')), [user])
   const hasGuardian = useMemo(() => get(user, 'Person.Guardian'), [user])
 
@@ -16,14 +16,13 @@ function UserInfo({ userId, user }) {
         userId={userId}
         person={get(user, 'Person')}
         title={`Personal Information`}
-        isStudent={isStudent}
       />
 
       <ContactInfo
         userId={userId}
         person={get(user, 'Person')}
         title={`Personal Contact Information`}
-        isStudent={isStudent}
+        refreshUser={refreshUser}
       />
 
       {isStudent ? (
@@ -34,7 +33,6 @@ function UserInfo({ userId, user }) {
               person={get(user, 'Person.Guardian')}
               title={`Guardian Information`}
               isGuardian
-              isStudent={isStudent}
             />
 
             <ContactInfo
@@ -42,7 +40,7 @@ function UserInfo({ userId, user }) {
               person={get(user, 'Person.Guardian')}
               title={`Guardian Contact Information`}
               isGuardian
-              isStudent={isStudent}
+              refreshUser={refreshUser}
             />
           </>
         ) : (

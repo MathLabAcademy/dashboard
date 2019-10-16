@@ -62,7 +62,7 @@ function User({ userId, user, getUser }) {
       </Segment>
 
       <Router>
-        <Info path="/" userId={userId} />
+        <Info path="/" userId={userId} refreshUser={refreshUser} />
         <AddCredit path="add-credit" userId={userId} />
         <Transactions path="transactions" userId={userId} />
         <ChangePassword path="change-password" userId={userId} />

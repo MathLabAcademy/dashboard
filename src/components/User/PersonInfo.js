@@ -6,7 +6,7 @@ import React, { memo, useState } from 'react'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
 import Editor from './PersonInfoEditor'
 
-function PersonInfo({ userId, person, title, isGuardian, isStudent }) {
+function PersonInfo({ userId, person, title, isGuardian }) {
   const [editing, setEditing] = useState(false)
 
   return editing ? (
