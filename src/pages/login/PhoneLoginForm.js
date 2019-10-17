@@ -1,9 +1,7 @@
-import { Link } from '@reach/router'
-import api from 'utils/api'
 import Form from 'components/Form/Form'
 import Input from 'components/Form/Input'
 import { Formik } from 'formik'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import {
   Button,
@@ -13,6 +11,7 @@ import {
   Segment
 } from 'semantic-ui-react'
 import { loginWithPhone } from 'store/actions/currentUser'
+import api from 'utils/api'
 import * as Yup from 'yup'
 
 function PhoneLoginRequest({ setPhone, setToken }) {

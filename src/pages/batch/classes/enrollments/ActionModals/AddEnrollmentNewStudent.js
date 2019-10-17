@@ -1,4 +1,3 @@
-import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
 import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'

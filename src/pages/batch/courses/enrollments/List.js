@@ -1,17 +1,10 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
-import Switcher from 'components/Pagination/Switcher'
-import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchCourseEnrollmentForYear } from 'store/actions/batches'
-import {
-  fetchBatchCourseEnrollmentPage,
-  getBatchStudent
-} from 'store/actions/batches'
-import { emptyArray } from 'utils/defaults'
 import AddEnrollment from './ActionModals/AddEnrollment'
 // import EditStudent from './ActionModals/EditStudent.js'
 
