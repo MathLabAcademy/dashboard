@@ -1,4 +1,3 @@
-import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
 import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
@@ -10,8 +9,8 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, FormGroup, Message, Modal } from 'semantic-ui-react'
 import {
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForNewStudent,
+  getBatchCourseEnrollmentNextSerial
 } from 'store/actions/batches'
 import { emptyObject } from 'utils/defaults'
 import * as Yup from 'yup'
@@ -20,21 +19,21 @@ function FormModal({
   open,
   handle,
   formik: { isSubmitting, isValid, values, status, setFieldValue },
-  batchClassId,
+  batchCourseId,
   nextSerials,
-  getBatchClassEnrollmentNextSerial
+  getBatchCourseEnrollmentNextSerial
 }) {
   useEffect(() => {
     if (open) {
-      getBatchClassEnrollmentNextSerial(batchClassId, values.year).then(
+      getBatchCourseEnrollmentNextSerial(batchCourseId, values.year).then(
         ({ serial }) => {
           setFieldValue('serial', serial)
         }
       )
     }
   }, [
-    getBatchClassEnrollmentNextSerial,
-    batchClassId,
+    getBatchCourseEnrollmentNextSerial,
+    batchCourseId,
     values.year,
     open,
     setFieldValue
@@ -150,12 +149,12 @@ const getInitialValues = year => ({
   phone: ''
 })
 
-function BatchClassEnrollmentAddNewStudentModal({
-  batchClassId,
+function BatchCourseEnrollmentAddNewStudentModal({
+  batchCourseId,
   year,
   nextSerials,
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForNewStudent,
+  getBatchCourseEnrollmentNextSerial
 }) {
   const [open, handle] = useToggle(false)
 
@@ -167,8 +166,8 @@ function BatchClassEnrollmentAddNewStudentModal({
       actions.setStatus(null)
 
       try {
-        await createBatchClassEnrollmentForNewStudent({
-          batchClassId,
+        await createBatchCourseEnrollmentForNewStudent({
+          batchCourseId,
           ...values,
           phone: `+88${values.phone}`
         })
@@ -177,7 +176,7 @@ function BatchClassEnrollmentAddNewStudentModal({
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
-            param === 'batchClassId'
+            param === 'batchCourseId'
               ? actions.setStatus(`${param}: ${message}`)
               : actions.setFieldError(param, message)
           )
@@ -191,7 +190,7 @@ function BatchClassEnrollmentAddNewStudentModal({
 
       actions.setSubmitting(false)
     },
-    [batchClassId, createBatchClassEnrollmentForNewStudent, handle]
+    [batchCourseId, createBatchCourseEnrollmentForNewStudent, handle]
   )
 
   return (
@@ -207,10 +206,10 @@ function BatchClassEnrollmentAddNewStudentModal({
             formik={props}
             open={open}
             handle={handle}
-            batchClassId={batchClassId}
+            batchCourseId={batchCourseId}
             nextSerials={nextSerials}
-            getBatchClassEnrollmentNextSerial={
-              getBatchClassEnrollmentNextSerial
+            getBatchCourseEnrollmentNextSerial={
+              getBatchCourseEnrollmentNextSerial
             }
           />
         )}
@@ -219,20 +218,20 @@ function BatchClassEnrollmentAddNewStudentModal({
   )
 }
 
-const mapStateToProps = ({ batches }, { batchClassId }) => ({
+const mapStateToProps = ({ batches }, { batchCourseId }) => ({
   nextSerials: get(
-    batches.classes.byId,
-    [batchClassId, 'nextSerials'],
+    batches.courses.byId,
+    [batchCourseId, 'nextSerials'],
     emptyObject
   )
 })
 
 const mapDispatchToProps = {
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForNewStudent,
+  getBatchCourseEnrollmentNextSerial
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchClassEnrollmentAddNewStudentModal)
+)(BatchCourseEnrollmentAddNewStudentModal)

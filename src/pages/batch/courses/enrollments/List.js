@@ -6,6 +6,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
+import { getAllBatchCourseEnrollmentForYear } from 'store/actions/batches'
 import {
   fetchBatchCourseEnrollmentPage,
   getBatchStudent
@@ -17,19 +18,13 @@ import AddEnrollment from './ActionModals/AddEnrollment'
 function _ListItemRow({
   batchCourseEnrollmentId,
   courseEnrollment,
-  studentId,
-  student,
-  getBatchStudent,
+  user,
   linkToBase
 }) {
-  useEffect(() => {
-    if (studentId && !student) getBatchStudent(studentId)
-  }, [student, studentId, getBatchStudent])
-
   return (
     <Table.Row>
       <Table.Cell>{batchCourseEnrollmentId}</Table.Cell>
-      <Table.Cell>{get(student, 'fullName')}</Table.Cell>
+      <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
       <Table.Cell collapsing textAlign="center">
         <Icon
           name={get(courseEnrollment, 'active') ? 'check' : 'close'}
@@ -54,29 +49,25 @@ function _ListItemRow({
 }
 
 const ListItemRow = connect(
-  ({ batches }, { batchCourseEnrollmentId }) => {
+  ({ batches, users }, { batchCourseEnrollmentId }) => {
     const courseEnrollment = get(
       batches.courseEnrollments.byId,
       batchCourseEnrollmentId
     )
 
-    const studentId = get(courseEnrollment, 'batchStudentId', null)
-
-    const student = get(batches.students.byId, studentId, null)
+    const user = get(users.byId, get(courseEnrollment, 'userId'), null)
 
     return {
       courseEnrollment,
-      studentId,
-      student
+      user
     }
-  },
-  { getBatchStudent }
+  }
 )(_ListItemRow)
 
 function BatchCourseStudentList({
   batchCourseId,
-  pagination,
-  fetchPage,
+  courseEnrollments,
+  getAllBatchCourseEnrollmentForYear,
   linkToBase
 }) {
   const yearRef = useRef()
@@ -89,18 +80,14 @@ function BatchCourseStudentList({
     setYear(Number(year))
   }, [])
 
-  const queryObject = useMemo(() => {
-    return {
-      filter: {
-        batchCourseId: { '=': batchCourseId },
-        year: { '=': year }
-      }
-    }
-  }, [batchCourseId, year])
+  useEffect(() => {
+    getAllBatchCourseEnrollmentForYear(batchCourseId, year)
+  }, [batchCourseId, year, getAllBatchCourseEnrollmentForYear])
 
-  const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
-    queryObject
-  })
+  const ids = useMemo(() => {
+    const regex = new RegExp(`^${batchCourseId}${String(year).slice(-2)}`)
+    return courseEnrollments.allIds.filter(id => regex.test(id))
+  }, [batchCourseId, year, courseEnrollments.allIds])
 
   return (
     <>
@@ -155,7 +142,7 @@ function BatchCourseStudentList({
         </Table.Header>
 
         <Table.Body>
-          {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+          {ids.map(id => (
             <ListItemRow
               key={id}
               batchCourseEnrollmentId={id}
@@ -164,22 +151,16 @@ function BatchCourseStudentList({
           ))}
         </Table.Body>
       </Table>
-
-      <Switcher
-        activePage={page}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
-      />
     </>
   )
 }
 
-const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.batchCourseEnrollments
+const mapStateToProps = ({ batches }) => ({
+  courseEnrollments: batches.courseEnrollments
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchBatchCourseEnrollmentPage
+  getAllBatchCourseEnrollmentForYear
 }
 
 export default connect(

@@ -1,4 +1,3 @@
-import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
 import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
@@ -10,8 +9,8 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, FormGroup, Message, Modal } from 'semantic-ui-react'
 import {
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForOldStudent,
+  getBatchCourseEnrollmentNextSerial
 } from 'store/actions/batches'
 import { emptyObject } from 'utils/defaults'
 import * as Yup from 'yup'
@@ -20,21 +19,21 @@ function FormModal({
   open,
   handle,
   formik: { isSubmitting, isValid, values, status, setFieldValue },
-  batchClassId,
+  batchCourseId,
   nextSerials,
-  getBatchClassEnrollmentNextSerial
+  getBatchCourseEnrollmentNextSerial
 }) {
   useEffect(() => {
     if (open) {
-      getBatchClassEnrollmentNextSerial(batchClassId, values.year).then(
+      getBatchCourseEnrollmentNextSerial(batchCourseId, values.year).then(
         ({ serial }) => {
           setFieldValue('serial', serial)
         }
       )
     }
   }, [
-    getBatchClassEnrollmentNextSerial,
-    batchClassId,
+    getBatchCourseEnrollmentNextSerial,
+    batchCourseId,
     values.year,
     open,
     setFieldValue
@@ -44,7 +43,7 @@ function FormModal({
     <Modal
       trigger={
         <Button type="button" color="blue" onClick={handle.open}>
-          New Student
+          Old Student
         </Button>
       }
       as={Form}
@@ -59,19 +58,7 @@ function FormModal({
           {status}
         </Message>
 
-        <FormInput name="fullName" label={`Full Name`} icon="user" />
-
-        <FormInput name="shortName" label={`Short Name`} icon="user" />
-
-        <FormInput
-          type="date"
-          name="dob"
-          label={`Date of Birth`}
-          icon="calendar alternate"
-          min="1900-01-01"
-        />
-
-        <FormInput name="phone" label={`Mobile Phone Number`} icon="phone" />
+        <FormInput name="userId" label={`User ID`} />
 
         <FormGroup widths="equal">
           <FormInput
@@ -105,7 +92,7 @@ function FormModal({
           loading={isSubmitting}
           disabled={!isValid || isSubmitting}
         >
-          Save
+          Enroll
         </Button>
       </Modal.Actions>
     </Modal>
@@ -114,6 +101,7 @@ function FormModal({
 
 const getValidationSchema = () => {
   return Yup.object({
+    userId: Yup.string().required(`required`),
     year: Yup.number()
       .integer()
       .min(2000)
@@ -129,33 +117,24 @@ const getValidationSchema = () => {
       .integer()
       .min(0)
       .max(100)
-      .required(`required`),
-    fullName: Yup.string().required(`required`),
-    shortName: Yup.string().required(`required`),
-    dob: Yup.date().notRequired(),
-    phone: Yup.string()
-      .matches(/^01\d{9}/)
       .required(`required`)
   })
 }
 
 const getInitialValues = year => ({
+  userId: '',
   year: year || new Date().getFullYear(),
   serial: '',
   active: true,
-  waiver: 0,
-  fullName: '',
-  shortName: '',
-  dob: '',
-  phone: ''
+  waiver: 0
 })
 
-function BatchClassEnrollmentAddNewStudentModal({
-  batchClassId,
+function BatchCourseEnrollmentAddOldStudentModal({
+  batchCourseId,
   year,
   nextSerials,
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForOldStudent,
+  getBatchCourseEnrollmentNextSerial
 }) {
   const [open, handle] = useToggle(false)
 
@@ -167,17 +146,16 @@ function BatchClassEnrollmentAddNewStudentModal({
       actions.setStatus(null)
 
       try {
-        await createBatchClassEnrollmentForNewStudent({
-          batchClassId,
-          ...values,
-          phone: `+88${values.phone}`
+        await createBatchCourseEnrollmentForOldStudent({
+          batchCourseId,
+          ...values
         })
         actions.resetForm()
         handle.close()
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
-            param === 'batchClassId'
+            param === 'batchCourseId'
               ? actions.setStatus(`${param}: ${message}`)
               : actions.setFieldError(param, message)
           )
@@ -191,7 +169,7 @@ function BatchClassEnrollmentAddNewStudentModal({
 
       actions.setSubmitting(false)
     },
-    [batchClassId, createBatchClassEnrollmentForNewStudent, handle]
+    [batchCourseId, createBatchCourseEnrollmentForOldStudent, handle]
   )
 
   return (
@@ -207,10 +185,10 @@ function BatchClassEnrollmentAddNewStudentModal({
             formik={props}
             open={open}
             handle={handle}
-            batchClassId={batchClassId}
+            batchCourseId={batchCourseId}
             nextSerials={nextSerials}
-            getBatchClassEnrollmentNextSerial={
-              getBatchClassEnrollmentNextSerial
+            getBatchCourseEnrollmentNextSerial={
+              getBatchCourseEnrollmentNextSerial
             }
           />
         )}
@@ -219,20 +197,20 @@ function BatchClassEnrollmentAddNewStudentModal({
   )
 }
 
-const mapStateToProps = ({ batches }, { batchClassId }) => ({
+const mapStateToProps = ({ batches }, { batchCourseId }) => ({
   nextSerials: get(
-    batches.classes.byId,
-    [batchClassId, 'nextSerials'],
+    batches.courses.byId,
+    [batchCourseId, 'nextSerials'],
     emptyObject
   )
 })
 
 const mapDispatchToProps = {
-  createBatchClassEnrollmentForNewStudent,
-  getBatchClassEnrollmentNextSerial
+  createBatchCourseEnrollmentForOldStudent,
+  getBatchCourseEnrollmentNextSerial
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchClassEnrollmentAddNewStudentModal)
+)(BatchCourseEnrollmentAddOldStudentModal)

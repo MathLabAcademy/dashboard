@@ -3,7 +3,7 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import BatchClasses from './batch/classes/Main'
-// import BatchCourses from './batch/courses/Main'
+import BatchCourses from './batch/courses/Main'
 import Courses from './courses/Main'
 import Index from './index/Main'
 import MCQs from './mcqs/Main'
@@ -17,7 +17,7 @@ function Dashboard({ userStatus }) {
     <Router>
       <Index path="/" />
       <BatchClasses path="batchclasses/*" />
-      {/* <BatchCourses path="batchcourses/*" /> */}
+      <BatchCourses path="batchcourses/*" />
       <Courses path="courses/*" />
       <MCQs path="mcqs/*" />
       <Profile path="profile/*" />

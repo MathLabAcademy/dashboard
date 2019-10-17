@@ -1,10 +1,10 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
-import { getAllBatchClassEnrollmentForYear } from 'store/actions/batches.js'
+import { getAllBatchClassEnrollmentForYear } from 'store/actions/batches'
 import AddEnrollment from './ActionModals/AddEnrollment'
 // import EditStudent from './ActionModals/EditStudent.js'
 

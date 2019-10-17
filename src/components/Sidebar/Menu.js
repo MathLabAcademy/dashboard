@@ -44,12 +44,12 @@ const items = [
     title: `Batch Classes`,
     link: '/batchclasses',
     permits: ['teacher']
+  },
+  {
+    title: `Batch Courses`,
+    link: '/batchcourses',
+    permits: ['teacher']
   }
-  // {
-  //   title: `Batch Courses`,
-  //   link: '/batchcourses',
-  //   permits: ['teacher']
-  // }
 ]
 
 function SidebarMenu({ sidebarVisible }) {

@@ -483,8 +483,49 @@ export const fetchBatchCourseEnrollmentPage = (
   return data
 }
 
-export const createBatchCourseEnrollment = batchCourseEnrollmentData => async dispatch => {
-  const url = `/batch/courseenrollments`
+export const getAllBatchCourseEnrollmentForYear = (
+  batchCourseId,
+  year
+) => async dispatch => {
+  const url = `/batch/courses/${batchCourseId}/enrollments/years/${year}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  const usersData = { items: [] }
+
+  data.items.forEach(item => {
+    const user = item.User
+    usersData.items.push(user)
+    delete item.User
+  })
+
+  dispatch({ type: USER_BULK_ADD, data: usersData })
+  dispatch({ type: BATCHCOURSEENROLLMENT_BULK_ADD, data })
+
+  return data
+}
+
+export const createBatchCourseEnrollmentForNewStudent = batchCourseEnrollmentData => async dispatch => {
+  const url = `/batch/courseenrollments/new-student`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: batchCourseEnrollmentData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_PAGINATION_PURGE })
+  dispatch({ type: BATCHCOURSEENROLLMENT_PAGINATION_PURGE })
+  dispatch({ type: BATCHCOURSEENROLLMENT_ADD, data })
+
+  return data
+}
+
+export const createBatchCourseEnrollmentForOldStudent = batchCourseEnrollmentData => async dispatch => {
+  const url = `/batch/courseenrollments/old-student`
 
   const { data, error } = await api(url, {
     method: 'POST',
