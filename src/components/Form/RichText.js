@@ -14,7 +14,7 @@ function RichTextField({
   isStatic,
   disabled
 }) {
-  const storeRef = useRef()
+  const storeRef = useRef(null)
 
   const [editing, setEditing] = useState(false)
 
@@ -53,7 +53,7 @@ function RichTextField({
                   const newValue = contentState.hasText()
                     ? JSON.stringify(convertToRaw(contentState))
                     : ''
-                  console.log(newValue)
+
                   form.setFieldValue(name, newValue)
                   setEditing(false)
                 } else {
