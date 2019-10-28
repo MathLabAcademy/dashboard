@@ -26,10 +26,17 @@ export function DraftViewer({ rawValue, inline }) {
   )
 }
 
-function getInitialEditorState(rawEditorState) {
+function getInitialEditorState(rawEditorState, currentEditorState) {
+  const decorator = currentEditorState
+    ? currentEditorState.getDecorator()
+    : undefined
+
   return rawEditorState
-    ? EditorState.createWithContent(convertFromRaw(JSON.parse(rawEditorState)))
-    : EditorState.createEmpty()
+    ? EditorState.createWithContent(
+        convertFromRaw(JSON.parse(rawEditorState)),
+        decorator
+      )
+    : EditorState.createEmpty(decorator)
 }
 
 function DraftEditor({ rawState, readOnly, style, storeRef }) {
@@ -45,9 +52,9 @@ function DraftEditor({ rawState, readOnly, style, storeRef }) {
     getInitialEditorState(rawState)
   )
 
-  // useEffect(() => {
-  //   setEditorState(getInitialEditorState(rawState))
-  // }, [rawState])
+  useEffect(() => {
+    setEditorState(editorState => getInitialEditorState(rawState, editorState))
+  }, [rawState, readOnly])
 
   // const onClick = useCallback(() => {
   //   store.current.getEditor().focus()
