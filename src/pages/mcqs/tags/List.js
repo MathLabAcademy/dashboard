@@ -1,22 +1,21 @@
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import usePagination from 'hooks/usePagination.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Header, Segment } from 'semantic-ui-react'
-import { fetchTagPage } from 'store/actions/mcqTags.js'
-import { emptyArray } from 'utils/defaults.js'
-import Create from './ActionModals/Create.js'
-import Edit from './ActionModals/Edit.js'
+import { Flex } from 'rebass'
+import { Header, Segment } from 'semantic-ui-react'
+import { fetchTagPage } from 'store/actions/mcqTags'
+import { emptyArray } from 'utils/defaults'
+import Create from './ActionModals/Create'
+import Edit from './ActionModals/Edit'
 
 function _TagListItem({ tagId, tag }) {
   return (
-    <Segment>
-      <HeaderGrid
-        Left={<Header>{get(tag, 'name')}</Header>}
-        Right={<Edit tagId={tagId} tag={tag} />}
-      />
+    <Segment style={{ margin: '0.5em' }}>
+      <Header>{get(tag, 'name')}</Header>
+      <Edit tagId={tagId} tag={tag} />
     </Segment>
   )
 }
@@ -39,19 +38,22 @@ function TagList({ pagination, fetchPage }) {
       </Segment>
 
       <Segment basic>
-        <Grid columns={5}>
+        <Flex
+          sx={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap'
+          }}
+        >
           {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
-            <Grid.Column key={id}>
-              <ListItem id={id} tagId={id} />
-            </Grid.Column>
+            <ListItem key={id} id={id} tagId={id} />
           ))}
 
-          <Grid.Column>
-            <Segment compact>
-              <Create />
-            </Segment>
-          </Grid.Column>
-        </Grid>
+          <Segment style={{ margin: '0.5em' }}>
+            <Create />
+          </Segment>
+        </Flex>
       </Segment>
 
       <Switcher
