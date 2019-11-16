@@ -1,10 +1,9 @@
+import ContactInfo from 'components/User/ContactInfo'
 import PersonInfo from 'components/User/PersonInfo.js'
 import TransactionInfo from 'components/User/TransactionInfo'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
-import AddGuardian from './AddGuardian'
-import ContactInfo from 'components/User/ContactInfo'
 
 function UserInfo({ userId, user, refreshUser }) {
   const isStudent = useMemo(() => /^student/.test(get(user, 'roleId')), [user])
@@ -44,10 +43,11 @@ function UserInfo({ userId, user, refreshUser }) {
             />
           </>
         ) : (
-          <AddGuardian
+          <PersonInfo
             userId={userId}
-            person={get(user, 'Person')}
-            title={`Add Guardian Information`}
+            person={get(user, 'Person.Guardian')}
+            title={`Guardian Information`}
+            isGuardian
           />
         )
       ) : null}
@@ -63,7 +63,4 @@ const mapStateToProps = ({ users }, { userId }) => ({
 
 const mapDispatchToProps = {}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfo)

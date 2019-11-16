@@ -1,17 +1,17 @@
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
-import { get } from 'lodash-es'
+import useToggle from 'hooks/useToggle'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
-import { setBatchClassFee } from 'store/actions/batches.js'
+import { createCoursePaymentForYear } from 'store/actions/batches'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
+    batchCourseEnrollmentId: Yup.string().required(`required`),
     amount: Yup.number()
       .integer()
       .min(0)
@@ -19,33 +19,33 @@ const getValidationSchema = () => {
   })
 }
 
-const getInitialValues = batchFee => ({
-  amount: get(batchFee, 'amount', 0) / 100
+const getInitialValues = () => ({
+  batchCourseEnrollmentId: '',
+  amount: ''
 })
 
-function BatchCourseFeeSetModal({
-  batchClassId,
+function BatchClassPaymentAddModal({
+  batchCourseId,
   year,
-  month,
-  monthName,
-  batchFee,
-  setBatchClassFee
+  createCoursePaymentForYear
 }) {
   const [open, handle] = useToggle(false)
 
-  const initialValues = useMemo(() => getInitialValues(batchFee), [batchFee])
+  const initialValues = useMemo(() => getInitialValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async ({ amount }, actions) => {
+    async ({ amount, batchCourseEnrollmentId }, actions) => {
       actions.setStatus(null)
 
       try {
-        await setBatchClassFee(batchClassId, year, month, {
-          amount: amount * 100
+        await createCoursePaymentForYear(batchCourseId, year, {
+          amount: amount * 100,
+          batchCourseEnrollmentId
         })
         actions.resetForm()
-        handle.close()
+        window.location.reload()
+        // handle.close()
       } catch (err) {
         if (err.errors) {
           const errors = []
@@ -65,7 +65,7 @@ function BatchCourseFeeSetModal({
 
       actions.setSubmitting(false)
     },
-    [batchClassId, handle, month, setBatchClassFee, year]
+    [batchCourseId, year, createCoursePaymentForYear]
   )
 
   return (
@@ -80,7 +80,7 @@ function BatchCourseFeeSetModal({
           <Modal
             trigger={
               <Button type="button" color="blue" onClick={handle.open}>
-                Set
+                Add Payment
               </Button>
             }
             as={Form}
@@ -88,14 +88,17 @@ function BatchCourseFeeSetModal({
             open={open}
             onClose={handle.close}
           >
-            <Modal.Header>
-              Set Fee for {monthName} {year}
-            </Modal.Header>
+            <Modal.Header>Add Payment for {year}</Modal.Header>
 
             <Modal.Content>
               <Message color="yellow" hidden={!status}>
                 {status}
               </Message>
+
+              <FormInput
+                name="batchCourseEnrollmentId"
+                label={`Student Enrollment ID`}
+              />
 
               <FormInput
                 type="number"
@@ -124,15 +127,13 @@ function BatchCourseFeeSetModal({
   )
 }
 
-const mapStateToProps = ({ batches }, { batchClassId, year, month }) => ({
-  batchFee: get(batches.classes.feesById, [batchClassId, year, month])
-})
+const mapStateToProps = null
 
 const mapDispatchToProps = {
-  setBatchClassFee
+  createCoursePaymentForYear
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchCourseFeeSetModal)
+)(BatchClassPaymentAddModal)

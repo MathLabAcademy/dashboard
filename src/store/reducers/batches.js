@@ -9,10 +9,25 @@ import {
   BATCHCLASSFEE_ADD,
   BATCHCLASSFEE_BULK_ADD,
   BATCHCLASSFEE_REMOVE,
+  BATCHCLASSPAYMENT_ADD,
+  BATCHCLASSPAYMENT_BULK_ADD,
+  BATCHCLASSPAYMENT_REMOVE,
   BATCHCLASS_ADD,
   BATCHCLASS_BULK_ADD,
   BATCHCLASS_REMOVE,
   BATCHCLASS_UPDATE,
+  BATCHCOURSEENROLLMENT_ADD,
+  BATCHCOURSEENROLLMENT_BULK_ADD,
+  BATCHCOURSEENROLLMENT_NEXT_SERIAL_SET,
+  BATCHCOURSEENROLLMENT_REMOVE,
+  BATCHCOURSEENROLLMENT_UPDATE,
+  BATCHCOURSEPAYMENT_ADD,
+  BATCHCOURSEPAYMENT_BULK_ADD,
+  BATCHCOURSEPAYMENT_REMOVE,
+  BATCHCOURSE_ADD,
+  BATCHCOURSE_BULK_ADD,
+  BATCHCOURSE_REMOVE,
+  BATCHCOURSE_UPDATE,
   // BATCHPAYMENT_ADD,
   // BATCHPAYMENT_BULK_ADD,
   // BATCHPAYMENT_REMOVE,
@@ -20,19 +35,7 @@ import {
   BATCHSTUDENT_ADD,
   BATCHSTUDENT_BULK_ADD,
   BATCHSTUDENT_REMOVE,
-  BATCHSTUDENT_UPDATE,
-  BATCHCOURSE_UPDATE,
-  BATCHCOURSE_REMOVE,
-  BATCHCOURSE_BULK_ADD,
-  BATCHCOURSE_ADD,
-  BATCHCOURSEENROLLMENT_UPDATE,
-  BATCHCOURSEENROLLMENT_REMOVE,
-  BATCHCOURSEENROLLMENT_BULK_ADD,
-  BATCHCOURSEENROLLMENT_ADD,
-  BATCHCOURSEENROLLMENT_NEXT_SERIAL_SET,
-  BATCHCLASSPAYMENT_ADD,
-  BATCHCLASSPAYMENT_REMOVE,
-  BATCHCLASSPAYMENT_BULK_ADD
+  BATCHSTUDENT_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -455,11 +458,54 @@ const batchClassPaymentsReducer = (
   }
 }
 
+const initialCoursePaymentsState = {
+  byId: emptyObject,
+  allIds: emptyArray,
+  idsByYear: emptyObject
+}
+
+const batchCoursePaymentsReducer = (
+  state = initialCoursePaymentsState,
+  { type, data }
+) => {
+  switch (type) {
+    case BATCHCOURSEPAYMENT_ADD:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [data.id]: {
+            ...data
+          }
+        },
+        allIds: ids.add(state.allIds, data)
+      }
+    case BATCHCOURSEPAYMENT_BULK_ADD:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...keyBy(data.items, 'id')
+        },
+        allIds: ids.addBulk(state.allIds, data)
+      }
+    case BATCHCOURSEPAYMENT_REMOVE:
+      return {
+        ...state,
+        byId: pickBy(state.byId, ({ id }) => id !== data.id),
+        allIds: ids.remove(state.allIds, data)
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   classes: batchClassesReducer,
   classEnrollments: batchClassEnrollmentsReducer,
   classPayments: batchClassPaymentsReducer,
   courses: batchCoursesReducer,
   courseEnrollments: batchCourseEnrollmentsReducer,
+  coursePayments: batchCoursePaymentsReducer,
   students: batchStudentsReducer
 })

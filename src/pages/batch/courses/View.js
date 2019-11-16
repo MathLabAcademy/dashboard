@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getBatchCourse } from 'store/actions/batches.js'
 import Enrollments from './enrollments/Main'
+import Payments from './payments/Main'
 
 function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
   useEffect(() => {
@@ -36,6 +37,9 @@ function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>
+                <Button color="orange" as={Link} to={`payments`}>
+                  Payments
+                </Button>
               </Permit>
             </>
           }
@@ -43,7 +47,7 @@ function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
       </Segment>
 
       <Router>
-        {/* <Fees path="fees/*" batchClassId={batchCourseId} /> */}
+        <Payments path="payments/*" batchCourseId={batchCourseId} />
         <Enrollments path="/*" batchCourseId={batchCourseId} />
       </Router>
     </>
@@ -58,7 +62,4 @@ const mapDispatchToProps = {
   getBatchCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchCourseView)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseView)

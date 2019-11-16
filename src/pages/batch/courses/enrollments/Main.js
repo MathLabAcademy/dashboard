@@ -1,7 +1,7 @@
 import { Router } from '@reach/router'
 import React from 'react'
-import List from './List.js'
-// import View from './View.js'
+import List from './List'
+import View from './View'
 
 function BatchCourseEnrollments({ batchCourseId }) {
   return (
@@ -13,7 +13,10 @@ function BatchCourseEnrollments({ batchCourseId }) {
           linkToBase="enrollments/"
         />
         <List path="enrollments" batchCourseId={batchCourseId} linkToBase="" />
-        {/* <View path="enrollments/:batchCourseEnrollmentId" batchCourseId={batchCourseId} /> */}
+        <View
+          path="enrollments/:batchCourseEnrollmentId"
+          batchCourseId={batchCourseId}
+        />
       </Router>
     </>
   )

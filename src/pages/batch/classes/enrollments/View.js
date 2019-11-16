@@ -54,7 +54,11 @@ function BatchClassStudent({
 
   return (
     <>
-      <BatchStudent batchClassEnrollment={batchClassEnrollment} user={user} />
+      <BatchStudent
+        batchType="class"
+        batchEnrollment={batchClassEnrollment}
+        user={user}
+      />
 
       <Table>
         <Table.Header>
@@ -98,7 +102,4 @@ const mapDispatchToProps = {
   getUser
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchClassStudent)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchClassStudent)

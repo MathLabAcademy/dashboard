@@ -30,6 +30,8 @@ import {
   BATCHCOURSEENROLLMENT_PAGE_REMOVE,
   BATCHCOURSEENROLLMENT_PAGE_REQUEST,
   BATCHCOURSEENROLLMENT_PAGINATION_PURGE,
+  BATCHCOURSEPAYMENT_ADD,
+  BATCHCOURSEPAYMENT_BULK_ADD,
   BATCHCOURSE_ADD,
   BATCHCOURSE_BULK_ADD,
   BATCHCOURSE_PAGE_ADD,
@@ -250,6 +252,21 @@ export const getAllClassPaymentForMonth = (
   return data
 }
 
+export const getAllCoursePaymentForYear = (
+  batchCourseId,
+  year
+) => async dispatch => {
+  const url = `/batch/courses/${batchCourseId}/payments/years/${year}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: BATCHCOURSEPAYMENT_BULK_ADD, data })
+
+  return data
+}
+
 export const createClassPaymentForMonth = (
   batchClassId,
   year,
@@ -266,6 +283,25 @@ export const createClassPaymentForMonth = (
   if (error) throw error
 
   dispatch({ type: BATCHCLASSPAYMENT_ADD, data })
+
+  return data
+}
+
+export const createCoursePaymentForYear = (
+  batchCourseId,
+  year,
+  batchCoursePaymentData
+) => async dispatch => {
+  const url = `/batch/courses/${batchCourseId}/payments/years/${year}`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: batchCoursePaymentData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: BATCHCOURSEPAYMENT_ADD, data })
 
   return data
 }
@@ -339,11 +375,25 @@ export const updateBatchClassEnrollment = (
 
   if (error) throw error
 
-  const userData = data.User
-  delete data.User
-
   dispatch({ type: BATCHCLASSENROLLMENT_ADD, data })
-  dispatch({ type: USER_ADD, data: userData })
+
+  return data
+}
+
+export const updateBatchCourseEnrollment = (
+  batchCourseEnrollmentId,
+  batchCourseEnrollmentData
+) => async dispatch => {
+  const url = `/batch/courseenrollments/${batchCourseEnrollmentId}`
+
+  const { data, error } = await api(url, {
+    method: 'PATCH',
+    body: batchCourseEnrollmentData
+  })
+
+  if (error) throw error
+
+  dispatch({ type: BATCHCOURSEENROLLMENT_ADD, data })
 
   return data
 }
@@ -503,6 +553,18 @@ export const getAllBatchCourseEnrollmentForYear = (
 
   dispatch({ type: USER_BULK_ADD, data: usersData })
   dispatch({ type: BATCHCOURSEENROLLMENT_BULK_ADD, data })
+
+  return data
+}
+
+export const getAllBatchCoursePaymentsForEnrollment = batchCourseEnrollmentId => async dispatch => {
+  const url = `/batch/courseenrollments/${batchCourseEnrollmentId}/payments`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: BATCHCOURSEPAYMENT_BULK_ADD, data })
 
   return data
 }

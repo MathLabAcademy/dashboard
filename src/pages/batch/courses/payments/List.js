@@ -1,22 +1,19 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
-import { Info } from 'luxon'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
-import { getAllClassPaymentForMonth } from 'store/actions/batches'
+import { getAllCoursePaymentForYear } from 'store/actions/batches'
 import api from 'utils/api'
 import AddPayment from './ActionModals/AddPayment'
-
-const months = Info.months()
 
 function _ListItemRow({ payment }) {
   const [enrollmentId, setEnrollmentId] = useState('')
 
   useEffect(() => {
     api(
-      `/batch/classpayments/${get(payment, 'id')}/enrollment-id`
+      `/batch/coursepayments/${get(payment, 'id')}/enrollment-id`
     ).then(({ data }) => setEnrollmentId(data))
   }, [payment])
 
@@ -34,19 +31,17 @@ function _ListItemRow({ payment }) {
 }
 
 const ListItemRow = connect(({ batches }, { id }) => ({
-  payment: get(batches.classPayments.byId, id)
+  payment: get(batches.coursePayments.byId, id)
 }))(_ListItemRow)
 
-function BatchClassPaymentList({
-  batchClassId,
-  getAllClassPaymentForMonth,
+function BatchCoursePaymentList({
+  batchCourseId,
+  getAllCoursePaymentForYear,
   linkToBase
 }) {
   const yearRef = useRef()
-  const monthRef = useRef()
 
   const [year, setYear] = useState(new Date().getFullYear())
-  const [month, setMonth] = useState(new Date().getMonth() + 1)
 
   const handleYearChange = useCallback(() => {
     if (!yearRef.current) return
@@ -54,36 +49,25 @@ function BatchClassPaymentList({
     setYear(Number(year))
   }, [])
 
-  const handleMonthChange = useCallback(() => {
-    if (!monthRef.current) return
-    const month = monthRef.current.inputRef.current.value
-    setMonth(Number(month))
-  }, [])
-
   const [ids, setIds] = useState([])
 
   useEffect(() => {
-    getAllClassPaymentForMonth(batchClassId, year, month).then(data => {
+    getAllCoursePaymentForYear(batchCourseId, year).then(data => {
       setIds(data.items.map(({ id }) => id))
     })
-  }, [batchClassId, year, month, getAllClassPaymentForMonth])
+  }, [batchCourseId, year, getAllCoursePaymentForYear])
 
   return (
     <>
       <Segment>
         <HeaderGrid
-          Left={<Header>Batch Class Payments</Header>}
+          Left={<Header>Batch Course Payments</Header>}
           Right={
             <>
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <AddPayment
-                batchClassId={batchClassId}
-                year={year}
-                month={month}
-                monthName={months[month - 1]}
-              />
+              <AddPayment batchCourseId={batchCourseId} year={year} />
             </>
           }
         />
@@ -92,10 +76,7 @@ function BatchClassPaymentList({
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell colSpan="2">
-              {months[month - 1]} {year}
-            </Table.HeaderCell>
-            <Table.HeaderCell textAlign="right">
+            <Table.HeaderCell>
               <Input
                 ref={yearRef}
                 defaultValue={year}
@@ -110,23 +91,6 @@ function BatchClassPaymentList({
                     type="button"
                     icon="filter"
                     onClick={handleYearChange}
-                  />
-                }
-              />
-              <Input
-                ref={monthRef}
-                defaultValue={month}
-                type="number"
-                min="1"
-                max="12"
-                step="1"
-                icon="calendar alternate"
-                iconPosition="left"
-                action={
-                  <Button
-                    type="button"
-                    icon="filter"
-                    onClick={handleMonthChange}
                   />
                 }
               />
@@ -156,14 +120,14 @@ function BatchClassPaymentList({
 }
 
 const mapStateToProps = ({ batches }) => ({
-  classPayments: batches.classPayments
+  coursePayments: batches.coursePayments
 })
 
 const mapDispatchToProps = {
-  getAllClassPaymentForMonth
+  getAllCoursePaymentForYear
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchClassPaymentList)
+)(BatchCoursePaymentList)

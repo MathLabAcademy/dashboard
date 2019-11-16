@@ -5,13 +5,13 @@ import React, { memo, useState } from 'react'
 import { Button, Header, Icon, Segment, Table } from 'semantic-ui-react'
 import BatchStudentEditor from './BatchStudentEditor'
 
-function BatchStudent({ batchClassEnrollment, user }) {
+function BatchStudent({ batchType, batchEnrollment, user }) {
   const [editing, setEditing] = useState(false)
 
   return (
     <Segment>
       <HeaderGrid
-        Left={<Header>Student ID: {get(batchClassEnrollment, 'id')}</Header>}
+        Left={<Header>Enrollment ID: {get(batchEnrollment, 'id')}</Header>}
         Right={
           <Button onClick={() => setEditing(!editing)}>
             {editing ? 'Cancel' : 'Edit'}
@@ -21,29 +21,18 @@ function BatchStudent({ batchClassEnrollment, user }) {
 
       {editing ? (
         <BatchStudentEditor
-          batchClassEnrollment={batchClassEnrollment}
+          batchType={batchType}
+          batchEnrollment={batchEnrollment}
           user={user}
         />
       ) : (
         <Table basic="very" compact className="horizontal-info">
           <Table.Body>
             <Table.Row>
-              <Table.HeaderCell collapsing content={`Student ID`} />
-              <Table.Cell content={get(batchClassEnrollment, 'id')} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`User ID`} />
-              <Table.Cell>
-                <Link to={`/users/onsite/${get(user, 'id')}`}>
-                  {get(user, 'id')}
-                </Link>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row>
               <Table.HeaderCell collapsing content={`Active`} />
               <Table.Cell
                 content={
-                  get(batchClassEnrollment, 'active') ? (
+                  get(batchEnrollment, 'active') ? (
                     <Icon name="check" color="green" />
                   ) : (
                     <Icon name="x" color="red" />
@@ -53,9 +42,14 @@ function BatchStudent({ batchClassEnrollment, user }) {
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell collapsing content={`Waiver`} />
-              <Table.Cell
-                content={`${get(batchClassEnrollment, 'waiver', 0)}%`}
-              />
+              <Table.Cell content={`${get(batchEnrollment, 'waiver', 0)}%`} />
+            </Table.Row>
+
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`User ID`} />
+              <Table.Cell>
+                <Link to={`/users/${get(user, 'id')}`}>{get(user, 'id')}</Link>
+              </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell collapsing content={`Full Name`} />
@@ -69,22 +63,6 @@ function BatchStudent({ batchClassEnrollment, user }) {
               <Table.HeaderCell collapsing content={`Mobile Phone`} />
               <Table.Cell content={get(user, 'Person.phone') || 'N/A'} />
             </Table.Row>
-            {/* <Table.Row>
-      <Table.HeaderCell collapsing content={`Guardian's Full Name`} />
-      <Table.Cell
-        content={get(user, 'Person.Guardian.fullName') || 'N/A'}
-      />
-    </Table.Row>
-    <Table.Row>
-      <Table.HeaderCell collapsing content={`Guardian's Short Name`} />
-      <Table.Cell
-        content={get(user, 'Person.Guardian.fullName') || 'N/A'}
-      />
-    </Table.Row>
-    <Table.Row>
-      <Table.HeaderCell collapsing content={`Guardian's Mobile Number`} />
-      <Table.Cell content={get(user, 'Person.Guardian.phone') || 'N/A'} />
-    </Table.Row> */}
           </Table.Body>
         </Table>
       )}

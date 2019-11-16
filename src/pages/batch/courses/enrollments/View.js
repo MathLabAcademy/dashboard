@@ -1,93 +1,108 @@
-import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import BatchStudent from 'components/User/BatchStudent'
 import { get } from 'lodash-es'
-import React, { useEffect } from 'react'
+import { DateTime } from 'luxon'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Icon, Segment, Table } from 'semantic-ui-react'
-import { getBatchStudent } from 'store/actions/batches.js'
+import { Table } from 'semantic-ui-react'
+import {
+  getAllBatchCoursePaymentsForEnrollment,
+  getBatchCourseEnrollment
+} from 'store/actions/batches'
+import { getUser } from 'store/actions/users'
 
-function BatchClassStudent({
-  batchClassId,
-  batchStudentId,
-  batchStudent,
-  getBatchStudent
+function _PaymentItemRow({ payment }) {
+  return (
+    <Table.Row>
+      <Table.Cell collapsing>{get(payment, 'id')}</Table.Cell>
+      <Table.Cell collapsing>
+        {get(payment, 'Transaction.amount') / 100}
+      </Table.Cell>
+      <Table.Cell collapsing textAlign="right">
+        {DateTime.fromISO(get(payment, 'created'))
+          .toLocal()
+          .toLocaleString()}
+      </Table.Cell>
+    </Table.Row>
+  )
+}
+
+const PaymentItemRow = connect(({ batches }, { id }) => ({
+  payment: get(batches.coursePayments.byId, id)
+}))(_PaymentItemRow)
+
+function BatchCourseStudent({
+  batchCourseId,
+  batchCourseEnrollmentId,
+  batchCourseEnrollment,
+  userId,
+  user,
+  getUser,
+  getBatchCourseEnrollment,
+  getAllBatchCoursePaymentsForEnrollment
 }) {
   useEffect(() => {
-    if (!batchStudent) getBatchStudent(batchStudentId)
-  }, [batchStudent, batchStudentId, getBatchStudent])
+    if (!batchCourseEnrollment)
+      getBatchCourseEnrollment(batchCourseEnrollmentId)
+  }, [batchCourseEnrollment, batchCourseEnrollmentId, getBatchCourseEnrollment])
+
+  const [paymentIds, setPaymentIds] = useState([])
+
+  useEffect(() => {
+    getAllBatchCoursePaymentsForEnrollment(batchCourseEnrollmentId).then(
+      data => {
+        setPaymentIds(data.items.map(({ id }) => id))
+      }
+    )
+  }, [batchCourseEnrollmentId, getAllBatchCoursePaymentsForEnrollment])
 
   return (
     <>
-      <Segment>
-        <HeaderGrid
-          Left={<Header>Student #{get(batchStudent, 'id')}</Header>}
-          Right={
-            <Button as={Link} to={`..`}>
-              Go Back
-            </Button>
-          }
-        />
-      </Segment>
-      <Segment>
-        <Table basic="very" compact className="horizontal-info">
-          <Table.Body>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`ID`} />
-              <Table.Cell content={get(batchStudent, 'id')} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Full Name`} />
-              <Table.Cell content={get(batchStudent, 'fullName')} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Short Name`} />
-              <Table.Cell content={get(batchStudent, 'shortName')} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Mobile Number`} />
-              <Table.Cell content={get(batchStudent, 'phone') || 'N/A'} />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell
-                collapsing
-                content={`Guardian's Mobile Number`}
-              />
-              <Table.Cell
-                content={get(batchStudent, 'guardianPhone') || 'N/A'}
-              />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Active`} />
-              <Table.Cell
-                content={
-                  get(batchStudent, 'active') ? (
-                    <Icon name="check" color="green" />
-                  ) : (
-                    <Icon name="x" color="red" />
-                  )
-                }
-              />
-            </Table.Row>
-            <Table.Row>
-              <Table.HeaderCell collapsing content={`Waiver`} />
-              <Table.Cell content={`${get(batchStudent, 'waiver', 0)}%`} />
-            </Table.Row>
-          </Table.Body>
-        </Table>
-      </Segment>
+      <BatchStudent
+        batchType="course"
+        batchEnrollment={batchCourseEnrollment}
+        user={user}
+      />
+
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell collapsing>Transaction ID</Table.HeaderCell>
+            <Table.HeaderCell collapsing>Amount (BDT)</Table.HeaderCell>
+            <Table.HeaderCell collapsing textAlign="right">
+              Date
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {paymentIds.map(id => (
+            <PaymentItemRow key={id} id={id} />
+          ))}
+        </Table.Body>
+      </Table>
     </>
   )
 }
 
-const mapStateToProps = ({ batches }, { batchStudentId }) => ({
-  batchStudent: get(batches.students.byId, batchStudentId)
-})
+const mapStateToProps = ({ batches, users }, { batchCourseEnrollmentId }) => {
+  const batchCourseEnrollment = get(
+    batches.courseEnrollments.byId,
+    batchCourseEnrollmentId
+  )
+  const userId = get(batchCourseEnrollment, 'userId')
+  const user = get(users.byId, userId)
 
-const mapDispatchToProps = {
-  getBatchStudent
+  return {
+    batchCourseEnrollment,
+    userId,
+    user
+  }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchClassStudent)
+const mapDispatchToProps = {
+  getBatchCourseEnrollment,
+  getAllBatchCoursePaymentsForEnrollment,
+  getUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseStudent)
