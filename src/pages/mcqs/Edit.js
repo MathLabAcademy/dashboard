@@ -1,10 +1,12 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import FormRichText from 'components/Form/RichText.js'
-import FormSelect from 'components/Form/Select.js'
+import Form from 'components/Form/Form'
+import FormRichText from 'components/Form/RichText'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
+import ImageGalleryModal from 'components/MCQs/ImageGalleryModal'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
+import useToggle from 'hooks/useToggle'
 import {
   get,
   isUndefined,
@@ -16,12 +18,10 @@ import {
 } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Message, Segment, Modal } from 'semantic-ui-react'
-import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs.js'
+import { Flex } from 'rebass'
+import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
+import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
 import * as Yup from 'yup'
-
-import ImageGalleryModal from 'components/MCQs/ImageGalleryModal.js'
-import useToggle from 'hooks/useToggle'
 
 const getValidationSchema = options => {
   const textSchema = Yup.string().required(`required`)
@@ -54,7 +54,9 @@ function MCQEdit({
   answerId,
   readMCQAnswer,
   mcqTags,
-  updateMCQ
+  updateMCQ,
+  prevMCQId,
+  nextMCQId
 }) {
   useEffect(() => {
     if (!mcq) getMCQ(mcqId)
@@ -118,6 +120,16 @@ function MCQEdit({
 
   return (
     <Permit teacher>
+      <Flex justifyContent="space-between" mb={3}>
+        <Button disabled={!prevMCQId} as={Link} to={`../../${prevMCQId}/edit`}>
+          Previous
+        </Button>
+
+        <Button disabled={!nextMCQId} as={Link} to={`../../${nextMCQId}/edit`}>
+          Next
+        </Button>
+      </Flex>
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -201,15 +213,33 @@ function MCQEdit({
           </Form>
         )}
       </Formik>
+
+      <Flex justifyContent="space-between" mt={3}>
+        <Button disabled={!prevMCQId} as={Link} to={`../../${prevMCQId}/edit`}>
+          Previous
+        </Button>
+
+        <Button disabled={!nextMCQId} as={Link} to={`../../${nextMCQId}/edit`}>
+          Next
+        </Button>
+      </Flex>
     </Permit>
   )
 }
 
-const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => ({
-  mcq: get(mcqs.byId, mcqId),
-  answerId: get(mcqs.answerById, mcqId),
-  mcqTags
-})
+const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => {
+  const index = mcqs.allIds.indexOf(+mcqId)
+  const prevMCQId = mcqs.allIds[index - 1]
+  const nextMCQId = mcqs.allIds[index + 1]
+
+  return {
+    mcq: get(mcqs.byId, mcqId),
+    answerId: get(mcqs.answerById, mcqId),
+    mcqTags,
+    prevMCQId,
+    nextMCQId
+  }
+}
 
 const mapDispatchToProps = {
   getMCQ,
@@ -217,7 +247,4 @@ const mapDispatchToProps = {
   updateMCQ
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQEdit)
