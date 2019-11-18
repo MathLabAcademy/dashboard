@@ -4,13 +4,15 @@ import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { Text } from 'rebass'
 import { Button, Message, Modal } from 'semantic-ui-react'
-import { chargeCoursePaymentForYear } from 'store/actions/batches'
+import { chargeClassPaymentForMonth } from 'store/actions/batches'
 
-function BatchCoursePaymentChargeModal({
-  batchCourseId,
+function BatchClassPaymentChargeModal({
+  batchClassId,
   year,
+  month,
+  monthName,
   onDone,
-  chargeCoursePaymentForYear
+  chargeClassPaymentForMonth
 }) {
   const [open, handle] = useToggle(false)
 
@@ -21,7 +23,7 @@ function BatchCoursePaymentChargeModal({
     setLoading(true)
 
     try {
-      await chargeCoursePaymentForYear(batchCourseId, year)
+      await chargeClassPaymentForMonth(batchClassId, year, month)
 
       setError(null)
       setLoading(false)
@@ -44,7 +46,7 @@ function BatchCoursePaymentChargeModal({
       setError(errors.length ? errors.join(', ') : null)
       setLoading(false)
     }
-  }, [batchCourseId, year, onDone, chargeCoursePaymentForYear])
+  }, [batchClassId, year, month, onDone, chargeClassPaymentForMonth])
 
   return (
     <Permit teacher>
@@ -58,7 +60,9 @@ function BatchCoursePaymentChargeModal({
         open={loading || open}
         onClose={handle.close}
       >
-        <Modal.Header>Charge Payment for {year}</Modal.Header>
+        <Modal.Header>
+          Charge Payment for {monthName} {year}
+        </Modal.Header>
 
         <Modal.Content>
           <Message color="yellow" hidden={!error}>
@@ -93,10 +97,10 @@ function BatchCoursePaymentChargeModal({
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  chargeCoursePaymentForYear
+  chargeClassPaymentForMonth
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(BatchCoursePaymentChargeModal)
+)(BatchClassPaymentChargeModal)

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllClassPaymentForMonth } from 'store/actions/batches'
 import api from 'utils/api'
-import AddPayment from './ActionModals/AddPayment'
+import ChargePayment from './ActionModals/ChargePayment'
 
 const months = Info.months()
 
@@ -62,11 +62,15 @@ function BatchClassPaymentList({
 
   const [ids, setIds] = useState([])
 
-  useEffect(() => {
+  const refreshPaymentIds = useCallback(() => {
     getAllClassPaymentForMonth(batchClassId, year, month).then(data => {
       setIds(data.items.map(({ id }) => id))
     })
   }, [batchClassId, year, month, getAllClassPaymentForMonth])
+
+  useEffect(() => {
+    refreshPaymentIds()
+  }, [refreshPaymentIds])
 
   return (
     <>
@@ -78,11 +82,12 @@ function BatchClassPaymentList({
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <AddPayment
+              <ChargePayment
                 batchClassId={batchClassId}
                 year={year}
                 month={month}
                 monthName={months[month - 1]}
+                onDone={refreshPaymentIds}
               />
             </>
           }

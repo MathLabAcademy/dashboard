@@ -14,7 +14,6 @@ import {
   BATCHCLASSFEE_PAGE_REMOVE,
   BATCHCLASSFEE_PAGE_REQUEST,
   BATCHCLASSFEE_REMOVE,
-  BATCHCLASSPAYMENT_ADD,
   BATCHCLASSPAYMENT_BULK_ADD,
   BATCHCLASS_ADD,
   BATCHCLASS_BULK_ADD,
@@ -266,22 +265,20 @@ export const getAllCoursePaymentForYear = (
   return data
 }
 
-export const createClassPaymentForMonth = (
+export const chargeClassPaymentForMonth = (
   batchClassId,
   year,
-  month,
-  batchClassPaymentData
+  month
 ) => async dispatch => {
-  const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}`
+  const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/charge`
 
   const { data, error } = await api(url, {
-    method: 'POST',
-    body: batchClassPaymentData
+    method: 'POST'
   })
 
   if (error) throw error
 
-  dispatch({ type: BATCHCLASSPAYMENT_ADD, data })
+  dispatch({ type: BATCHCLASSPAYMENT_BULK_ADD, data })
 
   return data
 }
