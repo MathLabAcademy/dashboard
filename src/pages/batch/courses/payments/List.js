@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllCoursePaymentForYear } from 'store/actions/batches'
 import api from 'utils/api'
-import AddPayment from './ActionModals/AddPayment'
+import ChargePayment from './ActionModals/ChargePayment'
 
 function _ListItemRow({ payment }) {
   const [enrollmentId, setEnrollmentId] = useState('')
@@ -51,11 +51,15 @@ function BatchCoursePaymentList({
 
   const [ids, setIds] = useState([])
 
-  useEffect(() => {
+  const refreshPaymentIds = useCallback(() => {
     getAllCoursePaymentForYear(batchCourseId, year).then(data => {
       setIds(data.items.map(({ id }) => id))
     })
-  }, [batchCourseId, year, getAllCoursePaymentForYear])
+  }, [getAllCoursePaymentForYear, batchCourseId, year])
+
+  useEffect(() => {
+    refreshPaymentIds()
+  }, [refreshPaymentIds])
 
   return (
     <>
@@ -67,7 +71,11 @@ function BatchCoursePaymentList({
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <AddPayment batchCourseId={batchCourseId} year={year} />
+              <ChargePayment
+                batchCourseId={batchCourseId}
+                year={year}
+                onDone={refreshPaymentIds}
+              />
             </>
           }
         />
