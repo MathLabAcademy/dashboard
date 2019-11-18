@@ -5,10 +5,10 @@ import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { addCredit } from 'store/actions/users'
+import { addCredit, readCredit } from 'store/actions/users'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -24,7 +24,11 @@ const getInitialValues = user => ({
   amount: 0
 })
 
-function UserAddCredit({ userId, user, addCredit, navigate }) {
+function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
+  useEffect(() => {
+    readCredit(userId)
+  }, [readCredit, userId])
+
   const validationSchema = useMemo(() => getValidationSchema(), [])
   const initialValues = useMemo(() => getInitialValues(user), [user])
 
@@ -122,10 +126,8 @@ const mapStateToProps = ({ users }, { userId }) => ({
 })
 
 const mapDispatchToProps = {
-  addCredit
+  addCredit,
+  readCredit
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserAddCredit)
+export default connect(mapStateToProps, mapDispatchToProps)(UserAddCredit)

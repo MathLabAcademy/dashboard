@@ -2,10 +2,10 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
-import { readCredit } from 'store/actions/users.js'
+import { readCredit } from 'store/actions/users'
 
 function TransactionInfo({ userId, user, title, readCredit }) {
   const creditTaka = useMemo(() => {
@@ -19,6 +19,10 @@ function TransactionInfo({ userId, user, title, readCredit }) {
   const refreshCredit = useCallback(() => {
     readCredit(userId)
   }, [readCredit, userId])
+
+  useEffect(() => {
+    refreshCredit()
+  }, [refreshCredit])
 
   return (
     <Segment>
@@ -62,7 +66,4 @@ const mapDispatchToProps = {
   readCredit
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TransactionInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionInfo)
