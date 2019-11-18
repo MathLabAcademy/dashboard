@@ -73,7 +73,7 @@ function BatchClassPaymentAddModal({
   )
 
   return (
-    <Permit teacher>
+    <Permit nobody>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
