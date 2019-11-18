@@ -21,7 +21,6 @@ function ImageCard({ src }) {
       <Card.Content />
       <Card.Content extra>
         <Input
-          disabled
           className="static"
           fluid
           id={id}
