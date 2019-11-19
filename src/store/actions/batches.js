@@ -529,9 +529,11 @@ export const fetchBatchCourseEnrollmentPage = (
 
 export const getAllBatchCourseEnrollmentForYear = (
   batchCourseId,
-  year
+  year,
+  { query = '' } = {}
 ) => async dispatch => {
-  const url = `/batch/courses/${batchCourseId}/enrollments/years/${year}`
+  let url = `/batch/courses/${batchCourseId}/enrollments/years/${year}`
+  if (query) url = `${url}?${query}`
 
   const { data, error } = await api(url)
 
