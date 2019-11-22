@@ -9,6 +9,7 @@ import {
   getAllCoursePaymentForYear
 } from 'store/actions/batches'
 import ChargePayment from './ActionModals/ChargePayment'
+import PaymentReminder from './ActionModals/PaymentReminder'
 
 function _ListItemRow({ enrollmentId, enrollment, user }) {
   const data = useMemo(() => {
@@ -90,6 +91,7 @@ function BatchCoursePaymentList({
                 year={year}
                 onDone={refreshPaymentData}
               />
+              <PaymentReminder batchCourseId={batchCourseId} year={year} />
             </>
           }
         />

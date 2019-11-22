@@ -23,6 +23,8 @@ import {
   BATCHCOURSEENROLLMENT_UPDATE,
   BATCHCOURSEPAYMENT_ADD,
   BATCHCOURSEPAYMENT_BULK_ADD,
+  BATCHCOURSEPAYMENT_REMINDER_ADD,
+  BATCHCOURSEPAYMENT_REMINDER_SET_ALL,
   BATCHCOURSEPAYMENT_REMOVE,
   BATCHCOURSE_ADD,
   BATCHCOURSE_BULK_ADD,
@@ -500,6 +502,52 @@ const batchCoursePaymentsReducer = (
   }
 }
 
+const initialCoursePaymentRemindersState = {
+  byId: emptyObject,
+  allIds: emptyArray,
+  idsByKey: emptyObject
+}
+
+const batchCoursePaymentRemindersReducer = (
+  state = initialCoursePaymentRemindersState,
+  { type, data, batchCourseId, year }
+) => {
+  const key = `${batchCourseId}:${year}`
+
+  switch (type) {
+    case BATCHCOURSEPAYMENT_REMINDER_ADD:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [data.id]: {
+            ...data
+          }
+        },
+        allIds: ids.add(state.allIds, data),
+        idsByKey: {
+          ...state.idsByKey,
+          [key]: ids.add(state.idsByKey[key], data)
+        }
+      }
+    case BATCHCOURSEPAYMENT_REMINDER_SET_ALL:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...keyBy(data.items, 'id')
+        },
+        allIds: ids.addBulk(state.allIds, data),
+        idsByKey: {
+          ...state.idsByKey,
+          [key]: ids.addBulk(state.idsByKey[key], data)
+        }
+      }
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   classes: batchClassesReducer,
   classEnrollments: batchClassEnrollmentsReducer,
@@ -507,5 +555,6 @@ export default combineReducers({
   courses: batchCoursesReducer,
   courseEnrollments: batchCourseEnrollmentsReducer,
   coursePayments: batchCoursePaymentsReducer,
+  coursePaymentReminders: batchCoursePaymentRemindersReducer,
   students: batchStudentsReducer
 })
