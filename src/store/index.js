@@ -25,7 +25,13 @@ export const dispatchToStore = store.dispatch
 
 store.subscribe(
   throttle(() => {
-    const { errorBoundary, pagination, user, ...state } = store.getState()
+    const {
+      errorBoundary,
+      pagination,
+      user,
+      transactions,
+      ...state
+    } = store.getState()
 
     saveState(stateLocalStorageKey, state)
   }, 1500)

@@ -1,6 +1,6 @@
-import api from 'utils/api.js'
-import { defaultOptsFetchPage } from 'utils/defaults.js'
-import { TRANSACTION_BULK_ADD } from './actionTypes.js'
+import api from 'utils/api'
+import { defaultOptsFetchPage } from 'utils/defaults'
+import { TRANSACTION_BULK_ADD } from './actionTypes'
 
 export const getAllTransactionsForUser = (
   userId,

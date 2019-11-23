@@ -5,7 +5,7 @@ import { DateTime } from 'luxon'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment, Table } from 'semantic-ui-react'
-import { getAllTransactionsForUser } from 'store/actions/transactions.js'
+import { getAllTransactionsForUser } from 'store/actions/transactions'
 
 function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
   useEffect(() => {
@@ -69,7 +69,4 @@ const mapDispatchToProps = {
   getAllTransactionsForUser
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserTransactions)
+export default connect(mapStateToProps, mapDispatchToProps)(UserTransactions)
