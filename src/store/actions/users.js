@@ -31,6 +31,22 @@ export const getUser = userId => async dispatch => {
   return data
 }
 
+export const findUser = ({
+  userId,
+  batchClassEnrollmentId,
+  batchCourseEnrollmentId
+}) => async dispatch => {
+  const url = `/users/action/find?userId=${userId}&batchClassEnrollmentId=${batchClassEnrollmentId}&batchCourseEnrollmentId=${batchCourseEnrollmentId}`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch(addUser(data))
+
+  return data
+}
+
 export const fetchUserPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true

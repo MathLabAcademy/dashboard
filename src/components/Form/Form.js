@@ -1,13 +1,9 @@
-import React from 'react'
-
 import { connect } from 'formik'
+import React from 'react'
+import { Form as SemanticForm } from 'semantic-ui-react'
 
-import { Form } from 'semantic-ui-react'
+const Form = connect(({ formik: { handleReset, handleSubmit }, ...props }) => (
+  <SemanticForm onReset={handleReset} onSubmit={handleSubmit} {...props} />
+))
 
-const ConnectedForm = connect(
-  ({ formik: { handleReset, handleSubmit }, ...props }) => (
-    <Form onReset={handleReset} onSubmit={handleSubmit} {...props} />
-  )
-)
-
-export default ConnectedForm
+export default Form

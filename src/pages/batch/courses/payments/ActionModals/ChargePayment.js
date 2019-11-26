@@ -26,6 +26,7 @@ function BatchCoursePaymentChargeModal({
       setError(null)
       setLoading(false)
       onDone()
+      handle.close()
     } catch (err) {
       const errors = []
 
@@ -44,7 +45,7 @@ function BatchCoursePaymentChargeModal({
       setError(errors.length ? errors.join(', ') : null)
       setLoading(false)
     }
-  }, [batchCourseId, year, onDone, chargeCoursePaymentForYear])
+  }, [batchCourseId, year, onDone, chargeCoursePaymentForYear, handle])
 
   return (
     <Permit teacher>

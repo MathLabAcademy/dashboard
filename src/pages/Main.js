@@ -9,6 +9,7 @@ import Index from './index/Main'
 import MCQs from './mcqs/Main'
 import Profile from './profile/Main'
 import Users from './users/Main'
+import FindUser from './find-user/Main'
 
 function Dashboard({ userStatus }) {
   return userStatus.loading ? (
@@ -22,6 +23,7 @@ function Dashboard({ userStatus }) {
       <MCQs path="mcqs/*" />
       <Profile path="profile/*" />
       <Users path="users/*" />
+      <FindUser path="find-user/*" />
     </Router>
   ) : (
     <Redirect to="/login" noThrow />

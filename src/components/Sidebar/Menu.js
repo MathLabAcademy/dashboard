@@ -17,6 +17,11 @@ const items = [
     permits: ['teacher']
   },
   {
+    title: `Find User`,
+    link: '/find-user',
+    permits: ['teacher']
+  },
+  {
     title: `Courses`,
     link: '/courses',
     permits: ['teacher', 'student'],
