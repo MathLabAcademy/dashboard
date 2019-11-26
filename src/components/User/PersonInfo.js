@@ -32,6 +32,13 @@ function PersonInfo({ userId, person, title, isGuardian }) {
 
       <Table basic="very" compact className="horizontal-info">
         <Table.Body>
+          {!isGuardian && (
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`User ID`} />
+              <Table.Cell content={userId} />
+            </Table.Row>
+          )}
+
           <Table.Row>
             <Table.HeaderCell collapsing content={`Full Name`} />
             <Table.Cell content={get(person, 'fullName')} />

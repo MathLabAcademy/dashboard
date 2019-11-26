@@ -79,7 +79,4 @@ const mapDispatchToProps = {
   getUser
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(User)
+export default connect(mapStateToProps, mapDispatchToProps)(User)
