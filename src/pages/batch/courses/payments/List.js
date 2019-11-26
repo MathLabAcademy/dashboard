@@ -73,7 +73,7 @@ function BatchCoursePaymentList({
 
   const enrollmentIds = useMemo(() => {
     const regex = new RegExp(`^${batchCourseId}${String(year).slice(-2)}`)
-    return courseEnrollments.allIds.filter(id => regex.test(id))
+    return courseEnrollments.allIds.filter(id => regex.test(id)).sort()
   }, [batchCourseId, year, courseEnrollments.allIds])
 
   return (
