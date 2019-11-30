@@ -1,6 +1,6 @@
 import HeaderGrid from 'components/HeaderGrid'
 import { convertToRaw } from 'draft-js'
-import RichEditor from 'components/Draft/index.js'
+import RichEditor from 'components/Draft/index'
 import { ErrorMessage, Field, getIn } from 'formik'
 import React, { useRef, useState } from 'react'
 import { Button, FormField, Segment } from 'semantic-ui-react'
@@ -12,7 +12,8 @@ function RichTextField({
   label,
   hideLabel,
   isStatic,
-  disabled
+  disabled,
+  disableImage
 }) {
   const storeRef = useRef(null)
 
@@ -66,7 +67,12 @@ function RichTextField({
       />
 
       <Segment>
-        <RichEditor rawState={value} readOnly={!editing} storeRef={storeRef} />
+        <RichEditor
+          rawState={value}
+          readOnly={!editing}
+          storeRef={storeRef}
+          disableImage={disableImage}
+        />
       </Segment>
 
       <ErrorMessage name={name} component="p" className="red text" />
@@ -80,7 +86,8 @@ function FormRichText({
   label,
   hideLabel = false,
   static: isStatic = false,
-  disabled
+  disabled,
+  disableImage
 }) {
   id = id || name
 
@@ -92,6 +99,7 @@ function FormRichText({
       hideLabel={hideLabel}
       isStatic={isStatic}
       disabled={disabled}
+      disableImage={disableImage}
       component={RichTextField}
     />
   )

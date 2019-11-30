@@ -8,11 +8,11 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Controls from './Controls'
 import { Button as ImageButton, getImageModule } from './modules/image'
 
-const getModules = () => {
+const getModules = disableImage => {
   const KaTeXModule = getKaTeXModule()
-  const ImageModule = getImageModule()
+  const ImageModule = disableImage ? null : getImageModule()
 
-  const modules = [ImageModule, KaTeXModule]
+  const modules = [ImageModule, KaTeXModule].filter(Boolean)
   return modules
 }
 
@@ -39,10 +39,10 @@ function getInitialEditorState(rawEditorState, currentEditorState) {
     : EditorState.createEmpty(decorator)
 }
 
-function DraftEditor({ rawState, readOnly, style, storeRef }) {
+function DraftEditor({ rawState, readOnly, style, storeRef, disableImage }) {
   const store = useRef(null)
 
-  const modules = useMemo(() => getModules(), [])
+  const modules = useMemo(() => getModules(disableImage), [disableImage])
 
   useEffect(() => {
     if (storeRef) storeRef.current = () => store.current
@@ -64,7 +64,7 @@ function DraftEditor({ rawState, readOnly, style, storeRef }) {
     <div style={style}>
       {!readOnly && (
         <Controls store={store.current}>
-          <ImageButton store={store.current} />
+          {!disableImage && <ImageButton store={store.current} />}
         </Controls>
       )}
 
