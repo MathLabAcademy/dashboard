@@ -58,7 +58,7 @@ function FormModal({
           {status}
         </Message>
 
-        <FormInput name="userId" label={`User ID`} />
+        <FormInput name="userId" label={`Existing User ID`} />
 
         <FormGroup widths="equal">
           <FormInput

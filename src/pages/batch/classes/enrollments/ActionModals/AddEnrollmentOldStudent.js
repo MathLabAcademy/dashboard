@@ -58,7 +58,7 @@ function FormModal({
           {status}
         </Message>
 
-        <FormInput name="oldEnrollmentId" label={`Old Enrollment ID`} />
+        <FormInput name="userId" label={`Existing User ID`} />
 
         <FormGroup widths="equal">
           <FormInput
@@ -101,9 +101,7 @@ function FormModal({
 
 const getValidationSchema = () => {
   return Yup.object({
-    oldEnrollmentId: Yup.number()
-      .integer()
-      .required(`required`),
+    userId: Yup.string().required(`required`),
     year: Yup.number()
       .integer()
       .min(2000)
@@ -124,7 +122,7 @@ const getValidationSchema = () => {
 }
 
 const getInitialValues = year => ({
-  oldEnrollmentId: '',
+  userId: '',
   year: year || new Date().getFullYear(),
   serial: '',
   active: true,

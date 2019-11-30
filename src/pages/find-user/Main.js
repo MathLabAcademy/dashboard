@@ -13,6 +13,7 @@ import View from './View'
 const getValidationSchema = () => {
   return Yup.object({
     userId: Yup.string().min(5),
+    phone: Yup.string().matches(/^01\d{9}$/),
     batchClassEnrollmentId: Yup.string()
       .max(7)
       .min(7),
@@ -68,6 +69,7 @@ function FindUser({ findUser }) {
           <Form>
             <Flex justifyContent="space-between" alignItems="center">
               <FormInput name="userId" label="User Id" />
+              <FormInput name="phone" label="Mobile Number" />
               <FormInput
                 name="batchClassEnrollmentId"
                 label="Batch Class Enrollment ID"

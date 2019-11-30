@@ -33,10 +33,11 @@ export const getUser = userId => async dispatch => {
 
 export const findUser = ({
   userId,
+  phone,
   batchClassEnrollmentId,
   batchCourseEnrollmentId
 }) => async dispatch => {
-  const url = `/users/action/find?userId=${userId}&batchClassEnrollmentId=${batchClassEnrollmentId}&batchCourseEnrollmentId=${batchCourseEnrollmentId}`
+  const url = `/users/action/find?userId=${userId}&phone=${phone}&batchClassEnrollmentId=${batchClassEnrollmentId}&batchCourseEnrollmentId=${batchCourseEnrollmentId}`
 
   const { data, error } = await api(url)
 
