@@ -25,6 +25,7 @@ const getValidationSchema = () => {
 
 const getInitialValues = () => ({
   userId: '',
+  phone: '',
   batchClassEnrollmentId: '',
   batchCourseEnrollmentId: ''
 })

@@ -28,6 +28,7 @@ const getValidationSchema = options => {
   return Yup.object({
     id: Yup.number().required(`required`),
     text: textSchema,
+    guide: textSchema,
     answerId: Yup.number()
       .integer()
       .oneOf(map(options, 'id'))
@@ -41,7 +42,8 @@ const getValidationSchema = options => {
 
 const getInitialValues = (mcq, options, answerId) => ({
   id: get(mcq, 'id'),
-  text: get(mcq, 'text'),
+  text: get(mcq, 'text') || '',
+  guide: get(mcq, 'guide') || '',
   answerId: String(answerId || ''),
   options: mapValues(keyBy(options, 'id'), 'text'),
   tagIds: get(mcq, 'tagIds').map(String)
@@ -189,6 +191,8 @@ function MCQEdit({
                 label={`Answer`}
                 options={answerIndexOptions}
               />
+
+              <FormRichText name="guide" label={`Guide`} disableImage />
 
               <Segment secondary>
                 {Object.keys(values.options).map((mcqOptionId, index) => (

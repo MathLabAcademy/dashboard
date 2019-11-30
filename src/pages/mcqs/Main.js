@@ -20,7 +20,7 @@ function MCQs({ tags, tagsPagination, fetchAllTagPage }) {
   }, [fetchAllTagPage, tags.allIds.length, tagsPagination.totalItems])
 
   return (
-    <Permit admin teacher>
+    <Permit teacher>
       <Router>
         <List path="/" />
         <Tags path="tags/*" />
@@ -41,7 +41,4 @@ const mapDispatchToProps = {
   fetchAllTagPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQs)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQs)

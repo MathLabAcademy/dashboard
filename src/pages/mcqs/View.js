@@ -84,6 +84,11 @@ function MCQView({
         </Segment>
 
         <Segment basic>
+          <Header size="small">Guide</Header>
+          <DraftViewer rawValue={mcq.guide} />
+        </Segment>
+
+        <Segment basic>
           <Header size="small">Tags</Header>
           <Label.Group size="tiny" style={{ marginTop: '1em' }}>
             {get(mcq, 'tagIds', emptyArray).map(id => (

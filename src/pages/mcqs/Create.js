@@ -17,6 +17,7 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     text: Yup.string().required(`required`),
+    guide: Yup.string().required(`required`),
     answerIndex: Yup.number()
       .integer()
       .min(0)
@@ -33,6 +34,7 @@ const getValidationSchema = () => {
 
 const getInitialValues = () => ({
   text: '',
+  guide: '',
   answerIndex: '0',
   options: ['', '', '', ''],
   tagIds: []
@@ -143,6 +145,8 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
                 options={answerIndexOptions}
               />
 
+              <FormRichText name="guide" label={`Guide`} disableImage />
+
               <Segment secondary>
                 <ErrorMessage
                   name={`options`}
@@ -184,7 +188,4 @@ const mapDispatchToProps = {
   createMCQ
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQCreate)
