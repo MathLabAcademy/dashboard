@@ -203,8 +203,11 @@ export const uploadMCQImage = (mcqId, mcqImageData) => async dispatch => {
   const body = new FormData()
 
   for (const [key, value] of Object.entries(mcqImageData)) {
-    if (value instanceof File) body.set(key, value, value.name)
-    else body.set(key, value)
+    if (value instanceof File) {
+      body.set(key, value, value.name)
+    } else if (typeof value !== 'undefined') {
+      body.set(key, value)
+    }
   }
 
   const { data, error } = await api(url, {
