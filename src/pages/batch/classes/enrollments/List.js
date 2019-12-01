@@ -81,7 +81,7 @@ function BatchClassStudentList({
     const regex = new RegExp(
       `^${String(year).slice(-2)}${String(batchClassId).padStart(2, '0')}`
     )
-    return classEnrollments.allIds.filter(id => regex.test(id))
+    return classEnrollments.allIds.filter(id => regex.test(id)).sort()
   }, [batchClassId, year, classEnrollments.allIds])
 
   return (

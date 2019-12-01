@@ -214,9 +214,11 @@ export const getBatchClassFeeForMonth = (
 
 export const getAllBatchClassEnrollmentForYear = (
   batchClassId,
-  year
+  year,
+  { query = '' } = {}
 ) => async dispatch => {
-  const url = `/batch/classes/${batchClassId}/enrollments/years/${year}`
+  let url = `/batch/classes/${batchClassId}/enrollments/years/${year}`
+  if (query) url = `${url}?${query}`
 
   const { data, error } = await api(url)
 

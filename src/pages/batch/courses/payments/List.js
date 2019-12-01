@@ -4,10 +4,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
-import {
-  getAllBatchCourseEnrollmentForYear,
-  getAllCoursePaymentForYear
-} from 'store/actions/batches'
+import { getAllBatchCourseEnrollmentForYear } from 'store/actions/batches'
 import ChargePayment from './ActionModals/ChargePayment'
 import PaymentReminder from './ActionModals/PaymentReminder'
 
@@ -46,7 +43,6 @@ const ListItemRow = connect(({ batches, users }, { enrollmentId }) => {
 
 function BatchCoursePaymentList({
   batchCourseId,
-  getAllCoursePaymentForYear,
   courseEnrollments,
   getAllBatchCourseEnrollmentForYear,
   linkToBase
@@ -154,7 +150,6 @@ const mapStateToProps = ({ batches }) => ({
 })
 
 const mapDispatchToProps = {
-  getAllCoursePaymentForYear,
   getAllBatchCourseEnrollmentForYear
 }
 
