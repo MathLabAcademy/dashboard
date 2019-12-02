@@ -1,9 +1,13 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
+import { Info } from 'luxon'
 import React, { memo, useState } from 'react'
 import { Button, Header, Icon, Segment, Table } from 'semantic-ui-react'
+import { emptyArray } from 'utils/defaults'
 import BatchStudentEditor from './BatchStudentEditor'
+
+const months = Info.months('short')
 
 function BatchStudent({ batchType, batchEnrollment, user }) {
   const [editing, setEditing] = useState(false)
@@ -29,10 +33,18 @@ function BatchStudent({ batchType, batchEnrollment, user }) {
         <Table basic="very" compact className="horizontal-info">
           <Table.Body>
             <Table.Row>
-              <Table.HeaderCell collapsing content={`Active`} />
+              <Table.HeaderCell
+                collapsing
+                content={`Active${batchType === 'class' ? ' Months' : ''}`}
+              />
               <Table.Cell
                 content={
-                  get(batchEnrollment, 'active') ? (
+                  batchType === 'class' ? (
+                    get(batchEnrollment, 'activeMonths', emptyArray)
+                      .sort((a, b) => a - b)
+                      .map(month => months[month - 1])
+                      .join(', ') || 'N/A'
+                  ) : get(batchEnrollment, 'active') ? (
                     <Icon name="check" color="green" />
                   ) : (
                     <Icon name="x" color="red" />

@@ -1,10 +1,11 @@
-import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import { get } from 'lodash-es'
+import { get, zipObject } from 'lodash-es'
+import { Info } from 'luxon'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Table } from 'semantic-ui-react'
@@ -12,23 +13,53 @@ import {
   updateBatchClassEnrollment,
   updateBatchCourseEnrollment
 } from 'store/actions/batches'
+import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
-const getValidationSchema = () => {
-  return Yup.object({
-    active: Yup.boolean().required(`required`),
+const monthOptions = zipObject(Info.months('numeric'), Info.months('short'))
+
+const getValidationSchema = batchType => {
+  const schema = Yup.object({
     waiver: Yup.number()
       .integer()
       .min(0)
       .max(100)
       .required(`required`)
   })
+
+  return schema.shape(
+    batchType === 'class'
+      ? {
+          activeMonths: Yup.array(
+            Yup.number()
+              .integer()
+              .min(1)
+              .max(12)
+          )
+        }
+      : { active: Yup.boolean().required(`required`) }
+  )
 }
 
-const getInitialValues = batchEnrollment => ({
-  active: get(batchEnrollment, 'active') || false,
-  waiver: get(batchEnrollment, 'waiver') || 0
-})
+const getInitialValues = (batchType, batchEnrollment) => {
+  const initialValues = {
+    waiver: get(batchEnrollment, 'waiver') || 0
+  }
+
+  if (batchType === 'course') {
+    initialValues.active = get(batchEnrollment, 'active') || false
+  }
+
+  if (batchType === 'class') {
+    initialValues.activeMonths = (
+      get(batchEnrollment, 'activeMonths') || emptyArray
+    )
+      .sort((a, b) => a - b)
+      .map(String)
+  }
+
+  return initialValues
+}
 
 function BatchStudentEditor({
   batchType,
@@ -36,10 +67,13 @@ function BatchStudentEditor({
   updateBatchClassEnrollment,
   updateBatchCourseEnrollment
 }) {
-  const validationSchema = useMemo(() => getValidationSchema(), [])
-  const initialValues = useMemo(() => getInitialValues(batchEnrollment), [
-    batchEnrollment
+  const validationSchema = useMemo(() => getValidationSchema(batchType), [
+    batchType
   ])
+  const initialValues = useMemo(
+    () => getInitialValues(batchType, batchEnrollment),
+    [batchType, batchEnrollment]
+  )
 
   const onSubmit = useCallback(
     async (values, actions) => {
@@ -100,9 +134,19 @@ function BatchStudentEditor({
                 )}
 
                 <Table.Row>
-                  <Table.HeaderCell collapsing content={`Active`} />
+                  <Table.HeaderCell
+                    collapsing
+                    content={`Active${batchType === 'class' ? ' Months' : ''}`}
+                  />
                   <Table.Cell>
-                    <FormCheckbox name="active" label={`Active`} hideLabel />
+                    <FormSelect
+                      name={batchType === 'class' ? 'activeMonths' : 'active'}
+                      label={`Active${batchType === 'class' ? ' Months' : ''}`}
+                      hideLabel
+                      options={monthOptions}
+                      multiple
+                      search
+                    />
                   </Table.Cell>
                 </Table.Row>
 

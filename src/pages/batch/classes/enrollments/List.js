@@ -3,10 +3,14 @@ import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
+import { Text } from 'rebass'
+import { Button, Header, Input, Popup, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchClassEnrollmentForYear } from 'store/actions/batches'
+import { emptyArray } from 'utils/defaults'
 import AddEnrollment from './ActionModals/AddEnrollment'
-// import EditStudent from './ActionModals/EditStudent.js'
+import { Info } from 'luxon'
+
+const months = Info.months('short')
 
 function _ListItemRow({
   batchClassEnrollmentId,
@@ -19,16 +23,21 @@ function _ListItemRow({
       <Table.Cell>{batchClassEnrollmentId}</Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
       <Table.Cell collapsing textAlign="center">
-        <Icon
-          name={get(classEnrollment, 'active') ? 'check' : 'close'}
-          color={get(classEnrollment, 'active') ? 'green' : 'red'}
+        <Popup
+          content={
+            get(classEnrollment, 'activeMonths', emptyArray)
+              .sort((a, b) => a - b)
+              .map(month => months[month - 1])
+              .join(', ') || 'N/A'
+          }
+          trigger={
+            <Text>
+              {get(classEnrollment, 'activeMonths', emptyArray).length} Months
+            </Text>
+          }
         />
       </Table.Cell>
       <Table.Cell collapsing>
-        {/* <Permit teacher> */}
-        {/* <EditStudent batchStudentId={batchStudentId} /> */}
-        {/* </Permit> */}
-
         <Button
           as={Link}
           to={`${linkToBase}${batchClassEnrollmentId}`}
@@ -130,7 +139,7 @@ function BatchClassStudentList({
             <Table.HeaderCell>ID</Table.HeaderCell>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell collapsing textAlign="center">
-              Active
+              Active Months
             </Table.HeaderCell>
             <Table.HeaderCell collapsing />
           </Table.Row>

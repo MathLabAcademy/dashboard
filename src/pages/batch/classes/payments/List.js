@@ -2,12 +2,12 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import { Info } from 'luxon'
-import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchClassEnrollmentForYear } from 'store/actions/batches'
-import ChargePayment from './ActionModals/ChargePayment'
 import { emptyArray } from 'utils/defaults'
+import ChargePayment from './ActionModals/ChargePayment'
 
 const months = Info.months()
 
@@ -84,8 +84,21 @@ function BatchClassPaymentList({
     const regex = new RegExp(
       `^${String(year).slice(-2)}${String(batchClassId).padStart(2, '0')}`
     )
-    return classEnrollments.allIds.filter(id => regex.test(id)).sort()
-  }, [batchClassId, year, classEnrollments.allIds])
+    return classEnrollments.allIds
+      .filter(id => regex.test(id))
+      .sort()
+      .filter(id =>
+        get(classEnrollments.byId, [id, 'activeMonths'], emptyArray).includes(
+          month
+        )
+      )
+  }, [
+    batchClassId,
+    year,
+    month,
+    classEnrollments.allIds,
+    classEnrollments.byId
+  ])
 
   return (
     <>
