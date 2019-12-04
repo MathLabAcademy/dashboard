@@ -5,7 +5,7 @@ import { Formik } from 'formik'
 import React, { useCallback, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Box, Flex } from 'rebass'
-import { Button, Message } from 'semantic-ui-react'
+import { Button, Message, Segment } from 'semantic-ui-react'
 import { findUser } from 'store/actions/users'
 import * as Yup from 'yup'
 import View from './View'
@@ -68,28 +68,34 @@ function FindUser({ findUser }) {
       >
         {({ isSubmitting, status }) => (
           <Form>
-            <Flex justifyContent="space-between" alignItems="center">
-              <FormInput name="userId" label="User Id" />
-              <FormInput name="phone" label="Mobile Number" />
-              <FormInput
-                name="batchClassEnrollmentId"
-                label="Batch Class Enrollment ID"
-              />
-              <FormInput
-                name="batchCourseEnrollmentId"
-                label="Batch Course Enrollment ID"
-              />
+            <Segment>
+              <Flex
+                justifyContent="space-between"
+                alignItems="center"
+                flexWrap="wrap"
+              >
+                <FormInput name="userId" label="User Id" />
+                <FormInput name="phone" label="Mobile Number" />
+                <FormInput
+                  name="batchClassEnrollmentId"
+                  label="Batch Class Enrollment ID"
+                />
+                <FormInput
+                  name="batchCourseEnrollmentId"
+                  label="Batch Course Enrollment ID"
+                />
 
-              <Box>
-                <Button
-                  type="submit"
-                  loading={isSubmitting}
-                  disabled={isSubmitting}
-                >
-                  Find
-                </Button>
-              </Box>
-            </Flex>
+                <Box>
+                  <Button
+                    type="submit"
+                    loading={isSubmitting}
+                    disabled={isSubmitting}
+                  >
+                    Find
+                  </Button>
+                </Box>
+              </Flex>
+            </Segment>
 
             {status ? <Message color="yellow">{status}</Message> : null}
           </Form>
