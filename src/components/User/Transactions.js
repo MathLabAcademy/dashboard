@@ -6,8 +6,14 @@ import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment, Table } from 'semantic-ui-react'
 import { getAllTransactionsForUser } from 'store/actions/transactions'
+import { Text } from 'rebass'
 
-function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
+function UserTransactions({
+  userId,
+  transactions,
+  getAllTransactionsForUser,
+  basic
+}) {
   useEffect(() => {
     getAllTransactionsForUser(userId)
   }, [getAllTransactionsForUser, userId])
@@ -20,9 +26,11 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
 
   return (
     <Permit admin teacher userId={userId}>
-      <Segment>
-        <HeaderGrid Left={<Header>Transaction History</Header>} />
-      </Segment>
+      {!basic && (
+        <Segment>
+          <HeaderGrid Left={<Header>Transaction History</Header>} />
+        </Segment>
+      )}
 
       <Table>
         <Table.Header>
@@ -33,14 +41,14 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
             <Table.HeaderCell collapsing textAlign="right">
               Amount (BDT)
             </Table.HeaderCell>
-            <Table.HeaderCell>Note</Table.HeaderCell>
+            <Table.HeaderCell>Meta</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
         <Table.Body>
           {transactionIds
             .map(id => get(transactions.byId, id))
-            .map(({ id, transactionTypeId, amount, note, created }) => (
+            .map(({ id, transactionTypeId, amount, data, created }) => (
               <Table.Row key={id}>
                 <Table.Cell>{id}</Table.Cell>
                 <Table.Cell>{transactionTypeId}</Table.Cell>
@@ -52,7 +60,11 @@ function UserTransactions({ userId, transactions, getAllTransactionsForUser }) {
                 <Table.Cell collapsing textAlign="right">
                   {amount / 100}
                 </Table.Cell>
-                <Table.Cell>{note}</Table.Cell>
+                <Table.Cell>
+                  <Text sx={{ wordBreak: 'break-all' }}>
+                    {JSON.stringify(data)}
+                  </Text>
+                </Table.Cell>
               </Table.Row>
             ))}
         </Table.Body>

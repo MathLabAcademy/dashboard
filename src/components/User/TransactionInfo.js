@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
 import { readCredit } from 'store/actions/users'
+import Transactions from './Transactions'
 
 function TransactionInfo({ userId, user, title, readCredit }) {
   const creditTaka = useMemo(() => {
@@ -17,7 +18,7 @@ function TransactionInfo({ userId, user, title, readCredit }) {
   const isStudent = useMemo(() => get(user, 'roleId') === 'student', [user])
 
   const refreshCredit = useCallback(() => {
-    readCredit(userId)
+    if (userId) readCredit(userId)
   }, [readCredit, userId])
 
   useEffect(() => {
@@ -38,11 +39,11 @@ function TransactionInfo({ userId, user, title, readCredit }) {
                 </Button>
               </Permit>
             )}
-            <Permit admin teacher userId={userId}>
+            {/* <Permit teacher userId={userId}>
               <Button as={Link} to={'transactions'}>
                 Transactions
               </Button>
-            </Permit>
+            </Permit> */}
           </>
         }
       />
@@ -55,6 +56,8 @@ function TransactionInfo({ userId, user, title, readCredit }) {
           </Table.Row>
         </Table.Body>
       </Table>
+
+      <Transactions userId={userId} basic />
     </Segment>
   )
 }

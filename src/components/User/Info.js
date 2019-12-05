@@ -4,6 +4,7 @@ import TransactionInfo from 'components/User/TransactionInfo'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
+import EnrollmentInfo from './EnrollmentInfo'
 
 function UserInfo({ userId, user, refreshUser }) {
   const isStudent = useMemo(() => /^student/.test(get(user, 'roleId')), [user])
@@ -51,6 +52,8 @@ function UserInfo({ userId, user, refreshUser }) {
           />
         )
       ) : null}
+
+      <EnrollmentInfo userId={userId} title={`Enrollments`} />
 
       <TransactionInfo userId={get(user, 'id')} title={`Transaction Info`} />
     </>

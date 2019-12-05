@@ -1,12 +1,14 @@
-import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
+import { get, groupBy, keyBy, mapValues, pickBy } from 'lodash-es'
 import {
+  BATCHCLASSENROLLMENT_BULK_ADD,
+  BATCHCOURSEENROLLMENT_BULK_ADD,
+  ENROLLMENT_ADD,
   ENROLLMENT_BULK_ADD,
+  MCQEXAMTRACKER_UPDATE,
   USER_ADD,
   USER_BULK_ADD,
   USER_REMOVE,
-  USER_UPDATE,
-  ENROLLMENT_ADD,
-  MCQEXAMTRACKER_UPDATE
+  USER_UPDATE
 } from 'store/actions/actionTypes.js'
 import { emptyArray, emptyObject } from 'utils/defaults.js'
 import * as ids from './helpers/ids-reducers.js'
@@ -14,7 +16,9 @@ import * as ids from './helpers/ids-reducers.js'
 const initialState = {
   byId: emptyObject,
   allIds: emptyArray,
-  enrollmentsById: emptyObject,
+  batchClassEnrollmentsById: emptyObject,
+  batchCourseEnrollmentsById: emptyObject,
+  courseEnrollmentsById: emptyObject,
   mcqExamTrackersById: emptyObject
 }
 
@@ -55,28 +59,50 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           }
         }
       }
+    case BATCHCLASSENROLLMENT_BULK_ADD:
+      return {
+        ...state,
+        batchClassEnrollmentsById: {
+          ...state.batchClassEnrollmentsById,
+          ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
+            ...get(state.batchClassEnrollmentsById, userId),
+            ...keyBy(items, 'id')
+          }))
+        }
+      }
+    case BATCHCOURSEENROLLMENT_BULK_ADD:
+      return {
+        ...state,
+        batchCourseEnrollmentsById: {
+          ...state.batchCourseEnrollmentsById,
+          ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
+            ...get(state.batchCourseEnrollmentsById, userId),
+            ...keyBy(items, 'id')
+          }))
+        }
+      }
     case ENROLLMENT_ADD:
       return {
         ...state,
-        enrollmentsById: {
-          ...state.enrollmentsById,
-          [data.userId]: union(
-            get(state.enrollmentsById, data.userId, emptyArray),
-            [data.courseId]
-          )
+        courseEnrollmentsById: {
+          ...state.courseEnrollmentsById,
+          [data.userId]: {
+            ...get(state.courseEnrollmentsById, data.userId),
+            [data.courseId]: {
+              ...data
+            }
+          }
         }
       }
     case ENROLLMENT_BULK_ADD:
       return {
         ...state,
-        enrollmentsById: {
-          ...state.enrollmentsById,
-          ...mapValues(groupBy(data.items, 'userId'), (items, userId) =>
-            union(
-              get(state.enrollmentsById, userId, emptyArray),
-              map(items, 'courseId')
-            )
-          )
+        courseEnrollmentsById: {
+          ...state.courseEnrollmentsById,
+          ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
+            ...get(state.courseEnrollmentsById, userId),
+            ...keyBy(items, 'courseId')
+          }))
         }
       }
     case MCQEXAMTRACKER_UPDATE:

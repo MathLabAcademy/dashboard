@@ -10,7 +10,6 @@ import { getUser } from 'store/actions/users'
 import AddCredit from './AddCredit'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
-import Transactions from './Transactions'
 
 const labeledRoles = ['teacher']
 
@@ -64,7 +63,6 @@ function User({ userId, user, getUser }) {
       <Router>
         <Info path="/" userId={userId} refreshUser={refreshUser} />
         <AddCredit path="add-credit" userId={userId} />
-        <Transactions path="transactions" userId={userId} />
         <ChangePassword path="change-password" userId={userId} />
       </Router>
     </Permit>

@@ -4,6 +4,8 @@ import {
   defaultOptsFetchPage
 } from 'utils/defaults.js'
 import {
+  BATCHCLASSENROLLMENT_BULK_ADD,
+  BATCHCOURSEENROLLMENT_BULK_ADD,
   CURRENT_USER_UPDATE,
   ENROLLMENT_BULK_ADD,
   USER_ADD,
@@ -184,14 +186,26 @@ export const addCredit = (userId, transactionData) => async dispatch => {
   return data
 }
 
-export const getAllEnrollments = userId => async dispatch => {
-  const url = `/users/${userId}/enrollments`
+export const getAllEnrollmentsForUser = (userId, type) => async dispatch => {
+  const url = `/users/${userId}/enrollments?type=${type}`
 
   const { data, error } = await api(url)
 
   if (error) throw error
 
-  dispatch({ type: ENROLLMENT_BULK_ADD, data })
+  switch (type) {
+    case 'course':
+      dispatch({ type: ENROLLMENT_BULK_ADD, data })
+      break
+    case 'batch_class':
+      dispatch({ type: BATCHCLASSENROLLMENT_BULK_ADD, data })
+      break
+    case 'batch_course':
+      dispatch({ type: BATCHCOURSEENROLLMENT_BULK_ADD, data })
+      break
+    default:
+      break
+  }
 
   return data
 }
