@@ -15,7 +15,7 @@ function UserTransactions({
   basic
 }) {
   useEffect(() => {
-    getAllTransactionsForUser(userId)
+    if (userId) getAllTransactionsForUser(userId)
   }, [getAllTransactionsForUser, userId])
 
   const transactionIds = useMemo(() => {
