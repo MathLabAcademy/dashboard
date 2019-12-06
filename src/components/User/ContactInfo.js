@@ -15,7 +15,8 @@ import {
   Table,
   Message,
   FormGroup,
-  FormField
+  FormField,
+  List
 } from 'semantic-ui-react'
 import api from 'utils/api'
 import Editor from './ContactInfoEditor'
@@ -23,6 +24,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
+import { Flex } from 'rebass'
 
 function ResendEmailVerificationButton({ userId, personId, ...props }) {
   const [loading, setLoading] = useState(false)
@@ -123,7 +125,7 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
       closeOnDimmerClick={false}
       onClose={handler.close}
       trigger={
-        <Button onClick={handler.open} color="yellow">
+        <Button onClick={handler.open} color="yellow" compact>
           Verify
         </Button>
       }
@@ -170,7 +172,10 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
                       try {
                         const { data, error } = await api(
                           '/user/person/phone/verify/init',
-                          { method: 'POST', body: { personId } }
+                          {
+                            method: 'POST',
+                            body: { personId }
+                          }
                         )
 
                         if (error) {
@@ -224,6 +229,97 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
         </Button>
       </Modal.Actions>
     </Modal>
+  )
+}
+
+function AcceptPhoneModal({ personId, phone, phoneTrx, refreshUser }) {
+  const [open, handler] = useToggle(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  const onSubmit = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await api(
+        `/persons/${personId}/actions/accept-new-phone`,
+        {
+          method: 'POST'
+        }
+      )
+
+      if (error) {
+        throw error
+      }
+
+      refreshUser()
+      handler.close()
+    } catch (err) {
+      if (err.message) {
+        setError(err.message)
+      } else {
+        console.error(err)
+      }
+    }
+
+    setLoading(true)
+  }, [personId, handler, refreshUser])
+
+  return (
+    <Permit teacher>
+      <Modal
+        open={open}
+        closeOnDimmerClick={false}
+        onClose={handler.close}
+        trigger={
+          <Button onClick={handler.open} negative size="tiny" compact>
+            Mark as Verified
+          </Button>
+        }
+      >
+        <Modal.Header>
+          Mark Unverified Phone as Verified: {phoneTrx}
+        </Modal.Header>
+        <Modal.Content>
+          <Message color="yellow" hidden={!error}>
+            {error}
+          </Message>
+
+          <Message color="red">
+            <List bulleted>
+              <List.Item>
+                The old phone number will be removed: {phone}
+              </List.Item>
+              <List.Item>
+                The new phone number will be accepted: {phoneTrx}
+              </List.Item>
+              <List.Item>
+                This is generally not recommended. User should go verify their
+                own phone number.
+              </List.Item>
+              <List.Item>
+                If you send SMS to someone without their consent, they can mark
+                you as SPAM.
+              </List.Item>
+            </List>
+          </Message>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            onClick={onSubmit}
+            negative
+            disabled={loading}
+            loading={loading}
+          >
+            Accept
+          </Button>
+          <Button onClick={handler.close} positive>
+            Later
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    </Permit>
   )
 }
 
@@ -294,7 +390,11 @@ function _ContactInfoView({
                 />
               </Button>
             ) : (
-              <>
+              <Flex
+                justifyContent="space-between"
+                alignItems="center"
+                flexWrap="wrap"
+              >
                 {valueTrx}
                 <VerifyPhoneModal
                   hide={currentUserId !== userId}
@@ -302,7 +402,13 @@ function _ContactInfoView({
                   phoneTrx={valueTrx}
                   refreshUser={refreshUser}
                 />
-              </>
+                <AcceptPhoneModal
+                  personId={get(person, 'id')}
+                  phone={value}
+                  phoneTrx={valueTrx}
+                  refreshUser={refreshUser}
+                />
+              </Flex>
             )}
           </Table.Cell>
         </Table.Row>
@@ -336,7 +442,11 @@ function _ContactInfoView({
                 />
               </Button>
             ) : (
-              <>
+              <Flex
+                justifyContent="space-between"
+                alignItems="center"
+                flexWrap="wrap"
+              >
                 {valueTrx}
                 <VerifyPhoneModal
                   hide={currentUserId !== userId}
@@ -344,7 +454,13 @@ function _ContactInfoView({
                   phoneTrx={valueTrx}
                   refreshUser={refreshUser}
                 />
-              </>
+                <AcceptPhoneModal
+                  personId={get(person, 'id')}
+                  phone={value}
+                  phoneTrx={valueTrx}
+                  refreshUser={refreshUser}
+                />
+              </Flex>
             )}
           </Table.Cell>
         </Table.Row>
