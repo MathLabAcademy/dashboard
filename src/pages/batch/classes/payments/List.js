@@ -8,6 +8,7 @@ import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchClassEnrollmentForYear } from 'store/actions/batches'
 import { emptyArray } from 'utils/defaults'
 import ChargePayment from './ActionModals/ChargePayment'
+import PaymentReminder from './ActionModals/PaymentReminder'
 
 const months = Info.months()
 
@@ -116,6 +117,12 @@ function BatchClassPaymentList({
                 month={month}
                 monthName={months[month - 1]}
                 onDone={refreshPaymentData}
+              />
+              <PaymentReminder
+                batchClassId={batchClassId}
+                year={year}
+                month={month}
+                monthName={months[month - 1]}
               />
             </>
           }

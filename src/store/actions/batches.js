@@ -15,6 +15,8 @@ import {
   BATCHCLASSFEE_PAGE_REQUEST,
   BATCHCLASSFEE_REMOVE,
   BATCHCLASSPAYMENT_BULK_ADD,
+  BATCHCLASSPAYMENT_REMINDER_ADD,
+  BATCHCLASSPAYMENT_REMINDER_SET_ALL,
   BATCHCLASS_ADD,
   BATCHCLASS_BULK_ADD,
   BATCHCLASS_PAGE_ADD,
@@ -30,6 +32,8 @@ import {
   BATCHCOURSEENROLLMENT_PAGE_REQUEST,
   BATCHCOURSEENROLLMENT_PAGINATION_PURGE,
   BATCHCOURSEPAYMENT_BULK_ADD,
+  BATCHCOURSEPAYMENT_REMINDER_ADD,
+  BATCHCOURSEPAYMENT_REMINDER_SET_ALL,
   BATCHCOURSE_ADD,
   BATCHCOURSE_BULK_ADD,
   BATCHCOURSE_PAGE_ADD,
@@ -46,9 +50,7 @@ import {
   BATCHSTUDENT_UPDATE,
   USER_ADD,
   USER_BULK_ADD,
-  USER_PAGINATION_PURGE,
-  BATCHCOURSEPAYMENT_REMINDER_ADD,
-  BATCHCOURSEPAYMENT_REMINDER_SET_ALL
+  USER_PAGINATION_PURGE
 } from './actionTypes.js'
 
 export const createBatchClass = batchClassData => async dispatch => {
@@ -283,6 +285,52 @@ export const chargeClassPaymentForMonth = (
   if (error) throw error
 
   dispatch({ type: BATCHCLASSPAYMENT_BULK_ADD, data })
+
+  return data
+}
+
+export const getAllClassPaymentReminderForMonth = (
+  batchClassId,
+  year,
+  month
+) => async dispatch => {
+  const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/reminders`
+
+  const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({
+    type: BATCHCLASSPAYMENT_REMINDER_SET_ALL,
+    data,
+    batchClassId,
+    year,
+    month
+  })
+
+  return data
+}
+
+export const sendClassPaymentReminderForMonth = (
+  batchClassId,
+  year,
+  month
+) => async dispatch => {
+  const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/reminders/send`
+
+  const { data, error } = await api(url, {
+    method: 'POST'
+  })
+
+  if (error) throw error
+
+  dispatch({
+    type: BATCHCLASSPAYMENT_REMINDER_ADD,
+    data,
+    batchClassId,
+    year,
+    month
+  })
 
   return data
 }
