@@ -22,6 +22,7 @@
     "@lingui/macro": "^2.7.4",
     "@lingui/react": "^2.7.4",
     "@muniftanjim/is-mobile-phone-number-bd": "^0.1.1",
+    "@nivo/calendar": "^0.61.1",
     "@reach/router": "^1.2.1",
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
