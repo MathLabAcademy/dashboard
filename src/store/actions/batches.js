@@ -412,6 +412,33 @@ export const fetchBatchClassEnrollmentPage = (
   return data
 }
 
+export const createBatchClassEnrollmentBulk = batchClassEnrollmentData => async dispatch => {
+  const url = `/batch/classenrollments/bulk`
+
+  const body = new FormData()
+
+  for (const [key, value] of Object.entries(batchClassEnrollmentData)) {
+    if (value instanceof File) {
+      body.set(key, value, value.name)
+    } else if (typeof value !== 'undefined') {
+      body.set(key, value)
+    }
+  }
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_PAGINATION_PURGE })
+  dispatch({ type: BATCHCLASSENROLLMENT_PAGINATION_PURGE })
+  // dispatch({ type: BATCHCLASSENROLLMENT_ADD, data })
+
+  return data
+}
+
 export const createBatchClassEnrollmentForNewStudent = batchClassEnrollmentData => async dispatch => {
   const url = `/batch/classenrollments/new-student`
 
@@ -650,6 +677,33 @@ export const getAllBatchCoursePaymentsForEnrollment = batchCourseEnrollmentId =>
   if (error) throw error
 
   dispatch({ type: BATCHCOURSEPAYMENT_BULK_ADD, data })
+
+  return data
+}
+
+export const createBatchCourseEnrollmentBulk = batchCourseEnrollmentData => async dispatch => {
+  const url = `/batch/courseenrollments/bulk`
+
+  const body = new FormData()
+
+  for (const [key, value] of Object.entries(batchCourseEnrollmentData)) {
+    if (value instanceof File) {
+      body.set(key, value, value.name)
+    } else if (typeof value !== 'undefined') {
+      body.set(key, value)
+    }
+  }
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_PAGINATION_PURGE })
+  dispatch({ type: BATCHCOURSEENROLLMENT_PAGINATION_PURGE })
+  // dispatch({ type: BATCHCOURSEENROLLMENT_ADD, data })
 
   return data
 }

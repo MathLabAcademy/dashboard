@@ -73,9 +73,13 @@ function BatchCourseStudentList({
     setYear(Number(year))
   }, [])
 
-  useEffect(() => {
+  const refreshData = useCallback(() => {
     getAllBatchCourseEnrollmentForYear(batchCourseId, year)
-  }, [batchCourseId, year, getAllBatchCourseEnrollmentForYear])
+  }, [batchCourseId, getAllBatchCourseEnrollmentForYear, year])
+
+  useEffect(() => {
+    refreshData()
+  }, [refreshData])
 
   const ids = useMemo(() => {
     const regex = new RegExp(`^${batchCourseId}${String(year).slice(-2)}`)
@@ -99,7 +103,11 @@ function BatchCourseStudentList({
         <Table.Header fullWidth>
           <Table.Row>
             <Table.HeaderCell colSpan="2">
-              <AddEnrollment batchCourseId={batchCourseId} year={year} />
+              <AddEnrollment
+                batchCourseId={batchCourseId}
+                year={year}
+                refreshData={refreshData}
+              />
             </Table.HeaderCell>
             <Table.HeaderCell colSpan="1" />
             <Table.HeaderCell colSpan="1" textAlign="right">

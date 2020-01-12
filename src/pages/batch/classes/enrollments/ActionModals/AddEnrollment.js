@@ -3,8 +3,9 @@ import React from 'react'
 import { Dropdown } from 'semantic-ui-react'
 import AddEnrollmentOldStudent from './AddEnrollmentOldStudent'
 import AddEnrollmentNewStudent from './AddEnrollmentNewStudent'
+import AddEnrollmentBulk from './AddEnrollmentBulk'
 
-function AddEnrollment({ batchClassId, year }) {
+function AddEnrollment({ batchClassId, year, refreshData }) {
   return (
     <Permit teacher>
       <Dropdown
@@ -21,6 +22,13 @@ function AddEnrollment({ batchClassId, year }) {
           </Dropdown.Item>
           <Dropdown.Item>
             <AddEnrollmentNewStudent batchClassId={batchClassId} year={year} />
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <AddEnrollmentBulk
+              batchClassId={batchClassId}
+              year={year}
+              refreshData={refreshData}
+            />
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>

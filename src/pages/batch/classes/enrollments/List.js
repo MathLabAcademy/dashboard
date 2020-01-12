@@ -82,9 +82,13 @@ function BatchClassStudentList({
     setYear(Number(year))
   }, [])
 
-  useEffect(() => {
+  const refreshData = useCallback(() => {
     getAllBatchClassEnrollmentForYear(batchClassId, year)
-  }, [batchClassId, year, getAllBatchClassEnrollmentForYear])
+  }, [batchClassId, getAllBatchClassEnrollmentForYear, year])
+
+  useEffect(() => {
+    refreshData()
+  }, [refreshData])
 
   const ids = useMemo(() => {
     const regex = new RegExp(
@@ -110,7 +114,11 @@ function BatchClassStudentList({
         <Table.Header fullWidth>
           <Table.Row>
             <Table.HeaderCell colSpan="2">
-              <AddEnrollment batchClassId={batchClassId} year={year} />
+              <AddEnrollment
+                batchClassId={batchClassId}
+                year={year}
+                refreshData={refreshData}
+              />
             </Table.HeaderCell>
             <Table.HeaderCell colSpan="1" />
             <Table.HeaderCell colSpan="1" textAlign="right">
