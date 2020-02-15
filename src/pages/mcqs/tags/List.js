@@ -1,15 +1,14 @@
 import HeaderGrid from 'components/HeaderGrid'
-import Switcher from 'components/Pagination/Switcher'
-import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Flex } from 'rebass'
 import { Header, Segment } from 'semantic-ui-react'
-import { fetchTagPage } from 'store/actions/mcqTags'
+import { fetchAllTagPage } from 'store/actions/mcqTags'
 import { emptyArray } from 'utils/defaults'
 import Create from './ActionModals/Create'
 import Edit from './ActionModals/Edit'
+import TagGroupsEditModal from './ActionModals/EditGroups'
 
 function _TagListItem({ tagId, tag }) {
   return (
@@ -24,17 +23,18 @@ const ListItem = connect(({ mcqTags }, { tagId }) => ({
   tag: get(mcqTags.byId, tagId)
 }))(_TagListItem)
 
-const queryObject = { length: 40 }
-
-function TagList({ pagination, fetchPage }) {
-  const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
-    queryObject
-  })
+function TagList({ mcqTags, fetchAllTagPage }) {
+  useEffect(() => {
+    fetchAllTagPage({ query: 'length=1000' })
+  }, [fetchAllTagPage])
 
   return (
     <>
       <Segment>
-        <HeaderGrid Left={<Header>MCQ Tags</Header>} />
+        <HeaderGrid
+          Left={<Header>MCQ Tags</Header>}
+          Right={<TagGroupsEditModal />}
+        />
       </Segment>
 
       <Segment basic>
@@ -46,7 +46,7 @@ function TagList({ pagination, fetchPage }) {
             flexWrap: 'wrap'
           }}
         >
-          {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+          {get(mcqTags, `allIds`, emptyArray).map(id => (
             <ListItem key={id} id={id} tagId={id} />
           ))}
 
@@ -55,24 +55,15 @@ function TagList({ pagination, fetchPage }) {
           </Segment>
         </Flex>
       </Segment>
-
-      <Switcher
-        activePage={page}
-        totalPages={pagination.totalPages}
-        onPageChange={handlePageChange}
-      />
     </>
   )
 }
-const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.mcqTags
+const mapStateToProps = ({ mcqTags }) => ({
+  mcqTags
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchTagPage
+  fetchAllTagPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TagList)
+export default connect(mapStateToProps, mapDispatchToProps)(TagList)

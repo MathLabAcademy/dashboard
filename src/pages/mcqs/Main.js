@@ -15,7 +15,7 @@ function MCQs({ tags, tagsPagination, fetchAllTagPage }) {
       !tagsPagination.totalItems ||
       tagsPagination.totalItems !== tags.allIds.length
     ) {
-      fetchAllTagPage({ query: 'length=40' })
+      fetchAllTagPage({ query: 'length=1000' })
     }
   }, [fetchAllTagPage, tags.allIds.length, tagsPagination.totalItems])
 

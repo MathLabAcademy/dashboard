@@ -1,17 +1,36 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import usePagination from 'hooks/usePagination.js'
-import useToggle from 'hooks/useToggle.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import Permit from 'components/Permit'
+import usePagination from 'hooks/usePagination'
+import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
+import { Box, Flex } from 'rebass'
 import { Button, Dropdown, Header, Segment } from 'semantic-ui-react'
-import { fetchMCQPage } from 'store/actions/mcqs.js'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
-import formatDropdownOptions from 'utils/format-dropdown-options.js'
-import ListItem from './ListItem.js'
-import Permit from 'components/Permit.js'
+import { fetchMCQPage } from 'store/actions/mcqs'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import formatDropdownOptions from 'utils/format-dropdown-options'
+import * as localStorage from 'utils/localStorage'
+import ListItem from './ListItem'
+
+function MCQTagGroups({ setTags }) {
+  const groups = useMemo(
+    () => localStorage.loadState('mathlab:mcqTagGroups') || emptyObject,
+    []
+  )
+
+  return (
+    <Flex>
+      {Object.keys(groups).map((name, index) => (
+        <Box key={index} p={2}>
+          <Button onClick={() => setTags(groups[name], true)}>{name}</Button>
+        </Box>
+      ))}
+    </Flex>
+  )
+}
 
 function MCQList({ pagination, fetchPage, mcqTags }) {
   const tagsRef = useRef()
@@ -23,19 +42,27 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
     queryObject
   })
 
-  const filterByTags = useCallback(() => {
-    if (!tagsRef.current) return
-
-    const value = tagsRef.current.state.value
+  const setTags = useCallback((tags = emptyArray, forceSet = false) => {
+    if (forceSet) {
+      tagsRef.current.setValue(tags)
+    }
 
     setQueryObject(obj => ({
       ...obj,
       filter: {
         ...get(obj, 'filter', emptyObject),
-        tagIds: value.length ? { '@>': value.map(Number) } : undefined
+        tagIds: tags.length ? { '&&': tags.map(Number) } : undefined
       }
     }))
   }, [])
+
+  const filterByTags = useCallback(() => {
+    if (!tagsRef.current) return
+
+    const value = tagsRef.current.state.value
+
+    setTags(value)
+  }, [setTags])
 
   const tagOptions = useMemo(() => {
     return formatDropdownOptions(
@@ -83,6 +110,8 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
             />
             <Button type="button" icon="filter" onClick={filterByTags} />
           </Button>
+
+          <MCQTagGroups tagOptions={tagOptions} setTags={setTags} />
         </Segment>
       )}
 
@@ -108,7 +137,4 @@ const mapDispatchToProps = {
   fetchPage: fetchMCQPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQList)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQList)
