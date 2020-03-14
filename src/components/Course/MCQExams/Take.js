@@ -1,8 +1,8 @@
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
-import { DraftViewer } from 'components/Draft/index.js'
-import useCountdown from 'hooks/useCountdown.js'
-import useInterval from 'hooks/useInterval.js'
+import Permit from 'components/Permit'
+import { DraftViewer } from 'components/Draft/index'
+import useCountdown from 'hooks/useCountdown'
+import useInterval from 'hooks/useInterval'
 import { get, sortBy } from 'lodash-es'
 import { DateTime, Duration } from 'luxon'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -23,8 +23,8 @@ import {
   pingTracker,
   readTracker,
   startTracker
-} from 'store/actions/mcqExams.js'
-import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs.js'
+} from 'store/actions/mcqExams'
+import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
 
 const optionLetters = ['a', 'b', 'c', 'd']
@@ -111,6 +111,7 @@ const MCQ = connect(
 )(_MCQ)
 
 function MCQExamTake({
+  mcqExam,
   mcqExamId,
   mcqIds,
   getAllQuestionsForExam,
@@ -121,11 +122,17 @@ function MCQExamTake({
   getAllMCQsForExam,
   getAllSubmissions
 }) {
+  const [error, setError] = useState(null)
+
   useEffect(() => {
     readTracker(mcqExamId)
   }, [mcqExamId, readTracker])
 
-  console.log(tracker)
+  const canStart = useMemo(() => {
+    const startTime = get(mcqExam, 'date')
+    return startTime && DateTime.fromISO(startTime) <= DateTime.local()
+  }, [mcqExam])
+
   const data = useMemo(() => {
     const data = { started: false, ended: false }
 
@@ -137,8 +144,6 @@ function MCQExamTake({
     const start = DateTime.fromISO(tracker.start)
     const end = DateTime.fromISO(tracker.end)
 
-    console.log(now, start, end)
-
     data.started = now >= start
     data.ended = now > end
 
@@ -146,8 +151,18 @@ function MCQExamTake({
   }, [tracker])
 
   useEffect(() => {
-    if (data.started) getAllMCQsForExam(mcqExamId)
-  }, [data.started, getAllMCQsForExam, mcqExamId])
+    if (data.started) {
+      getAllMCQsForExam(mcqExamId)
+      getAllQuestionsForExam(mcqExamId)
+      getAllSubmissions(mcqExamId)
+    }
+  }, [
+    data.started,
+    getAllMCQsForExam,
+    getAllQuestionsForExam,
+    getAllSubmissions,
+    mcqExamId
+  ])
 
   const [countdown] = useCountdown({
     endTime: get(tracker, 'end')
@@ -160,26 +175,38 @@ function MCQExamTake({
     countdown ? 15000 : null
   )
 
-  useEffect(() => {
-    getAllQuestionsForExam(mcqExamId)
-    getAllSubmissions(mcqExamId)
-  }, [getAllQuestionsForExam, getAllSubmissions, mcqExamId])
-
   const sortedMcqIds = useMemo(() => mcqIds.sort(), [mcqIds])
 
-  const startExam = useCallback(() => {
-    startTracker(mcqExamId)
+  const startExam = useCallback(async () => {
+    try {
+      await startTracker(mcqExamId)
+    } catch (err) {
+      if (err.message) {
+        setError(err.message)
+      } else {
+        console.error(err)
+      }
+    }
   }, [mcqExamId, startTracker])
 
-  console.log(data)
+  if (!canStart) {
+    return null
+  }
+
   return (
     <Permit student>
       <Segment>
         <HeaderGrid
           Left={
-            <Header as="span" size="small">
-              {data.ended && 'MCQ Exam Finished!'}
-            </Header>
+            <>
+              <Header as="span" size="small">
+                {data.ended && 'MCQ Exam Finished!'}
+              </Header>
+
+              <Message color="red" hidden={!error}>
+                {error}
+              </Message>
+            </>
           }
           Right={
             <>
@@ -217,6 +244,7 @@ function MCQExamTake({
 }
 
 const mapStateToProps = ({ mcqExams, user }, { mcqExamId }) => ({
+  mcqExam: get(mcqExams.byId, mcqExamId),
   mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
   tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id])
 })
@@ -230,7 +258,4 @@ const mapDispatchToProps = {
   getAllSubmissions
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQExamTake)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQExamTake)

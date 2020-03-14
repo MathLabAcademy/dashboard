@@ -8,6 +8,8 @@ import { Button, Header, Segment } from 'semantic-ui-react'
 import { getMCQExam } from 'store/actions/mcqExams.js'
 import TeacherView from './TeacherView.js'
 import TakeExam from './Take.js'
+import { Box, Text } from 'rebass'
+import { DateTime } from 'luxon'
 
 function View({ courseId, mcqExamId }) {
   return (
@@ -32,10 +34,27 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
       <Segment loading={!mcqExam}>
         <HeaderGrid
           Left={
-            <Header>
-              MCQ Exam: {get(mcqExam, 'name')}
-              <Header.Subheader>{get(mcqExam, 'description')}</Header.Subheader>
-            </Header>
+            <>
+              <Header>
+                MCQ Exam: {get(mcqExam, 'name')}
+                <Header.Subheader>
+                  {get(mcqExam, 'description')}
+                </Header.Subheader>
+              </Header>
+
+              <Box>
+                <Text>
+                  <strong>Date: </strong>
+                  {DateTime.fromISO(get(mcqExam, 'date')).toLocaleString(
+                    DateTime.DATE_FULL
+                  )}
+                </Text>
+                <Text>
+                  <strong>Exam Duration: </strong>
+                  {get(mcqExam, 'duration') / 60} minutes
+                </Text>
+              </Box>
+            </>
           }
           Right={
             <>
@@ -64,7 +83,4 @@ const mapDispatchToProps = {
   getMCQExam
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseMCQExamView)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamView)
