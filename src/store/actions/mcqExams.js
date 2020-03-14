@@ -1,14 +1,15 @@
-import api from 'utils/api.js'
-import { defaultOptsFetchPage } from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchPage } from 'utils/defaults'
 import {
+  MCQEXAMQUESTION_ADD,
+  MCQEXAMQUESTION_BULK_ADD,
+  MCQEXAMQUESTION_REMOVE,
   MCQEXAMTRACKER_UPDATE,
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
   MCQEXAM_UPDATE,
-  MCQSUBMISSION_BULK_ADD,
-  MCQEXAMQUESTION_BULK_ADD,
-  MCQEXAMQUESTION_ADD
-} from './actionTypes.js'
+  MCQSUBMISSION_BULK_ADD
+} from './actionTypes'
 
 export const createMCQExam = mcqExamData => async dispatch => {
   const url = `/mcqexams`
@@ -122,6 +123,24 @@ export const addQuestionToMCQExam = (
   if (error) throw error
 
   dispatch({ type: MCQEXAMQUESTION_ADD, data })
+
+  return data
+}
+
+export const removeQuestionFromMCQExam = (
+  mcqExamId,
+  { mcqId }
+) => async dispatch => {
+  const url = `/mcqexams/${mcqExamId}/action/remove-question`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: { mcqId }
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQEXAMQUESTION_REMOVE, data })
 
   return data
 }

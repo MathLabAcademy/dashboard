@@ -2,6 +2,7 @@ import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
 import {
   MCQEXAMQUESTION_ADD,
   MCQEXAMQUESTION_BULK_ADD,
+  MCQEXAMQUESTION_REMOVE,
   MCQEXAMTRACKER_UPDATE,
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
@@ -67,6 +68,18 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
             get(state.questionsById, data.mcqExamId, emptyArray),
             [data.mcqId]
           )
+        }
+      }
+    case MCQEXAMQUESTION_REMOVE:
+      return {
+        ...state,
+        questionsById: {
+          ...state.questionsById,
+          [data.mcqExamId]: get(
+            state.questionsById,
+            data.mcqExamId,
+            emptyArray
+          ).filter(id => id !== data.mcqId)
         }
       }
     case MCQEXAMQUESTION_BULK_ADD:

@@ -1,10 +1,11 @@
+import { DraftViewer } from 'components/Draft/index.js'
 import HeaderGrid from 'components/HeaderGrid.js'
 import Permit from 'components/Permit.js'
-import { DraftViewer } from 'components/Draft/index.js'
 import useToggle from 'hooks/useToggle.js'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Text } from 'rebass'
 import { Button, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react'
 import { getAllQuestionsForExam } from 'store/actions/mcqExams.js'
 import {
@@ -16,10 +17,19 @@ import { emptyArray } from 'utils/defaults.js'
 import AddMCQ from './ActionModals/AddMCQ.js'
 import EditMCQ from './ActionModals/EditMCQ.js'
 import PickMCQ from './ActionModals/PickMCQ.js'
+import RemoveMCQ from './ActionModals/RemoveMCQ.js'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
-function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
+function _MCQ({
+  mcqExamId,
+  mcqId,
+  mcq,
+  getMCQ,
+  answerId,
+  readMCQAnswer,
+  index
+}) {
   useEffect(() => {
     if (isUndefined(answerId)) readMCQAnswer(mcqId)
   }, [answerId, mcqId, readMCQAnswer])
@@ -41,7 +51,9 @@ function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
       <HeaderGrid
         Left={
           <Header>
-            <Header.Subheader>#{index + 1}</Header.Subheader>
+            <Header.Subheader>
+              #{index + 1} [ID:{mcqId}]
+            </Header.Subheader>
             <DraftViewer rawValue={mcq.text} />
           </Header>
         }
@@ -58,6 +70,7 @@ function _MCQ({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, index }) {
               options={options}
               answerId={answerId}
             />
+            <RemoveMCQ mcqId={mcqId} mcq={mcq} mcqExamId={mcqExamId} />
           </>
         }
       />
@@ -101,7 +114,7 @@ function CourseMCQExamTeacherView({
     getAllMCQAnswersForExam(mcqExamId)
   }, [getAllMCQAnswersForExam, getAllQuestionsForExam, mcqExamId])
 
-  const sortedMcqIds = useMemo(() => mcqIds.sort(), [mcqIds])
+  const sortedMcqIds = useMemo(() => mcqIds, [mcqIds])
 
   return (
     <Permit admin teacher>
@@ -110,7 +123,7 @@ function CourseMCQExamTeacherView({
 
         {sortedMcqIds.map((id, index) => (
           <React.Fragment key={index}>
-            <MCQ index={index} mcqId={id} />
+            <MCQ index={index} mcqId={id} mcqExamId={mcqExamId} />
             {index + 1 < mcqIds.length && <Divider section />}
           </React.Fragment>
         ))}
