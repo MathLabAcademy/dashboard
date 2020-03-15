@@ -21,6 +21,7 @@ import { connect } from 'react-redux'
 import { Flex } from 'rebass'
 import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
+import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
 const getValidationSchema = options => {
@@ -46,7 +47,7 @@ const getInitialValues = (mcq, options, answerId) => ({
   guide: get(mcq, 'guide') || '',
   answerId: String(answerId || ''),
   options: mapValues(keyBy(options, 'id'), 'text'),
-  tagIds: get(mcq, 'tagIds').map(String)
+  tagIds: get(mcq, 'tagIds', emptyArray).map(String)
 })
 
 function MCQEdit({
