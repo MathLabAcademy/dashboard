@@ -1,15 +1,16 @@
 import { Link } from '@reach/router'
-import FormCheckbox from 'components/Form/Checkbox.js'
-import Form from 'components/Form/Form.js'
+import FormCheckbox from 'components/Form/Checkbox'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
-import { enroll } from 'store/actions/courses.js'
-import { emptyArray } from 'utils/defaults.js'
+import { enroll } from 'store/actions/courses'
+import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -19,8 +20,9 @@ const getValidationSchema = () => {
       .required(`required`),
     credit: Yup.number()
       .integer()
-      .min(Yup.ref('price'))
+      // .min(Yup.ref('price'))
       .required(`required`),
+    couponId: Yup.string().notRequired(),
     confirm: Yup.bool()
       .oneOf([true], 'must confirm')
       .required(`required`)
@@ -30,6 +32,7 @@ const getValidationSchema = () => {
 const getInitialValues = (course, currentUser) => ({
   credit: get(currentUser, 'credit') / 100,
   price: get(course, 'price') / 100,
+  couponId: '',
   confirm: false
 })
 
@@ -52,11 +55,11 @@ function CourseEnroll({
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async (_, actions) => {
+    async ({ couponId }, actions) => {
       actions.setStatus(null)
 
       try {
-        await enroll(courseId)
+        await enroll(courseId, { couponId })
         navigate('..')
       } catch (err) {
         if (err.errors) {
@@ -126,8 +129,11 @@ function CourseEnroll({
                   </>
                 }
               />
-
-              <Message color="yellow" hidden={!amountDeficit}>
+              {console.log(values)}
+              <Message
+                color="yellow"
+                hidden={!amountDeficit || !!values.couponId}
+              >
                 Insufficient balance! You need {amountDeficit.toFixed(2)}{' '}
                 additional credit to enroll...
               </Message>
@@ -148,6 +154,17 @@ function CourseEnroll({
                     <Table.HeaderCell collapsing content={`Your Credit`} />
                     <Table.Cell>
                       {Number(values.credit).toFixed(2)} BDT
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell collapsing content={`Coupon`} />
+                    <Table.Cell>
+                      <FormInput
+                        id="couponId"
+                        name="couponId"
+                        label={`Coupon`}
+                        hideLabel
+                      />
                     </Table.Cell>
                   </Table.Row>
 
@@ -180,7 +197,4 @@ const mapDispatchToProps = {
   enroll
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseEnroll)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseEnroll)

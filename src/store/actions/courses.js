@@ -100,11 +100,12 @@ export const fetchAllCoursePage = (
   return true
 }
 
-export const enroll = courseId => async dispatch => {
+export const enroll = (courseId, { couponId } = {}) => async dispatch => {
   const url = `/courses/${courseId}/action/enroll`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
+    body: { couponId }
   })
 
   if (error) throw error
