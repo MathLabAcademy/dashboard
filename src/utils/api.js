@@ -1,5 +1,5 @@
-import { setErrorBoundaryRootError } from 'store/actions/errorBoundary.js'
-import { dispatchToStore } from 'store/index.js'
+import { setErrorBoundaryRootError } from 'store/actions/errorBoundary'
+import { dispatchToStore } from 'store/index'
 
 async function api(endpoint, options = {}) {
   const Response = {

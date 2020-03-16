@@ -1,6 +1,6 @@
+import { DraftViewer } from 'components/Draft/index'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft/index'
 import useCountdown from 'hooks/useCountdown'
 import useInterval from 'hooks/useInterval'
 import { get, sortBy } from 'lodash-es'
@@ -26,6 +26,7 @@ import {
 } from 'store/actions/mcqExams'
 import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
+import MCQExamResult from './Result'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
@@ -111,6 +112,7 @@ const MCQ = connect(
 )(_MCQ)
 
 function MCQExamTake({
+  courseId,
   mcqExam,
   mcqExamId,
   mcqIds,
@@ -191,6 +193,10 @@ function MCQExamTake({
 
   if (!canStart) {
     return null
+  }
+
+  if (data.ended) {
+    return <MCQExamResult courseId={courseId} mcqExamId={mcqExamId} />
   }
 
   return (
