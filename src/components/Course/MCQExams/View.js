@@ -1,15 +1,16 @@
 import { Link, Router } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
+import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
-import { getMCQExam } from 'store/actions/mcqExams.js'
-import TeacherView from './TeacherView.js'
-import TakeExam from './Take.js'
 import { Box, Text } from 'rebass'
-import { DateTime } from 'luxon'
+import { Button, Header, Segment } from 'semantic-ui-react'
+import { getMCQExam } from 'store/actions/mcqExams'
+import TakeExam from './Take.js'
+import TeacherResults from './TeacherResults'
+import TeacherView from './TeacherView'
 
 function View({ courseId, mcqExamId }) {
   return (
@@ -59,6 +60,9 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
           Right={
             <>
               <Permit teacher>
+                <Button as={Link} to={`results`} color="blue">
+                  Results
+                </Button>
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>
@@ -70,6 +74,7 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
 
       <Router>
         <View path="/" courseId={courseId} />
+        <TeacherResults path="/results" courseId={courseId} />
       </Router>
     </>
   )
