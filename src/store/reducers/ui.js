@@ -1,6 +1,6 @@
-import { UI_LOCALE_UPDATE } from 'store/actions/actionTypes.js'
+import { UI_LOCALE_UPDATE } from 'store/actions/actionTypes'
 
-import i18nConfig from 'i18n/config.js'
+import i18nConfig from 'i18n/config'
 
 const initialState = {
   locale: {

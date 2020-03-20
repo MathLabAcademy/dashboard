@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { Box, Text } from 'rebass'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getMCQExam } from 'store/actions/mcqExams'
-import TakeExam from './Take.js'
+import TakeExam from './Take'
 import TeacherResults from './TeacherResults'
 import TeacherView from './TeacherView'
 

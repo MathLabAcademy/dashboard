@@ -1,10 +1,10 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getMCQExam } from 'store/actions/mcqExams.js'
+import { getMCQExam } from 'store/actions/mcqExams'
 
 function CourseMCQExamListItem({ id, data, getData, linkToBase }) {
   useEffect(() => {

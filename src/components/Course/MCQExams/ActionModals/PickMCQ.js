@@ -1,9 +1,9 @@
-import Form from 'components/Form/Form.js'
+import Form from 'components/Form/Form'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft/index.js'
+import { DraftViewer } from 'components/Draft/index'
 import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import { get } from 'lodash-es'
 import React, { useCallback, useMemo, useRef } from 'react'
 import { connect } from 'react-redux'
@@ -16,8 +16,8 @@ import {
   Modal,
   Segment
 } from 'semantic-ui-react'
-import { addQuestionToMCQExam } from 'store/actions/mcqExams.js'
-import { getMCQ } from 'store/actions/mcqs.js'
+import { addQuestionToMCQExam } from 'store/actions/mcqExams'
+import { getMCQ } from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
 function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
@@ -73,10 +73,7 @@ function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
   )
 }
 
-const Picker = connect(
-  ({ mcqs }) => ({ mcqs }),
-  { getMCQ }
-)(_Picker)
+const Picker = connect(({ mcqs }) => ({ mcqs }), { getMCQ })(_Picker)
 
 const getValidationSchema = mcqIds => {
   return Yup.object({
@@ -201,7 +198,4 @@ const mapDispatchToProps = {
   addQuestionToMCQExam
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PickMCQ)
+export default connect(mapStateToProps, mapDispatchToProps)(PickMCQ)

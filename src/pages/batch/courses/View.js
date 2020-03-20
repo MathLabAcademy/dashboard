@@ -1,11 +1,11 @@
 import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getBatchCourse } from 'store/actions/batches.js'
+import { getBatchCourse } from 'store/actions/batches'
 import Enrollments from './enrollments/Main'
 import Payments from './payments/Main'
 

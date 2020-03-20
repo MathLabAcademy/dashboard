@@ -1,6 +1,6 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import Input from 'components/Form/Input'
 import { Formik } from 'formik'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -11,7 +11,7 @@ import {
   Message,
   Segment
 } from 'semantic-ui-react'
-import { logIn } from 'store/actions/currentUser.js'
+import { logIn } from 'store/actions/currentUser'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -106,7 +106,4 @@ const mapDispatchToProps = {
   logIn
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(EmailLogInForm)
+export default connect(null, mapDispatchToProps)(EmailLogInForm)

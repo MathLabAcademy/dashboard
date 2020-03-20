@@ -1,6 +1,6 @@
-import api from 'utils/api.js'
-import { defaultOptsFetchPage } from 'utils/defaults.js'
-import { CQEXAM_ADD, CQEXAM_BULK_ADD, CQEXAM_UPDATE } from './actionTypes.js'
+import api from 'utils/api'
+import { defaultOptsFetchPage } from 'utils/defaults'
+import { CQEXAM_ADD, CQEXAM_BULK_ADD, CQEXAM_UPDATE } from './actionTypes'
 
 export const createCQExam = cqExamData => async dispatch => {
   const url = `/cqexams`

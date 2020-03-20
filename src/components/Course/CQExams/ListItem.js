@@ -1,10 +1,10 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getCQExam } from 'store/actions/cqExams.js'
+import { getCQExam } from 'store/actions/cqExams'
 import { DateTime } from 'luxon'
 
 function CourseCQExamListItem({ id, data, getData, linkToBase }) {

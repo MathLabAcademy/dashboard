@@ -95,7 +95,4 @@ const mapStateToProps = ({ courses, courseTags, user }, { courseId }) => ({
 
 const mapDispatchToProps = {}
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Course)
+export default connect(mapStateToProps, mapDispatchToProps)(Course)

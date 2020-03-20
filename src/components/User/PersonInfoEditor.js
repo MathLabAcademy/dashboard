@@ -153,7 +153,4 @@ const mapDispatchToProps = {
   updatePerson
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PersonInfoEditor)
+export default connect(mapStateToProps, mapDispatchToProps)(PersonInfoEditor)

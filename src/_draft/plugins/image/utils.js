@@ -1,4 +1,4 @@
-import ImageBlock from './ImageBlock.js'
+import ImageBlock from './ImageBlock'
 
 export function blockRendererFn(block, getStore, next) {
   const isAtomic = block.getType() === 'atomic'

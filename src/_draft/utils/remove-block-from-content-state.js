@@ -1,5 +1,5 @@
 import { ContentState } from 'draft-js'
-import getNewBlockSelection from './get-new-block-selection.js'
+import getNewBlockSelection from './get-new-block-selection'
 
 export default function removeBlockFromContentState(
   contentState,

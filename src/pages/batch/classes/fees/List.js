@@ -139,7 +139,4 @@ const mapDispatchToProps = {
   getAllBatchClassFeesForYear
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchClassFeeList)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchClassFeeList)

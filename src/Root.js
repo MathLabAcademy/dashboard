@@ -1,6 +1,6 @@
-import RootErrorBoundary from 'components/RootErrorBoundary.js'
+import RootErrorBoundary from 'components/RootErrorBoundary'
 import { ThemeProvider } from 'emotion-theming'
-import I18nProvider from 'i18n/index.js'
+import I18nProvider from 'i18n/index'
 import React from 'react'
 import { Provider } from 'react-redux'
 import App from './App'

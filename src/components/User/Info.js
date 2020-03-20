@@ -1,5 +1,5 @@
 import ContactInfo from 'components/User/ContactInfo'
-import PersonInfo from 'components/User/PersonInfo.js'
+import PersonInfo from 'components/User/PersonInfo'
 import TransactionInfo from 'components/User/TransactionInfo'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'

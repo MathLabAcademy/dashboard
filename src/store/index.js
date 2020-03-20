@@ -1,8 +1,8 @@
 // import { throttle } from 'lodash-es'
 import { applyMiddleware, compose, createStore } from 'redux'
 import ReduxThunkMiddleware from 'redux-thunk'
-import rootReducer from 'store/reducers/root.js'
-// import { loadState, saveState } from 'utils/localStorage.js'
+import rootReducer from 'store/reducers/root'
+// import { loadState, saveState } from 'utils/localStorage'
 
 // const stateLocalStorageKey = 'mathlab-state'
 

@@ -1,8 +1,5 @@
-import api from 'utils/api.js'
-import {
-  defaultOptsFetchAllPages,
-  defaultOptsFetchPage
-} from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   COURSETAG_ADD,
   COURSETAG_BULK_ADD,
@@ -11,7 +8,7 @@ import {
   COURSETAG_PAGE_REQUEST,
   COURSETAG_PAGINATION_PURGE,
   COURSETAG_UPDATE
-} from './actionTypes.js'
+} from './actionTypes'
 
 export const createTag = tagData => async dispatch => {
   const url = `/coursetags`

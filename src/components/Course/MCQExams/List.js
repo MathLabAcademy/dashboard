@@ -1,13 +1,13 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getAllMCQExamsForCourse } from 'store/actions/mcqExams.js'
-import { emptyArray } from 'utils/defaults.js'
-import ListItem from './ListItem.js'
+import { getAllMCQExamsForCourse } from 'store/actions/mcqExams'
+import { emptyArray } from 'utils/defaults'
+import ListItem from './ListItem'
 
 function CourseMCQExamList({
   courseId,
@@ -61,7 +61,4 @@ const mapDispatchToProps = {
   getAllMCQExamsForCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseMCQExamList)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamList)

@@ -50,7 +50,4 @@ const mapDispatchToProps = {
   getData: getUser
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserListItem)
+export default connect(mapStateToProps, mapDispatchToProps)(UserListItem)

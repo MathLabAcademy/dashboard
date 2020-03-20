@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
-import { setErrorBoundaryRootError } from 'store/actions/errorBoundary.js'
+import { setErrorBoundaryRootError } from 'store/actions/errorBoundary'
 
 import { Button, Segment } from 'semantic-ui-react'
 
@@ -42,7 +42,4 @@ const mapDispatchToProps = {
   setError: setErrorBoundaryRootError
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(RootErrorBoundary)
+export default connect(mapStateToProps, mapDispatchToProps)(RootErrorBoundary)

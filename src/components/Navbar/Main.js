@@ -3,7 +3,7 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Button, Menu } from 'semantic-ui-react'
-import { logOut } from 'store/actions/currentUser.js'
+import { logOut } from 'store/actions/currentUser'
 import './Main.css'
 
 function Navbar({ userStatus, sidebarVisible, toggleSidebar, logOut }) {
@@ -57,7 +57,4 @@ const mapActionToProps = {
   logOut
 }
 
-export default connect(
-  mapStateToProps,
-  mapActionToProps
-)(Navbar)
+export default connect(mapStateToProps, mapActionToProps)(Navbar)

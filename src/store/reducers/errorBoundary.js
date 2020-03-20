@@ -1,4 +1,4 @@
-import { ERROR_BOUNDARY_SET_ROOT_ERROR } from 'store/actions/actionTypes.js'
+import { ERROR_BOUNDARY_SET_ROOT_ERROR } from 'store/actions/actionTypes'
 
 const initialState = {
   rootError: null

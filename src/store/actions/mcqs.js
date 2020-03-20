@@ -1,8 +1,5 @@
-import api from 'utils/api.js'
-import {
-  defaultOptsFetchAllPages,
-  defaultOptsFetchPage
-} from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
@@ -19,7 +16,7 @@ import {
   MCQ_PAGE_REQUEST,
   MCQ_PAGINATION_PURGE,
   MCQ_UPDATE
-} from './actionTypes.js'
+} from './actionTypes'
 
 export const createMCQ = mcqData => async dispatch => {
   const url = `/mcqs`

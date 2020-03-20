@@ -2,11 +2,11 @@ import { get } from 'lodash-es'
 import React, { useEffect, useMemo, useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Card, Modal, Button, Image, Input } from 'semantic-ui-react'
-import { getAllMCQTmpImages } from 'store/actions/mcqs.js'
+import { getAllMCQTmpImages } from 'store/actions/mcqs'
 import useToggle from 'hooks/useToggle'
 import md5 from 'md5-o-matic'
 
-import TmpImageUploader from './TmpImageUploader.js'
+import TmpImageUploader from './TmpImageUploader'
 
 function ImageCard({ src }) {
   const id = useMemo(() => `tmp-${md5(src)}`, [src])

@@ -2,12 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Container, Segment } from 'semantic-ui-react'
 import { Value } from 'slate'
 import { Editor } from 'slate-react'
-import SlateEditorToolbar from './components/toolbar.js'
-import defaultInitialValue from './initialValue.js'
-import InlineFormatPlugin from './plugins/inline-format.js'
-import KatexPlugin from './plugins/katex.js'
-import MarkdownPlugin from './plugins/markdown.js'
-import QueriesPlugin from './plugins/queries.js'
+import SlateEditorToolbar from './components/toolbar'
+import defaultInitialValue from './initialValue'
+import InlineFormatPlugin from './plugins/inline-format'
+import KatexPlugin from './plugins/katex'
+import MarkdownPlugin from './plugins/markdown'
+import QueriesPlugin from './plugins/queries'
 
 const plugins = [
   QueriesPlugin(),

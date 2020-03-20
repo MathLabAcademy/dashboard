@@ -4,7 +4,7 @@ import { Field, ErrorMessage } from 'formik'
 
 import { FormField, Dropdown } from 'semantic-ui-react'
 
-import formatDropdownOptions from 'utils/format-dropdown-options.js'
+import formatDropdownOptions from 'utils/format-dropdown-options'
 
 function SelectionDropdown({
   field: { name, value },

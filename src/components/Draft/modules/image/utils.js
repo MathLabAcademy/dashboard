@@ -1,5 +1,5 @@
-import { __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__ } from './constants.js'
-import ImageBlock from './ImageBlock.js'
+import { __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__ } from './constants'
+import ImageBlock from './ImageBlock'
 
 export function blockRendererFn(store, block) {
   const isAtomic = block.getType() === 'atomic'

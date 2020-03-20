@@ -1,6 +1,6 @@
 import { Router } from '@reach/router'
 import React from 'react'
-import List from './List.js'
+import List from './List'
 
 function BatchClassFees({ batchClassId }) {
   return (

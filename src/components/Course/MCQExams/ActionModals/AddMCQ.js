@@ -1,15 +1,15 @@
-import Form from 'components/Form/Form.js'
-import FormRichText from 'components/Form/RichText.js'
-import FormSelect from 'components/Form/Select.js'
+import Form from 'components/Form/Form'
+import FormRichText from 'components/Form/RichText'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
 import TmpImageGalleryModal from 'components/MCQs/TmpImageGalleryModal'
 import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
-import { createMCQ } from 'store/actions/mcqs.js'
+import { createMCQ } from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -172,7 +172,4 @@ const mapDispatchToProps = {
   createMCQ
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AddMCQ)
+export default connect(mapStateToProps, mapDispatchToProps)(AddMCQ)

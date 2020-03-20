@@ -1,7 +1,7 @@
 import { Router } from '@reach/router'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import React from 'react'
-import List from './List.js'
+import List from './List'
 
 function Tags() {
   return (

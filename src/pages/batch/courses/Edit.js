@@ -1,14 +1,14 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
+import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getBatchCourse, updateBatchCourse } from 'store/actions/batches.js'
+import { getBatchCourse, updateBatchCourse } from 'store/actions/batches'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -132,7 +132,4 @@ const mapDispatchToProps = {
   updateBatchCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchCourseEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseEdit)

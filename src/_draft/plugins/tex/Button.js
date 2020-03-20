@@ -1,7 +1,7 @@
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import React from 'react'
 import { Button, Modal } from 'semantic-ui-react'
-import Editor from './Editor.js'
+import Editor from './Editor'
 
 function TeXButton({ getStore }) {
   const [open, handler] = useToggle(false)

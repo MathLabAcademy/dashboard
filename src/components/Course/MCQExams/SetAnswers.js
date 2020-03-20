@@ -1,9 +1,9 @@
 import { Link } from '@reach/router'
-import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField.js'
-import Form from 'components/Form/Form.js'
-import HeaderGrid from 'components/HeaderGrid.js'
+import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField'
+import Form from 'components/Form/Form'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft/index.js'
+import { DraftViewer } from 'components/Draft/index'
 import { Formik } from 'formik'
 import { get, map, sortBy } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -20,7 +20,7 @@ import {
   getAllMCQAnswersForExam,
   getAllMCQsForExam,
   setMCQAnswers
-} from 'store/actions/mcqs.js'
+} from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
 const optionLetters = ['a', 'b', 'c', 'd']

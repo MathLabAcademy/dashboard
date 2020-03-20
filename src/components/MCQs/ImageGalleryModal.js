@@ -4,9 +4,9 @@ import md5 from 'md5-o-matic'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Card, Image, Input, Modal } from 'semantic-ui-react'
-import { getAllMCQImages } from 'store/actions/mcqs.js'
+import { getAllMCQImages } from 'store/actions/mcqs'
 import { emptyObject } from 'utils/defaults'
-import ImageUploader from './ImageUploader.js'
+import ImageUploader from './ImageUploader'
 
 function ImageCard({ image, openReplacer }) {
   const id = useMemo(() => `tmp-${md5(get(image, 'filePath'))}`, [image])

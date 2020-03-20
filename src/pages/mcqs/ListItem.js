@@ -1,12 +1,12 @@
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
-import { DraftViewer } from 'components/Draft/index.js'
+import Permit from 'components/Permit'
+import { DraftViewer } from 'components/Draft/index'
 import { get, isUndefined } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
-import { getMCQ, readMCQAnswer } from 'store/actions/mcqs.js'
+import { getMCQ, readMCQAnswer } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
 
 function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
@@ -68,7 +68,4 @@ const mapDispatchToProps = {
   readMCQAnswer
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQListItem)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQListItem)

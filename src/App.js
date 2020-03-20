@@ -1,16 +1,16 @@
 import { Router } from '@reach/router'
-import Navbar from 'components/Navbar/Main.js'
-import SidebarMenu from 'components/Sidebar/Menu.js'
+import Navbar from 'components/Navbar/Main'
+import SidebarMenu from 'components/Sidebar/Menu'
 import { get } from 'lodash-es'
-import EmailVerification from 'pages/email-verification/Main.js'
-import ForgotPassword from 'pages/forgot-password/Main.js'
-import LogIn from 'pages/login/Main.js'
-import Dashboard from 'pages/Main.js'
-import Register from 'pages/register/Main.js'
+import EmailVerification from 'pages/email-verification/Main'
+import ForgotPassword from 'pages/forgot-password/Main'
+import LogIn from 'pages/login/Main'
+import Dashboard from 'pages/Main'
+import Register from 'pages/register/Main'
 import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Segment, Sidebar } from 'semantic-ui-react'
-import { checkAuthStatus } from 'store/actions/currentUser.js'
+import { checkAuthStatus } from 'store/actions/currentUser'
 import './App.css'
 
 function App({ checkAuthStatus, userStatus }) {
@@ -56,7 +56,4 @@ const mapStateToProps = ({ user }) => ({
 
 const mapActionToProps = { checkAuthStatus }
 
-export default connect(
-  mapStateToProps,
-  mapActionToProps
-)(App)
+export default connect(mapStateToProps, mapActionToProps)(App)

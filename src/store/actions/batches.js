@@ -1,5 +1,5 @@
-import api from 'utils/api.js'
-import { defaultOptsFetchPage } from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchPage } from 'utils/defaults'
 import {
   BATCHCLASSENROLLMENT_ADD,
   BATCHCLASSENROLLMENT_BULK_ADD,
@@ -51,7 +51,7 @@ import {
   USER_ADD,
   USER_BULK_ADD,
   USER_PAGINATION_PURGE
-} from './actionTypes.js'
+} from './actionTypes'
 
 export const createBatchClass = batchClassData => async dispatch => {
   const url = `/batch/classes`

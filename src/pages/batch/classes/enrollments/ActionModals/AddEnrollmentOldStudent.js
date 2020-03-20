@@ -1,9 +1,9 @@
-import FormCheckbox from 'components/Form/Checkbox.js'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
+import FormCheckbox from 'components/Form/Checkbox'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -11,7 +11,7 @@ import { Button, FormGroup, Message, Modal } from 'semantic-ui-react'
 import {
   createBatchClassEnrollmentForOldStudent,
   getBatchClassEnrollmentNextSerial
-} from 'store/actions/batches.js'
+} from 'store/actions/batches'
 import { emptyObject } from 'utils/defaults'
 import * as Yup from 'yup'
 

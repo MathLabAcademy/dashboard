@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import { connect } from 'react-redux'
-import { removePayment } from 'store/actions/batches.js'
+import { removePayment } from 'store/actions/batches'
 import { get } from 'lodash-es'
 import { Button, Confirm, ModalContent, Message } from 'semantic-ui-react'
-import useToggle from 'hooks/useToggle.js'
-import Permit from 'components/Permit.js'
+import useToggle from 'hooks/useToggle'
+import Permit from 'components/Permit'
 
 function CourseStudentPaymentClearPaidModal({
   batchPaymentId,

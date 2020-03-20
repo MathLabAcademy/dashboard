@@ -1,12 +1,12 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
-import { getCQExam } from 'store/actions/cqExams.js'
+import { getCQExam } from 'store/actions/cqExams'
 
 function CourseCQExamView({ courseId, cqExamId, cqExam, getCQExam }) {
   useEffect(() => {
@@ -72,7 +72,4 @@ const mapDispatchToProps = {
   getCQExam
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseCQExamView)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseCQExamView)

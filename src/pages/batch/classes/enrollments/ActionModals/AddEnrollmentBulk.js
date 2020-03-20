@@ -1,12 +1,12 @@
 import FormFile from 'components/Form/File'
-import Form from 'components/Form/Form.js'
+import Form from 'components/Form/Form'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
-import { createBatchClassEnrollmentBulk } from 'store/actions/batches.js'
+import { createBatchClassEnrollmentBulk } from 'store/actions/batches'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {

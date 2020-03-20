@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Sidebar } from 'semantic-ui-react'
-import MenuItems from './MenuItems.js'
+import MenuItems from './MenuItems'
 
 const items = [
   {

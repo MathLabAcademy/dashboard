@@ -1,14 +1,14 @@
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import Permit from 'components/Permit.js'
-import usePagination from 'hooks/usePagination.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import Permit from 'components/Permit'
+import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment } from 'semantic-ui-react'
-import { fetchUserPage } from 'store/actions/users.js'
-import { emptyArray } from 'utils/defaults.js'
-import ListItem from './ListItem.js'
+import { fetchUserPage } from 'store/actions/users'
+import { emptyArray } from 'utils/defaults'
+import ListItem from './ListItem'
 
 function UserList({ pagination, fetchPage }) {
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage)
@@ -40,7 +40,4 @@ const mapDispatchToProps = {
   fetchPage: fetchUserPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserList)
+export default connect(mapStateToProps, mapDispatchToProps)(UserList)

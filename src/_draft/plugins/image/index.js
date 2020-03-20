@@ -1,2 +1,2 @@
-export { blockRendererFn } from './utils.js'
-export { default as Button } from './Button.js'
+export { blockRendererFn } from './utils'
+export { default as Button } from './Button'

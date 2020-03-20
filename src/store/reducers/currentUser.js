@@ -2,7 +2,7 @@ import {
   CURRENT_USER_LOGIN_REQUEST,
   CURRENT_USER_UPDATE,
   CURRENT_USER_REMOVE
-} from 'store/actions/actionTypes.js'
+} from 'store/actions/actionTypes'
 
 const initialState = {
   data: null,

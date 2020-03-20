@@ -1,4 +1,4 @@
-import { blockRendererFn } from './utils.js'
+import { blockRendererFn } from './utils'
 
 export function getImageModule() {
   return {
@@ -6,4 +6,4 @@ export function getImageModule() {
   }
 }
 
-export { default as Button } from './Button.js'
+export { default as Button } from './Button'

@@ -1,8 +1,8 @@
-import Course from 'components/Course/Main.js'
+import Course from 'components/Course/Main'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { getCourse, getAllEnrollments } from 'store/actions/courses.js'
+import { getCourse, getAllEnrollments } from 'store/actions/courses'
 
 function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
   useEffect(() => {
@@ -25,7 +25,4 @@ const mapDispatchToProps = {
   getAllEnrollments
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseView)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseView)

@@ -1,6 +1,6 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
@@ -10,7 +10,7 @@ import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, updateCourse } from 'store/actions/courses.js'
+import { getCourse, updateCourse } from 'store/actions/courses'
 import * as Yup from 'yup'
 
 const getInitialValues = course => ({
@@ -147,7 +147,4 @@ const mapDispatchToProps = {
   updateCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseEdit)

@@ -4,9 +4,9 @@ import {
   COURSETAG_BULK_ADD,
   COURSETAG_REMOVE,
   COURSETAG_UPDATE
-} from 'store/actions/actionTypes.js'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
-import * as ids from './helpers/ids-reducers.js'
+} from 'store/actions/actionTypes'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import * as ids from './helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,

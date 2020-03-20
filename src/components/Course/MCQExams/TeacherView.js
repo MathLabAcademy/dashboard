@@ -1,23 +1,22 @@
-import { DraftViewer } from 'components/Draft/index.js'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Permit from 'components/Permit.js'
-import useToggle from 'hooks/useToggle.js'
+import { DraftViewer } from 'components/Draft/index'
+import HeaderGrid from 'components/HeaderGrid'
+import Permit from 'components/Permit'
+import useToggle from 'hooks/useToggle'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Text } from 'rebass'
 import { Button, Divider, Grid, Header, Icon, Segment } from 'semantic-ui-react'
-import { getAllQuestionsForExam } from 'store/actions/mcqExams.js'
+import { getAllQuestionsForExam } from 'store/actions/mcqExams'
 import {
   getAllMCQAnswersForExam,
   getMCQ,
   readMCQAnswer
-} from 'store/actions/mcqs.js'
-import { emptyArray } from 'utils/defaults.js'
-import AddMCQ from './ActionModals/AddMCQ.js'
-import EditMCQ from './ActionModals/EditMCQ.js'
-import PickMCQ from './ActionModals/PickMCQ.js'
-import RemoveMCQ from './ActionModals/RemoveMCQ.js'
+} from 'store/actions/mcqs'
+import { emptyArray } from 'utils/defaults'
+import AddMCQ from './ActionModals/AddMCQ'
+import EditMCQ from './ActionModals/EditMCQ'
+import PickMCQ from './ActionModals/PickMCQ'
+import RemoveMCQ from './ActionModals/RemoveMCQ'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 

@@ -1,8 +1,5 @@
-import api from 'utils/api.js'
-import {
-  defaultOptsFetchAllPages,
-  defaultOptsFetchPage
-} from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   BATCHCLASSENROLLMENT_BULK_ADD,
   BATCHCOURSEENROLLMENT_BULK_ADD,
@@ -14,7 +11,7 @@ import {
   USER_PAGE_REMOVE,
   USER_PAGE_REQUEST,
   USER_UPDATE
-} from './actionTypes.js'
+} from './actionTypes'
 
 const addUser = data => ({
   type: USER_ADD,

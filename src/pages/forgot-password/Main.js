@@ -2,8 +2,8 @@ import { Redirect, Router } from '@reach/router'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
-import RequestReset from './RequestReset.js'
-import Reset from './Reset.js'
+import RequestReset from './RequestReset'
+import Reset from './Reset'
 
 function ForgotPassword({ userStatus, location }) {
   return userStatus.authed ? (

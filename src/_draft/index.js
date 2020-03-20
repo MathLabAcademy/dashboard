@@ -1,10 +1,10 @@
 import { Editor } from 'draft-js'
 import 'draft-js/dist/Draft.css'
-import * as ImagePlugin from '_draft/plugins/image/index.js'
-import * as TeXPlugin from '_draft/plugins/tex/index.js'
+import * as ImagePlugin from '_draft/plugins/image/index'
+import * as TeXPlugin from '_draft/plugins/tex/index'
 import React, { useCallback, useEffect } from 'react'
-import Controls from './Controls.js'
-import useEditor from './hooks/useEditor.js'
+import Controls from './Controls'
+import useEditor from './hooks/useEditor'
 import './index.css'
 
 const customStyleMap = {

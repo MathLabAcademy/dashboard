@@ -1,11 +1,11 @@
 import Permit from 'components/Permit'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react'
+import React, { useEffect, useMemo, useReducer } from 'react'
 import { connect } from 'react-redux'
 import { Flex } from 'rebass'
 import { Button, Dropdown, Input, Modal } from 'semantic-ui-react'
-import { updateTag } from 'store/actions/mcqTags.js'
+import { updateTag } from 'store/actions/mcqTags'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import formatDropdownOptions from 'utils/format-dropdown-options'
 import * as localStorage from 'utils/localStorage'
@@ -57,31 +57,6 @@ function TagGroupsEditModal({ mcqTags }) {
       )
     )
   }, [mcqTags.allIds, mcqTags.byId])
-
-  const onSubmit = useCallback(
-    async (values, actions) => {
-      actions.setStatus(null)
-
-      try {
-        actions.resetForm()
-        handle.close()
-      } catch (err) {
-        if (err.errors) {
-          err.errors.forEach(({ param, message }) =>
-            actions.setFieldError(param, message)
-          )
-        } else if (err.message) {
-          actions.setStatus(err.message)
-        } else {
-          actions.setStatus(null)
-          console.error(err)
-        }
-      }
-
-      actions.setSubmitting(false)
-    },
-    [handle]
-  )
 
   return (
     <Permit teacher>

@@ -1,5 +1,5 @@
-import InlineTeX from './InlineTeX.js'
-import { findInlineTeXEntities } from './utils.js'
+import InlineTeX from './InlineTeX'
+import { findInlineTeXEntities } from './utils'
 
 const inlineTeXDecorator = {
   strategy: findInlineTeXEntities,

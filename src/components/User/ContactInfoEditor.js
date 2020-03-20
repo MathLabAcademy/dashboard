@@ -198,7 +198,4 @@ const mapDispatchToProps = {
   updatePhone
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ContactInfoEditor)
+export default connect(mapStateToProps, mapDispatchToProps)(ContactInfoEditor)

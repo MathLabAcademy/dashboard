@@ -44,8 +44,8 @@ import {
   USER_PAGE_REMOVE,
   USER_PAGE_REQUEST,
   USER_PAGINATION_PURGE
-} from 'store/actions/actionTypes.js'
-import getPaginationReducer from './helpers/get-pagination-reducer.js'
+} from 'store/actions/actionTypes'
+import getPaginationReducer from './helpers/get-pagination-reducer'
 
 const batchClasses = getPaginationReducer({
   ADD: BATCHCLASS_PAGE_ADD,

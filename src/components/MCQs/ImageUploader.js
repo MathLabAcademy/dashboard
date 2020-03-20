@@ -14,7 +14,7 @@ import {
   Placeholder,
   Segment
 } from 'semantic-ui-react'
-import { uploadMCQImage } from 'store/actions/mcqs.js'
+import { uploadMCQImage } from 'store/actions/mcqs'
 
 const defaultState = {
   file: null,
@@ -74,7 +74,7 @@ function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
         await uploadMCQImage(mcqId, { serial: state.serial, image: state.file })
         dispatch({ type: 'RESET', data: initialState })
 
-        if (state.serial) return   window.location.reload(true)
+        if (state.serial) return window.location.reload(true)
 
         onSuccess()
       } catch (err) {
@@ -160,7 +160,4 @@ const mapDispatchToProps = {
   uploadMCQImage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQImageUploader)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQImageUploader)

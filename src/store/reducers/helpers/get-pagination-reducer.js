@@ -1,5 +1,5 @@
 import { map } from 'lodash-es'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
+import { emptyArray, emptyObject } from 'utils/defaults'
 
 const initialPaginationState = {
   fetching: false,

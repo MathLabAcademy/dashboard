@@ -1,13 +1,13 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import Input from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { updatePassword } from 'store/actions/currentUser.js'
+import { updatePassword } from 'store/actions/currentUser'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -111,7 +111,4 @@ const mapDispatchToProps = {
   updatePassword
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ChangePassword)
+export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword)

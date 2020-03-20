@@ -1,5 +1,5 @@
 import { EditorState, SelectionState } from 'draft-js'
-import TeXBlock from './TeXBlock.js'
+import TeXBlock from './TeXBlock'
 
 const ArrowLeft = 37
 const ArrowRight = 39

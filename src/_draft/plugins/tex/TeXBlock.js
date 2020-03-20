@@ -1,8 +1,8 @@
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import React, { useMemo } from 'react'
 import { Modal } from 'semantic-ui-react'
-import Editor from './Editor.js'
-import TeX from './TeX.js'
+import Editor from './Editor'
+import TeX from './TeX'
 
 function TeXBlock({ block, blockProps: { getStore }, contentState }) {
   const [open, handler] = useToggle(false)

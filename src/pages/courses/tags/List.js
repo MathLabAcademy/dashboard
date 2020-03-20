@@ -1,14 +1,14 @@
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import usePagination from 'hooks/usePagination.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Grid, Header, Segment } from 'semantic-ui-react'
-import { fetchTagPage } from 'store/actions/courseTags.js'
-import { emptyArray } from 'utils/defaults.js'
-import Create from './ActionModals/Create.js'
-import Edit from './ActionModals/Edit.js'
+import { fetchTagPage } from 'store/actions/courseTags'
+import { emptyArray } from 'utils/defaults'
+import Create from './ActionModals/Create'
+import Edit from './ActionModals/Edit'
 
 function _TagListItem({ tagId, tag }) {
   return (
@@ -70,7 +70,4 @@ const mapDispatchToProps = {
   fetchPage: fetchTagPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TagList)
+export default connect(mapStateToProps, mapDispatchToProps)(TagList)

@@ -10,9 +10,9 @@ import {
   ENROLLMENT_BULK_ADD,
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD
-} from 'store/actions/actionTypes.js'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
-import * as ids from './helpers/ids-reducers.js'
+} from 'store/actions/actionTypes'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import * as ids from './helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,

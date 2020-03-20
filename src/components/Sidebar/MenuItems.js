@@ -1,9 +1,9 @@
 import { Link, Match } from '@reach/router'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import { zipObject } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
 import { Accordion, Header, Icon, Menu } from 'semantic-ui-react'
-import { emptyArray } from 'utils/defaults.js'
+import { emptyArray } from 'utils/defaults'
 import './MenuItems.css'
 
 const ParentItem = ({ link, title, icon, active, children }) => (

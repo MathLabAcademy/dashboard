@@ -1,10 +1,10 @@
 import { Router } from '@reach/router'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import React from 'react'
-import Create from './Create.js'
-import Edit from './Edit.js'
-import List from './List.js'
-import View from './View.js'
+import Create from './Create'
+import Edit from './Edit'
+import List from './List'
+import View from './View'
 
 function CourseMCQExams({ courseId }) {
   return (

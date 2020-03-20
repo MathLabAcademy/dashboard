@@ -7,10 +7,10 @@ import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import {
   getAllBatchClassFeesForYear,
   getAllBatchStudentPayments
-} from 'store/actions/batches.js'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
-import ClearMonthPaid from '../ActionModals/ClearMonthPaid.js'
-import RecordMonthPayment from '../ActionModals/RecordMonthPayment.js'
+} from 'store/actions/batches'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import ClearMonthPaid from '../ActionModals/ClearMonthPaid'
+import RecordMonthPayment from '../ActionModals/RecordMonthPayment'
 
 const months = Info.months()
 

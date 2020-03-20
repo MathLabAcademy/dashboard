@@ -1,7 +1,7 @@
 import { Link } from '@reach/router'
 import FormFile from 'components/Form/File'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
@@ -10,7 +10,7 @@ import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCQExam, updateCQExam } from 'store/actions/cqExams.js'
+import { getCQExam, updateCQExam } from 'store/actions/cqExams'
 import * as Yup from 'yup'
 
 const getInitialValues = data => ({
@@ -132,7 +132,4 @@ const mapDispatchToProps = {
   updateCQExam
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseCQExamEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseCQExamEdit)

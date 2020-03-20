@@ -1,8 +1,8 @@
 import { get, isNull } from 'lodash-es'
 import { stringify } from 'query-string'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { emptyObject } from 'utils/defaults.js'
-import usePrevious from './usePrevious.js'
+import { emptyObject } from 'utils/defaults'
+import usePrevious from './usePrevious'
 
 const defaultOptions = { maxTryCount: 3, queryObject: emptyObject }
 

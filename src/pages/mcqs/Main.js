@@ -1,13 +1,13 @@
 import { Router } from '@reach/router'
-import Permit from 'components/Permit.js'
+import Permit from 'components/Permit'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { fetchAllTagPage } from 'store/actions/mcqTags.js'
-import Create from './Create.js'
-import Edit from './Edit.js'
-import List from './List.js'
-import Tags from './tags/Main.js'
-import View from './View.js'
+import { fetchAllTagPage } from 'store/actions/mcqTags'
+import Create from './Create'
+import Edit from './Edit'
+import List from './List'
+import Tags from './tags/Main'
+import View from './View'
 
 function MCQs({ tags, tagsPagination, fetchAllTagPage }) {
   useEffect(() => {

@@ -1,10 +1,10 @@
 import Permit from 'components/Permit'
-import useToggle from 'hooks/useToggle.js'
+import useToggle from 'hooks/useToggle'
 import { get } from 'lodash-es'
 import React, { useCallback, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Confirm, Message, ModalContent } from 'semantic-ui-react'
-import { unsetBatchClassFee } from 'store/actions/batches.js'
+import { unsetBatchClassFee } from 'store/actions/batches'
 
 function BatchCourseFeeUnsetModal({
   batchClassId,

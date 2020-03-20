@@ -1,8 +1,5 @@
-import api from 'utils/api.js'
-import {
-  defaultOptsFetchAllPages,
-  defaultOptsFetchPage
-} from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   MCQTAG_ADD,
   MCQTAG_BULK_ADD,
@@ -11,7 +8,7 @@ import {
   MCQTAG_PAGE_REQUEST,
   MCQTAG_UPDATE,
   MCQTAG_PAGINATION_PURGE
-} from './actionTypes.js'
+} from './actionTypes'
 
 export const createTag = tagData => async dispatch => {
   const url = `/mcqtags`

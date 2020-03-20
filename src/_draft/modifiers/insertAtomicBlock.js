@@ -5,7 +5,7 @@ import {
   EditorState,
   Modifier
 } from 'draft-js'
-import generateRandomKey from 'draft-js/lib/generateRandomKey.js'
+import generateRandomKey from 'draft-js/lib/generateRandomKey'
 import { List, Repeat } from 'immutable'
 
 function insertAtomicBlock(editorState, data, character = ' ') {

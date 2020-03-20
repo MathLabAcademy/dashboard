@@ -1,10 +1,10 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
+import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getCourse } from 'store/actions/courses.js'
+import { getCourse } from 'store/actions/courses'
 
 function CourseListItem({ id, data, getData }) {
   useEffect(() => {
@@ -33,7 +33,4 @@ const mapDispatchToProps = {
   getData: getCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseListItem)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseListItem)

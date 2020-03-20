@@ -14,7 +14,7 @@ import {
   Placeholder,
   Segment
 } from 'semantic-ui-react'
-import { uploadMCQTmpImage } from 'store/actions/mcqs.js'
+import { uploadMCQTmpImage } from 'store/actions/mcqs'
 
 const initialState = {
   file: null,
@@ -131,7 +131,4 @@ const mapDispatchToProps = {
   uploadMCQTmpImage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MCQTmpImageUploader)
+export default connect(mapStateToProps, mapDispatchToProps)(MCQTmpImageUploader)

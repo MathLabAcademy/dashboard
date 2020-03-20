@@ -1,6 +1,6 @@
 import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
-import Form from 'components/Form/Form.js'
-import Input from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import Input from 'components/Form/Input'
 import { Formik } from 'formik'
 import React, { useCallback, useMemo } from 'react'
 import {

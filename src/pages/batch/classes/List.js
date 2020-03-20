@@ -1,14 +1,14 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import Permit from 'components/Permit.js'
-import usePagination from 'hooks/usePagination.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import Permit from 'components/Permit'
+import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { fetchBatchClassPage, getBatchClass } from 'store/actions/batches.js'
-import { emptyArray } from 'utils/defaults.js'
+import { fetchBatchClassPage, getBatchClass } from 'store/actions/batches'
+import { emptyArray } from 'utils/defaults'
 
 function _ListItem({ batchClassId, batchClass, getBatchClass }) {
   useEffect(() => {
@@ -90,7 +90,4 @@ const mapDispatchToProps = {
   fetchPage: fetchBatchClassPage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchClassList)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchClassList)

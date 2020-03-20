@@ -65,7 +65,4 @@ const mapDispatchToProps = {
   getBatchClass
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchClassView)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchClassView)

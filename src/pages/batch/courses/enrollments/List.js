@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Icon, Input, Segment, Table } from 'semantic-ui-react'
 import { getAllBatchCourseEnrollmentForYear } from 'store/actions/batches'
 import AddEnrollment from './ActionModals/AddEnrollment'
-// import EditStudent from './ActionModals/EditStudent.js'
+// import EditStudent from './ActionModals/EditStudent'
 
 function _ListItemRow({
   batchCourseEnrollmentId,

@@ -1,8 +1,8 @@
 import { Link } from '@reach/router'
-import Form from 'components/Form/Form.js'
-import FormInput from 'components/Form/Input.js'
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import FormRichText from 'components/Form/RichText'
-import FormSelect from 'components/Form/Select.js'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
@@ -10,7 +10,7 @@ import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { createCourse } from 'store/actions/courses.js'
+import { createCourse } from 'store/actions/courses'
 import * as Yup from 'yup'
 
 const getInitialValues = () => ({
@@ -142,7 +142,4 @@ const mapDispatchToProps = {
   createCourse
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseCreate)

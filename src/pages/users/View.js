@@ -20,7 +20,4 @@ const mapDispatchToProps = {
   getUser
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UserView)
+export default connect(mapStateToProps, mapDispatchToProps)(UserView)

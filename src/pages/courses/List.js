@@ -1,17 +1,17 @@
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid.js'
-import Switcher from 'components/Pagination/Switcher.js'
-import Permit from 'components/Permit.js'
-import usePagination from 'hooks/usePagination.js'
-import useToggle from 'hooks/useToggle.js'
+import HeaderGrid from 'components/HeaderGrid'
+import Switcher from 'components/Pagination/Switcher'
+import Permit from 'components/Permit'
+import usePagination from 'hooks/usePagination'
+import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Dropdown, Header, Segment } from 'semantic-ui-react'
-import { fetchCoursePage } from 'store/actions/courses.js'
-import { emptyArray, emptyObject } from 'utils/defaults.js'
-import formatDropdownOptions from 'utils/format-dropdown-options.js'
-import ListItem from './ListItem.js'
+import { fetchCoursePage } from 'store/actions/courses'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import formatDropdownOptions from 'utils/format-dropdown-options'
+import ListItem from './ListItem'
 
 function CourseList({ pagination, fetchPage, courseTags }) {
   const tagsRef = useRef()
@@ -108,7 +108,4 @@ const mapDispatchToProps = {
   fetchPage: fetchCoursePage
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseList)
+export default connect(mapStateToProps, mapDispatchToProps)(CourseList)

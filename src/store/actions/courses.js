@@ -1,8 +1,5 @@
-import api from 'utils/api.js'
-import {
-  defaultOptsFetchAllPages,
-  defaultOptsFetchPage
-} from 'utils/defaults.js'
+import api from 'utils/api'
+import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   COURSE_ADD,
   COURSE_BULK_ADD,
@@ -13,7 +10,7 @@ import {
   COURSE_UPDATE,
   ENROLLMENT_BULK_ADD,
   ENROLLMENT_ADD
-} from './actionTypes.js'
+} from './actionTypes'
 
 export const createCourse = courseData => async dispatch => {
   const url = `/courses`
