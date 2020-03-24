@@ -15,6 +15,7 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     text: Yup.string().required(`required`),
+    guide: Yup.string().required(`required`),
     answerIndex: Yup.number()
       .integer()
       .min(0)
@@ -31,6 +32,7 @@ const getValidationSchema = () => {
 const getInitialValues = mcqExamId => ({
   mcqExamId,
   text: '',
+  guide: '',
   answerIndex: '0',
   options: ['', '', '', '']
 })
@@ -130,6 +132,8 @@ function AddMCQ({ mcqExamId, createMCQ }) {
                 label={'Answer'}
                 options={answerIndexOptions}
               />
+
+              <FormRichText name="guide" label={`Guide`} disableImage />
 
               <Segment secondary>
                 <ErrorMessage
