@@ -86,7 +86,7 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
 
       <Router>
         <CourseInfo
-          path="/"
+          path="/*"
           course={course}
           courseId={courseId}
           courseTags={courseTags}
