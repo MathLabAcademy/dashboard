@@ -2,14 +2,13 @@ import { get, groupBy, keyBy, mapValues, pickBy } from 'lodash-es'
 import {
   BATCHCLASSENROLLMENT_BULK_ADD,
   BATCHCOURSEENROLLMENT_BULK_ADD,
-  ENROLLMENT_ADD,
-  ENROLLMENT_BULK_ADD,
   MCQEXAMTRACKER_UPDATE,
   USER_ADD,
   USER_BULK_ADD,
   USER_REMOVE,
   USER_UPDATE
 } from 'store/actions/actionTypes'
+import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
 

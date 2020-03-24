@@ -5,6 +5,7 @@ import courses from './courses'
 import courseTags from './courseTags'
 import cqExams from './cqExams'
 import user from './currentUser'
+import enrollments from '../enrollments/reducer'
 import errorBoundary from './errorBoundary'
 import mcqExams from './mcqExams'
 import mcqs from './mcqs'
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   courseTags,
   cqExams,
   user,
+  enrollments,
   errorBoundary,
   mcqExams,
   mcqs,

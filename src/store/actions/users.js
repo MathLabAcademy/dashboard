@@ -4,7 +4,6 @@ import {
   BATCHCLASSENROLLMENT_BULK_ADD,
   BATCHCOURSEENROLLMENT_BULK_ADD,
   CURRENT_USER_UPDATE,
-  ENROLLMENT_BULK_ADD,
   USER_ADD,
   USER_BULK_ADD,
   USER_PAGE_ADD,
@@ -12,6 +11,7 @@ import {
   USER_PAGE_REQUEST,
   USER_UPDATE
 } from './actionTypes'
+import { ENROLLMENT_BULK_ADD } from 'store/enrollments'
 
 const addUser = data => ({
   type: USER_ADD,

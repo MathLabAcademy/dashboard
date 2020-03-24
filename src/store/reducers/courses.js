@@ -6,13 +6,12 @@ import {
   COURSE_UPDATE,
   CQEXAM_ADD,
   CQEXAM_BULK_ADD,
-  ENROLLMENT_ADD,
-  ENROLLMENT_BULK_ADD,
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
+import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 
 const initialState = {
   byId: emptyObject,

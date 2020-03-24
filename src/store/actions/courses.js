@@ -1,3 +1,4 @@
+import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import api from 'utils/api'
 import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
@@ -8,8 +9,6 @@ import {
   COURSE_PAGE_REQUEST,
   COURSE_PAGINATION_PURGE,
   COURSE_UPDATE,
-  ENROLLMENT_ADD,
-  ENROLLMENT_BULK_ADD,
   USER_BULK_ADD
 } from './actionTypes'
 
@@ -127,8 +126,6 @@ export const getAllEnrollments = courseId => async dispatch => {
     usersData.items.push(user)
     delete item.User
   })
-
-  console.log(usersData)
 
   dispatch({ type: USER_BULK_ADD, data: usersData })
   dispatch({ type: ENROLLMENT_BULK_ADD, data })
