@@ -82,7 +82,7 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header as="h2">New Course:</Header>}
+                Left={<Header as="h2">New Online Course:</Header>}
                 Right={
                   <>
                     <Button as={Link} to="..">

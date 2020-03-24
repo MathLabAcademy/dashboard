@@ -85,7 +85,7 @@ function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header as="h2">Edit Course #{courseId}:</Header>}
+                Left={<Header as="h2">Edit Online Course #{courseId}:</Header>}
                 Right={
                   <>
                     <Button as={Link} to="..">

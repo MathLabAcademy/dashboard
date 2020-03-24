@@ -8,8 +8,9 @@ import {
   COURSE_PAGE_REQUEST,
   COURSE_PAGINATION_PURGE,
   COURSE_UPDATE,
+  ENROLLMENT_ADD,
   ENROLLMENT_BULK_ADD,
-  ENROLLMENT_ADD
+  USER_BULK_ADD
 } from './actionTypes'
 
 export const createCourse = courseData => async dispatch => {
@@ -119,6 +120,17 @@ export const getAllEnrollments = courseId => async dispatch => {
 
   if (error) throw error
 
+  const usersData = { items: [] }
+
+  data.items.forEach(item => {
+    const user = item.User
+    usersData.items.push(user)
+    delete item.User
+  })
+
+  console.log(usersData)
+
+  dispatch({ type: USER_BULK_ADD, data: usersData })
   dispatch({ type: ENROLLMENT_BULK_ADD, data })
 
   return data

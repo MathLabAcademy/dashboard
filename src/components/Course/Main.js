@@ -9,39 +9,45 @@ import { Button, Header, Label, Segment, Table } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults'
 import CourseCQExams from './CQExams/Main'
 import Enroll from './Enroll'
+import CourseEnrollments from './Enrollments'
 import CourseMCQExams from './MCQExams/Main'
 
-function CourseInfo({ course, courseTags }) {
+function CourseInfo({ courseId, course, courseTags }) {
   return (
-    <Segment>
-      <Table basic="very" compact className="horizontal-info">
-        <Table.Body>
-          <Table.Row>
-            <Table.HeaderCell collapsing content={`Description`} />
-            <Table.Cell
-              content={<DraftViewer rawValue={get(course, 'description')} />}
-            />
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell collapsing content={`Price`} />
-            <Table.Cell content={`${get(course, 'price') / 100} BDT`} />
-          </Table.Row>
-          <Table.Row>
-            <Table.HeaderCell collapsing content={`Tags`} />
-            <Table.Cell>
-              {get(course, 'tagIds', emptyArray).map(id => (
-                <Label
-                  key={id}
-                  color="black"
-                  size="tiny"
-                  content={get(courseTags.byId, [id, 'name'])}
-                />
-              ))}
-            </Table.Cell>
-          </Table.Row>
-        </Table.Body>
-      </Table>
-    </Segment>
+    <>
+      <Segment>
+        <Table basic="very" compact className="horizontal-info">
+          <Table.Body>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Description`} />
+              <Table.Cell
+                content={<DraftViewer rawValue={get(course, 'description')} />}
+              />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Price`} />
+              <Table.Cell content={`${get(course, 'price') / 100} BDT`} />
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell collapsing content={`Tags`} />
+              <Table.Cell>
+                {get(course, 'tagIds', emptyArray).map(id => (
+                  <Label
+                    key={id}
+                    color="black"
+                    size="tiny"
+                    content={get(courseTags.byId, [id, 'name'])}
+                  />
+                ))}
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      </Segment>
+
+      <CourseCQExams courseId={courseId} />
+      <CourseMCQExams courseId={courseId} />
+    </>
   )
 }
 
@@ -61,6 +67,9 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>
+                <Button as={Link} to={`enrollments`} color="blue">
+                  Enrollments
+                </Button>
               </Permit>
 
               <Permit student>
@@ -76,12 +85,15 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
       </Segment>
 
       <Router>
-        <CourseInfo path="/" course={course} courseTags={courseTags} />
+        <CourseInfo
+          path="/"
+          course={course}
+          courseId={courseId}
+          courseTags={courseTags}
+        />
+        <CourseEnrollments path="enrollments" courseId={courseId} />
         <Enroll path="enroll" courseId={courseId} />
       </Router>
-
-      <CourseCQExams courseId={courseId} />
-      <CourseMCQExams courseId={courseId} />
     </>
   )
 }

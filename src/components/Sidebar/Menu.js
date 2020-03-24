@@ -22,7 +22,7 @@ const items = [
     permits: ['teacher']
   },
   {
-    title: `Courses`,
+    title: `Online Courses`,
     link: '/courses',
     permits: ['teacher', 'student'],
     items: [
