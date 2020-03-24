@@ -17,6 +17,7 @@ function _ListItemRow({
   return (
     <Table.Row>
       <Table.Cell>{batchCourseEnrollmentId}</Table.Cell>
+      <Table.Cell>{get(user, 'id')}</Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
       <Table.Cell collapsing textAlign="center">
         <Icon
@@ -134,6 +135,7 @@ function BatchCourseStudentList({
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>User ID</Table.HeaderCell>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell collapsing textAlign="center">
               Active
