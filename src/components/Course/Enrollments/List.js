@@ -9,7 +9,9 @@ import { emptyArray } from 'utils/defaults'
 function _ListItemRow({ userId, user }) {
   return (
     <Table.Row>
-      <Table.Cell>{get(user, 'id')}</Table.Cell>
+      <Table.Cell>
+        <Link to={`/users/${get(user, 'id')}`}>{get(user, 'id')}</Link>
+      </Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
     </Table.Row>
   )

@@ -21,7 +21,9 @@ function _ListItemRow({
   return (
     <Table.Row>
       <Table.Cell>{batchClassEnrollmentId}</Table.Cell>
-      <Table.Cell>{get(user, 'id')}</Table.Cell>
+      <Table.Cell>
+        <Link to={`/users/${get(user, 'id')}`}>{get(user, 'id')}</Link>
+      </Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
       <Table.Cell collapsing textAlign="center">
         <Popup
