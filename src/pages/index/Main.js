@@ -1,12 +1,14 @@
-import { get } from 'lodash-es'
-import { connect } from 'react-redux'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import React, { useCallback, useRef, useState } from 'react'
-import { Box } from 'reflexbox'
-import { useStats } from 'hooks/useStats'
-import { Card, Input, Button, Header } from 'semantic-ui-react'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
+import { useStats } from 'hooks/useStats'
+import { get } from 'lodash-es'
+import React, { useCallback, useRef, useState } from 'react'
+import { connect } from 'react-redux'
+import { Box } from 'reflexbox'
+import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
+import bkashPaymentTempImage from './bkash-payment-temp.jpeg'
+import { Flex, Text } from 'rebass'
 
 function DailyTransactionsForYearStats() {
   const yearRef = useRef()
@@ -70,9 +72,47 @@ function DailyTransactionsForYearStats() {
   )
 }
 
-function DashIndex() {
+function BkashPaymentTemp({ userData }) {
+  return (
+    <Card fluid>
+      <Card.Content>
+        <Card.Header>
+          <HeaderGrid Left={<Header>Payment by bKash</Header>} Right={null} />
+        </Card.Header>
+        <Card.Description>
+          <Flex flexDirection="row">
+            <Box mr={16}>
+              <Image src={bkashPaymentTempImage} />
+            </Box>
+            <Flex flexDirection="column" justifyContent="center">
+              <Box p={4}>
+                <Text color="grey" fontSize={2} as="p">
+                  bKash Account Number
+                </Text>
+                <Text fontWeight="bold" fontSize={5}>
+                  01913254460
+                </Text>
+              </Box>
+              <Box p={4}>
+                <Text color="grey" fontSize={2} as="p">
+                  Student ID (User ID)
+                </Text>
+                <Text fontWeight="bold" fontSize={5}>
+                  {get(userData, 'id')}
+                </Text>
+              </Box>
+            </Flex>
+          </Flex>
+        </Card.Description>
+      </Card.Content>
+    </Card>
+  )
+}
+
+function DashIndex({ userData }) {
   return (
     <Box>
+      <BkashPaymentTemp userData={userData} />
       <DailyTransactionsForYearStats />
     </Box>
   )
