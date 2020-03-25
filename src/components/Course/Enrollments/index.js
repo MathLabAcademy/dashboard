@@ -1,5 +1,5 @@
+import { Router } from '@reach/router'
 import React from 'react'
-import { Link, Router } from '@reach/router'
 import CourseEnrollmentList from './List'
 
 function CourseEnrollments({ courseId }) {
