@@ -7,7 +7,7 @@ import { Formik } from 'formik'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { updatePassword } from 'store/actions/currentUser'
+import { updatePassword } from 'store/currentUser'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -18,14 +18,14 @@ const getValidationSchema = () => {
       .required(`required`),
     passwordConfirmation: Yup.string()
       .oneOf([Yup.ref('password'), null], `recheck password`)
-      .required(`required`)
+      .required(`required`),
   })
 }
 
 const initialValues = {
   currentPassword: '',
   password: '',
-  passwordConfirmation: ''
+  passwordConfirmation: '',
 }
 
 function ChangePassword({ userId, updatePassword, navigate }) {
@@ -108,7 +108,7 @@ function ChangePassword({ userId, updatePassword, navigate }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  updatePassword
+  updatePassword,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChangePassword)

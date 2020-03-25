@@ -1,3 +1,4 @@
+import { Stack, Text } from '@chakra-ui/core'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
@@ -8,7 +9,6 @@ import { connect } from 'react-redux'
 import { Box } from 'reflexbox'
 import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
 import bkashPaymentTempImage from './bkash-payment-temp.jpeg'
-import { Flex, Text } from 'rebass'
 
 function DailyTransactionsForYearStats() {
   const yearRef = useRef()
@@ -74,38 +74,33 @@ function DailyTransactionsForYearStats() {
 
 function BkashPaymentTemp({ userData }) {
   return (
-    <Card fluid>
-      <Card.Content>
-        <Card.Header>
-          <HeaderGrid Left={<Header>Payment by bKash</Header>} Right={null} />
-        </Card.Header>
-        <Card.Description>
-          <Flex flexDirection="row">
-            <Box mr={16}>
-              <Image src={bkashPaymentTempImage} />
-            </Box>
-            <Flex flexDirection="column" justifyContent="center">
-              <Box p={4}>
-                <Text color="grey" fontSize={2} as="p">
-                  bKash Account Number
-                </Text>
-                <Text fontWeight="bold" fontSize={5}>
-                  01913254460
-                </Text>
-              </Box>
-              <Box p={4}>
-                <Text color="grey" fontSize={2} as="p">
-                  Student ID (User ID)
-                </Text>
-                <Text fontWeight="bold" fontSize={5}>
-                  {get(userData, 'id')}
-                </Text>
-              </Box>
-            </Flex>
-          </Flex>
-        </Card.Description>
-      </Card.Content>
-    </Card>
+    <Box p={4} sx={{ borderWidth: 1, boxShadow: 'md' }}>
+      <HeaderGrid Left={<Header>Payment by bKash</Header>} Right={null} />
+
+      <Stack isInline spacing={12} flexWrap="wrap" alignItems="center">
+        <Box minWidth="400px">
+          <Image src={bkashPaymentTempImage} />
+        </Box>
+        <Stack spacing={4}>
+          <Box p={2}>
+            <Text color="gray.500" fontSize={3} as="p">
+              bKash Account Number
+            </Text>
+            <Text fontWeight="bold" fontSize={6}>
+              01913254460
+            </Text>
+          </Box>
+          <Box p={2}>
+            <Text color="gray.500" fontSize={3} as="p">
+              Student ID (User ID)
+            </Text>
+            <Text fontWeight="bold" fontSize={6}>
+              {get(userData, 'id')}
+            </Text>
+          </Box>
+        </Stack>
+      </Stack>
+    </Box>
   )
 }
 
@@ -119,7 +114,7 @@ function DashIndex({ userData }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userData: get(user, 'data')
+  userData: get(user, 'data'),
 })
 
 const mapDispatchToProps = {}

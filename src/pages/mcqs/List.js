@@ -7,7 +7,7 @@ import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { connect } from 'react-redux'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'reflexbox'
 import { Button, Dropdown, Header, Segment } from 'semantic-ui-react'
 import { fetchMCQPage } from 'store/actions/mcqs'
 import { emptyArray, emptyObject } from 'utils/defaults'
@@ -39,7 +39,7 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
   const [queryObject, setQueryObject] = useState({ length: 20 })
 
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
-    queryObject
+    queryObject,
   })
 
   const setTags = useCallback((tags = emptyArray, forceSet = false) => {
@@ -47,12 +47,12 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
       tagsRef.current.setValue(tags)
     }
 
-    setQueryObject(obj => ({
+    setQueryObject((obj) => ({
       ...obj,
       filter: {
         ...get(obj, 'filter', emptyObject),
-        tagIds: tags.length ? { '&&': tags.map(Number) } : undefined
-      }
+        tagIds: tags.length ? { '&&': tags.map(Number) } : undefined,
+      },
     }))
   }, [])
 
@@ -68,7 +68,7 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
     return formatDropdownOptions(
       zipObject(
         mcqTags.allIds,
-        mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+        mcqTags.allIds.map((id) => get(mcqTags.byId, [id, 'name']))
       )
     )
   }, [mcqTags.allIds, mcqTags.byId])
@@ -115,7 +115,7 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
         </Segment>
       )}
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
         <ListItem key={id} id={id} mcqId={id} />
       ))}
 
@@ -130,11 +130,11 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
 
 const mapStateToProps = ({ pagination, mcqTags }) => ({
   pagination: pagination.mcqs,
-  mcqTags
+  mcqTags,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchMCQPage
+  fetchPage: fetchMCQPage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQList)

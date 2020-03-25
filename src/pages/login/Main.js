@@ -34,7 +34,7 @@ function LogIn({ userStatus }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userStatus: get(user, 'status')
+  userStatus: get(user, 'status'),
 })
 
 export default connect(mapStateToProps)(LogIn)

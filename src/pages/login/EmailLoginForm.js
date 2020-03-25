@@ -9,15 +9,15 @@ import {
   FormField,
   FormGroup,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
-import { logIn } from 'store/actions/currentUser'
+import { logIn } from 'store/currentUser'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object().shape({
     email: Yup.string().required(`required`),
-    password: Yup.string().required(`required`)
+    password: Yup.string().required(`required`),
   })
 }
 
@@ -103,7 +103,7 @@ function EmailLogInForm({ logIn }) {
 }
 
 const mapDispatchToProps = {
-  logIn
+  logIn,
 }
 
 export default connect(null, mapDispatchToProps)(EmailLogInForm)

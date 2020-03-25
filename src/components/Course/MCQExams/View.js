@@ -5,7 +5,8 @@ import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Box, Text } from 'rebass'
+import { Text } from 'rebass'
+import { Box } from 'reflexbox'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getMCQExam } from 'store/actions/mcqExams'
 import TakeExam from './Take'
@@ -81,11 +82,11 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
 }
 
 const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
-  mcqExam: get(mcqExams.byId, mcqExamId)
+  mcqExam: get(mcqExams.byId, mcqExamId),
 })
 
 const mapDispatchToProps = {
-  getMCQExam
+  getMCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamView)

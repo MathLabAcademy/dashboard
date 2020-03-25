@@ -4,7 +4,7 @@ import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import React, { useCallback, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
-import { Box, Flex } from 'rebass'
+import { Box, Flex } from 'reflexbox'
 import { Button, Message, Segment } from 'semantic-ui-react'
 import { findUser } from 'store/actions/users'
 import * as Yup from 'yup'
@@ -14,12 +14,8 @@ const getValidationSchema = () => {
   return Yup.object({
     userId: Yup.string().min(5),
     phone: Yup.string().matches(/^01\d{9}$/),
-    batchClassEnrollmentId: Yup.string()
-      .max(7)
-      .min(7),
-    batchCourseEnrollmentId: Yup.string()
-      .min(7)
-      .max(9)
+    batchClassEnrollmentId: Yup.string().max(7).min(7),
+    batchCourseEnrollmentId: Yup.string().min(7).max(9),
   })
 }
 
@@ -27,7 +23,7 @@ const getInitialValues = () => ({
   userId: '',
   phone: '',
   batchClassEnrollmentId: '',
-  batchCourseEnrollmentId: ''
+  batchCourseEnrollmentId: '',
 })
 
 function FindUser({ findUser }) {
@@ -110,7 +106,7 @@ function FindUser({ findUser }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  findUser
+  findUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindUser)

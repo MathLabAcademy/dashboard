@@ -1,24 +1,24 @@
+import { CURRENT_USER_UPDATE } from 'store/currentUser'
+import { ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import api from 'utils/api'
 import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import {
   BATCHCLASSENROLLMENT_BULK_ADD,
   BATCHCOURSEENROLLMENT_BULK_ADD,
-  CURRENT_USER_UPDATE,
   USER_ADD,
   USER_BULK_ADD,
   USER_PAGE_ADD,
   USER_PAGE_REMOVE,
   USER_PAGE_REQUEST,
-  USER_UPDATE
+  USER_UPDATE,
 } from './actionTypes'
-import { ENROLLMENT_BULK_ADD } from 'store/enrollments'
 
-const addUser = data => ({
+const addUser = (data) => ({
   type: USER_ADD,
-  data
+  data,
 })
 
-export const getUser = userId => async dispatch => {
+export const getUser = (userId) => async (dispatch) => {
   let url = `/users/${userId}`
 
   const { data, error } = await api(url)
@@ -34,8 +34,8 @@ export const findUser = ({
   userId,
   phone,
   batchClassEnrollmentId,
-  batchCourseEnrollmentId
-}) => async dispatch => {
+  batchCourseEnrollmentId,
+}) => async (dispatch) => {
   const url = `/users/action/find?userId=${userId}&phone=${phone}&batchClassEnrollmentId=${batchClassEnrollmentId}&batchCourseEnrollmentId=${batchCourseEnrollmentId}`
 
   const { data, error } = await api(url)
@@ -50,7 +50,7 @@ export const findUser = ({
 export const fetchUserPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: USER_PAGE_REQUEST, page, query })
 
   let url = `/users?page=${page}`
@@ -73,7 +73,7 @@ export const fetchUserPage = (
 export const fetchAllUserPage = (
   { query = '' } = defaultOptsFetchAllPages,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   let page = 1
   let hasNext = true
 
@@ -93,14 +93,14 @@ export const updateEmail = (
   userId,
   emailData,
   { isGuardian, isCurrent }
-) => async dispatch => {
+) => async (dispatch) => {
   const url = isGuardian
     ? `/users/${userId}/person/guardian/email`
     : `/users/${userId}/person/email`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: emailData
+    body: emailData,
   })
   if (error) throw error
 
@@ -115,14 +115,14 @@ export const updatePhone = (
   userId,
   phoneData,
   { isGuardian, isCurrent }
-) => async dispatch => {
+) => async (dispatch) => {
   const url = isGuardian
     ? `/users/${userId}/person/guardian/phone`
     : `/users/${userId}/person/phone`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: phoneData
+    body: phoneData,
   })
   if (error) throw error
 
@@ -137,14 +137,14 @@ export const updatePerson = (
   userId,
   personData,
   { isGuardian, isCurrent }
-) => async dispatch => {
+) => async (dispatch) => {
   const url = isGuardian
     ? `/users/${userId}/person/guardian`
     : `/users/${userId}/person`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: personData
+    body: personData,
   })
 
   if (error) throw error
@@ -156,7 +156,7 @@ export const updatePerson = (
   return data
 }
 
-export const readCredit = userId => async dispatch => {
+export const readCredit = (userId) => async (dispatch) => {
   const url = `/users/${userId}/credit`
 
   const { data, error } = await api(url)
@@ -168,12 +168,12 @@ export const readCredit = userId => async dispatch => {
   return data
 }
 
-export const addCredit = (userId, transactionData) => async dispatch => {
+export const addCredit = (userId, transactionData) => async (dispatch) => {
   const url = `/users/${userId}/action/add-credit`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: transactionData
+    body: transactionData,
   })
 
   if (error) throw error
@@ -183,7 +183,7 @@ export const addCredit = (userId, transactionData) => async dispatch => {
   return data
 }
 
-export const getAllEnrollmentsForUser = (userId, type) => async dispatch => {
+export const getAllEnrollmentsForUser = (userId, type) => async (dispatch) => {
   const url = `/users/${userId}/enrollments?type=${type}`
 
   const { data, error } = await api(url)

@@ -8,7 +8,7 @@ import { connect } from 'react-redux'
 import { Button, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
-import { Flex } from 'rebass'
+import { Flex } from 'reflexbox'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
@@ -20,7 +20,7 @@ function MCQView({
   readMCQAnswer,
   mcqTags,
   prevMCQId,
-  nextMCQId
+  nextMCQId,
 }) {
   useEffect(() => {
     if (!mcq) getMCQ(mcqId)
@@ -91,7 +91,7 @@ function MCQView({
         <Segment basic>
           <Header size="small">Tags</Header>
           <Label.Group size="tiny" style={{ marginTop: '1em' }}>
-            {get(mcq, 'tagIds', emptyArray).map(id => (
+            {get(mcq, 'tagIds', emptyArray).map((id) => (
               <Label key={id}>{get(mcqTags.byId, [id, 'name'])}</Label>
             ))}
           </Label.Group>
@@ -121,12 +121,12 @@ const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => {
     answerId: get(mcqs.answerById, mcqId),
     mcqTags,
     prevMCQId,
-    nextMCQId
+    nextMCQId,
   }
 }
 
 const mapDispatchToProps = {
   getMCQ,
-  readMCQAnswer
+  readMCQAnswer,
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MCQView)

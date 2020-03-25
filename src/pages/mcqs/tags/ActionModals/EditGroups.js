@@ -3,7 +3,7 @@ import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useEffect, useMemo, useReducer } from 'react'
 import { connect } from 'react-redux'
-import { Flex } from 'rebass'
+import { Flex } from 'reflexbox'
 import { Button, Dropdown, Input, Modal } from 'semantic-ui-react'
 import { updateTag } from 'store/actions/mcqTags'
 import { emptyArray, emptyObject } from 'utils/defaults'
@@ -53,7 +53,7 @@ function TagGroupsEditModal({ mcqTags }) {
     return formatDropdownOptions(
       zipObject(
         mcqTags.allIds,
-        mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+        mcqTags.allIds.map((id) => get(mcqTags.byId, [id, 'name']))
       )
     )
   }, [mcqTags.allIds, mcqTags.byId])
@@ -82,11 +82,11 @@ function TagGroupsEditModal({ mcqTags }) {
             <Flex key={index} alignItems="center" py={2}>
               <Input
                 value={name}
-                onChange={e => {
+                onChange={(e) => {
                   dispatch({
                     type: 'RENAME_GROUP',
                     prevName: name,
-                    name: e.target.value
+                    name: e.target.value,
                   })
                 }}
               />
@@ -118,7 +118,7 @@ function TagGroupsEditModal({ mcqTags }) {
             onClick={() => {
               dispatch({
                 type: 'ADD_GROUP',
-                name: `GROUP:${Math.floor(Math.random() * 100)}`
+                name: `GROUP:${Math.floor(Math.random() * 100)}`,
               })
             }}
           >
@@ -134,7 +134,7 @@ function TagGroupsEditModal({ mcqTags }) {
 const mapStateToProps = ({ mcqTags }) => ({ mcqTags })
 
 const mapDispatchToProps = {
-  updateTag
+  updateTag,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagGroupsEditModal)

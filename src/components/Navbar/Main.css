@@ -1,8 +1,0 @@
-.mathlab.ui.menu.navbar {
-  border: 0;
-  border-radius: 0;
-}
-
-.mathlab.ui.menu.navbar > .item + .item {
-  padding-left: 0;
-}

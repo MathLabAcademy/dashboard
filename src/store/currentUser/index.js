@@ -1,17 +1,16 @@
 import api from 'utils/api'
-import {
-  CURRENT_USER_LOGIN_REQUEST,
-  CURRENT_USER_REMOVE,
-  CURRENT_USER_UPDATE
-} from './actionTypes'
 
-export const logIn = loginData => async dispatch => {
+export const CURRENT_USER_LOGIN_REQUEST = 'CURRENT_USER_LOGIN_REQUEST'
+export const CURRENT_USER_UPDATE = 'CURRENT_USER_UPDATE'
+export const CURRENT_USER_REMOVE = 'CURRENT_USER_REMOVE'
+
+export const logIn = (loginData) => async (dispatch) => {
   try {
     dispatch({ type: CURRENT_USER_LOGIN_REQUEST })
 
     const { data, error } = await api('/auth/login', {
       method: 'POST',
-      body: loginData
+      body: loginData,
     })
 
     if (error) throw error
@@ -25,13 +24,13 @@ export const logIn = loginData => async dispatch => {
   }
 }
 
-export const loginWithPhone = loginData => async dispatch => {
+export const loginWithPhone = (loginData) => async (dispatch) => {
   try {
     dispatch({ type: CURRENT_USER_LOGIN_REQUEST })
 
     const { data, error } = await api('/auth/login/phone', {
       method: 'POST',
-      body: loginData
+      body: loginData,
     })
 
     if (error) throw error
@@ -45,9 +44,9 @@ export const loginWithPhone = loginData => async dispatch => {
   }
 }
 
-export const logOut = () => async dispatch => {
+export const logOut = () => async (dispatch) => {
   const { data, error } = await api('/auth/logout', {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -57,7 +56,7 @@ export const logOut = () => async dispatch => {
   return data
 }
 
-export const checkAuthStatus = () => async dispatch => {
+export const checkAuthStatus = () => async (dispatch) => {
   const { data } = await api('/user')
 
   if (data) {
@@ -69,10 +68,10 @@ export const checkAuthStatus = () => async dispatch => {
   dispatch({ type: CURRENT_USER_REMOVE })
 }
 
-export const updatePassword = passwordData => async dispatch => {
+export const updatePassword = (passwordData) => async (dispatch) => {
   const { error } = await api('/user/password', {
     method: 'POST',
-    body: passwordData
+    body: passwordData,
   })
 
   if (error) throw error

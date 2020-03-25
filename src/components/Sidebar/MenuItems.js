@@ -1,33 +1,39 @@
-import { Link, Match } from '@reach/router'
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+} from '@chakra-ui/core'
+import { Match } from '@reach/router'
+import NavLink from 'components/Link/NavLink'
 import Permit from 'components/Permit'
 import { zipObject } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
-import { Accordion, Header, Icon, Menu } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults'
-import './MenuItems.css'
 
-const ParentItem = ({ link, title, icon, active, children }) => (
-  <Accordion className="parent-item">
-    <Accordion.Title
-      as={props => <Menu.Item as={Link} {...props} />}
-      to={link}
-      active={active}
-      className="parent-item-title"
-    >
-      {icon ? <Icon name={icon} className="item-icon" /> : null}
-      {title}
-      <Icon name="dropdown" className="parent-item-dropdown-icon" />
-    </Accordion.Title>
-    <Accordion.Content
-      as={Menu.Menu}
-      active={active}
-      content={children}
-      className="parent-item-content"
-    />
-  </Accordion>
-)
+function ParentItem({ link, title, match, children }) {
+  return (
+    <AccordionItem borderWidth={0} _last={{ borderWidth: 0 }} isOpen={!!match}>
+      <AccordionHeader
+        as={link ? NavLink : undefined}
+        to={link}
+        py={3}
+        fontWeight={match ? 'bold' : 'normal'}
+        color={match ? 'white' : null}
+        bg={match ? 'primary' : null}
+        _hover={{ bg: 'primary', color: 'white' }}
+      >
+        <Box flexGrow={1}>{title}</Box>
+        <AccordionIcon />
+      </AccordionHeader>
+      <AccordionPanel p={2}>{children}</AccordionPanel>
+    </AccordionItem>
+  )
+}
 
-function Item({ link, title, icon, permits = emptyArray, children }) {
+function Item({ link, title, permits = emptyArray, children, isChild }) {
   const permitsObject = useMemo(() => {
     return zipObject(permits, permits.map(Boolean))
   }, [permits])
@@ -44,15 +50,30 @@ function Item({ link, title, icon, permits = emptyArray, children }) {
             <ParentItem
               link={link}
               title={title}
-              icon={icon}
-              active={Boolean(match)}
               children={children}
+              match={match}
             />
           ) : (
-            <Menu.Item as={Link} to={link} active={Boolean(match)}>
-              {icon ? <Icon name={icon} className="item-icon" /> : null}
-              {title}
-            </Menu.Item>
+            <AccordionItem
+              borderWidth={0}
+              _last={{ borderWidth: 0 }}
+              isOpen={!!match}
+            >
+              <AccordionHeader
+                as={NavLink}
+                to={link}
+                py={isChild ? 2 : 3}
+                fontWeight={match ? 'bold' : 'normal'}
+                color={match ? (isChild ? 'primary' : 'white') : null}
+                bg={match && !isChild ? 'primary' : null}
+                _hover={{
+                  bg: isChild ? null : 'primary',
+                  color: isChild ? 'primary' : 'white',
+                }}
+              >
+                <Box>{title}</Box>
+              </AccordionHeader>
+            </AccordionItem>
           )
         }
       </Match>
@@ -60,16 +81,21 @@ function Item({ link, title, icon, permits = emptyArray, children }) {
   )
 }
 
-const ItemsFactory = ({ items }) => {
+const ItemsFactory = ({ items, isChild }) => {
   return items.map(({ ...props }) => (
-    <ItemFactory key={props.link} {...props} />
+    <ItemFactory
+      key={props.link}
+      isParent={!!props.items}
+      isChild={isChild}
+      {...props}
+    />
   ))
 }
 
-const ItemFactory = ({ items, ...props }) => (
+const ItemFactory = ({ items, isParent: hasParent, ...props }) => (
   <Item
     key={props.link}
-    children={items ? <ItemsFactory items={items} /> : null}
+    children={items ? <ItemsFactory items={items} isChild={hasParent} /> : null}
     {...props}
   />
 )
@@ -78,16 +104,9 @@ const Items = ({ items }) => <ItemsFactory items={items} />
 
 function SidebarMenuItems({ items }) {
   return (
-    <>
-      <Menu.Item as={Link} to="/" className="logo">
-        <Header as="h2" textAlign="center">
-          {/* <Image size="small" src={Logo} alt="MathLab Logo" /> */}
-          <Header.Subheader>MathLab</Header.Subheader>
-        </Header>
-      </Menu.Item>
-
+    <Accordion allowMultiple={false}>
       <Items items={items} />
-    </>
+    </Accordion>
   )
 }
 

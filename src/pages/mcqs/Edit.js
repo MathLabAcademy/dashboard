@@ -14,17 +14,17 @@ import {
   map,
   mapValues,
   sortBy,
-  zipObject
+  zipObject,
 } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Flex } from 'rebass'
+import { Flex } from 'reflexbox'
 import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
-const getValidationSchema = options => {
+const getValidationSchema = (options) => {
   const textSchema = Yup.string().required(`required`)
   return Yup.object({
     id: Yup.number().required(`required`),
@@ -37,7 +37,7 @@ const getValidationSchema = options => {
     options: Yup.object(
       mapValues(keyBy(options, 'id'), () => textSchema)
     ).required(`required`),
-    tagIds: Yup.array().of(Yup.number().integer())
+    tagIds: Yup.array().of(Yup.number().integer()),
   })
 }
 
@@ -47,7 +47,7 @@ const getInitialValues = (mcq, options, answerId) => ({
   guide: get(mcq, 'guide') || '',
   answerId: String(answerId || ''),
   options: mapValues(keyBy(options, 'id'), 'text'),
-  tagIds: get(mcq, 'tagIds', emptyArray).map(String)
+  tagIds: get(mcq, 'tagIds', emptyArray).map(String),
 })
 
 function MCQEdit({
@@ -59,7 +59,7 @@ function MCQEdit({
   mcqTags,
   updateMCQ,
   prevMCQId,
-  nextMCQId
+  nextMCQId,
 }) {
   useEffect(() => {
     if (!mcq) getMCQ(mcqId)
@@ -78,7 +78,7 @@ function MCQEdit({
     [answerId, mcq, options]
   )
   const validationSchema = useMemo(() => getValidationSchema(options), [
-    options
+    options,
   ])
 
   const onSubmit = useCallback(
@@ -115,7 +115,7 @@ function MCQEdit({
   const tagOptions = useMemo(() => {
     return zipObject(
       mcqTags.allIds,
-      mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+      mcqTags.allIds.map((id) => get(mcqTags.byId, [id, 'name']))
     )
   }, [mcqTags.allIds, mcqTags.byId])
 
@@ -242,14 +242,14 @@ const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => {
     answerId: get(mcqs.answerById, mcqId),
     mcqTags,
     prevMCQId,
-    nextMCQId
+    nextMCQId,
   }
 }
 
 const mapDispatchToProps = {
   getMCQ,
   readMCQAnswer,
-  updateMCQ
+  updateMCQ,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQEdit)

@@ -16,7 +16,7 @@ import {
   Message,
   FormGroup,
   FormField,
-  List
+  List,
 } from 'semantic-ui-react'
 import api from 'utils/api'
 import Editor from './ContactInfoEditor'
@@ -24,7 +24,7 @@ import { Formik } from 'formik'
 import * as Yup from 'yup'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
-import { Flex } from 'rebass'
+import { Flex } from 'reflexbox'
 
 function ResendEmailVerificationButton({ userId, personId, ...props }) {
   const [loading, setLoading] = useState(false)
@@ -39,8 +39,8 @@ function ResendEmailVerificationButton({ userId, personId, ...props }) {
         method: 'POST',
         body: {
           userId,
-          personId
-        }
+          personId,
+        },
       }
     )
 
@@ -72,7 +72,7 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
   const [state, setState] = useState({
     loading: false,
     phone: phoneTrx,
-    token: null
+    token: null,
   })
 
   const onSubmit = useCallback(
@@ -85,8 +85,8 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
           body: {
             personId,
             code,
-            token: state.token
-          }
+            token: state.token,
+          },
         })
 
         if (error) {
@@ -137,7 +137,7 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
           validationSchema={Yup.object().shape({
             code: Yup.string()
               .matches(/^\d{4}$/, 'must be 4 digit code')
-              .required(`required`)
+              .required(`required`),
           })}
           onSubmit={onSubmit}
         >
@@ -164,9 +164,9 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
                     onClick={async () => {
                       setStatus(null)
 
-                      setState(state => ({
+                      setState((state) => ({
                         ...state,
-                        loading: true
+                        loading: true,
                       }))
 
                       try {
@@ -174,24 +174,24 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
                           '/user/person/phone/verify/init',
                           {
                             method: 'POST',
-                            body: { personId }
+                            body: { personId },
                           }
                         )
 
                         if (error) {
-                          setState(state => ({
+                          setState((state) => ({
                             ...state,
-                            loading: false
+                            loading: false,
                           }))
 
                           throw error
                         }
 
-                        setState(state => ({
+                        setState((state) => ({
                           ...state,
                           loading: false,
                           phone: data.phone,
-                          token: data.token
+                          token: data.token,
                         }))
                       } catch (err) {
                         if (err.message) {
@@ -245,7 +245,7 @@ function AcceptPhoneModal({ personId, phone, phoneTrx, refreshUser }) {
       const { error } = await api(
         `/persons/${personId}/actions/accept-new-phone`,
         {
-          method: 'POST'
+          method: 'POST',
         }
       )
 
@@ -325,17 +325,17 @@ function AcceptPhoneModal({ personId, phone, phoneTrx, refreshUser }) {
 
 const fieldTitle = {
   email: 'Email',
-  phone: 'Mobile Phone'
+  phone: 'Mobile Phone',
 }
 
 const verifiedFieldTitle = {
   email: 'Email (verified)',
-  phone: 'Mobile Phone (verified)'
+  phone: 'Mobile Phone (verified)',
 }
 
 const pendingVerificationFieldTitle = {
   email: 'Email (pending verification)',
-  phone: 'Mobile Phone (pending verification)'
+  phone: 'Mobile Phone (pending verification)',
 }
 
 function _ContactInfoView({
@@ -344,7 +344,7 @@ function _ContactInfoView({
   field,
   fieldTrx,
   currentUserId,
-  refreshUser
+  refreshUser,
 }) {
   const value = get(person, field) // verified
   const valueTrx = get(person, fieldTrx) // pending verification
@@ -472,7 +472,7 @@ function _ContactInfoView({
 }
 
 const ContactInfoView = connect(({ user }) => ({
-  currentUserId: get(user.data, 'id')
+  currentUserId: get(user.data, 'id'),
 }))(_ContactInfoView)
 
 function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {

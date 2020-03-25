@@ -8,9 +8,9 @@ import {
   FormField,
   FormGroup,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
-import { loginWithPhone } from 'store/actions/currentUser'
+import { loginWithPhone } from 'store/currentUser'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
@@ -21,7 +21,7 @@ function PhoneLoginRequest({ setPhone, setToken }) {
       validationSchema={Yup.object().shape({
         phone: Yup.string()
           .matches(/01\d{9}/)
-          .required(`required`)
+          .required(`required`),
       })}
       onSubmit={async ({ phone }, actions) => {
         actions.setStatus(null)
@@ -30,8 +30,8 @@ function PhoneLoginRequest({ setPhone, setToken }) {
           const { data, error } = await api('/auth/login/phone/init', {
             method: 'POST',
             body: {
-              phone: `+88${phone}`
-            }
+              phone: `+88${phone}`,
+            },
           })
 
           if (error) {
@@ -117,7 +117,7 @@ function PhoneLoginForm({ loginWithPhone }) {
     <Formik
       initialValues={{ code: '' }}
       validationSchema={Yup.object().shape({
-        code: Yup.string().required(`required`)
+        code: Yup.string().required(`required`),
       })}
       onSubmit={onSubmit}
     >
@@ -153,10 +153,7 @@ function PhoneLoginForm({ loginWithPhone }) {
 }
 
 const mapDispatchToProps = {
-  loginWithPhone
+  loginWithPhone,
 }
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(PhoneLoginForm)
+export default connect(null, mapDispatchToProps)(PhoneLoginForm)

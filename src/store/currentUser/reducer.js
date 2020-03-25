@@ -1,15 +1,15 @@
 import {
   CURRENT_USER_LOGIN_REQUEST,
+  CURRENT_USER_REMOVE,
   CURRENT_USER_UPDATE,
-  CURRENT_USER_REMOVE
-} from 'store/actions/actionTypes'
+} from 'store/currentUser'
 
 const initialState = {
   data: null,
   status: {
     authed: false,
-    loading: true
-  }
+    loading: true,
+  },
 }
 
 const currentUserReducer = (state = initialState, { type, data }) => {
@@ -19,24 +19,24 @@ const currentUserReducer = (state = initialState, { type, data }) => {
         data: null,
         status: {
           authed: false,
-          loading: true
-        }
+          loading: true,
+        },
       }
     case CURRENT_USER_UPDATE:
       return {
         data,
         status: {
           authed: true,
-          loading: false
-        }
+          loading: false,
+        },
       }
     case CURRENT_USER_REMOVE:
       return {
         data: null,
         status: {
           authed: false,
-          loading: false
-        }
+          loading: false,
+        },
       }
     default:
       return state

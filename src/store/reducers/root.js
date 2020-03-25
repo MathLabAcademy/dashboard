@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux'
-import { CURRENT_USER_REMOVE } from 'store/actions/actionTypes'
+import { CURRENT_USER_REMOVE } from 'store/currentUser'
+import user from '../currentUser/reducer'
+import enrollments from '../enrollments/reducer'
 import batches from './batches'
 import courses from './courses'
 import courseTags from './courseTags'
 import cqExams from './cqExams'
-import user from './currentUser'
-import enrollments from '../enrollments/reducer'
 import errorBoundary from './errorBoundary'
 import mcqExams from './mcqExams'
 import mcqs from './mcqs'
@@ -29,7 +29,7 @@ const rootReducer = combineReducers({
   pagination,
   transactions,
   ui,
-  users
+  users,
 })
 
 export default (state, action) => {
