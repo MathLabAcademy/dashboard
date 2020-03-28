@@ -42,7 +42,7 @@ function BatchStudent({ batchType, batchEnrollment, user }) {
                   batchType === 'class' ? (
                     get(batchEnrollment, 'activeMonths', emptyArray)
                       .sort((a, b) => a - b)
-                      .map(month => months[month - 1])
+                      .map((month) => months[month - 1])
                       .join(', ') || 'N/A'
                   ) : get(batchEnrollment, 'active') ? (
                     <Icon name="check" color="green" />

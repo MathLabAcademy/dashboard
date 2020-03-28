@@ -14,7 +14,7 @@ import {
   Input,
   Message,
   Modal,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import { addQuestionToMCQExam } from 'store/actions/mcqExams'
 import { getMCQ } from 'store/actions/mcqs'
@@ -75,17 +75,17 @@ function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
 
 const Picker = connect(({ mcqs }) => ({ mcqs }), { getMCQ })(_Picker)
 
-const getValidationSchema = mcqIds => {
+const getValidationSchema = (mcqIds) => {
   return Yup.object({
     mcqId: Yup.number()
       .integer()
       .notOneOf(mcqIds, `already picked`)
-      .required(`required`)
+      .required(`required`),
   })
 }
 
 const getInitialValues = () => ({
-  mcqId: ''
+  mcqId: '',
 })
 
 function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
@@ -133,7 +133,7 @@ function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
           errors,
           status,
           setFieldValue,
-          setFieldError
+          setFieldError,
         }) => (
           <Modal
             trigger={
@@ -195,7 +195,7 @@ function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  addQuestionToMCQExam
+  addQuestionToMCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PickMCQ)

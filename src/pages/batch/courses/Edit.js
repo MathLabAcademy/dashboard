@@ -14,16 +14,13 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     name: Yup.string().required(`required`),
-    feeAmount: Yup.number()
-      .integer()
-      .min(0)
-      .required(`required`)
+    feeAmount: Yup.number().integer().min(0).required(`required`),
   })
 }
 
-const getInitialValues = batchClass => ({
+const getInitialValues = (batchClass) => ({
   name: get(batchClass, 'name', ''),
-  feeAmount: get(batchClass, 'feeAmount', 0) / 100
+  feeAmount: get(batchClass, 'feeAmount', 0) / 100,
 })
 
 function BatchCourseEdit({
@@ -31,14 +28,14 @@ function BatchCourseEdit({
   batchCourse,
   getBatchCourse,
   updateBatchCourse,
-  navigate
+  navigate,
 }) {
   useEffect(() => {
     if (!batchCourse) getBatchCourse(batchCourseId)
   }, [batchCourse, batchCourseId, getBatchCourse])
 
   const initialValues = useMemo(() => getInitialValues(batchCourse), [
-    batchCourse
+    batchCourse,
   ])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -49,7 +46,7 @@ function BatchCourseEdit({
       try {
         await updateBatchCourse(batchCourseId, {
           ...values,
-          feeAmount: feeAmount * 100
+          feeAmount: feeAmount * 100,
         })
       } catch (err) {
         if (err.errors) {
@@ -124,12 +121,12 @@ function BatchCourseEdit({
 }
 
 const mapStateToProps = ({ batches }, { batchCourseId }) => ({
-  batchCourse: get(batches.courses.byId, batchCourseId)
+  batchCourse: get(batches.courses.byId, batchCourseId),
 })
 
 const mapDispatchToProps = {
   getBatchCourse,
-  updateBatchCourse
+  updateBatchCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseEdit)

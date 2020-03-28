@@ -16,7 +16,7 @@ export function useStats(key, queryObject = emptyObject) {
         setData(data)
         setLoading(false)
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err)
         setLoading(false)
       })

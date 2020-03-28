@@ -11,10 +11,10 @@ function LazyI18nProvider({ language, children }) {
 
   useEffect(() => {
     if (!get(catalogs, language)) {
-      fetchCatalog(language).then(catalog => {
-        setCatalogs(catalogs => ({
+      fetchCatalog(language).then((catalog) => {
+        setCatalogs((catalogs) => ({
           ...catalogs,
-          [language]: catalog
+          [language]: catalog,
         }))
       })
     }
@@ -33,7 +33,7 @@ function LazyI18nProvider({ language, children }) {
 }
 
 const mapStateToProps = ({ ui }) => ({
-  language: get(ui, 'locale.language')
+  language: get(ui, 'locale.language'),
 })
 
 export default connect(mapStateToProps)(LazyI18nProvider)

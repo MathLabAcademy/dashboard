@@ -2,7 +2,7 @@ import { blockRendererFn } from './utils'
 
 export function getImageModule() {
   return {
-    blockRendererFn
+    blockRendererFn,
   }
 }
 

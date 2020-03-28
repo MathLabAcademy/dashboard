@@ -9,16 +9,14 @@ import {
   FormGroup,
   Header,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object().shape({
-    email: Yup.string()
-      .email(`invalid email`)
-      .required(`required`),
+    email: Yup.string().email(`invalid email`).required(`required`),
     password: Yup.string()
       .min(8, `must be at least 8 characters long`)
       .required(`required`),
@@ -31,20 +29,18 @@ const getValidationSchema = () => {
     phone: Yup.string().test(
       'is-mobile-phone',
       'invalid mobile phone number',
-      phone => (phone ? isMobilePhone(phone) : true)
+      (phone) => (phone ? isMobilePhone(phone) : true)
     ),
     Guardian: Yup.object({
       fullName: Yup.string().required(`required`),
       shortName: Yup.string().required(`required`),
-      email: Yup.string()
-        .email(`invalid email`)
-        .notRequired(),
+      email: Yup.string().email(`invalid email`).notRequired(),
       phone: Yup.string().test(
         'is-mobile-phone',
         'invalid mobile phone number',
-        phone => (phone ? isMobilePhone(phone) : true)
-      )
-    })
+        (phone) => (phone ? isMobilePhone(phone) : true)
+      ),
+    }),
   })
 }
 
@@ -60,8 +56,8 @@ const initialValues = {
     fullName: '',
     shortName: '',
     email: '',
-    phone: ''
-  }
+    phone: '',
+  },
 }
 
 function RegisterForm({ onSuccess }) {
@@ -73,7 +69,7 @@ function RegisterForm({ onSuccess }) {
 
       const { data, error } = await api('/users/action/register', {
         method: 'POST',
-        body: values
+        body: values,
       })
 
       actions.setSubmitting(false)

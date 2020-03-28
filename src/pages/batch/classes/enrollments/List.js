@@ -16,7 +16,7 @@ function _ListItemRow({
   batchClassEnrollmentId,
   classEnrollment,
   user,
-  linkToBase
+  linkToBase,
 }) {
   return (
     <Table.Row>
@@ -30,7 +30,7 @@ function _ListItemRow({
           content={
             get(classEnrollment, 'activeMonths', emptyArray)
               .sort((a, b) => a - b)
-              .map(month => months[month - 1])
+              .map((month) => months[month - 1])
               .join(', ') || 'N/A'
           }
           trigger={
@@ -64,7 +64,7 @@ const ListItemRow = connect(
 
     return {
       classEnrollment,
-      user
+      user,
     }
   }
 )(_ListItemRow)
@@ -73,7 +73,7 @@ function BatchClassStudentList({
   batchClassId,
   classEnrollments,
   getAllBatchClassEnrollmentForYear,
-  linkToBase
+  linkToBase,
 }) {
   const yearRef = useRef()
 
@@ -97,7 +97,7 @@ function BatchClassStudentList({
     const regex = new RegExp(
       `^${String(year).slice(-2)}${String(batchClassId).padStart(2, '0')}`
     )
-    return classEnrollments.allIds.filter(id => regex.test(id)).sort()
+    return classEnrollments.allIds.filter((id) => regex.test(id)).sort()
   }, [batchClassId, year, classEnrollments.allIds])
 
   return (
@@ -158,7 +158,7 @@ function BatchClassStudentList({
         </Table.Header>
 
         <Table.Body>
-          {ids.map(id => (
+          {ids.map((id) => (
             <ListItemRow
               key={id}
               batchClassEnrollmentId={id}
@@ -172,11 +172,11 @@ function BatchClassStudentList({
 }
 
 const mapStateToProps = ({ batches }) => ({
-  classEnrollments: batches.classEnrollments
+  classEnrollments: batches.classEnrollments,
 })
 
 const mapDispatchToProps = {
-  getAllBatchClassEnrollmentForYear
+  getAllBatchClassEnrollmentForYear,
 }
 
 export default connect(

@@ -15,7 +15,7 @@ function CourseMCQExamList({
   getAllMCQExamsForCourse,
   currentUser,
   enrollments,
-  linkToBase
+  linkToBase,
 }) {
   useEffect(() => {
     getAllMCQExamsForCourse(courseId)
@@ -42,7 +42,7 @@ function CourseMCQExamList({
             }
           />
 
-          {mcqExamIds.map(id => (
+          {mcqExamIds.map((id) => (
             <ListItem key={id} id={id} linkToBase={linkToBase} />
           ))}
         </Segment>
@@ -54,11 +54,11 @@ function CourseMCQExamList({
 const mapStateToProps = ({ courses, user }, { courseId }) => ({
   currentUser: user.data,
   mcqExamIds: get(courses.mcqExamsById, courseId, emptyArray),
-  enrollments: get(courses.enrollmentsById, courseId, emptyArray)
+  enrollments: get(courses.enrollmentsById, courseId, emptyArray),
 })
 
 const mapDispatchToProps = {
-  getAllMCQExamsForCourse
+  getAllMCQExamsForCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamList)

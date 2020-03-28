@@ -3,7 +3,7 @@ import { findInlineTeXEntities } from './utils'
 
 const inlineTeXDecorator = {
   strategy: findInlineTeXEntities,
-  component: InlineTeX
+  component: InlineTeX,
 }
 
 const decorators = [inlineTeXDecorator]

@@ -50,15 +50,15 @@ import {
   BATCHSTUDENT_UPDATE,
   USER_ADD,
   USER_BULK_ADD,
-  USER_PAGINATION_PURGE
+  USER_PAGINATION_PURGE,
 } from './actionTypes'
 
-export const createBatchClass = batchClassData => async dispatch => {
+export const createBatchClass = (batchClassData) => async (dispatch) => {
   const url = `/batch/classes`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchClassData
+    body: batchClassData,
   })
 
   if (error) throw error
@@ -69,7 +69,7 @@ export const createBatchClass = batchClassData => async dispatch => {
   return data
 }
 
-export const getBatchClass = batchClassId => async dispatch => {
+export const getBatchClass = (batchClassId) => async (dispatch) => {
   let url = `/batch/classes/${batchClassId}`
 
   const { data, error } = await api(url)
@@ -81,15 +81,14 @@ export const getBatchClass = batchClassId => async dispatch => {
   return data
 }
 
-export const updateBatchClass = (
-  batchClassId,
-  batchClassData
-) => async dispatch => {
+export const updateBatchClass = (batchClassId, batchClassData) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: batchClassData
+    body: batchClassData,
   })
 
   if (error) throw error
@@ -102,7 +101,7 @@ export const updateBatchClass = (
 export const fetchBatchClassPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHCLASS_PAGE_REQUEST, page, query })
 
   let url = `/batch/classes?page=${page}`
@@ -122,17 +121,14 @@ export const fetchBatchClassPage = (
   return data
 }
 
-export const setBatchClassFee = (
-  batchClassId,
-  year,
-  month,
-  feeData
-) => async dispatch => {
+export const setBatchClassFee = (batchClassId, year, month, feeData) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/fees/${year}/${month}`
 
   const { data, error } = await api(url, {
     method: 'PUT',
-    body: feeData
+    body: feeData,
   })
 
   if (error) throw error
@@ -142,15 +138,13 @@ export const setBatchClassFee = (
   return data
 }
 
-export const unsetBatchClassFee = (
-  batchClassId,
-  year,
-  month
-) => async dispatch => {
+export const unsetBatchClassFee = (batchClassId, year, month) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/fees/${year}/${month}`
 
   const { data, error } = await api(url, {
-    method: 'DELETE'
+    method: 'DELETE',
   })
 
   if (error) throw error
@@ -163,7 +157,7 @@ export const unsetBatchClassFee = (
 export const fetchBatchClassFeePage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHCLASSFEE_PAGE_REQUEST, page, query })
 
   let url = `/batch/classes/fees?page=${page}`
@@ -183,10 +177,9 @@ export const fetchBatchClassFeePage = (
   return data
 }
 
-export const getAllBatchClassFeesForYear = (
-  batchClassId,
-  year
-) => async dispatch => {
+export const getAllBatchClassFeesForYear = (batchClassId, year) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/fees/${year}`
 
   const { data, error } = await api(url)
@@ -198,11 +191,9 @@ export const getAllBatchClassFeesForYear = (
   return data
 }
 
-export const getBatchClassFeeForMonth = (
-  batchClassId,
-  year,
-  month
-) => async dispatch => {
+export const getBatchClassFeeForMonth = (batchClassId, year, month) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/fees/${year}/${month}`
 
   const { data, error } = await api(url)
@@ -218,7 +209,7 @@ export const getAllBatchClassEnrollmentForYear = (
   batchClassId,
   year,
   { query = '' } = {}
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/batch/classes/${batchClassId}/enrollments/years/${year}`
   if (query) url = `${url}?${query}`
 
@@ -228,7 +219,7 @@ export const getAllBatchClassEnrollmentForYear = (
 
   const usersData = { items: [] }
 
-  data.items.forEach(item => {
+  data.items.forEach((item) => {
     const user = item.User
     usersData.items.push(user)
     delete item.User
@@ -240,11 +231,9 @@ export const getAllBatchClassEnrollmentForYear = (
   return data
 }
 
-export const getAllClassPaymentForMonth = (
-  batchClassId,
-  year,
-  month
-) => async dispatch => {
+export const getAllClassPaymentForMonth = (batchClassId, year, month) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}`
 
   const { data, error } = await api(url)
@@ -256,10 +245,9 @@ export const getAllClassPaymentForMonth = (
   return data
 }
 
-export const getAllCoursePaymentForYear = (
-  batchCourseId,
-  year
-) => async dispatch => {
+export const getAllCoursePaymentForYear = (batchCourseId, year) => async (
+  dispatch
+) => {
   const url = `/batch/courses/${batchCourseId}/payments/years/${year}`
 
   const { data, error } = await api(url)
@@ -271,15 +259,13 @@ export const getAllCoursePaymentForYear = (
   return data
 }
 
-export const chargeClassPaymentForMonth = (
-  batchClassId,
-  year,
-  month
-) => async dispatch => {
+export const chargeClassPaymentForMonth = (batchClassId, year, month) => async (
+  dispatch
+) => {
   const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/charge`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -293,7 +279,7 @@ export const getAllClassPaymentReminderForMonth = (
   batchClassId,
   year,
   month
-) => async dispatch => {
+) => async (dispatch) => {
   const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/reminders`
 
   const { data, error } = await api(url)
@@ -305,7 +291,7 @@ export const getAllClassPaymentReminderForMonth = (
     data,
     batchClassId,
     year,
-    month
+    month,
   })
 
   return data
@@ -315,11 +301,11 @@ export const sendClassPaymentReminderForMonth = (
   batchClassId,
   year,
   month
-) => async dispatch => {
+) => async (dispatch) => {
   const url = `/batch/classes/${batchClassId}/payments/years/${year}/months/${month}/reminders/send`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -329,20 +315,19 @@ export const sendClassPaymentReminderForMonth = (
     data,
     batchClassId,
     year,
-    month
+    month,
   })
 
   return data
 }
 
-export const chargeCoursePaymentForYear = (
-  batchCourseId,
-  year
-) => async dispatch => {
+export const chargeCoursePaymentForYear = (batchCourseId, year) => async (
+  dispatch
+) => {
   const url = `/batch/courses/${batchCourseId}/payments/years/${year}/charge`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -355,7 +340,7 @@ export const chargeCoursePaymentForYear = (
 export const getAllCoursePaymentReminderForYear = (
   batchCourseId,
   year
-) => async dispatch => {
+) => async (dispatch) => {
   const url = `/batch/courses/${batchCourseId}/payments/years/${year}/reminders`
 
   const { data, error } = await api(url)
@@ -366,20 +351,19 @@ export const getAllCoursePaymentReminderForYear = (
     type: BATCHCOURSEPAYMENT_REMINDER_SET_ALL,
     data,
     batchCourseId,
-    year
+    year,
   })
 
   return data
 }
 
-export const sendCoursePaymentReminderForYear = (
-  batchCourseId,
-  year
-) => async dispatch => {
+export const sendCoursePaymentReminderForYear = (batchCourseId, year) => async (
+  dispatch
+) => {
   const url = `/batch/courses/${batchCourseId}/payments/years/${year}/reminders/send`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -392,7 +376,7 @@ export const sendCoursePaymentReminderForYear = (
 export const fetchBatchClassEnrollmentPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHCLASSENROLLMENT_PAGE_REQUEST, page, query })
 
   let url = `/batch/classenrollments?page=${page}`
@@ -412,7 +396,9 @@ export const fetchBatchClassEnrollmentPage = (
   return data
 }
 
-export const createBatchClassEnrollmentBulk = batchClassEnrollmentData => async dispatch => {
+export const createBatchClassEnrollmentBulk = (
+  batchClassEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/classenrollments/bulk`
 
   const body = new FormData()
@@ -427,7 +413,7 @@ export const createBatchClassEnrollmentBulk = batchClassEnrollmentData => async 
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body
+    body,
   })
 
   if (error) throw error
@@ -439,12 +425,14 @@ export const createBatchClassEnrollmentBulk = batchClassEnrollmentData => async 
   return data
 }
 
-export const createBatchClassEnrollmentForNewStudent = batchClassEnrollmentData => async dispatch => {
+export const createBatchClassEnrollmentForNewStudent = (
+  batchClassEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/classenrollments/new-student`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchClassEnrollmentData
+    body: batchClassEnrollmentData,
   })
 
   if (error) throw error
@@ -456,12 +444,14 @@ export const createBatchClassEnrollmentForNewStudent = batchClassEnrollmentData 
   return data
 }
 
-export const createBatchClassEnrollmentForOldStudent = batchClassEnrollmentData => async dispatch => {
+export const createBatchClassEnrollmentForOldStudent = (
+  batchClassEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/classenrollments/old-student`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchClassEnrollmentData
+    body: batchClassEnrollmentData,
   })
 
   if (error) throw error
@@ -475,12 +465,12 @@ export const createBatchClassEnrollmentForOldStudent = batchClassEnrollmentData 
 export const updateBatchClassEnrollment = (
   batchClassEnrollmentId,
   batchClassEnrollmentData
-) => async dispatch => {
+) => async (dispatch) => {
   const url = `/batch/classenrollments/${batchClassEnrollmentId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: batchClassEnrollmentData
+    body: batchClassEnrollmentData,
   })
 
   if (error) throw error
@@ -493,12 +483,12 @@ export const updateBatchClassEnrollment = (
 export const updateBatchCourseEnrollment = (
   batchCourseEnrollmentId,
   batchCourseEnrollmentData
-) => async dispatch => {
+) => async (dispatch) => {
   const url = `/batch/courseenrollments/${batchCourseEnrollmentId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: batchCourseEnrollmentData
+    body: batchCourseEnrollmentData,
   })
 
   if (error) throw error
@@ -508,7 +498,9 @@ export const updateBatchCourseEnrollment = (
   return data
 }
 
-export const getBatchClassEnrollment = batchClassEnrollmentId => async dispatch => {
+export const getBatchClassEnrollment = (batchClassEnrollmentId) => async (
+  dispatch
+) => {
   const url = `/batch/classenrollments/${batchClassEnrollmentId}`
 
   const { data, error } = await api(url)
@@ -524,7 +516,9 @@ export const getBatchClassEnrollment = batchClassEnrollmentId => async dispatch 
   return data
 }
 
-export const getAllBatchClassPaymentsForEnrollment = batchClassEnrollmentId => async dispatch => {
+export const getAllBatchClassPaymentsForEnrollment = (
+  batchClassEnrollmentId
+) => async (dispatch) => {
   const url = `/batch/classenrollments/${batchClassEnrollmentId}/payments`
 
   const { data, error } = await api(url)
@@ -536,10 +530,9 @@ export const getAllBatchClassPaymentsForEnrollment = batchClassEnrollmentId => a
   return data
 }
 
-export const getBatchClassEnrollmentNextSerial = (
-  batchClassId,
-  year
-) => async dispatch => {
+export const getBatchClassEnrollmentNextSerial = (batchClassId, year) => async (
+  dispatch
+) => {
   let url = `/batch/classes/${batchClassId}/enrollments/years/${year}/next-serial`
 
   const { data, error, params } = await api(url)
@@ -551,12 +544,12 @@ export const getBatchClassEnrollmentNextSerial = (
   return data
 }
 
-export const createBatchCourse = batchCourseData => async dispatch => {
+export const createBatchCourse = (batchCourseData) => async (dispatch) => {
   const url = `/batch/courses`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchCourseData
+    body: batchCourseData,
   })
 
   if (error) throw error
@@ -567,7 +560,7 @@ export const createBatchCourse = batchCourseData => async dispatch => {
   return data
 }
 
-export const getBatchCourse = batchCourseId => async dispatch => {
+export const getBatchCourse = (batchCourseId) => async (dispatch) => {
   let url = `/batch/courses/${batchCourseId}`
 
   const { data, error } = await api(url)
@@ -579,15 +572,14 @@ export const getBatchCourse = batchCourseId => async dispatch => {
   return data
 }
 
-export const updateBatchCourse = (
-  batchCourseId,
-  batchCourseData
-) => async dispatch => {
+export const updateBatchCourse = (batchCourseId, batchCourseData) => async (
+  dispatch
+) => {
   const url = `/batch/courses/${batchCourseId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: batchCourseData
+    body: batchCourseData,
   })
 
   if (error) throw error
@@ -600,7 +592,7 @@ export const updateBatchCourse = (
 export const fetchBatchCoursePage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHCOURSE_PAGE_REQUEST, page, query })
 
   let url = `/batch/courses?page=${page}`
@@ -623,7 +615,7 @@ export const fetchBatchCoursePage = (
 export const fetchBatchCourseEnrollmentPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHCOURSEENROLLMENT_PAGE_REQUEST, page, query })
 
   let url = `/batch/courseenrollments?page=${page}`
@@ -647,7 +639,7 @@ export const getAllBatchCourseEnrollmentForYear = (
   batchCourseId,
   year,
   { query = '' } = {}
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/batch/courses/${batchCourseId}/enrollments/years/${year}`
   if (query) url = `${url}?${query}`
 
@@ -657,7 +649,7 @@ export const getAllBatchCourseEnrollmentForYear = (
 
   const usersData = { items: [] }
 
-  data.items.forEach(item => {
+  data.items.forEach((item) => {
     const user = item.User
     usersData.items.push(user)
     delete item.User
@@ -669,7 +661,9 @@ export const getAllBatchCourseEnrollmentForYear = (
   return data
 }
 
-export const getAllBatchCoursePaymentsForEnrollment = batchCourseEnrollmentId => async dispatch => {
+export const getAllBatchCoursePaymentsForEnrollment = (
+  batchCourseEnrollmentId
+) => async (dispatch) => {
   const url = `/batch/courseenrollments/${batchCourseEnrollmentId}/payments`
 
   const { data, error } = await api(url)
@@ -681,7 +675,9 @@ export const getAllBatchCoursePaymentsForEnrollment = batchCourseEnrollmentId =>
   return data
 }
 
-export const createBatchCourseEnrollmentBulk = batchCourseEnrollmentData => async dispatch => {
+export const createBatchCourseEnrollmentBulk = (
+  batchCourseEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/courseenrollments/bulk`
 
   const body = new FormData()
@@ -696,7 +692,7 @@ export const createBatchCourseEnrollmentBulk = batchCourseEnrollmentData => asyn
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body
+    body,
   })
 
   if (error) throw error
@@ -708,12 +704,14 @@ export const createBatchCourseEnrollmentBulk = batchCourseEnrollmentData => asyn
   return data
 }
 
-export const createBatchCourseEnrollmentForNewStudent = batchCourseEnrollmentData => async dispatch => {
+export const createBatchCourseEnrollmentForNewStudent = (
+  batchCourseEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/courseenrollments/new-student`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchCourseEnrollmentData
+    body: batchCourseEnrollmentData,
   })
 
   if (error) throw error
@@ -725,12 +723,14 @@ export const createBatchCourseEnrollmentForNewStudent = batchCourseEnrollmentDat
   return data
 }
 
-export const createBatchCourseEnrollmentForOldStudent = batchCourseEnrollmentData => async dispatch => {
+export const createBatchCourseEnrollmentForOldStudent = (
+  batchCourseEnrollmentData
+) => async (dispatch) => {
   const url = `/batch/courseenrollments/old-student`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchCourseEnrollmentData
+    body: batchCourseEnrollmentData,
   })
 
   if (error) throw error
@@ -741,7 +741,9 @@ export const createBatchCourseEnrollmentForOldStudent = batchCourseEnrollmentDat
   return data
 }
 
-export const getBatchCourseEnrollment = batchCourseEnrollmentId => async dispatch => {
+export const getBatchCourseEnrollment = (batchCourseEnrollmentId) => async (
+  dispatch
+) => {
   const url = `/batch/courseenrollments/${batchCourseEnrollmentId}`
 
   const { data, error } = await api(url)
@@ -756,7 +758,7 @@ export const getBatchCourseEnrollment = batchCourseEnrollmentId => async dispatc
 export const getBatchCourseEnrollmentNextSerial = (
   batchCourseId,
   year
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/batch/courses/${batchCourseId}/enrollments/years/${year}/next-serial`
 
   const { data, error, params } = await api(url)
@@ -768,12 +770,12 @@ export const getBatchCourseEnrollmentNextSerial = (
   return data
 }
 
-export const createBatchStudent = batchClassData => async dispatch => {
+export const createBatchStudent = (batchClassData) => async (dispatch) => {
   const url = `/batch/students`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: batchClassData
+    body: batchClassData,
   })
 
   if (error) throw error
@@ -784,7 +786,7 @@ export const createBatchStudent = batchClassData => async dispatch => {
   return data
 }
 
-export const getBatchStudent = batchStudentId => async dispatch => {
+export const getBatchStudent = (batchStudentId) => async (dispatch) => {
   let url = `/batch/students/${batchStudentId}`
 
   const { data, error } = await api(url)
@@ -796,15 +798,14 @@ export const getBatchStudent = batchStudentId => async dispatch => {
   return data
 }
 
-export const updateBatchStudent = (
-  batchStudentId,
-  batchStudentData
-) => async dispatch => {
+export const updateBatchStudent = (batchStudentId, batchStudentData) => async (
+  dispatch
+) => {
   const url = `/batch/students/${batchStudentId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: batchStudentData
+    body: batchStudentData,
   })
 
   if (error) throw error
@@ -817,7 +818,7 @@ export const updateBatchStudent = (
 export const fetchBatchStudentPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: BATCHSTUDENT_PAGE_REQUEST, page, query })
 
   let url = `/batch/students?page=${page}`

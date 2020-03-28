@@ -14,7 +14,7 @@ function TeXBlock({ block, blockProps: { getStore }, contentState }) {
 
     return {
       tex: blockData.get('tex'),
-      type: blockData.get('type')
+      type: blockData.get('type'),
     }
   }, [block])
 

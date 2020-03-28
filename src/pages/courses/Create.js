@@ -17,17 +17,15 @@ const getInitialValues = () => ({
   name: '',
   description: '',
   price: 0,
-  tagIds: []
+  tagIds: [],
 })
 
 const getValidationSchema = () => {
   return Yup.object({
     name: Yup.string().required(`required`),
     description: Yup.string().required(`required`),
-    price: Yup.number()
-      .integer()
-      .required(`required`),
-    tagIds: Yup.array().of(Yup.number().integer())
+    price: Yup.number().integer().required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer()),
   })
 }
 
@@ -35,7 +33,7 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
   const tagOptions = useMemo(() => {
     return zipObject(
       courseTags.allIds,
-      courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+      courseTags.allIds.map((id) => get(courseTags.byId, [id, 'name']))
     )
   }, [courseTags.allIds, courseTags.byId])
 
@@ -49,7 +47,7 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
       try {
         await createCourse({
           price: price * 100,
-          ...values
+          ...values,
         })
         actions.resetForm()
         navigate('..')
@@ -135,11 +133,11 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
 }
 
 const mapStateToProps = ({ courseTags }) => ({
-  courseTags
+  courseTags,
 })
 
 const mapDispatchToProps = {
-  createCourse
+  createCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseCreate)

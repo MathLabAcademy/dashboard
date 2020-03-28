@@ -6,10 +6,10 @@ import { Popup } from 'semantic-ui-react'
 function KaTeX({ displayMode, Component, nodeProps, children }) {
   const context = useRef(null)
   const renderHtmlString = useCallback(
-    tex => {
+    (tex) => {
       return katex.renderToString(tex, {
         displayMode,
-        throwOnError: false
+        throwOnError: false,
       })
     },
     [displayMode]
@@ -37,7 +37,7 @@ function KaTeX({ displayMode, Component, nodeProps, children }) {
       content={
         <Component
           dangerouslySetInnerHTML={{
-            __html: renderHtmlString(nodeProps.node.text)
+            __html: renderHtmlString(nodeProps.node.text),
           }}
         />
       }
@@ -47,7 +47,7 @@ function KaTeX({ displayMode, Component, nodeProps, children }) {
       {...nodeProps.attributes}
       style={{ cursor: 'pointer' }}
       dangerouslySetInnerHTML={{
-        __html: renderHtmlString(nodeProps.node.text)
+        __html: renderHtmlString(nodeProps.node.text),
       }}
       onClick={onClick}
     />
@@ -113,7 +113,7 @@ function KatexPlugin(options = {}) {
   return {
     renderBlock,
     renderInline,
-    onKeyDown
+    onKeyDown,
   }
 }
 

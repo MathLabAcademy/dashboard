@@ -3,14 +3,14 @@ import {
   COURSETAG_ADD,
   COURSETAG_BULK_ADD,
   COURSETAG_REMOVE,
-  COURSETAG_UPDATE
+  COURSETAG_UPDATE,
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const courseTagsReducer = (state = initialState, { type, data }) => {
@@ -20,24 +20,24 @@ const courseTagsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case COURSETAG_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case COURSETAG_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case COURSETAG_UPDATE:
       return {
@@ -46,9 +46,9 @@ const courseTagsReducer = (state = initialState, { type, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     default:
       return state

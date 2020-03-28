@@ -8,7 +8,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Controls from './Controls'
 import { Button as ImageButton, getImageModule } from './modules/image'
 
-const getModules = disableImage => {
+const getModules = (disableImage) => {
   const KaTeXModule = getKaTeXModule()
   const ImageModule = disableImage ? null : getImageModule()
 
@@ -53,7 +53,9 @@ function DraftEditor({ rawState, readOnly, style, storeRef, disableImage }) {
   )
 
   useEffect(() => {
-    setEditorState(editorState => getInitialEditorState(rawState, editorState))
+    setEditorState((editorState) =>
+      getInitialEditorState(rawState, editorState)
+    )
   }, [rawState, readOnly])
 
   // const onClick = useCallback(() => {

@@ -20,7 +20,7 @@ function MCQExamResult({ mcqExamId }) {
 
   const dataByUserId = useMemo(() => {
     const users = map(
-      get(data, 'Trackers', emptyArray).filter(tracker => tracker.end),
+      get(data, 'Trackers', emptyArray).filter((tracker) => tracker.end),
       'User'
     )
 
@@ -33,7 +33,7 @@ function MCQExamResult({ mcqExamId }) {
 
     const submissionsByUserId = mapValues(
       groupBy(get(data, 'Submissions', emptyArray), 'userId'),
-      submissions => mapValues(keyBy(submissions, 'mcqId'), 'mcqOptionId')
+      (submissions) => mapValues(keyBy(submissions, 'mcqId'), 'mcqOptionId')
     )
 
     const dataByUserId = {}
@@ -47,13 +47,13 @@ function MCQExamResult({ mcqExamId }) {
         phone: get(user, 'Person.phone'),
         answersSubmitted: `${Object.values(submissions).length}/${totalMarks}`,
         correctlyAnswered: `${
-          Object.keys(submissions).filter(questionId => {
+          Object.keys(submissions).filter((questionId) => {
             return (
               submissions[questionId] ===
               correctOptionIdByQuestionId[questionId]
             )
           }).length
-        }/${totalMarks}`
+        }/${totalMarks}`,
       }
     }
 

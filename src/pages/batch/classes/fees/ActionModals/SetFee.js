@@ -12,15 +12,12 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    amount: Yup.number()
-      .integer()
-      .min(0)
-      .required(`required`)
+    amount: Yup.number().integer().min(0).required(`required`),
   })
 }
 
-const getInitialValues = batchFee => ({
-  amount: get(batchFee, 'amount', 0) / 100
+const getInitialValues = (batchFee) => ({
+  amount: get(batchFee, 'amount', 0) / 100,
 })
 
 function BatchCourseFeeSetModal({
@@ -29,7 +26,7 @@ function BatchCourseFeeSetModal({
   month,
   monthName,
   batchFee,
-  setBatchClassFee
+  setBatchClassFee,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -42,7 +39,7 @@ function BatchCourseFeeSetModal({
 
       try {
         await setBatchClassFee(batchClassId, year, month, {
-          amount: amount * 100
+          amount: amount * 100,
         })
         actions.resetForm()
         handle.close()
@@ -125,11 +122,11 @@ function BatchCourseFeeSetModal({
 }
 
 const mapStateToProps = ({ batches }, { batchClassId, year, month }) => ({
-  batchFee: get(batches.classes.feesById, [batchClassId, year, month])
+  batchFee: get(batches.classes.feesById, [batchClassId, year, month]),
 })
 
 const mapDispatchToProps = {
-  setBatchClassFee
+  setBatchClassFee,
 }
 
 export default connect(

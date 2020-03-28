@@ -10,4 +10,4 @@ export const addBulk = (state = emptyArray, { items }) =>
   )
 
 export const remove = (state = emptyArray, { id }) =>
-  state.filter(i => i !== id)
+  state.filter((i) => i !== id)

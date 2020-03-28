@@ -12,14 +12,12 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    name: Yup.string()
-      .min(3)
-      .required(`required`)
+    name: Yup.string().min(3).required(`required`),
   })
 }
 
-const getInitialValues = tag => ({
-  name: get(tag, 'name') || ''
+const getInitialValues = (tag) => ({
+  name: get(tag, 'name') || '',
 })
 
 function TagEditModal({ tagId, tag, updateTag }) {
@@ -108,7 +106,7 @@ function TagEditModal({ tagId, tag, updateTag }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  updateTag
+  updateTag,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagEditModal)

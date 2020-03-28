@@ -11,7 +11,7 @@ import { Button, Message, Modal, Segment } from 'semantic-ui-react'
 import { updateMCQ } from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
-const getValidationSchema = options => {
+const getValidationSchema = (options) => {
   const textSchema = Yup.string().required(`required`)
   return Yup.object({
     id: Yup.number().required(`required`),
@@ -22,7 +22,7 @@ const getValidationSchema = options => {
       .required(`required`),
     options: Yup.object(
       mapValues(keyBy(options, 'id'), () => textSchema)
-    ).required(`required`)
+    ).required(`required`),
   })
 }
 
@@ -30,7 +30,7 @@ const getInitialValues = (mcq, options, answerId) => ({
   id: get(mcq, 'id'),
   text: get(mcq, 'text'),
   answerId: String(answerId || ''),
-  options: mapValues(keyBy(options, 'id'), 'text')
+  options: mapValues(keyBy(options, 'id'), 'text'),
 })
 
 function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
@@ -41,7 +41,7 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
     [answerId, mcq, options]
   )
   const validationSchema = useMemo(() => getValidationSchema(options), [
-    options
+    options,
   ])
 
   const onSubmit = useCallback(
@@ -147,7 +147,7 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  updateMCQ
+  updateMCQ,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditMCQ)

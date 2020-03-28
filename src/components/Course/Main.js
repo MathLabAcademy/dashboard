@@ -31,7 +31,7 @@ function CourseInfo({ courseId, course, courseTags }) {
             <Table.Row>
               <Table.HeaderCell collapsing content={`Tags`} />
               <Table.Cell>
-                {get(course, 'tagIds', emptyArray).map(id => (
+                {get(course, 'tagIds', emptyArray).map((id) => (
                   <Label
                     key={id}
                     color="black"
@@ -102,7 +102,7 @@ const mapStateToProps = ({ courses, courseTags, user }, { courseId }) => ({
   course: get(courses.byId, courseId),
   courseTags,
   enrollments: get(courses, ['enrollmentsById', courseId], emptyArray),
-  currentUser: user.data
+  currentUser: user.data,
 })
 
 const mapDispatchToProps = {}

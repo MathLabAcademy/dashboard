@@ -14,7 +14,7 @@ function CourseStudentPaymentClearPaidModal({
   batchStudentId,
   year,
   month,
-  monthName
+  monthName,
 }) {
   const [open, handler] = useToggle(false)
   const [status, setStatus] = useState(null)
@@ -71,11 +71,11 @@ const mapStateToProps = (
   { batchClassId, year, month, batchPaymentId }
 ) => ({
   batchFee: get(batches.classes.feesById, [batchClassId, year, month]),
-  batchPayment: get(batches.payments.byId, batchPaymentId)
+  batchPayment: get(batches.payments.byId, batchPaymentId),
 })
 
 const mapDispatchToProps = {
-  removePayment
+  removePayment,
 }
 
 export default connect(

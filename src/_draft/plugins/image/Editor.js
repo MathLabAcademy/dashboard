@@ -12,15 +12,15 @@ import {
   Modal,
   Placeholder,
   Segment,
-  FormGroup
+  FormGroup,
 } from 'semantic-ui-react'
 
 const defaultState = {
   src: '',
-  caption: ''
+  caption: '',
 }
 
-const getIntialState = data => {
+const getIntialState = (data) => {
   return data ? { src: data.src, caption: data.caption } : defaultState
 }
 
@@ -31,7 +31,7 @@ function reducer(state, { type, data }) {
     case 'UPDATE':
       return {
         ...state,
-        ...data
+        ...data,
       }
     default:
       throw new Error(`invalid actionType: ${type}`)
@@ -52,7 +52,7 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
 
     return getIntialState({
       src: blockData.get('src'),
-      caption: blockData.get('caption')
+      caption: blockData.get('caption'),
     })
   }, [block, toUpdate])
 
@@ -72,7 +72,7 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
     const store = getStore()
 
     const blockKey = block.getKey()
-    store.setEditorState(editorState => removeBlock(editorState, blockKey))
+    store.setEditorState((editorState) => removeBlock(editorState, blockKey))
 
     onClose()
   }, [block, getStore, onClose, toUpdate])
@@ -86,7 +86,7 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
 
     const selectionState = SelectionState.createEmpty(blockKey).merge({
       anchorOffset: 0,
-      focusOffset: contentBlock.getLength()
+      focusOffset: contentBlock.getLength(),
     })
 
     const newContentState = Modifier.mergeBlockData(
@@ -95,7 +95,7 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
       { src: state.src, caption: state.caption }
     )
 
-    store.setEditorState(editorState =>
+    store.setEditorState((editorState) =>
       EditorState.push(editorState, newContentState, 'change-block-data')
     )
   }, [block, contentState, getStore, state.caption, state.src])
@@ -106,10 +106,10 @@ function ImageEditor({ toUpdate, block, contentState, getStore, onClose }) {
     const data = {
       src: state.src,
       caption: state.caption,
-      atomic: 'image'
+      atomic: 'image',
     }
 
-    store.setEditorState(editorState => insertAtomicBlock(editorState, data))
+    store.setEditorState((editorState) => insertAtomicBlock(editorState, data))
   }, [getStore, state.caption, state.src])
 
   const onSubmit = useCallback(() => {

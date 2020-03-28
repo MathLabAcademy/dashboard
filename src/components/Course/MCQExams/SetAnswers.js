@@ -14,12 +14,12 @@ import {
   Grid,
   Header,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import {
   getAllMCQAnswersForExam,
   getAllMCQsForExam,
-  setMCQAnswers
+  setMCQAnswers,
 } from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
@@ -71,7 +71,7 @@ const getValidationSchema = (mcqIds, mcqs) => {
         .oneOf(map(get(mcqs.byId, [id, 'Options']), 'id'))
         .required(`required`)
       return schema
-    }, {})
+    }, {}),
   })
 }
 
@@ -88,7 +88,7 @@ function CourseMCQExamSetAnswers({
   mcqs,
   getAllMCQsForExam,
   getAllMCQAnswersForExam,
-  setMCQAnswers
+  setMCQAnswers,
 }) {
   useEffect(() => {
     getAllMCQsForExam(mcqExamId)
@@ -98,17 +98,17 @@ function CourseMCQExamSetAnswers({
   const mcqIds = useMemo(() => {
     const McqExamId = Number(mcqExamId)
     return mcqs.allIds
-      .filter(id => get(mcqs.byId, [id, 'mcqExamId']) === McqExamId)
+      .filter((id) => get(mcqs.byId, [id, 'mcqExamId']) === McqExamId)
       .sort()
   }, [mcqExamId, mcqs.allIds, mcqs.byId])
 
   const initialValues = useMemo(() => getInitialValues(mcqIds, mcqs), [
     mcqIds,
-    mcqs
+    mcqs,
   ])
   const validationSchema = useMemo(() => getValidationSchema(mcqIds, mcqs), [
     mcqIds,
-    mcqs
+    mcqs,
   ])
 
   const onSubmit = useCallback(
@@ -117,7 +117,7 @@ function CourseMCQExamSetAnswers({
 
       try {
         await setMCQAnswers({
-          byId: values
+          byId: values,
         })
       } catch (err) {
         if (err.errors) {
@@ -171,7 +171,7 @@ function CourseMCQExamSetAnswers({
           </Message>
 
           {mcqIds
-            .map(id => get(mcqs.byId, id))
+            .map((id) => get(mcqs.byId, id))
             .map((mcq, index) => (
               <React.Fragment key={index}>
                 <MCQ index={index} mcq={mcq} />
@@ -185,13 +185,13 @@ function CourseMCQExamSetAnswers({
 }
 
 const mapStateToProps = ({ mcqs }) => ({
-  mcqs
+  mcqs,
 })
 
 const mapDispatchToProps = {
   getAllMCQsForExam,
   getAllMCQAnswersForExam,
-  setMCQAnswers
+  setMCQAnswers,
 }
 
 export default connect(

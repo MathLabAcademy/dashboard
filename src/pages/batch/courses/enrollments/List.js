@@ -12,7 +12,7 @@ function _ListItemRow({
   batchCourseEnrollmentId,
   courseEnrollment,
   user,
-  linkToBase
+  linkToBase,
 }) {
   return (
     <Table.Row>
@@ -55,7 +55,7 @@ const ListItemRow = connect(
 
     return {
       courseEnrollment,
-      user
+      user,
     }
   }
 )(_ListItemRow)
@@ -64,7 +64,7 @@ function BatchCourseStudentList({
   batchCourseId,
   courseEnrollments,
   getAllBatchCourseEnrollmentForYear,
-  linkToBase
+  linkToBase,
 }) {
   const yearRef = useRef()
 
@@ -86,7 +86,7 @@ function BatchCourseStudentList({
 
   const ids = useMemo(() => {
     const regex = new RegExp(`^${batchCourseId}${String(year).slice(-2)}`)
-    return courseEnrollments.allIds.filter(id => regex.test(id)).sort()
+    return courseEnrollments.allIds.filter((id) => regex.test(id)).sort()
   }, [batchCourseId, year, courseEnrollments.allIds])
 
   return (
@@ -147,7 +147,7 @@ function BatchCourseStudentList({
         </Table.Header>
 
         <Table.Body>
-          {ids.map(id => (
+          {ids.map((id) => (
             <ListItemRow
               key={id}
               batchCourseEnrollmentId={id}
@@ -161,11 +161,11 @@ function BatchCourseStudentList({
 }
 
 const mapStateToProps = ({ batches }) => ({
-  courseEnrollments: batches.courseEnrollments
+  courseEnrollments: batches.courseEnrollments,
 })
 
 const mapDispatchToProps = {
-  getAllBatchCourseEnrollmentForYear
+  getAllBatchCourseEnrollmentForYear,
 }
 
 export default connect(

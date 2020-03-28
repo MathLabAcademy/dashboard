@@ -17,7 +17,7 @@ function _ListItemRow({ enrollmentId, enrollment, user }) {
     return {
       credit,
       transactionId,
-      amount
+      amount,
     }
   }, [enrollment, user])
 
@@ -37,7 +37,7 @@ const ListItemRow = connect(({ batches, users }, { enrollmentId }) => {
   const enrollment = get(batches.courseEnrollments.byId, enrollmentId)
   return {
     enrollment,
-    user: get(users.byId, get(enrollment, 'userId'))
+    user: get(users.byId, get(enrollment, 'userId')),
   }
 })(_ListItemRow)
 
@@ -45,7 +45,7 @@ function BatchCoursePaymentList({
   batchCourseId,
   courseEnrollments,
   getAllBatchCourseEnrollmentForYear,
-  linkToBase
+  linkToBase,
 }) {
   const yearRef = useRef()
 
@@ -59,7 +59,7 @@ function BatchCoursePaymentList({
 
   const refreshPaymentData = useCallback(() => {
     getAllBatchCourseEnrollmentForYear(batchCourseId, year, {
-      query: 'include=Payments'
+      query: 'include=Payments',
     })
   }, [getAllBatchCourseEnrollmentForYear, batchCourseId, year])
 
@@ -69,7 +69,7 @@ function BatchCoursePaymentList({
 
   const enrollmentIds = useMemo(() => {
     const regex = new RegExp(`^${batchCourseId}${String(year).slice(-2)}`)
-    return courseEnrollments.allIds.filter(id => regex.test(id)).sort()
+    return courseEnrollments.allIds.filter((id) => regex.test(id)).sort()
   }, [batchCourseId, year, courseEnrollments.allIds])
 
   return (
@@ -131,7 +131,7 @@ function BatchCoursePaymentList({
         </Table.Header>
 
         <Table.Body>
-          {enrollmentIds.map(enrollmentId => (
+          {enrollmentIds.map((enrollmentId) => (
             <ListItemRow
               key={enrollmentId}
               linkToBase={linkToBase}
@@ -146,11 +146,11 @@ function BatchCoursePaymentList({
 
 const mapStateToProps = ({ batches }) => ({
   courseEnrollments: batches.courseEnrollments,
-  coursePayments: batches.coursePayments
+  coursePayments: batches.coursePayments,
 })
 
 const mapDispatchToProps = {
-  getAllBatchCourseEnrollmentForYear
+  getAllBatchCourseEnrollmentForYear,
 }
 
 export default connect(

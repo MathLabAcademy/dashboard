@@ -3,7 +3,7 @@ import {
   CharacterMetadata,
   ContentBlock,
   EditorState,
-  Modifier
+  Modifier,
 } from 'draft-js'
 import generateRandomKey from 'draft-js/lib/generateRandomKey'
 import { List, Repeat } from 'immutable'
@@ -37,17 +37,17 @@ function insertAtomicBlock(editorState, data, character = ' ') {
     text: character,
     type: 'atomic',
     characterList: List(Repeat(charData, character.length)),
-    data
+    data,
   }
 
   const atomicDividerBlockConfig = {
     key: generateRandomKey(),
-    type: 'unstyled'
+    type: 'unstyled',
   }
 
   const fragmentArray = [
     new ContentBlock(atomicBlockConfig),
-    new ContentBlock(atomicDividerBlockConfig)
+    new ContentBlock(atomicDividerBlockConfig),
   ]
 
   const fragment = BlockMapBuilder.createFromArray(fragmentArray)
@@ -60,7 +60,7 @@ function insertAtomicBlock(editorState, data, character = ' ') {
 
   const newContent = withAtomicBlock.merge({
     selectionBefore: selectionState,
-    selectionAfter: withAtomicBlock.getSelectionAfter().set('hasFocus', true)
+    selectionAfter: withAtomicBlock.getSelectionAfter().set('hasFocus', true),
   })
 
   return EditorState.push(editorState, newContent, 'insert-fragment')

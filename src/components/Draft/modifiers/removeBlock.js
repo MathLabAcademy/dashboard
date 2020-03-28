@@ -8,7 +8,7 @@ function removeBlock(editorState, blockKey) {
     anchorKey: blockKey,
     anchorOffset: 0,
     focusKey: blockKey,
-    focusOffset: contentBlock.getLength()
+    focusOffset: contentBlock.getLength(),
   })
 
   const withoutBlock = Modifier.removeRange(

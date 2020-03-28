@@ -17,42 +17,38 @@ const getValidationSchema = () => {
     fullName: Yup.string().required(`required`),
     shortName: Yup.string().required(`required`),
     phone: Yup.string()
-      .test('is-mobile-phone', 'invalid mobile phone number', phone =>
+      .test('is-mobile-phone', 'invalid mobile phone number', (phone) =>
         phone ? isMobilePhone(phone) : true
       )
       .notRequired(),
     guardianPhone: Yup.string()
-      .test('is-mobile-phone', 'invalid mobile phone number', phone =>
+      .test('is-mobile-phone', 'invalid mobile phone number', (phone) =>
         phone ? isMobilePhone(phone) : true
       )
       .notRequired(),
     active: Yup.boolean().required(`required`),
-    waiver: Yup.number()
-      .integer()
-      .min(0)
-      .max(100)
-      .required(`required`)
+    waiver: Yup.number().integer().min(0).max(100).required(`required`),
   })
 }
 
-const getInitialValues = batchStudent => ({
+const getInitialValues = (batchStudent) => ({
   fullName: get(batchStudent, 'fullName', ''),
   shortName: get(batchStudent, 'shortName', ''),
   phone: get(batchStudent, 'phone') || '',
   guardianPhone: get(batchStudent, 'guardianPhone') || '',
   active: get(batchStudent, 'active', false),
-  waiver: get(batchStudent, 'waiver', 0)
+  waiver: get(batchStudent, 'waiver', 0),
 })
 
 function BatchCourseStudentAddModal({
   batchStudentId,
   batchStudent,
-  updateBatchStudent
+  updateBatchStudent,
 }) {
   const [open, handle] = useToggle(false)
 
   const initialValues = useMemo(() => getInitialValues(batchStudent), [
-    batchStudent
+    batchStudent,
   ])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -146,11 +142,11 @@ function BatchCourseStudentAddModal({
 }
 
 const mapStateToProps = ({ batches }, { batchStudentId }) => ({
-  batchStudent: get(batches.students.byId, batchStudentId)
+  batchStudent: get(batches.students.byId, batchStudentId),
 })
 
 const mapDispatchToProps = {
-  updateBatchStudent
+  updateBatchStudent,
 }
 
 export default connect(

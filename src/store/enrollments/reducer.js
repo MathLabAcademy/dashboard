@@ -8,7 +8,7 @@ const initialState = {
   allIds: emptyArray,
   enrollmentsById: emptyObject,
   cqExamsById: emptyObject,
-  mcqExamsById: emptyObject
+  mcqExamsById: emptyObject,
 }
 
 const enrollmentsReducer = (state = initialState, { type, data }) => {
@@ -18,18 +18,18 @@ const enrollmentsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case ENROLLMENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case ENROLLMENT_UPDATE:
       return {
@@ -38,9 +38,9 @@ const enrollmentsReducer = (state = initialState, { type, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     default:
       return state

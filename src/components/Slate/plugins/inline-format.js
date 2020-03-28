@@ -45,7 +45,7 @@ function InlineFormatPlugin(options = {}) {
 
   return {
     onKeyDown,
-    renderMark
+    renderMark,
   }
 }
 

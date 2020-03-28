@@ -5,7 +5,7 @@ import * as ids from './helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const transactionsReducer = (state = initialState, { type, data }) => {
@@ -15,9 +15,9 @@ const transactionsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     default:
       return state

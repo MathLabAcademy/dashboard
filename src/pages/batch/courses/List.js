@@ -44,7 +44,7 @@ function _ListItem({ batchCourseId, batchCourse, getBatchCourse }) {
 
 const ListItem = connect(
   ({ batches }, { batchCourseId }) => ({
-    batchCourse: get(batches.courses.byId, batchCourseId)
+    batchCourse: get(batches.courses.byId, batchCourseId),
   }),
   { getBatchCourse }
 )(_ListItem)
@@ -67,7 +67,7 @@ function BatchCourseList({ pagination, fetchPage }) {
         />
       </Segment>
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
         <ListItem key={id} batchCourseId={id} />
       ))}
 
@@ -81,11 +81,11 @@ function BatchCourseList({ pagination, fetchPage }) {
 }
 
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.batchCourses
+  pagination: pagination.batchCourses,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchBatchCoursePage
+  fetchPage: fetchBatchCoursePage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseList)

@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react'
 
 function StyleButton({ style, onToggle, active, label, icon }) {
   const _onToggle = useCallback(
-    e => {
+    (e) => {
       e.preventDefault()
       onToggle(style)
     },
@@ -31,7 +31,7 @@ const BLOCK_TYPES = [
   { label: 'H6', style: 'header-six' },
   { style: 'blockquote', icon: 'quote left' },
   { style: 'unordered-list-item', icon: 'list ul' },
-  { style: 'ordered-list-item', icon: 'list ol' }
+  { style: 'ordered-list-item', icon: 'list ol' },
   // { label: 'Code Block', style: 'code-block' }
 ]
 
@@ -42,7 +42,7 @@ function BlockStyleControls({ editorState, onToggle }) {
     .getBlockForKey(selection.getStartKey())
     .getType()
 
-  return BLOCK_TYPES.map(type => (
+  return BLOCK_TYPES.map((type) => (
     <StyleButton
       key={type.label || type.icon}
       active={type.style === blockType}
@@ -58,13 +58,13 @@ const INLINE_STYLES = [
   { style: 'BOLD', icon: 'bold' },
   { style: 'ITALIC', icon: 'italic' },
   { style: 'UNDERLINE', icon: 'underline' },
-  { style: 'CODE', icon: 'code' }
+  { style: 'CODE', icon: 'code' },
 ]
 
 function InlineStyleControls({ editorState, onToggle }) {
   const currentStyle = editorState.getCurrentInlineStyle()
 
-  return INLINE_STYLES.map(type => (
+  return INLINE_STYLES.map((type) => (
     <StyleButton
       key={type.label || type.icon}
       active={currentStyle.has(type.style)}
@@ -78,14 +78,14 @@ function InlineStyleControls({ editorState, onToggle }) {
 
 function RichEditorControls({ editorState, setEditorState, children }) {
   const toggleBlockType = useCallback(
-    blockType => {
+    (blockType) => {
       setEditorState(RichUtils.toggleBlockType(editorState, blockType))
     },
     [editorState, setEditorState]
   )
 
   const toggleInlineStyle = useCallback(
-    inlineStyle => {
+    (inlineStyle) => {
       setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle))
     },
     [editorState, setEditorState]

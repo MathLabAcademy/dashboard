@@ -14,7 +14,7 @@ function Permit({ children, currentUser, userId, ...roleIds }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  currentUser: user.data
+  currentUser: user.data,
 })
 
 export default connect(

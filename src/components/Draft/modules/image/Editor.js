@@ -12,16 +12,16 @@ import {
   Input,
   Modal,
   Placeholder,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import { __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__ } from './constants'
 
 const defaultState = {
   src: '',
-  caption: ''
+  caption: '',
 }
 
-const getIntialState = data => {
+const getIntialState = (data) => {
   return data ? { src: data.src, caption: data.caption } : defaultState
 }
 
@@ -32,7 +32,7 @@ function reducer(state, { type, data }) {
     case 'UPDATE':
       return {
         ...state,
-        ...data
+        ...data,
       }
     default:
       throw new Error(`invalid actionType: ${type}`)
@@ -52,7 +52,7 @@ function ImageEditor({ toUpdate, block, contentState, store, onClose }) {
 
     return getIntialState({
       src: blockData.get('src'),
-      caption: blockData.get('caption')
+      caption: blockData.get('caption'),
     })
   }, [block, toUpdate])
 
@@ -85,7 +85,7 @@ function ImageEditor({ toUpdate, block, contentState, store, onClose }) {
 
     const selectionState = SelectionState.createEmpty(blockKey).merge({
       anchorOffset: 0,
-      focusOffset: contentBlock.getLength()
+      focusOffset: contentBlock.getLength(),
     })
 
     const newContentState = Modifier.mergeBlockData(
@@ -107,7 +107,7 @@ function ImageEditor({ toUpdate, block, contentState, store, onClose }) {
     const data = {
       src: state.src,
       caption: state.caption,
-      type: __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__
+      type: __MATHLAB_DRAFT_JS_IMAGE_BLOCK_TYPE__,
     }
 
     const newEditorState = insertAtomicBlock(store.getEditorState(), data)

@@ -4,8 +4,8 @@ import i18nConfig from 'i18n/config'
 
 const initialState = {
   locale: {
-    language: i18nConfig.defaultLanguage
-  }
+    language: i18nConfig.defaultLanguage,
+  },
 }
 
 const uiReducer = (state = initialState, { type, locale }) => {
@@ -15,8 +15,8 @@ const uiReducer = (state = initialState, { type, locale }) => {
         ...state,
         locale: {
           ...state.locale,
-          ...locale
-        }
+          ...locale,
+        },
       }
     default:
       return state

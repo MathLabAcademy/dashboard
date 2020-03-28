@@ -12,7 +12,7 @@ import {
   List,
   Message,
   Placeholder,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import { uploadMCQImage } from 'store/actions/mcqs'
 
@@ -20,17 +20,17 @@ const defaultState = {
   file: null,
   src: '',
   loading: false,
-  error: ''
+  error: '',
 }
 
-const getIntialState = data => {
+const getIntialState = (data) => {
   return data
     ? {
         file: null,
         src: `/api${get(data, 'filePath')}`,
         loading: false,
         error: '',
-        serial: get(data, 'serial')
+        serial: get(data, 'serial'),
       }
     : defaultState
 }
@@ -43,12 +43,12 @@ function reducer(state, { type, data }) {
       return {
         ...state,
         ...data,
-        error: ''
+        error: '',
       }
     case 'ERROR':
       return {
         ...state,
-        error: data
+        error: data,
       }
     default:
       throw new Error(`invalid actionType: ${type}`)
@@ -66,7 +66,7 @@ function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
   )
 
   const onSubmit = useCallback(
-    async state => {
+    async (state) => {
       try {
         if (state.error) return
 
@@ -97,13 +97,13 @@ function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
               <Input
                 type="file"
                 accept="image/png, image/jpeg"
-                onChange={async event => {
+                onChange={async (event) => {
                   const imageFile = event.target.files[0]
 
                   if (!imageFile) return
 
                   const image = await imageCompression(imageFile, {
-                    maxWidthOrHeight: 512
+                    maxWidthOrHeight: 512,
                   })
 
                   const base64EncodedImage = await imageCompression.getDataUrlFromFile(
@@ -112,7 +112,7 @@ function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
 
                   dispatch({
                     type: 'UPDATE',
-                    data: { file: image, src: base64EncodedImage }
+                    data: { file: image, src: base64EncodedImage },
                   })
                 }}
                 action={
@@ -153,11 +153,11 @@ function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
 }
 
 const mapStateToProps = ({ mcqs }, { mcqId, serial }) => ({
-  image: get(mcqs.imagesById, [mcqId, serial])
+  image: get(mcqs.imagesById, [mcqId, serial]),
 })
 
 const mapDispatchToProps = {
-  uploadMCQImage
+  uploadMCQImage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQImageUploader)

@@ -43,7 +43,7 @@ function MCQTmpImageGalleryModal({ images, getAllMCQTmpImages }) {
 
   return (
     <Card.Group centered itemsPerRow={4}>
-      {images.map(src => (
+      {images.map((src) => (
         <ImageCard key={src} src={src} />
       ))}
       <Card>
@@ -76,11 +76,11 @@ function MCQTmpImageGalleryModal({ images, getAllMCQTmpImages }) {
 }
 
 const mapStateToProps = ({ mcqs }) => ({
-  images: get(mcqs.imagesById, 'tmp')
+  images: get(mcqs.imagesById, 'tmp'),
 })
 
 const mapDispatchToProps = {
-  getAllMCQTmpImages
+  getAllMCQTmpImages,
 }
 
 export default connect(

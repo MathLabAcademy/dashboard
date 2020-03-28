@@ -6,7 +6,7 @@ import {
   USER_ADD,
   USER_BULK_ADD,
   USER_REMOVE,
-  USER_UPDATE
+  USER_UPDATE,
 } from 'store/actions/actionTypes'
 import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import { emptyArray, emptyObject } from 'utils/defaults'
@@ -18,7 +18,7 @@ const initialState = {
   batchClassEnrollmentsById: emptyObject,
   batchCourseEnrollmentsById: emptyObject,
   courseEnrollmentsById: emptyObject,
-  mcqExamTrackersById: emptyObject
+  mcqExamTrackersById: emptyObject,
 }
 
 const usersReducer = (state = initialState, { type, id, data }) => {
@@ -28,24 +28,24 @@ const usersReducer = (state = initialState, { type, id, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case USER_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case USER_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, i => i !== id),
-        allIds: ids.remove(state.allIds, id)
+        byId: pickBy(state.byId, (i) => i !== id),
+        allIds: ids.remove(state.allIds, id),
       }
     case USER_UPDATE:
       return {
@@ -54,9 +54,9 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     case BATCHCLASSENROLLMENT_BULK_ADD:
       return {
@@ -65,9 +65,9 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           ...state.batchClassEnrollmentsById,
           ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
             ...get(state.batchClassEnrollmentsById, userId),
-            ...keyBy(items, 'id')
-          }))
-        }
+            ...keyBy(items, 'id'),
+          })),
+        },
       }
     case BATCHCOURSEENROLLMENT_BULK_ADD:
       return {
@@ -76,9 +76,9 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           ...state.batchCourseEnrollmentsById,
           ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
             ...get(state.batchCourseEnrollmentsById, userId),
-            ...keyBy(items, 'id')
-          }))
-        }
+            ...keyBy(items, 'id'),
+          })),
+        },
       }
     case ENROLLMENT_ADD:
       return {
@@ -88,10 +88,10 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           [data.userId]: {
             ...get(state.courseEnrollmentsById, data.userId),
             [data.courseId]: {
-              ...data
-            }
-          }
-        }
+              ...data,
+            },
+          },
+        },
       }
     case ENROLLMENT_BULK_ADD:
       return {
@@ -100,16 +100,16 @@ const usersReducer = (state = initialState, { type, id, data }) => {
           ...state.courseEnrollmentsById,
           ...mapValues(groupBy(data.items, 'userId'), (items, userId) => ({
             ...get(state.courseEnrollmentsById, userId),
-            ...keyBy(items, 'courseId')
-          }))
-        }
+            ...keyBy(items, 'courseId'),
+          })),
+        },
       }
     case MCQEXAMTRACKER_UPDATE:
       return {
         ...state,
         mcqExamTrackersById: {
-          ...state.enrollmentsById
-        }
+          ...state.enrollmentsById,
+        },
       }
     default:
       return state

@@ -15,16 +15,16 @@ const getValidationSchema = () => {
   return Yup.object({
     fullName: Yup.string().required(`required`),
     shortName: Yup.string().required(`required`),
-    dob: Yup.date().notRequired()
+    dob: Yup.date().notRequired(),
   })
 }
 
-const getInitialValues = person => ({
+const getInitialValues = (person) => ({
   fullName: get(person, 'fullName') || '',
   shortName: get(person, 'shortName') || '',
   dob: get(person, 'dob')
     ? DateTime.fromISO(get(person, 'dob')).toISODate()
-    : ''
+    : '',
 })
 
 function PersonInfoEditor({
@@ -34,7 +34,7 @@ function PersonInfoEditor({
   isCurrent,
   isGuardian,
   setOpen,
-  updatePerson
+  updatePerson,
 }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
   const initialValues = useMemo(() => getInitialValues(person), [person])
@@ -146,11 +146,11 @@ function PersonInfoEditor({
 }
 
 const mapStateToProps = ({ user }, { userId }) => ({
-  isCurrent: get(user, 'id') === userId
+  isCurrent: get(user, 'id') === userId,
 })
 
 const mapDispatchToProps = {
-  updatePerson
+  updatePerson,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PersonInfoEditor)

@@ -12,18 +12,14 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    id: Yup.number()
-      .integer()
-      .min(1)
-      .max(99)
-      .required(`required`),
-    name: Yup.string().required(`required`)
+    id: Yup.number().integer().min(1).max(99).required(`required`),
+    name: Yup.string().required(`required`),
   })
 }
 
 const getInitialValues = () => ({
   id: '',
-  name: ''
+  name: '',
 })
 
 function BatchClassCreate({ createBatchClass, navigate }) {
@@ -113,7 +109,7 @@ function BatchClassCreate({ createBatchClass, navigate }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createBatchClass
+  createBatchClass,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassCreate)

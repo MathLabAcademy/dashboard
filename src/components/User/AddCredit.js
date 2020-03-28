@@ -13,15 +13,13 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    amount: Yup.number()
-      .integer()
-      .required(`required`)
+    amount: Yup.number().integer().required(`required`),
   })
 }
 
-const getInitialValues = user => ({
+const getInitialValues = (user) => ({
   credit: get(user, 'credit') / 100,
-  amount: 0
+  amount: 0,
 })
 
 function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
@@ -38,7 +36,7 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
 
       try {
         await addCredit(userId, {
-          amount: amount * 100
+          amount: amount * 100,
         })
         navigate('..')
       } catch (err) {
@@ -122,12 +120,12 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
 }
 
 const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId)
+  user: get(users.byId, userId),
 })
 
 const mapDispatchToProps = {
   addCredit,
-  readCredit
+  readCredit,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAddCredit)

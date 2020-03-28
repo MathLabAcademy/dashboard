@@ -12,12 +12,12 @@ import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createCQExam } from 'store/actions/cqExams'
 import * as Yup from 'yup'
 
-const getInitialValues = courseId => ({
+const getInitialValues = (courseId) => ({
   courseId: Number(courseId),
   date: '',
   name: '',
   description: '',
-  questionPaperPdf: ''
+  questionPaperPdf: '',
 })
 
 const getValidationSchema = () => {
@@ -27,7 +27,7 @@ const getValidationSchema = () => {
       .required(`required`),
     name: Yup.string().notRequired(),
     description: Yup.string().notRequired(),
-    questionPaperPdf: Yup.mixed().required(`required`)
+    questionPaperPdf: Yup.mixed().required(`required`),
   })
 }
 
@@ -122,7 +122,7 @@ function CourseMCQExamCreate({ courseId, createCQExam, navigate }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createCQExam
+  createCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamCreate)

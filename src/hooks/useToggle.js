@@ -7,7 +7,7 @@ function useToggle(initalState = false) {
     () => ({
       open: () => setOpen(true),
       close: () => setOpen(false),
-      toggle: () => setOpen(open => !open)
+      toggle: () => setOpen((open) => !open),
     }),
     []
   )

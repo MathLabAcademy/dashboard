@@ -16,14 +16,14 @@ function _ListItemRow({ enrollmentId, enrollment, user, month }) {
   const data = useMemo(() => {
     const credit = get(user, 'credit', 0) / 100
     const payment = get(enrollment, 'Payments', emptyArray).find(
-      payment => payment.month === month
+      (payment) => payment.month === month
     )
     const transactionId = get(payment, 'id', '---')
     const amount = get(payment, 'Transaction.amount') / 100 || '---'
     return {
       credit,
       transactionId,
-      amount
+      amount,
     }
   }, [enrollment, user, month])
 
@@ -43,7 +43,7 @@ const ListItemRow = connect(({ batches, users }, { enrollmentId }) => {
   const enrollment = get(batches.classEnrollments.byId, enrollmentId)
   return {
     enrollment,
-    user: get(users.byId, get(enrollment, 'userId'))
+    user: get(users.byId, get(enrollment, 'userId')),
   }
 })(_ListItemRow)
 
@@ -51,7 +51,7 @@ function BatchClassPaymentList({
   batchClassId,
   getAllBatchClassEnrollmentForYear,
   classEnrollments,
-  linkToBase
+  linkToBase,
 }) {
   const yearRef = useRef()
   const monthRef = useRef()
@@ -73,7 +73,7 @@ function BatchClassPaymentList({
 
   const refreshPaymentData = useCallback(() => {
     getAllBatchClassEnrollmentForYear(batchClassId, year, {
-      query: `include=Payments&month=${month}`
+      query: `include=Payments&month=${month}`,
     })
   }, [batchClassId, year, month, getAllBatchClassEnrollmentForYear])
 
@@ -86,9 +86,9 @@ function BatchClassPaymentList({
       `^${String(year).slice(-2)}${String(batchClassId).padStart(2, '0')}`
     )
     return classEnrollments.allIds
-      .filter(id => regex.test(id))
+      .filter((id) => regex.test(id))
       .sort()
-      .filter(id =>
+      .filter((id) =>
         get(classEnrollments.byId, [id, 'activeMonths'], emptyArray).includes(
           month
         )
@@ -98,7 +98,7 @@ function BatchClassPaymentList({
     year,
     month,
     classEnrollments.allIds,
-    classEnrollments.byId
+    classEnrollments.byId,
   ])
 
   return (
@@ -186,7 +186,7 @@ function BatchClassPaymentList({
         </Table.Header>
 
         <Table.Body>
-          {enrollmentIds.map(enrollmentId => (
+          {enrollmentIds.map((enrollmentId) => (
             <ListItemRow
               key={enrollmentId}
               linkToBase={linkToBase}
@@ -202,11 +202,11 @@ function BatchClassPaymentList({
 
 const mapStateToProps = ({ batches }) => ({
   classPayments: batches.classPayments,
-  classEnrollments: batches.classEnrollments
+  classEnrollments: batches.classEnrollments,
 })
 
 const mapDispatchToProps = {
-  getAllBatchClassEnrollmentForYear
+  getAllBatchClassEnrollmentForYear,
 }
 
 export default connect(

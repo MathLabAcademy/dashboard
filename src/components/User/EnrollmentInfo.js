@@ -14,7 +14,7 @@ function EnrollmentInfo({
   courseEnrollments,
   batchClassEnrollments,
   batchCourseEnrollments,
-  getAllEnrollmentsForUser
+  getAllEnrollmentsForUser,
 }) {
   useEffect(() => {
     getAllEnrollmentsForUser(userId, 'batch_class')
@@ -25,12 +25,12 @@ function EnrollmentInfo({
   const {
     courseIds,
     batchClassEnrollmentIds,
-    batchCourseEnrollmentIds
+    batchCourseEnrollmentIds,
   } = useMemo(
     () => ({
       courseIds: Object.keys(courseEnrollments),
       batchClassEnrollmentIds: Object.keys(batchClassEnrollments),
-      batchCourseEnrollmentIds: Object.keys(batchCourseEnrollments)
+      batchCourseEnrollmentIds: Object.keys(batchCourseEnrollments),
     }),
     [batchClassEnrollments, batchCourseEnrollments, courseEnrollments]
   )
@@ -45,7 +45,7 @@ function EnrollmentInfo({
             <Table.Row>
               <Table.HeaderCell collapsing content={`Enrolled Courses`} />
               <Table.Cell>
-                {courseIds.map(courseId => (
+                {courseIds.map((courseId) => (
                   <Label key={courseId} to={`/courses/${courseId}`} as={Link}>
                     {get(courses.byId[courseId], 'name', `#${courseId}`)}
                   </Label>
@@ -61,7 +61,7 @@ function EnrollmentInfo({
                 content={`Batch Class Enrollments`}
               />
               <Table.Cell>
-                {batchClassEnrollmentIds.map(enrollmentId => (
+                {batchClassEnrollmentIds.map((enrollmentId) => (
                   <Label
                     key={enrollmentId}
                     to={`/batchclasses/${get(
@@ -84,7 +84,7 @@ function EnrollmentInfo({
                 content={`Batch Course Enrollments`}
               />
               <Table.Cell>
-                {batchCourseEnrollmentIds.map(enrollmentId => (
+                {batchCourseEnrollmentIds.map((enrollmentId) => (
                   <Label
                     key={enrollmentId}
                     to={`/batchcourses/${get(
@@ -118,7 +118,7 @@ const mapStateToProps = ({ courses, users }, { userId }) => ({
     userId,
     emptyObject
   ),
-  user: get(users.byId, userId)
+  user: get(users.byId, userId),
 })
 
 const mapDispatchToProps = { getAllEnrollmentsForUser }

@@ -35,11 +35,11 @@ class RootErrorBoundary extends Component {
 }
 
 const mapStateToProps = ({ errorBoundary }) => ({
-  error: errorBoundary.rootError
+  error: errorBoundary.rootError,
 })
 
 const mapDispatchToProps = {
-  setError: setErrorBoundaryRootError
+  setError: setErrorBoundaryRootError,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RootErrorBoundary)

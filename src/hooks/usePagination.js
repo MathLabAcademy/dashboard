@@ -33,7 +33,7 @@ function usePagination(
 
     if (!isNull(prevQuery) && query === prevQuery) return
 
-    setTryCount(c => (page === prevPage && query === prevQuery ? c + 1 : 1))
+    setTryCount((c) => (page === prevPage && query === prevQuery ? c + 1 : 1))
 
     if (tryCount < maxTryCount) fetchPage({ page, query })
   }, [
@@ -43,7 +43,7 @@ function usePagination(
     pagination.pages,
     prevPage,
     query,
-    tryCount
+    tryCount,
   ])
 
   const onPageChange = useCallback(

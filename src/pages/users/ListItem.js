@@ -43,11 +43,11 @@ function UserListItem({ id, data, getData }) {
 }
 
 const mapStateToProps = ({ users }, { id }) => ({
-  data: get(users.byId, id)
+  data: get(users.byId, id),
 })
 
 const mapDispatchToProps = {
-  getData: getUser
+  getData: getUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserListItem)

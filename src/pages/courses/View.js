@@ -17,12 +17,12 @@ function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
 }
 
 const mapStateToProps = ({ courses }, { courseId }) => ({
-  course: get(courses.byId, courseId)
+  course: get(courses.byId, courseId),
 })
 
 const mapDispatchToProps = {
   getCourse,
-  getAllEnrollments
+  getAllEnrollments,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseView)

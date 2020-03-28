@@ -17,12 +17,12 @@ const PageSwitcher = ({ activePage, totalPages, onPageChange }) => {
       prevItem={{
         disabled: activePage === 1,
         content: '⟨',
-        'aria-label': `Previous Page`
+        'aria-label': `Previous Page`,
       }}
       nextItem={{
         disabled: activePage === totalPages,
         content: '⟩',
-        'aria-label': `Next Page`
+        'aria-label': `Next Page`,
       }}
       aria-label={`Page Navigation`}
     />

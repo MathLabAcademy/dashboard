@@ -15,15 +15,15 @@ import {
   MCQ_PAGE_REMOVE,
   MCQ_PAGE_REQUEST,
   MCQ_PAGINATION_PURGE,
-  MCQ_UPDATE
+  MCQ_UPDATE,
 } from './actionTypes'
 
-export const createMCQ = mcqData => async dispatch => {
+export const createMCQ = (mcqData) => async (dispatch) => {
   const url = `/mcqs`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: mcqData
+    body: mcqData,
   })
 
   if (error) throw error
@@ -35,7 +35,7 @@ export const createMCQ = mcqData => async dispatch => {
   if (mcqData.mcqExamId) {
     dispatch({
       type: MCQEXAMQUESTION_ADD,
-      data: { mcqExamId: mcqData.mcqExamId, mcqId: data.id }
+      data: { mcqExamId: mcqData.mcqExamId, mcqId: data.id },
     })
   }
 
@@ -44,7 +44,7 @@ export const createMCQ = mcqData => async dispatch => {
   return data
 }
 
-export const getMCQ = mcqId => async dispatch => {
+export const getMCQ = (mcqId) => async (dispatch) => {
   let url = `/mcqs/${mcqId}`
 
   const { data, error } = await api(url)
@@ -56,12 +56,12 @@ export const getMCQ = mcqId => async dispatch => {
   return data
 }
 
-export const updateMCQ = (mcqId, mcqData) => async dispatch => {
+export const updateMCQ = (mcqId, mcqData) => async (dispatch) => {
   const url = `/mcqs/${mcqId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: mcqData
+    body: mcqData,
   })
 
   if (error) throw error
@@ -76,7 +76,7 @@ export const updateMCQ = (mcqId, mcqData) => async dispatch => {
 export const getAllMCQsForExam = (
   mcqExamId,
   { query = '' } = defaultOptsFetchAllPages
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/mcqexams/${mcqExamId}/mcqs`
   if (query) url += `?${query}`
 
@@ -89,7 +89,7 @@ export const getAllMCQsForExam = (
   return data
 }
 
-export const readMCQAnswer = mcqId => async dispatch => {
+export const readMCQAnswer = (mcqId) => async (dispatch) => {
   const url = `/mcqs/${mcqId}/answer`
 
   const { data, error } = await api(url)
@@ -101,12 +101,12 @@ export const readMCQAnswer = mcqId => async dispatch => {
   return data
 }
 
-export const setMCQAnswers = mcqAnswersData => async dispatch => {
+export const setMCQAnswers = (mcqAnswersData) => async (dispatch) => {
   const url = `/mcqs/answers`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: mcqAnswersData
+    body: mcqAnswersData,
   })
 
   if (error) throw error
@@ -119,7 +119,7 @@ export const setMCQAnswers = mcqAnswersData => async dispatch => {
 export const getAllMCQAnswersForExam = (
   mcqExamId,
   { query = '' } = defaultOptsFetchAllPages
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/mcqexams/${mcqExamId}/mcqanswers`
   if (query) url += `?${query}`
 
@@ -132,12 +132,14 @@ export const getAllMCQAnswersForExam = (
   return data
 }
 
-export const submit = (mcqExamId, mcqId, submissionData) => async dispatch => {
+export const submit = (mcqExamId, mcqId, submissionData) => async (
+  dispatch
+) => {
   const url = `/mcqexams/${mcqExamId}/mcqs/${mcqId}/action/submit`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: submissionData
+    body: submissionData,
   })
 
   if (error) throw error
@@ -150,7 +152,7 @@ export const submit = (mcqExamId, mcqId, submissionData) => async dispatch => {
 export const fetchMCQPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: MCQ_PAGE_REQUEST, page, query })
 
   let url = `/mcqs?page=${page}`
@@ -170,7 +172,7 @@ export const fetchMCQPage = (
   return data
 }
 
-export const getAllMCQImages = mcqId => async dispatch => {
+export const getAllMCQImages = (mcqId) => async (dispatch) => {
   const url = `/mcqs/${mcqId}/images`
 
   const { data, error } = await api(url)
@@ -182,7 +184,7 @@ export const getAllMCQImages = mcqId => async dispatch => {
   return data
 }
 
-export const getAllMCQTmpImages = () => async dispatch => {
+export const getAllMCQTmpImages = () => async (dispatch) => {
   const url = `/mcqs/tmp/images`
 
   const { data, error } = await api(url)
@@ -194,7 +196,7 @@ export const getAllMCQTmpImages = () => async dispatch => {
   return data
 }
 
-export const uploadMCQImage = (mcqId, mcqImageData) => async dispatch => {
+export const uploadMCQImage = (mcqId, mcqImageData) => async (dispatch) => {
   const url = `/mcqs/${mcqId}/images`
 
   const body = new FormData()
@@ -209,7 +211,7 @@ export const uploadMCQImage = (mcqId, mcqImageData) => async dispatch => {
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body
+    body,
   })
 
   if (error) throw error
@@ -219,7 +221,7 @@ export const uploadMCQImage = (mcqId, mcqImageData) => async dispatch => {
   return data
 }
 
-export const uploadMCQTmpImage = mcqImageData => async dispatch => {
+export const uploadMCQTmpImage = (mcqImageData) => async (dispatch) => {
   const url = `/mcqs/tmp/images`
 
   const body = new FormData()
@@ -231,7 +233,7 @@ export const uploadMCQTmpImage = mcqImageData => async dispatch => {
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body
+    body,
   })
 
   if (error) throw error

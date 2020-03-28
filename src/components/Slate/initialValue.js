@@ -9,10 +9,10 @@ export default JSON.stringify({
         nodes: [
           {
             object: 'text',
-            text: ''
-          }
-        ]
-      }
-    ]
-  }
+            text: '',
+          },
+        ],
+      },
+    ],
+  },
 })

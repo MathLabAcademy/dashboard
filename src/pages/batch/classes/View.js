@@ -58,11 +58,11 @@ function BatchClassView({ batchClassId, batchClass, getBatchClass }) {
 }
 
 const mapStateToProps = ({ batches }, { batchClassId }) => ({
-  batchClass: get(batches.classes.byId, batchClassId)
+  batchClass: get(batches.classes.byId, batchClassId),
 })
 
 const mapDispatchToProps = {
-  getBatchClass
+  getBatchClass,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassView)

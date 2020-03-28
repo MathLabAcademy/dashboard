@@ -32,7 +32,7 @@ const FormFile = ({
             {...field}
             id={id}
             type="file"
-            onChange={e => {
+            onChange={(e) => {
               form.setFieldTouched(name, true)
               form.setFieldValue(
                 name,

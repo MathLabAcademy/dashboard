@@ -13,7 +13,7 @@ const plugins = [
   QueriesPlugin(),
   MarkdownPlugin(),
   KatexPlugin(),
-  InlineFormatPlugin()
+  InlineFormatPlugin(),
 ]
 
 export function SlateViewer({ initialValue, inline = false }) {

@@ -19,7 +19,7 @@ function UserList({ pagination, fetchPage }) {
         <HeaderGrid Left={<Header>Users</Header>} />
       </Segment>
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
         <ListItem key={id} id={id} />
       ))}
 
@@ -33,11 +33,11 @@ function UserList({ pagination, fetchPage }) {
 }
 
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.users
+  pagination: pagination.users,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchUserPage
+  fetchPage: fetchUserPage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserList)

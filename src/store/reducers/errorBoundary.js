@@ -1,7 +1,7 @@
 import { ERROR_BOUNDARY_SET_ROOT_ERROR } from 'store/actions/actionTypes'
 
 const initialState = {
-  rootError: null
+  rootError: null,
 }
 
 const errorBoundaryReducer = (state = initialState, { type, data }) => {
@@ -9,7 +9,7 @@ const errorBoundaryReducer = (state = initialState, { type, data }) => {
     case ERROR_BOUNDARY_SET_ROOT_ERROR:
       return {
         ...state,
-        rootError: data
+        rootError: data,
       }
     default:
       return state

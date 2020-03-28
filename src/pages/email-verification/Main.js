@@ -18,8 +18,8 @@ function EmailVerification({ token, userStatus, forGuardian }) {
     const { error } = await api(url, {
       method: 'POST',
       body: {
-        encodedToken: token
-      }
+        encodedToken: token,
+      },
     })
 
     setLoading(false)
@@ -79,7 +79,7 @@ function EmailVerification({ token, userStatus, forGuardian }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userStatus: get(user, 'status')
+  userStatus: get(user, 'status'),
 })
 
 export default connect(mapStateToProps)(EmailVerification)

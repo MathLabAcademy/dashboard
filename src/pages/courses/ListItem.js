@@ -26,11 +26,11 @@ function CourseListItem({ id, data, getData }) {
 }
 
 const mapStateToProps = ({ courses }, { id }) => ({
-  data: get(courses.byId, id)
+  data: get(courses.byId, id),
 })
 
 const mapDispatchToProps = {
-  getData: getCourse
+  getData: getCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseListItem)

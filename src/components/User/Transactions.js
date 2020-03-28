@@ -12,7 +12,7 @@ function UserTransactions({
   userId,
   transactions,
   getAllTransactionsForUser,
-  basic
+  basic,
 }) {
   useEffect(() => {
     if (userId) getAllTransactionsForUser(userId)
@@ -20,7 +20,7 @@ function UserTransactions({
 
   const transactionIds = useMemo(() => {
     return transactions.allIds.filter(
-      id => get(transactions.byId, [id, 'userId']) === userId
+      (id) => get(transactions.byId, [id, 'userId']) === userId
     )
   }, [transactions.allIds, transactions.byId, userId])
 
@@ -47,7 +47,7 @@ function UserTransactions({
 
         <Table.Body>
           {transactionIds
-            .map(id => get(transactions.byId, id))
+            .map((id) => get(transactions.byId, id))
             .map(({ id, transactionTypeId, amount, data, created }) => (
               <Table.Row key={id}>
                 <Table.Cell>{id}</Table.Cell>
@@ -74,11 +74,11 @@ function UserTransactions({
 }
 
 const mapStateToProps = ({ transactions }) => ({
-  transactions
+  transactions,
 })
 
 const mapDispatchToProps = {
-  getAllTransactionsForUser
+  getAllTransactionsForUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserTransactions)

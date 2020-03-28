@@ -1,4 +1,4 @@
-const getPersonName = person => {
+const getPersonName = (person) => {
   if (!person) return ``
 
   const { firstName, middleName, lastName } = person

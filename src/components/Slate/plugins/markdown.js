@@ -1,6 +1,6 @@
 import React from 'react'
 
-const getType = chars => {
+const getType = (chars) => {
   switch (chars) {
     case '*':
     case '-':
@@ -136,7 +136,7 @@ function MarkdownPlugin(options = {}) {
 
   return {
     onKeyDown,
-    renderBlock
+    renderBlock,
   }
 }
 

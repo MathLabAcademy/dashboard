@@ -8,7 +8,7 @@ function NavLink({ children, to, ...props }) {
       as={RouterLink}
       to={to}
       _hover={{
-        textDecoration: 'none'
+        textDecoration: 'none',
       }}
       {...props}
     >

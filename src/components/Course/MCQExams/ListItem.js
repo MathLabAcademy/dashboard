@@ -26,11 +26,11 @@ function CourseMCQExamListItem({ id, data, getData, linkToBase }) {
 }
 
 const mapStateToProps = ({ mcqExams }, { id }) => ({
-  data: get(mcqExams.byId, id)
+  data: get(mcqExams.byId, id),
 })
 
 const mapDispatchToProps = {
-  getData: getMCQExam
+  getData: getMCQExam,
 }
 
 export default connect(

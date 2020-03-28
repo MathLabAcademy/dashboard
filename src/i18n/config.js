@@ -5,8 +5,8 @@ const i18nConfig = {
   languages: ['bn', 'en'],
   languageNames: {
     bn: t`Bangla`,
-    en: t`English`
-  }
+    en: t`English`,
+  },
 }
 
 export default i18nConfig

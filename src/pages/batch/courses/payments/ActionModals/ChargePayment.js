@@ -10,7 +10,7 @@ function BatchCoursePaymentChargeModal({
   batchCourseId,
   year,
   onDone,
-  chargeCoursePaymentForYear
+  chargeCoursePaymentForYear,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -94,7 +94,7 @@ function BatchCoursePaymentChargeModal({
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  chargeCoursePaymentForYear
+  chargeCoursePaymentForYear,
 }
 
 export default connect(

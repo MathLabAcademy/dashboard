@@ -12,7 +12,7 @@ function BatchCourseFeeUnsetModal({
   month,
   monthName,
   batchFee,
-  unsetBatchClassFee
+  unsetBatchClassFee,
 }) {
   const [open, handler] = useToggle(false)
   const [status, setStatus] = useState(null)
@@ -41,7 +41,7 @@ function BatchCourseFeeUnsetModal({
   }, [batchClassId, handler, month, unsetBatchClassFee, year])
 
   const isSet = useMemo(() => Number.isFinite(get(batchFee, 'amount')), [
-    batchFee
+    batchFee,
   ])
 
   if (!isSet) return null
@@ -69,11 +69,11 @@ function BatchCourseFeeUnsetModal({
 }
 
 const mapStateToProps = ({ batches }, { batchClassId, year, month }) => ({
-  batchFee: get(batches.classes.feesById, [batchClassId, year, month])
+  batchFee: get(batches.classes.feesById, [batchClassId, year, month]),
 })
 
 const mapDispatchToProps = {
-  unsetBatchClassFee
+  unsetBatchClassFee,
 }
 
 export default connect(

@@ -11,7 +11,7 @@ import {
   FormGroup,
   Modal,
   Segment,
-  TextArea
+  TextArea,
 } from 'semantic-ui-react'
 import TeX from './TeX'
 import removeEntity from '_draft/modifiers/removeEntity'
@@ -19,10 +19,10 @@ import removeEntity from '_draft/modifiers/removeEntity'
 const defaultState = {
   tex: '',
   type: 'block',
-  error: 'empty'
+  error: 'empty',
 }
 
-const getIntialState = data => {
+const getIntialState = (data) => {
   return data
     ? { tex: data.tex, type: data.type, error: data.tex ? '' : 'empty' }
     : defaultState
@@ -36,12 +36,12 @@ function reducer(state, { type, data }) {
       return {
         ...state,
         ...data,
-        error: ''
+        error: '',
       }
     case 'ERROR':
       return {
         ...state,
-        error: data
+        error: data,
       }
     default:
       throw new Error(`invalid actionType: ${type}`)
@@ -59,7 +59,7 @@ function TeXEditor({
   entityKey,
   offsetKey,
   getStore,
-  onClose
+  onClose,
 }) {
   useEffect(() => {
     const store = getStore()
@@ -77,7 +77,7 @@ function TeXEditor({
 
       return getIntialState({
         tex: entityData.tex,
-        type: entityData.type
+        type: entityData.type,
       })
     }
 
@@ -85,7 +85,7 @@ function TeXEditor({
 
     return getIntialState({
       tex: blockData.get('tex'),
-      type: blockData.get('type')
+      type: blockData.get('type'),
     })
   }, [block, contentState, entityKey, isInline, toUpdate])
 
@@ -104,7 +104,7 @@ function TeXEditor({
     [toUpdate]
   )
 
-  const onError = useCallback(err => {
+  const onError = useCallback((err) => {
     dispatch({ type: 'ERROR', data: err.toString() })
   }, [])
 
@@ -114,12 +114,12 @@ function TeXEditor({
     const store = getStore()
 
     if (isInline) {
-      store.setEditorState(editorState =>
+      store.setEditorState((editorState) =>
         removeEntity(editorState, { contentState, entityKey })
       )
     } else {
       const blockKey = block.getKey()
-      store.setEditorState(editorState => removeBlock(editorState, blockKey))
+      store.setEditorState((editorState) => removeBlock(editorState, blockKey))
     }
 
     onClose()
@@ -137,14 +137,14 @@ function TeXEditor({
       let selectionToReplace = SelectionState.createEmpty(blockKey)
 
       block.findEntityRanges(
-        character => {
+        (character) => {
           const characterEntityKey = character.getEntity()
           return characterEntityKey && characterEntityKey === entityKey
         },
         (start, end) => {
           selectionToReplace = selectionToReplace.merge({
             anchorOffset: start,
-            focusOffset: end
+            focusOffset: end,
           })
         }
       )
@@ -157,7 +157,7 @@ function TeXEditor({
         entityKey
       ).mergeEntityData(entityKey, { tex: state.tex })
 
-      store.setEditorState(editorState =>
+      store.setEditorState((editorState) =>
         EditorState.push(editorState, newContentState, 'insert-characters')
       )
     } else {
@@ -169,7 +169,7 @@ function TeXEditor({
         anchorKey: blockKey,
         anchorOffset: 0,
         focusKey: blockKey,
-        focusOffset: contentBlock.getLength()
+        focusOffset: contentBlock.getLength(),
       })
 
       const newContentState = Modifier.mergeBlockData(
@@ -178,7 +178,7 @@ function TeXEditor({
         { tex: state.tex }
       )
 
-      store.setEditorState(editorState =>
+      store.setEditorState((editorState) =>
         EditorState.push(editorState, newContentState, 'change-block-data')
       )
     }
@@ -191,7 +191,7 @@ function TeXEditor({
 
     const data = {
       tex: state.tex,
-      type: state.type
+      type: state.type,
     }
 
     if (!isInline) data.atomic = 'texblock'

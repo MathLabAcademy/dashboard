@@ -12,7 +12,7 @@ import {
   List,
   Message,
   Placeholder,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import { uploadMCQTmpImage } from 'store/actions/mcqs'
 
@@ -20,7 +20,7 @@ const initialState = {
   file: null,
   src: '',
   loading: false,
-  error: ''
+  error: '',
 }
 
 function reducer(state, { type, data }) {
@@ -31,12 +31,12 @@ function reducer(state, { type, data }) {
       return {
         ...state,
         ...data,
-        error: ''
+        error: '',
       }
     case 'ERROR':
       return {
         ...state,
-        error: data
+        error: data,
       }
     default:
       throw new Error(`invalid actionType: ${type}`)
@@ -47,7 +47,7 @@ function MCQTmpImageUploader({ uploadMCQTmpImage, onSuccess }) {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const onSubmit = useCallback(
-    async state => {
+    async (state) => {
       try {
         if (state.error) return
 
@@ -76,11 +76,11 @@ function MCQTmpImageUploader({ uploadMCQTmpImage, onSuccess }) {
               <Input
                 type="file"
                 accept="image/png, image/jpeg"
-                onChange={async event => {
+                onChange={async (event) => {
                   const imageFile = event.target.files[0]
 
                   const image = await imageCompression(imageFile, {
-                    maxWidthOrHeight: 512
+                    maxWidthOrHeight: 512,
                   })
 
                   const base64EncodedImage = await imageCompression.getDataUrlFromFile(
@@ -89,7 +89,7 @@ function MCQTmpImageUploader({ uploadMCQTmpImage, onSuccess }) {
 
                   dispatch({
                     type: 'UPDATE',
-                    data: { file: image, src: base64EncodedImage }
+                    data: { file: image, src: base64EncodedImage },
                   })
                 }}
                 action={
@@ -128,7 +128,7 @@ function MCQTmpImageUploader({ uploadMCQTmpImage, onSuccess }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  uploadMCQTmpImage
+  uploadMCQTmpImage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQTmpImageUploader)

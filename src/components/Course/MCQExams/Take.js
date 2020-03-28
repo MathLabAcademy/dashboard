@@ -15,14 +15,14 @@ import {
   Header,
   Label,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import {
   getAllQuestionsForExam,
   getAllSubmissions,
   pingTracker,
   readTracker,
-  startTracker
+  startTracker,
 } from 'store/actions/mcqExams'
 import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
@@ -37,7 +37,7 @@ function _MCQ({
   mcq,
   submitMCQ,
   submission,
-  readOnly
+  readOnly,
 }) {
   const [error, setError] = useState(null)
   const timer = useRef(null)
@@ -106,7 +106,7 @@ function _MCQ({
 const MCQ = connect(
   ({ mcqExams, mcqs, user }, { mcqExamId, mcqId }) => ({
     mcq: get(mcqs.byId, mcqId),
-    submission: get(mcqExams.submissionsById, [mcqExamId, user.data.id, mcqId])
+    submission: get(mcqExams.submissionsById, [mcqExamId, user.data.id, mcqId]),
   }),
   { submitMCQ }
 )(_MCQ)
@@ -122,7 +122,7 @@ function MCQExamTake({
   startTracker,
   pingTracker,
   getAllMCQsForExam,
-  getAllSubmissions
+  getAllSubmissions,
 }) {
   const [error, setError] = useState(null)
 
@@ -163,11 +163,11 @@ function MCQExamTake({
     getAllMCQsForExam,
     getAllQuestionsForExam,
     getAllSubmissions,
-    mcqExamId
+    mcqExamId,
   ])
 
   const [countdown] = useCountdown({
-    endTime: get(tracker, 'end')
+    endTime: get(tracker, 'end'),
   })
 
   useInterval(
@@ -252,7 +252,7 @@ function MCQExamTake({
 const mapStateToProps = ({ mcqExams, user }, { mcqExamId }) => ({
   mcqExam: get(mcqExams.byId, mcqExamId),
   mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
-  tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id])
+  tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id]),
 })
 
 const mapDispatchToProps = {
@@ -261,7 +261,7 @@ const mapDispatchToProps = {
   startTracker,
   pingTracker,
   getAllMCQsForExam,
-  getAllSubmissions
+  getAllSubmissions,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQExamTake)

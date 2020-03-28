@@ -17,6 +17,6 @@ export default function getNewBlockSelection(blockBefore, blockAfter, after) {
   return SelectionState.createEmpty(nextBlock.getKey()).merge({
     anchorOffset: offset,
     focusOffset: offset,
-    hasFocus: true
+    hasFocus: true,
   })
 }

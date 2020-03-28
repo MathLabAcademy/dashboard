@@ -38,7 +38,7 @@ function SuccessMessage({ data }) {
 function Register({ userStatus }) {
   const [data, setData] = useState(null)
 
-  const onSuccess = useCallback(data => {
+  const onSuccess = useCallback((data) => {
     setData(data)
   }, [])
 
@@ -60,7 +60,7 @@ function Register({ userStatus }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userStatus: get(user, 'status')
+  userStatus: get(user, 'status'),
 })
 
 export default connect(mapStateToProps)(Register)

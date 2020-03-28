@@ -13,11 +13,11 @@ import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getCQExam, updateCQExam } from 'store/actions/cqExams'
 import * as Yup from 'yup'
 
-const getInitialValues = data => ({
+const getInitialValues = (data) => ({
   date: DateTime.fromISO(get(data, 'date')).toISODate() || '',
   name: get(data, 'name') || '',
   description: get(data, 'description') || '',
-  questionPaperPdf: ''
+  questionPaperPdf: '',
 })
 
 const getValidationSchema = () => {
@@ -27,7 +27,7 @@ const getValidationSchema = () => {
       .required(`required`),
     name: Yup.string().notRequired(),
     description: Yup.string().notRequired(),
-    questionPaperPdf: Yup.mixed().notRequired()
+    questionPaperPdf: Yup.mixed().notRequired(),
   })
 }
 
@@ -124,12 +124,12 @@ function CourseCQExamEdit({ cqExamId, data, getData, updateCQExam }) {
 }
 
 const mapStateToProps = ({ cqExams }, { cqExamId }) => ({
-  data: get(cqExams.byId, cqExamId)
+  data: get(cqExams.byId, cqExamId),
 })
 
 const mapDispatchToProps = {
   getData: getCQExam,
-  updateCQExam
+  updateCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseCQExamEdit)

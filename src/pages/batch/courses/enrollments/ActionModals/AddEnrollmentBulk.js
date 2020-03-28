@@ -11,19 +11,19 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    dataFile: Yup.mixed().required(`required`)
+    dataFile: Yup.mixed().required(`required`),
   })
 }
 
 const getInitialValues = () => ({
-  dataFile: ''
+  dataFile: '',
 })
 
 function BatchCourseEnrollmentBulkAddModal({
   batchCourseId,
   year,
   createBatchCourseEnrollmentBulk,
-  refreshData
+  refreshData,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -38,7 +38,7 @@ function BatchCourseEnrollmentBulkAddModal({
         await createBatchCourseEnrollmentBulk({
           batchCourseId,
           year,
-          ...values
+          ...values,
         })
         actions.resetForm()
         handle.close()
@@ -120,7 +120,7 @@ function BatchCourseEnrollmentBulkAddModal({
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createBatchCourseEnrollmentBulk
+  createBatchCourseEnrollmentBulk,
 }
 
 export default connect(

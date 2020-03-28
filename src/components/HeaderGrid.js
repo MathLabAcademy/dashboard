@@ -7,7 +7,7 @@ function HeaderGrid({
   Right = null,
   leftClassName = 'grow wide',
   rightClassName = 'auto wide',
-  verticalAlign = 'middle'
+  verticalAlign = 'middle',
 }) {
   return (
     <Grid columns={2} verticalAlign={verticalAlign}>

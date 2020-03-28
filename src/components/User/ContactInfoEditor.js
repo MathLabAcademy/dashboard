@@ -16,38 +16,38 @@ const fieldSchema = {
   phone: Yup.string().test(
     'is-mobile-phone',
     'invalid mobile phone number',
-    phone => (phone ? isMobilePhone(phone) : true)
-  )
+    (phone) => (phone ? isMobilePhone(phone) : true)
+  ),
 }
 
-const getValidationSchema = field => {
+const getValidationSchema = (field) => {
   return Yup.object({
-    [field]: fieldSchema[field]
+    [field]: fieldSchema[field],
   })
 }
 
 const getInitialValues = (person, field, fieldTrx) => ({
-  [field]: get(person, fieldTrx) || get(person, field) || ''
+  [field]: get(person, fieldTrx) || get(person, field) || '',
 })
 
 const inputType = {
   email: 'email',
-  phone: 'text'
+  phone: 'text',
 }
 
 const verifiedFieldTitle = {
   email: 'Verified Email',
-  phone: 'Verified Mobile Phone'
+  phone: 'Verified Mobile Phone',
 }
 
 const newFieldTitle = {
   email: 'New Email',
-  phone: 'New Mobile Phone'
+  phone: 'New Mobile Phone',
 }
 
 const editorTitle = {
   email: 'Edit Email',
-  phone: 'Edit Mobile Phone'
+  phone: 'Edit Mobile Phone',
 }
 
 function ContactInfoEditor({
@@ -59,19 +59,19 @@ function ContactInfoEditor({
   updatePhone,
   isCurrent,
   isGuardian,
-  onClose
+  onClose,
 }) {
   const updateContactInfo = useMemo(() => {
     const updater = {
       email: updateEmail,
-      phone: updatePhone
+      phone: updatePhone,
     }
     return updater[field]
   }, [field, updateEmail, updatePhone])
 
   const validationSchema = useMemo(() => getValidationSchema(field, fieldTrx), [
     field,
-    fieldTrx
+    fieldTrx,
   ])
 
   const initialValues = useMemo(
@@ -190,12 +190,12 @@ function ContactInfoEditor({
 }
 
 const mapStateToProps = ({ user }, { userId }) => ({
-  isCurrent: get(user, 'id') === userId
+  isCurrent: get(user, 'id') === userId,
 })
 
 const mapDispatchToProps = {
   updateEmail,
-  updatePhone
+  updatePhone,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactInfoEditor)

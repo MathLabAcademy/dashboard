@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Input, Segment, Table } from 'semantic-ui-react'
 import {
   getAllBatchClassFeesForYear,
-  getAllBatchStudentPayments
+  getAllBatchStudentPayments,
 } from 'store/actions/batches'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import ClearMonthPaid from '../ActionModals/ClearMonthPaid'
@@ -21,7 +21,7 @@ function BatchCourseStudentPayments({
   getAllBatchClassFeesForYear,
   batchPaymentIds,
   batchPayments,
-  getAllBatchStudentPayments
+  getAllBatchStudentPayments,
 }) {
   const yearRef = useRef()
 
@@ -44,13 +44,13 @@ function BatchCourseStudentPayments({
   const data = useMemo(() => {
     const fees = get(batchClassFees, year, emptyObject)
     const payments = batchPaymentIds
-      .filter(id => get(batchPayments.byId, [id, 'year']) === year)
-      .map(id => get(batchPayments.byId, id, emptyObject))
+      .filter((id) => get(batchPayments.byId, [id, 'year']) === year)
+      .map((id) => get(batchPayments.byId, id, emptyObject))
 
     return months.reduce((byMonth, monthName, index) => {
       const month = index + 1
       const fee = get(fees, month)
-      const payment = payments.find(item => item.month === month)
+      const payment = payments.find((item) => item.month === month)
       byMonth[month] = { fee, payment, monthName }
       return byMonth
     }, {})
@@ -167,12 +167,12 @@ const mapStateToProps = ({ batches }, { batchClassId, batchStudentId }) => ({
     batchStudentId,
     emptyArray
   ),
-  batchPayments: batches.payments
+  batchPayments: batches.payments,
 })
 
 const mapDispatchToProps = {
   getAllBatchClassFeesForYear,
-  getAllBatchStudentPayments
+  getAllBatchStudentPayments,
 }
 
 export default connect(

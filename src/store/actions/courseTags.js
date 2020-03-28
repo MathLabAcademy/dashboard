@@ -7,15 +7,15 @@ import {
   COURSETAG_PAGE_REMOVE,
   COURSETAG_PAGE_REQUEST,
   COURSETAG_PAGINATION_PURGE,
-  COURSETAG_UPDATE
+  COURSETAG_UPDATE,
 } from './actionTypes'
 
-export const createTag = tagData => async dispatch => {
+export const createTag = (tagData) => async (dispatch) => {
   const url = `/coursetags`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: tagData
+    body: tagData,
   })
 
   if (error) throw error
@@ -27,7 +27,7 @@ export const createTag = tagData => async dispatch => {
   return data
 }
 
-export const getTag = tagId => async dispatch => {
+export const getTag = (tagId) => async (dispatch) => {
   const url = `/coursetags/${tagId}`
 
   const { data, error } = await api(url)
@@ -39,12 +39,12 @@ export const getTag = tagId => async dispatch => {
   return data
 }
 
-export const updateTag = (tagId, tagData) => async dispatch => {
+export const updateTag = (tagId, tagData) => async (dispatch) => {
   const url = `/coursetags/${tagId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: tagData
+    body: tagData,
   })
 
   if (error) throw error
@@ -57,7 +57,7 @@ export const updateTag = (tagId, tagData) => async dispatch => {
 export const fetchTagPage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: COURSETAG_PAGE_REQUEST, page, query })
 
   let url = `/coursetags?page=${page}`
@@ -80,7 +80,7 @@ export const fetchTagPage = (
 export const fetchAllTagPage = (
   { query = '' } = defaultOptsFetchAllPages,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   let page = 1
   let hasNext = true
 

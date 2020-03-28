@@ -3,7 +3,7 @@ import { dispatchToStore } from 'store/index'
 
 async function api(endpoint, options = {}) {
   const Response = {
-    meta: {}
+    meta: {},
   }
 
   const url = `/api${endpoint}`

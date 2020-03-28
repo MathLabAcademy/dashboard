@@ -4,7 +4,7 @@ import { Button } from 'semantic-ui-react'
 
 function StyleButton({ style, onToggle, active, label, icon }) {
   const _onToggle = useCallback(
-    e => {
+    (e) => {
       e.preventDefault()
       onToggle(style)
     },
@@ -31,7 +31,7 @@ const BLOCK_TYPES = [
   // { label: 'H6', style: 'header-six' },
   // { style: 'blockquote', icon: 'quote left' },
   { style: 'unordered-list-item', icon: 'list ul' },
-  { style: 'ordered-list-item', icon: 'list ol' }
+  { style: 'ordered-list-item', icon: 'list ol' },
   // { label: 'Code Block', style: 'code-block' }
 ]
 
@@ -42,7 +42,7 @@ function BlockStyleControls({ editorState, onToggle }) {
     .getBlockForKey(selection.getStartKey())
     .getType()
 
-  return BLOCK_TYPES.map(type => (
+  return BLOCK_TYPES.map((type) => (
     <StyleButton
       key={type.label || type.icon}
       active={type.style === blockType}
@@ -57,14 +57,14 @@ function BlockStyleControls({ editorState, onToggle }) {
 const INLINE_STYLES = [
   { style: 'BOLD', icon: 'bold' },
   { style: 'ITALIC', icon: 'italic' },
-  { style: 'UNDERLINE', icon: 'underline' }
+  { style: 'UNDERLINE', icon: 'underline' },
   // { style: 'CODE', icon: 'code' }
 ]
 
 function InlineStyleControls({ editorState, onToggle }) {
   const currentStyle = editorState.getCurrentInlineStyle()
 
-  return INLINE_STYLES.map(type => (
+  return INLINE_STYLES.map((type) => (
     <StyleButton
       key={type.label || type.icon}
       active={currentStyle.has(type.style)}
@@ -78,7 +78,7 @@ function InlineStyleControls({ editorState, onToggle }) {
 
 function RichEditorControls({ store, children }) {
   const toggleBlockType = useCallback(
-    blockType => {
+    (blockType) => {
       store.setEditorState(
         RichUtils.toggleBlockType(store.getEditorState(), blockType)
       )
@@ -87,7 +87,7 @@ function RichEditorControls({ store, children }) {
   )
 
   const toggleInlineStyle = useCallback(
-    inlineStyle => {
+    (inlineStyle) => {
       store.setEditorState(
         RichUtils.toggleInlineStyle(store.getEditorState(), inlineStyle)
       )
@@ -102,7 +102,7 @@ function RichEditorControls({ store, children }) {
       style={{
         borderBottom: '1px solid #ddd',
         paddingBottom: '10px',
-        marginBottom: '10px'
+        marginBottom: '10px',
       }}
     >
       <BlockStyleControls

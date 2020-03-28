@@ -13,7 +13,7 @@ function ImageBlock({ block, blockProps: { store }, contentState }) {
 
     return {
       src: blockData.get('src'),
-      caption: blockData.get('caption')
+      caption: blockData.get('caption'),
     }
   }, [block])
 

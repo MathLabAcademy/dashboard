@@ -65,11 +65,11 @@ function CourseCQExamView({ courseId, cqExamId, cqExam, getCQExam }) {
   )
 }
 const mapStateToProps = ({ cqExams }, { cqExamId }) => ({
-  cqExam: get(cqExams.byId, cqExamId)
+  cqExam: get(cqExams.byId, cqExamId),
 })
 
 const mapDispatchToProps = {
-  getCQExam
+  getCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseCQExamView)

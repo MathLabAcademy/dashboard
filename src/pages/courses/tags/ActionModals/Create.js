@@ -11,14 +11,12 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    name: Yup.string()
-      .min(3)
-      .required(`required`)
+    name: Yup.string().min(3).required(`required`),
   })
 }
 
 const getInitialValues = () => ({
-  name: ''
+  name: '',
 })
 
 function TagCreateModal({ createTag }) {
@@ -107,7 +105,7 @@ function TagCreateModal({ createTag }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createTag
+  createTag,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagCreateModal)

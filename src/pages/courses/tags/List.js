@@ -22,14 +22,14 @@ function _TagListItem({ tagId, tag }) {
 }
 
 const ListItem = connect(({ courseTags }, { tagId }) => ({
-  tag: get(courseTags.byId, tagId)
+  tag: get(courseTags.byId, tagId),
 }))(_TagListItem)
 
 const queryObject = { length: 40 }
 
 function TagList({ pagination, fetchPage }) {
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
-    queryObject
+    queryObject,
   })
 
   return (
@@ -40,7 +40,7 @@ function TagList({ pagination, fetchPage }) {
 
       <Segment basic>
         <Grid columns={5}>
-          {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+          {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
             <Grid.Column key={id}>
               <ListItem id={id} tagId={id} />
             </Grid.Column>
@@ -63,11 +63,11 @@ function TagList({ pagination, fetchPage }) {
   )
 }
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.courseTags
+  pagination: pagination.courseTags,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchTagPage
+  fetchPage: fetchTagPage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TagList)

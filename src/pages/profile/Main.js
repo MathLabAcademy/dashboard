@@ -14,11 +14,11 @@ function Profile({ currentUserId, user, getUser }) {
 
 const mapStateToProps = ({ user, users }) => ({
   currentUserId: get(user.data, 'id'),
-  user: get(users.byId, get(user.data, 'id'))
+  user: get(users.byId, get(user.data, 'id')),
 })
 
 const mapDispatchToProps = {
-  getUser
+  getUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

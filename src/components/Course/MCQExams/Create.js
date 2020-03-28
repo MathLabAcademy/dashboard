@@ -11,12 +11,12 @@ import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createMCQExam } from 'store/actions/mcqExams'
 import * as Yup from 'yup'
 
-const getInitialValues = courseId => ({
+const getInitialValues = (courseId) => ({
   courseId: Number(courseId),
   date: '',
   duration: 0,
   name: '',
-  description: ''
+  description: '',
 })
 
 const getValidationSchema = () => {
@@ -24,11 +24,9 @@ const getValidationSchema = () => {
     date: Yup.date()
       .min(DateTime.local().toISODate(), `date already passed`)
       .required(`required`),
-    duration: Yup.number()
-      .integer()
-      .positive(),
+    duration: Yup.number().integer().positive(),
     name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    description: Yup.string().required(`required`),
   })
 }
 
@@ -41,7 +39,7 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
       try {
         await createMCQExam({
           ...values,
-          duration: duration * 60 // minutes -> seconds
+          duration: duration * 60, // minutes -> seconds
         })
         actions.setStatus(null)
         navigate(`/courses/${courseId}/mcqexams`)
@@ -126,7 +124,7 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createMCQExam
+  createMCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamCreate)

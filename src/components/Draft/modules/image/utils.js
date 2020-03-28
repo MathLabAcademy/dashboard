@@ -11,8 +11,8 @@ export function blockRendererFn(store, block) {
       component: ImageBlock,
       editable: false,
       props: {
-        store
-      }
+        store,
+      },
     }
   }
 }

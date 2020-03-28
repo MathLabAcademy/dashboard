@@ -46,7 +46,7 @@ function _ListItem({ batchClassId, batchClass, getBatchClass }) {
 
 const ListItem = connect(
   ({ batches }, { batchClassId }) => ({
-    batchClass: get(batches.classes.byId, batchClassId)
+    batchClass: get(batches.classes.byId, batchClassId),
   }),
   { getBatchClass }
 )(_ListItem)
@@ -69,7 +69,7 @@ function BatchClassList({ pagination, fetchPage }) {
         />
       </Segment>
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
         <ListItem key={id} batchClassId={id} />
       ))}
 
@@ -83,11 +83,11 @@ function BatchClassList({ pagination, fetchPage }) {
 }
 
 const mapStateToProps = ({ pagination }) => ({
-  pagination: pagination.batchClasses
+  pagination: pagination.batchClasses,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchBatchClassPage
+  fetchPage: fetchBatchClassPage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassList)

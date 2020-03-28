@@ -11,7 +11,7 @@ function InlineTeX({
   dir,
   entityKey,
   offsetKey,
-  getStore
+  getStore,
 }) {
   const [open, handler] = useToggle(false)
 
@@ -24,7 +24,7 @@ function InlineTeX({
 
     return {
       tex: entityData.tex,
-      type: entityData.type
+      type: entityData.type,
     }
   }, [contentState, entityKey])
 

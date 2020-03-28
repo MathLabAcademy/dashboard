@@ -8,14 +8,14 @@ function removeEntity(editorState, { contentState, entityKey }) {
   let selectionToRemove = SelectionState.createEmpty(blockKey)
 
   block.findEntityRanges(
-    character => {
+    (character) => {
       const characterEntityKey = character.getEntity()
       return characterEntityKey && characterEntityKey === entityKey
     },
     (start, end) => {
       selectionToRemove = selectionToRemove.merge({
         anchorOffset: start,
-        focusOffset: end
+        focusOffset: end,
       })
     }
   )

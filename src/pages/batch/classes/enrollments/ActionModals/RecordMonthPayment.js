@@ -10,18 +10,18 @@ import { Button, Message, Modal } from 'semantic-ui-react'
 import { setBatchStudentPaymentMonthPaid } from 'store/actions/batches'
 import * as Yup from 'yup'
 
-const getValidationSchema = amountBoundary => {
+const getValidationSchema = (amountBoundary) => {
   return Yup.object({
     amount: Yup.number()
       .integer()
       .min(amountBoundary.min)
       .max(amountBoundary.max)
-      .required(`required`)
+      .required(`required`),
   })
 }
 
-const getInitialValues = amountBoundary => ({
-  amount: amountBoundary.min
+const getInitialValues = (amountBoundary) => ({
+  amount: amountBoundary.min,
 })
 
 function CourseStudentPaymentRecordMonthModal({
@@ -32,7 +32,7 @@ function CourseStudentPaymentRecordMonthModal({
   monthName,
   setBatchStudentPaymentMonthPaid,
   batchFee,
-  batchStudent
+  batchStudent,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -42,16 +42,16 @@ function CourseStudentPaymentRecordMonthModal({
 
     return {
       min: fee * (1 - waiver / 100),
-      max: fee
+      max: fee,
     }
   }, [batchFee, batchStudent])
 
   const initialValues = useMemo(() => getInitialValues(amountBoundary), [
-    amountBoundary
+    amountBoundary,
   ])
 
   const validationSchema = useMemo(() => getValidationSchema(amountBoundary), [
-    amountBoundary
+    amountBoundary,
   ])
 
   const onSubmit = useCallback(
@@ -62,7 +62,7 @@ function CourseStudentPaymentRecordMonthModal({
         await setBatchStudentPaymentMonthPaid(batchStudentId, {
           year,
           month,
-          amount: amount * 100
+          amount: amount * 100,
         })
         actions.resetForm()
         handle.close()
@@ -150,11 +150,11 @@ const mapStateToProps = (
   { batchClassId, batchStudentId, year, month }
 ) => ({
   batchFee: get(batches.classes.feesById, [batchClassId, year, month]),
-  batchStudent: get(batches.students.byId, batchStudentId)
+  batchStudent: get(batches.students.byId, batchStudentId),
 })
 
 const mapDispatchToProps = {
-  setBatchStudentPaymentMonthPaid
+  setBatchStudentPaymentMonthPaid,
 }
 
 export default connect(

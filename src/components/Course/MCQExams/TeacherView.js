@@ -10,7 +10,7 @@ import { getAllQuestionsForExam } from 'store/actions/mcqExams'
 import {
   getAllMCQAnswersForExam,
   getMCQ,
-  readMCQAnswer
+  readMCQAnswer,
 } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
 import AddMCQ from './ActionModals/AddMCQ'
@@ -27,7 +27,7 @@ function _MCQ({
   getMCQ,
   answerId,
   readMCQAnswer,
-  index
+  index,
 }) {
   useEffect(() => {
     if (isUndefined(answerId)) readMCQAnswer(mcqId)
@@ -94,11 +94,11 @@ function _MCQ({
 const MCQ = connect(
   ({ mcqs }, { mcqId }) => ({
     mcq: get(mcqs.byId, mcqId),
-    answerId: get(mcqs.answerById, mcqId)
+    answerId: get(mcqs.answerById, mcqId),
   }),
   {
     getMCQ,
-    readMCQAnswer
+    readMCQAnswer,
   }
 )(_MCQ)
 
@@ -106,7 +106,7 @@ function CourseMCQExamTeacherView({
   mcqExamId,
   mcqIds,
   getAllQuestionsForExam,
-  getAllMCQAnswersForExam
+  getAllMCQAnswersForExam,
 }) {
   useEffect(() => {
     getAllQuestionsForExam(mcqExamId)
@@ -141,12 +141,12 @@ function CourseMCQExamTeacherView({
 }
 
 const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
-  mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray)
+  mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
 })
 
 const mapDispatchToProps = {
   getAllQuestionsForExam,
-  getAllMCQAnswersForExam
+  getAllMCQAnswersForExam,
 }
 
 export default connect(

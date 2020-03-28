@@ -10,30 +10,28 @@ import {
   FormGroup,
   Header,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
 const getValidationSchema = () =>
   Yup.object().shape({
-    userId: Yup.number()
-      .integer()
-      .required(`required`),
+    userId: Yup.number().integer().required(`required`),
     password: Yup.string()
       .min(8, `must be at least 8 characters long`)
       .required(`required`),
     passwordConfirmation: Yup.string()
       .oneOf([Yup.ref('password'), null], `recheck password`)
       .required(`required`),
-    token: Yup.string().required(`required`)
+    token: Yup.string().required(`required`),
   })
 
 const getInitialValues = (userId, token) => ({
   userId,
   password: '',
   passwordConfirmation: '',
-  token
+  token,
 })
 
 function ResetPassword({ userId, token }) {
@@ -41,7 +39,7 @@ function ResetPassword({ userId, token }) {
 
   const initialValues = useMemo(() => getInitialValues(userId, token), [
     token,
-    userId
+    userId,
   ])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -51,7 +49,7 @@ function ResetPassword({ userId, token }) {
     try {
       const { error } = await api('/auth/action/reset-password', {
         method: 'POST',
-        body: values
+        body: values,
       })
 
       if (error) throw error

@@ -17,7 +17,7 @@ function ForgotPassword({ userStatus, location }) {
 }
 
 const mapStateToProps = ({ user }) => ({
-  userStatus: get(user, 'status')
+  userStatus: get(user, 'status'),
 })
 
 export default connect(mapStateToProps)(ForgotPassword)

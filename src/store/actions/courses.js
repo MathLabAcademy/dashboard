@@ -9,15 +9,15 @@ import {
   COURSE_PAGE_REQUEST,
   COURSE_PAGINATION_PURGE,
   COURSE_UPDATE,
-  USER_BULK_ADD
+  USER_BULK_ADD,
 } from './actionTypes'
 
-export const createCourse = courseData => async dispatch => {
+export const createCourse = (courseData) => async (dispatch) => {
   const url = `/courses`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: courseData
+    body: courseData,
   })
 
   if (error) throw error
@@ -28,7 +28,7 @@ export const createCourse = courseData => async dispatch => {
   return data
 }
 
-export const getCourse = courseId => async dispatch => {
+export const getCourse = (courseId) => async (dispatch) => {
   let url = `/courses/${courseId}`
 
   const { data, error } = await api(url)
@@ -40,12 +40,12 @@ export const getCourse = courseId => async dispatch => {
   return data
 }
 
-export const updateCourse = (courseId, courseData) => async dispatch => {
+export const updateCourse = (courseId, courseData) => async (dispatch) => {
   const url = `/courses/${courseId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: courseData
+    body: courseData,
   })
 
   if (error) throw error
@@ -58,7 +58,7 @@ export const updateCourse = (courseId, courseData) => async dispatch => {
 export const fetchCoursePage = (
   { page = 1, query = '' } = defaultOptsFetchPage,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   dispatch({ type: COURSE_PAGE_REQUEST, page, query })
 
   let url = `/courses?page=${page}`
@@ -81,7 +81,7 @@ export const fetchCoursePage = (
 export const fetchAllCoursePage = (
   { query = '' } = defaultOptsFetchAllPages,
   storeItems = true
-) => async dispatch => {
+) => async (dispatch) => {
   let page = 1
   let hasNext = true
 
@@ -97,12 +97,12 @@ export const fetchAllCoursePage = (
   return true
 }
 
-export const enroll = (courseId, { couponId } = {}) => async dispatch => {
+export const enroll = (courseId, { couponId } = {}) => async (dispatch) => {
   const url = `/courses/${courseId}/action/enroll`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: { couponId }
+    body: { couponId },
   })
 
   if (error) throw error
@@ -112,7 +112,7 @@ export const enroll = (courseId, { couponId } = {}) => async dispatch => {
   return data
 }
 
-export const getAllEnrollments = courseId => async dispatch => {
+export const getAllEnrollments = (courseId) => async (dispatch) => {
   const url = `/courses/${courseId}/enrollments`
 
   const { data, error } = await api(url)
@@ -121,7 +121,7 @@ export const getAllEnrollments = courseId => async dispatch => {
 
   const usersData = { items: [] }
 
-  data.items.forEach(item => {
+  data.items.forEach((item) => {
     const user = item.User
     usersData.items.push(user)
     delete item.User

@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Table } from 'semantic-ui-react'
 import {
   getAllBatchCoursePaymentsForEnrollment,
-  getBatchCourseEnrollment
+  getBatchCourseEnrollment,
 } from 'store/actions/batches'
 import { getUser } from 'store/actions/users'
 
@@ -18,16 +18,14 @@ function _PaymentItemRow({ payment }) {
         {get(payment, 'Transaction.amount') / 100}
       </Table.Cell>
       <Table.Cell collapsing textAlign="right">
-        {DateTime.fromISO(get(payment, 'created'))
-          .toLocal()
-          .toLocaleString()}
+        {DateTime.fromISO(get(payment, 'created')).toLocal().toLocaleString()}
       </Table.Cell>
     </Table.Row>
   )
 }
 
 const PaymentItemRow = connect(({ batches }, { id }) => ({
-  payment: get(batches.coursePayments.byId, id)
+  payment: get(batches.coursePayments.byId, id),
 }))(_PaymentItemRow)
 
 function BatchCourseStudent({
@@ -38,7 +36,7 @@ function BatchCourseStudent({
   user,
   getUser,
   getBatchCourseEnrollment,
-  getAllBatchCoursePaymentsForEnrollment
+  getAllBatchCoursePaymentsForEnrollment,
 }) {
   useEffect(() => {
     if (!batchCourseEnrollment)
@@ -49,7 +47,7 @@ function BatchCourseStudent({
 
   useEffect(() => {
     getAllBatchCoursePaymentsForEnrollment(batchCourseEnrollmentId).then(
-      data => {
+      (data) => {
         setPaymentIds(data.items.map(({ id }) => id))
       }
     )
@@ -75,7 +73,7 @@ function BatchCourseStudent({
         </Table.Header>
 
         <Table.Body>
-          {paymentIds.map(id => (
+          {paymentIds.map((id) => (
             <PaymentItemRow key={id} id={id} />
           ))}
         </Table.Body>
@@ -95,14 +93,14 @@ const mapStateToProps = ({ batches, users }, { batchCourseEnrollmentId }) => {
   return {
     batchCourseEnrollment,
     userId,
-    user
+    user,
   }
 }
 
 const mapDispatchToProps = {
   getBatchCourseEnrollment,
   getAllBatchCoursePaymentsForEnrollment,
-  getUser
+  getUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseStudent)

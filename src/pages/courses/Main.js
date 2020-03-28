@@ -34,11 +34,11 @@ function Courses({ tags, tagsPagination, fetchAllTagPage }) {
 
 const mapStateToProps = ({ mcqTags, pagination }) => ({
   tags: mcqTags,
-  tagsPagination: pagination.mcqTags
+  tagsPagination: pagination.mcqTags,
 })
 
 const mapDispatchToProps = {
-  fetchAllTagPage
+  fetchAllTagPage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Courses)

@@ -10,7 +10,7 @@ import {
   getAllSubmissions,
   pingTracker,
   readTracker,
-  startTracker
+  startTracker,
 } from 'store/actions/mcqExams'
 import { getAllMCQsForExam } from 'store/actions/mcqs'
 import api from 'utils/api'
@@ -29,7 +29,7 @@ function MCQExamResult({
   startTracker,
   pingTracker,
   getAllMCQsForExam,
-  getAllSubmissions
+  getAllSubmissions,
 }) {
   const [data, setData] = useState(null)
 
@@ -97,7 +97,7 @@ const mapStateToProps = ({ mcqExams, user }, { mcqExamId }) => ({
   userId: user.data.id,
   mcqExam: get(mcqExams.byId, mcqExamId),
   mcqIds: get(mcqExams.questionsById, mcqExamId, emptyArray),
-  tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id])
+  tracker: get(mcqExams.trackersById, [mcqExamId, user.data.id]),
 })
 
 const mapDispatchToProps = {
@@ -106,7 +106,7 @@ const mapDispatchToProps = {
   startTracker,
   pingTracker,
   getAllMCQsForExam,
-  getAllSubmissions
+  getAllSubmissions,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQExamResult)

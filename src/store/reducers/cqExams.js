@@ -3,14 +3,14 @@ import {
   CQEXAM_ADD,
   CQEXAM_BULK_ADD,
   CQEXAM_REMOVE,
-  CQEXAM_UPDATE
+  CQEXAM_UPDATE,
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const cqExamsReducer = (state = initialState, { type, data }) => {
@@ -20,24 +20,24 @@ const cqExamsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case CQEXAM_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case CQEXAM_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case CQEXAM_UPDATE:
       return {
@@ -46,9 +46,9 @@ const cqExamsReducer = (state = initialState, { type, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     default:
       return state

@@ -12,11 +12,11 @@ import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getMCQExam, updateMCQExam } from 'store/actions/mcqExams'
 import * as Yup from 'yup'
 
-const getInitialValues = data => ({
+const getInitialValues = (data) => ({
   date: DateTime.fromISO(get(data, 'date')).toISODate() || '',
   duration: get(data, 'duration') / 60,
   name: get(data, 'name') || '',
-  description: get(data, 'description') || ''
+  description: get(data, 'description') || '',
 })
 
 const getValidationSchema = () => {
@@ -24,11 +24,9 @@ const getValidationSchema = () => {
     date: Yup.date()
       .min(DateTime.local().toISODate(), `date already passed`)
       .required(`required`),
-    duration: Yup.number()
-      .integer()
-      .positive(),
+    duration: Yup.number().integer().positive(),
     name: Yup.string().required(`required`),
-    description: Yup.string().required(`required`)
+    description: Yup.string().required(`required`),
   })
 }
 
@@ -45,7 +43,7 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
       try {
         await updateMCQExam(mcqExamId, {
           ...values,
-          duration: duration * 60 // minutes -> seconds
+          duration: duration * 60, // minutes -> seconds
         })
         actions.setStatus(null)
       } catch (err) {
@@ -130,12 +128,12 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
 }
 
 const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
-  data: get(mcqExams.byId, mcqExamId)
+  data: get(mcqExams.byId, mcqExamId),
 })
 
 const mapDispatchToProps = {
   getData: getMCQExam,
-  updateMCQExam
+  updateMCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamEdit)

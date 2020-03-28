@@ -17,17 +17,14 @@ const getValidationSchema = () => {
       .max(4, 'maximum 4 characters')
       .required(`required`),
     name: Yup.string().required(`required`),
-    feeAmount: Yup.number()
-      .integer()
-      .min(0)
-      .required(`required`)
+    feeAmount: Yup.number().integer().min(0).required(`required`),
   })
 }
 
 const getInitialValues = () => ({
   id: '',
   name: '',
-  feeAmount: 0
+  feeAmount: 0,
 })
 
 function BatchCourseCreate({ createBatchCourse, navigate }) {
@@ -41,7 +38,7 @@ function BatchCourseCreate({ createBatchCourse, navigate }) {
       try {
         await createBatchCourse({
           ...values,
-          feeAmount: feeAmount * 100
+          feeAmount: feeAmount * 100,
         })
         actions.resetForm()
         navigate('..')
@@ -121,10 +118,7 @@ function BatchCourseCreate({ createBatchCourse, navigate }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createBatchCourse
+  createBatchCourse,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(BatchCourseCreate)
+export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseCreate)

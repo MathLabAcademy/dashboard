@@ -25,7 +25,7 @@ function useEditor(rawState, _readOnly, plugins) {
   const store = useInstance({
     getEditorRef: () => editor.current,
     setEditorState,
-    setReadOnly
+    setReadOnly,
   })
   store.getEditorState = getEditorState
   store.getReadOnly = getReadOnly
@@ -52,7 +52,7 @@ function useEditor(rawState, _readOnly, plugins) {
     setEditorState,
     readOnly,
     editorProps,
-    getStore
+    getStore,
   }
 }
 

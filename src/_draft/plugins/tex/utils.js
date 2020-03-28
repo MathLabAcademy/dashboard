@@ -13,8 +13,8 @@ export function blockRendererFn(block, getStore, next) {
       component: TeXBlock,
       editable: false,
       props: {
-        getStore
-      }
+        getStore,
+      },
     }
   }
 
@@ -83,7 +83,7 @@ function jumpSelectionOverEntity(editorState, getStore, { entityKey, dir }) {
   let selectionToJump
 
   block.findEntityRanges(
-    character => {
+    (character) => {
       const characterEntityKey = character.getEntity()
       return characterEntityKey && characterEntityKey === entityKey
     },
@@ -95,7 +95,7 @@ function jumpSelectionOverEntity(editorState, getStore, { entityKey, dir }) {
       if (offset) {
         selectionToJump = SelectionState.createEmpty(blockKey).merge({
           anchorOffset: offset,
-          focusOffset: offset
+          focusOffset: offset,
         })
       }
     }
@@ -120,7 +120,7 @@ function jumpSelectionOverBlock(editorState, getStore, { blockKey, dir }) {
     const selectionOffset = blockBefore.getLength()
     selectionToJump = SelectionState.createEmpty(blockBefore.getKey()).merge({
       anchorOffset: selectionOffset,
-      focusOffset: selectionOffset
+      focusOffset: selectionOffset,
     })
   }
 
@@ -155,7 +155,7 @@ export function handleKeyCommand(command, editorState, getStore, next) {
 }
 
 export function findInlineTeXEntities(contentBlock, callback, contentState) {
-  contentBlock.findEntityRanges(character => {
+  contentBlock.findEntityRanges((character) => {
     const entityKey = character.getEntity()
     if (entityKey === null) return false
     return contentState.getEntity(entityKey).getType() === 'inlinetex'

@@ -10,20 +10,18 @@ import {
   FormField,
   FormGroup,
   Message,
-  Segment
+  Segment,
 } from 'semantic-ui-react'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
 const getValidationSchema = () =>
   Yup.object().shape({
-    email: Yup.string()
-      .email(`invalid email`)
-      .required(`required`)
+    email: Yup.string().email(`invalid email`).required(`required`),
   })
 
-const getInitialValues = email => ({
-  email: email || ''
+const getInitialValues = (email) => ({
+  email: email || '',
 })
 
 function RequestPasswordReset({ location }) {
@@ -42,7 +40,7 @@ function RequestPasswordReset({ location }) {
     try {
       await api('/auth/action/request-password-reset', {
         method: 'POST',
-        body: values
+        body: values,
       })
 
       setSent(true)

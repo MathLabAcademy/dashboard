@@ -16,25 +16,21 @@ const getValidationSchema = () => {
   return Yup.object({
     text: Yup.string().required(`required`),
     guide: Yup.string().required(`required`),
-    answerIndex: Yup.number()
-      .integer()
-      .min(0)
-      .max(3)
-      .required(`required`),
+    answerIndex: Yup.number().integer().min(0).max(3).required(`required`),
     options: Yup.array()
       .of(Yup.string().required(`required`))
       .min(4)
       .max(4)
-      .required(`required`)
+      .required(`required`),
   })
 }
 
-const getInitialValues = mcqExamId => ({
+const getInitialValues = (mcqExamId) => ({
   mcqExamId,
   text: '',
   guide: '',
   answerIndex: '0',
-  options: ['', '', '', '']
+  options: ['', '', '', ''],
 })
 
 const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
@@ -173,7 +169,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  createMCQ
+  createMCQ,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddMCQ)

@@ -11,31 +11,22 @@ import { connect } from 'react-redux'
 import { Button, Message, Table } from 'semantic-ui-react'
 import {
   updateBatchClassEnrollment,
-  updateBatchCourseEnrollment
+  updateBatchCourseEnrollment,
 } from 'store/actions/batches'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
 const monthOptions = zipObject(Info.months('numeric'), Info.months('short'))
 
-const getValidationSchema = batchType => {
+const getValidationSchema = (batchType) => {
   const schema = Yup.object({
-    waiver: Yup.number()
-      .integer()
-      .min(0)
-      .max(100)
-      .required(`required`)
+    waiver: Yup.number().integer().min(0).max(100).required(`required`),
   })
 
   return schema.shape(
     batchType === 'class'
       ? {
-          activeMonths: Yup.array(
-            Yup.number()
-              .integer()
-              .min(1)
-              .max(12)
-          )
+          activeMonths: Yup.array(Yup.number().integer().min(1).max(12)),
         }
       : { active: Yup.boolean().required(`required`) }
   )
@@ -43,7 +34,7 @@ const getValidationSchema = batchType => {
 
 const getInitialValues = (batchType, batchEnrollment) => {
   const initialValues = {
-    waiver: get(batchEnrollment, 'waiver') || 0
+    waiver: get(batchEnrollment, 'waiver') || 0,
   }
 
   if (batchType === 'course') {
@@ -65,10 +56,10 @@ function BatchStudentEditor({
   batchType,
   batchEnrollment,
   updateBatchClassEnrollment,
-  updateBatchCourseEnrollment
+  updateBatchCourseEnrollment,
 }) {
   const validationSchema = useMemo(() => getValidationSchema(batchType), [
-    batchType
+    batchType,
   ])
   const initialValues = useMemo(
     () => getInitialValues(batchType, batchEnrollment),
@@ -106,7 +97,7 @@ function BatchStudentEditor({
       batchType,
       batchEnrollment,
       updateBatchClassEnrollment,
-      updateBatchCourseEnrollment
+      updateBatchCourseEnrollment,
     ]
   )
 
@@ -185,7 +176,7 @@ const mapStateToProps = null
 
 const mapDispatchToProps = {
   updateBatchClassEnrollment,
-  updateBatchCourseEnrollment
+  updateBatchCourseEnrollment,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchStudentEditor)

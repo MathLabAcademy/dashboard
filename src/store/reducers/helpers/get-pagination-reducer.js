@@ -7,7 +7,7 @@ const initialPaginationState = {
   totalPages: 0,
   totalItems: 0,
   itemsPerPage: 0,
-  nextLink: null
+  nextLink: null,
 }
 
 const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
@@ -23,13 +23,13 @@ const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
           [page]: {
             fetching: false,
             itemIds: map(data.items, 'id'),
-            query
-          }
+            query,
+          },
         },
         totalPages: data.totalPages,
         totalItems: data.totalItems,
         itemsPerPage: data.itemsPerPage,
-        nextLink: data.nextLink
+        nextLink: data.nextLink,
       }
     case REMOVE:
       return {
@@ -37,8 +37,8 @@ const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
         fetching: false,
         pages: {
           ...state.pages,
-          [page]: undefined
-        }
+          [page]: undefined,
+        },
       }
     case REQUEST:
       return {
@@ -49,9 +49,9 @@ const getPaginationReducer = ({ ADD, REMOVE, REQUEST, PURGE }) => (
           [page]: {
             fetching: true,
             itemIds: emptyArray,
-            query
-          }
-        }
+            query,
+          },
+        },
       }
     case PURGE:
       return initialPaginationState

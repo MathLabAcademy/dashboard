@@ -8,7 +8,7 @@ export default function removeEntityFromContentState(
 ) {
   const selectionToRemove = SelectionState.createEmpty(blockKey).merge({
     anchorOffset: start,
-    focusOffset: end
+    focusOffset: end,
   })
 
   return Modifier.removeRange(contentState, selectionToRemove, 'backward')

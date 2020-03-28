@@ -44,7 +44,7 @@ function _ListItemRow({ batchClassId, year, month, monthName, batchFee }) {
 
 const ListItemRow = connect(
   ({ batches }, { batchClassId, year, month }) => ({
-    batchFee: get(batches.classes.feesById, [batchClassId, year, month])
+    batchFee: get(batches.classes.feesById, [batchClassId, year, month]),
   }),
   {}
 )(_ListItemRow)
@@ -52,7 +52,7 @@ const ListItemRow = connect(
 function BatchClassFeeList({
   batchClassId,
   getAllBatchClassFeesForYear,
-  linkToBase
+  linkToBase,
 }) {
   const yearRef = useRef()
 
@@ -136,7 +136,7 @@ function BatchClassFeeList({
 const mapStateToProps = () => null
 
 const mapDispatchToProps = {
-  getAllBatchClassFeesForYear
+  getAllBatchClassFeesForYear,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassFeeList)

@@ -8,15 +8,15 @@ import {
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
   MCQEXAM_UPDATE,
-  MCQSUBMISSION_BULK_ADD
+  MCQSUBMISSION_BULK_ADD,
 } from './actionTypes'
 
-export const createMCQExam = mcqExamData => async dispatch => {
+export const createMCQExam = (mcqExamData) => async (dispatch) => {
   const url = `/mcqexams`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: mcqExamData
+    body: mcqExamData,
   })
 
   if (error) throw error
@@ -26,7 +26,7 @@ export const createMCQExam = mcqExamData => async dispatch => {
   return data
 }
 
-export const getMCQExam = mcqExamId => async dispatch => {
+export const getMCQExam = (mcqExamId) => async (dispatch) => {
   let url = `/mcqexams/${mcqExamId}`
 
   const { data, error } = await api(url)
@@ -38,12 +38,12 @@ export const getMCQExam = mcqExamId => async dispatch => {
   return data
 }
 
-export const updateMCQExam = (mcqExamId, mcqExamData) => async dispatch => {
+export const updateMCQExam = (mcqExamId, mcqExamData) => async (dispatch) => {
   const url = `/mcqexams/${mcqExamId}`
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body: mcqExamData
+    body: mcqExamData,
   })
 
   if (error) throw error
@@ -56,7 +56,7 @@ export const updateMCQExam = (mcqExamId, mcqExamData) => async dispatch => {
 export const getAllMCQExamsForCourse = (
   courseId,
   { query = '' } = defaultOptsFetchPage
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/courses/${courseId}/mcqexams`
   if (query) url += `?${query}`
 
@@ -69,7 +69,7 @@ export const getAllMCQExamsForCourse = (
   return data
 }
 
-export const readTracker = mcqExamId => async dispatch => {
+export const readTracker = (mcqExamId) => async (dispatch) => {
   const url = `/mcqexams/${mcqExamId}/tracker`
 
   const { data, error } = await api(url)
@@ -81,11 +81,11 @@ export const readTracker = mcqExamId => async dispatch => {
   return data
 }
 
-export const startTracker = mcqExamId => async dispatch => {
+export const startTracker = (mcqExamId) => async (dispatch) => {
   const url = `/mcqexams/${mcqExamId}/tracker`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -95,11 +95,11 @@ export const startTracker = mcqExamId => async dispatch => {
   return data
 }
 
-export const pingTracker = mcqExamId => async dispatch => {
+export const pingTracker = (mcqExamId) => async (dispatch) => {
   const url = `/mcqexams/${mcqExamId}/tracker/ping`
 
   const { data, error } = await api(url, {
-    method: 'POST'
+    method: 'POST',
   })
 
   if (error) throw error
@@ -109,15 +109,14 @@ export const pingTracker = mcqExamId => async dispatch => {
   return data
 }
 
-export const addQuestionToMCQExam = (
-  mcqExamId,
-  mcqExamQuestionData
-) => async dispatch => {
+export const addQuestionToMCQExam = (mcqExamId, mcqExamQuestionData) => async (
+  dispatch
+) => {
   const url = `/mcqexams/${mcqExamId}/action/add-question`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: mcqExamQuestionData
+    body: mcqExamQuestionData,
   })
 
   if (error) throw error
@@ -127,15 +126,14 @@ export const addQuestionToMCQExam = (
   return data
 }
 
-export const removeQuestionFromMCQExam = (
-  mcqExamId,
-  { mcqId }
-) => async dispatch => {
+export const removeQuestionFromMCQExam = (mcqExamId, { mcqId }) => async (
+  dispatch
+) => {
   const url = `/mcqexams/${mcqExamId}/action/remove-question`
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body: { mcqId }
+    body: { mcqId },
   })
 
   if (error) throw error
@@ -148,7 +146,7 @@ export const removeQuestionFromMCQExam = (
 export const getAllQuestionsForExam = (
   mcqExamId,
   { query = '' } = defaultOptsFetchPage
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/mcqexams/${mcqExamId}/questions`
   if (query) url += `?${query}`
 
@@ -161,7 +159,7 @@ export const getAllQuestionsForExam = (
   return data
 }
 
-export const getAllSubmissions = mcqExamId => async dispatch => {
+export const getAllSubmissions = (mcqExamId) => async (dispatch) => {
   const url = `/mcqexams/${mcqExamId}/mcqsubmissions`
 
   const { data, error } = await api(url)

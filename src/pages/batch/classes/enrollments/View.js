@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Table } from 'semantic-ui-react'
 import {
   getAllBatchClassPaymentsForEnrollment,
-  getBatchClassEnrollment
+  getBatchClassEnrollment,
 } from 'store/actions/batches'
 import { getUser } from 'store/actions/users'
 
@@ -18,16 +18,14 @@ function _PaymentItemRow({ payment }) {
         {get(payment, 'Transaction.amount') / 100}
       </Table.Cell>
       <Table.Cell collapsing textAlign="right">
-        {DateTime.fromISO(get(payment, 'created'))
-          .toLocal()
-          .toLocaleString()}
+        {DateTime.fromISO(get(payment, 'created')).toLocal().toLocaleString()}
       </Table.Cell>
     </Table.Row>
   )
 }
 
 const PaymentItemRow = connect(({ batches }, { id }) => ({
-  payment: get(batches.classPayments.byId, id)
+  payment: get(batches.classPayments.byId, id),
 }))(_PaymentItemRow)
 
 function BatchClassStudent({
@@ -38,7 +36,7 @@ function BatchClassStudent({
   user,
   getUser,
   getBatchClassEnrollment,
-  getAllBatchClassPaymentsForEnrollment
+  getAllBatchClassPaymentsForEnrollment,
 }) {
   useEffect(() => {
     if (!batchClassEnrollment) getBatchClassEnrollment(batchClassEnrollmentId)
@@ -47,9 +45,11 @@ function BatchClassStudent({
   const [paymentIds, setPaymentIds] = useState([])
 
   useEffect(() => {
-    getAllBatchClassPaymentsForEnrollment(batchClassEnrollmentId).then(data => {
-      setPaymentIds(data.items.map(({ id }) => id))
-    })
+    getAllBatchClassPaymentsForEnrollment(batchClassEnrollmentId).then(
+      (data) => {
+        setPaymentIds(data.items.map(({ id }) => id))
+      }
+    )
   }, [batchClassEnrollmentId, getAllBatchClassPaymentsForEnrollment])
 
   return (
@@ -72,7 +72,7 @@ function BatchClassStudent({
         </Table.Header>
 
         <Table.Body>
-          {paymentIds.map(id => (
+          {paymentIds.map((id) => (
             <PaymentItemRow key={id} id={id} />
           ))}
         </Table.Body>
@@ -92,14 +92,14 @@ const mapStateToProps = ({ batches, users }, { batchClassEnrollmentId }) => {
   return {
     batchClassEnrollment,
     userId,
-    user
+    user,
   }
 }
 
 const mapDispatchToProps = {
   getBatchClassEnrollment,
   getAllBatchClassPaymentsForEnrollment,
-  getUser
+  getUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassStudent)

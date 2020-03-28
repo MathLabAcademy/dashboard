@@ -13,21 +13,19 @@ import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getCourse, updateCourse } from 'store/actions/courses'
 import * as Yup from 'yup'
 
-const getInitialValues = course => ({
+const getInitialValues = (course) => ({
   name: get(course, 'name') || '',
   description: get(course, 'description') || '',
   price: (get(course, 'price') || 0) / 100,
-  tagIds: get(course, 'tagIds').map(String)
+  tagIds: get(course, 'tagIds').map(String),
 })
 
 const getValidationSchema = () => {
   return Yup.object({
     name: Yup.string().required(`required`),
     description: Yup.string().required(`required`),
-    price: Yup.number()
-      .integer()
-      .required(`required`),
-    tagIds: Yup.array().of(Yup.number().integer())
+    price: Yup.number().integer().required(`required`),
+    tagIds: Yup.array().of(Yup.number().integer()),
   })
 }
 
@@ -46,7 +44,7 @@ function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
       try {
         await updateCourse(courseId, {
           price: price * 100,
-          ...values
+          ...values,
         })
       } catch (err) {
         if (err.errors) {
@@ -69,7 +67,7 @@ function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
   const tagOptions = useMemo(() => {
     return zipObject(
       courseTags.allIds,
-      courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+      courseTags.allIds.map((id) => get(courseTags.byId, [id, 'name']))
     )
   }, [courseTags.allIds, courseTags.byId])
 
@@ -139,12 +137,12 @@ function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
 
 const mapStateToProps = ({ courses, courseTags }, { courseId }) => ({
   course: get(courses.byId, courseId),
-  courseTags
+  courseTags,
 })
 
 const mapDispatchToProps = {
   getCourse,
-  updateCourse
+  updateCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseEdit)

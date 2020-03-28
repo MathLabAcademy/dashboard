@@ -8,7 +8,7 @@ import { Text } from 'rebass'
 import { Button, Message, Modal, Tab } from 'semantic-ui-react'
 import {
   getAllClassPaymentReminderForMonth,
-  sendClassPaymentReminderForMonth
+  sendClassPaymentReminderForMonth,
 } from 'store/actions/batches'
 import { emptyArray } from 'utils/defaults'
 
@@ -19,7 +19,7 @@ function BatchClassPaymentReminderModal({
   monthName,
   paymentReminders,
   getAllClassPaymentReminderForMonth,
-  sendClassPaymentReminderForMonth
+  sendClassPaymentReminderForMonth,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -60,7 +60,7 @@ function BatchClassPaymentReminderModal({
 
   const reminders = useMemo(() => {
     const key = `${batchClassId}:${year}:${month}`
-    return get(paymentReminders.idsByKey, key, emptyArray).map(id =>
+    return get(paymentReminders.idsByKey, key, emptyArray).map((id) =>
       get(paymentReminders.byId, id)
     )
   }, [
@@ -68,7 +68,7 @@ function BatchClassPaymentReminderModal({
     year,
     month,
     paymentReminders.idsByKey,
-    paymentReminders.byId
+    paymentReminders.byId,
   ])
 
   return (
@@ -104,13 +104,13 @@ function BatchClassPaymentReminderModal({
                 ),
                 render: () => (
                   <Tab.Pane>
-                    {get(data, 'enrollmentIds', emptyArray).map(id => (
+                    {get(data, 'enrollmentIds', emptyArray).map((id) => (
                       <>
                         <span>{id}</span>,{' '}
                       </>
                     ))}
                   </Tab.Pane>
-                )
+                ),
               }))}
             />
           )}
@@ -136,12 +136,12 @@ function BatchClassPaymentReminderModal({
 }
 
 const mapStateToProps = ({ batches }) => ({
-  paymentReminders: batches.classPaymentReminders
+  paymentReminders: batches.classPaymentReminders,
 })
 
 const mapDispatchToProps = {
   getAllClassPaymentReminderForMonth,
-  sendClassPaymentReminderForMonth
+  sendClassPaymentReminderForMonth,
 }
 
 export default connect(

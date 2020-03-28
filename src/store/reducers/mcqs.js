@@ -9,7 +9,7 @@ import {
   MCQ_ADD,
   MCQ_BULK_ADD,
   MCQ_REMOVE,
-  MCQ_UPDATE
+  MCQ_UPDATE,
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
@@ -19,8 +19,8 @@ const initialState = {
   allIds: emptyArray,
   answerById: emptyObject,
   imagesById: {
-    tmp: []
-  }
+    tmp: [],
+  },
 }
 
 const mcqsReducer = (state = initialState, { type, data }) => {
@@ -30,24 +30,24 @@ const mcqsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case MCQ_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case MCQ_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case MCQ_UPDATE:
       return {
@@ -56,25 +56,25 @@ const mcqsReducer = (state = initialState, { type, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     case MCQANSWER_ADD:
       return {
         ...state,
         answerById: {
           ...state.answerById,
-          [data.mcqId]: data.mcqOptionId
-        }
+          [data.mcqId]: data.mcqOptionId,
+        },
       }
     case MCQANSWER_BULK_ADD:
       return {
         ...state,
         answerById: {
           ...state.answerById,
-          ...mapValues(keyBy(data.items, 'mcqId'), 'mcqOptionId')
-        }
+          ...mapValues(keyBy(data.items, 'mcqId'), 'mcqOptionId'),
+        },
       }
     case MCQIMAGE_ADD:
       return {
@@ -84,10 +84,10 @@ const mcqsReducer = (state = initialState, { type, data }) => {
           [data.mcqId]: {
             ...get(state.imagesById, data.mcqId, emptyObject),
             [data.serial]: {
-              ...data
-            }
-          }
-        }
+              ...data,
+            },
+          },
+        },
       }
     case MCQIMAGE_BULK_ADD:
       return {
@@ -96,25 +96,25 @@ const mcqsReducer = (state = initialState, { type, data }) => {
           ...state.imagesById,
           ...mapValues(groupBy(data.items, 'mcqId'), (items, mcqId) => ({
             ...get(state.imagesById, mcqId, emptyObject),
-            ...keyBy(items, 'serial')
-          }))
-        }
+            ...keyBy(items, 'serial'),
+          })),
+        },
       }
     case MCQIMAGE_TMP_ADD:
       return {
         ...state,
         imagesById: {
           ...state.imagesById,
-          tmp: union(state.imagesById.tmp, [data.filePath])
-        }
+          tmp: union(state.imagesById.tmp, [data.filePath]),
+        },
       }
     case MCQIMAGE_TMP_BULK_ADD:
       return {
         ...state,
         imagesById: {
           ...state.imagesById,
-          tmp: map(data.items, 'filePath')
-        }
+          tmp: map(data.items, 'filePath'),
+        },
       }
     default:
       return state

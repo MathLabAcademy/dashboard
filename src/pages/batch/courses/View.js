@@ -55,11 +55,11 @@ function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
 }
 
 const mapStateToProps = ({ batches }, { batchCourseId }) => ({
-  batchCourse: get(batches.courses.byId, batchCourseId)
+  batchCourse: get(batches.courses.byId, batchCourseId),
 })
 
 const mapDispatchToProps = {
-  getBatchCourse
+  getBatchCourse,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchCourseView)

@@ -39,7 +39,7 @@ import {
   BATCHSTUDENT_ADD,
   BATCHSTUDENT_BULK_ADD,
   BATCHSTUDENT_REMOVE,
-  BATCHSTUDENT_UPDATE
+  BATCHSTUDENT_UPDATE,
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
@@ -47,7 +47,7 @@ import * as ids from './helpers/ids-reducers'
 const initialClassesState = {
   byId: emptyObject,
   allIds: emptyArray,
-  feesById: emptyObject
+  feesById: emptyObject,
 }
 
 const batchClassesReducer = (
@@ -61,25 +61,25 @@ const batchClassesReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCLASS_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCLASS_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case BATCHCLASS_UPDATE:
       return {
@@ -88,9 +88,9 @@ const batchClassesReducer = (
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     case BATCHCLASSENROLLMENT_NEXT_SERIAL_SET:
       return {
@@ -105,10 +105,10 @@ const batchClassesReducer = (
                 [params.batchClassId, 'nextSerials'],
                 emptyObject
               ),
-              [params.year]: data
-            }
-          }
-        }
+              [params.year]: data,
+            },
+          },
+        },
       }
     case BATCHCLASSFEE_ADD:
       return {
@@ -124,11 +124,11 @@ const batchClassesReducer = (
                 emptyObject
               ),
               [data.month]: {
-                ...data
-              }
-            }
-          }
-        }
+                ...data,
+              },
+            },
+          },
+        },
       }
     case BATCHCLASSFEE_BULK_ADD:
       return {
@@ -141,11 +141,11 @@ const batchClassesReducer = (
               ...get(state.feesById, batchClassId, emptyObject),
               ...mapValues(groupBy(items, 'year'), (items, year) => ({
                 ...get(state.feesById, [batchClassId, year], emptyObject),
-                ...keyBy(items, 'month')
-              }))
+                ...keyBy(items, 'month'),
+              })),
             })
-          )
-        }
+          ),
+        },
       }
     case BATCHCLASSFEE_REMOVE:
       return {
@@ -160,10 +160,10 @@ const batchClassesReducer = (
                 [data.batchClassId, data.year],
                 emptyObject
               ),
-              [data.month]: undefined
-            }
-          }
-        }
+              [data.month]: undefined,
+            },
+          },
+        },
       }
     default:
       return state
@@ -172,7 +172,7 @@ const batchClassesReducer = (
 
 const initialClassEnrollmentsState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const batchClassEnrollmentsReducer = (
@@ -186,25 +186,25 @@ const batchClassEnrollmentsReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCLASSENROLLMENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCLASSENROLLMENT_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case BATCHCLASSENROLLMENT_UPDATE:
       return {
@@ -213,9 +213,9 @@ const batchClassEnrollmentsReducer = (
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     default:
       return state
@@ -224,7 +224,7 @@ const batchClassEnrollmentsReducer = (
 
 const initialCoursesState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const batchCoursesReducer = (
@@ -238,25 +238,25 @@ const batchCoursesReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCOURSE_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCOURSE_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case BATCHCOURSE_UPDATE:
       return {
@@ -265,9 +265,9 @@ const batchCoursesReducer = (
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     case BATCHCOURSEENROLLMENT_NEXT_SERIAL_SET:
       return {
@@ -282,10 +282,10 @@ const batchCoursesReducer = (
                 [params.batchCourseId, 'nextSerials'],
                 emptyObject
               ),
-              [params.year]: data
-            }
-          }
-        }
+              [params.year]: data,
+            },
+          },
+        },
       }
     default:
       return state
@@ -294,7 +294,7 @@ const batchCoursesReducer = (
 
 const initialCourseEnrollmentsState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
 }
 
 const batchCourseEnrollmentsReducer = (
@@ -308,25 +308,25 @@ const batchCourseEnrollmentsReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCOURSEENROLLMENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCOURSEENROLLMENT_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case BATCHCOURSEENROLLMENT_UPDATE:
       return {
@@ -335,9 +335,9 @@ const batchCourseEnrollmentsReducer = (
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     default:
       return state
@@ -346,7 +346,7 @@ const batchCourseEnrollmentsReducer = (
 
 const initialStudentsState = {
   byId: emptyObject,
-  allIds: emptyArray
+  allIds: emptyArray,
   // paymentIdsById: emptyObject
 }
 
@@ -361,25 +361,25 @@ const batchStudentsReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHSTUDENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHSTUDENT_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case BATCHSTUDENT_UPDATE:
       return {
@@ -388,9 +388,9 @@ const batchStudentsReducer = (
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     // case BATCHPAYMENT_ADD:
     //   return {
@@ -423,7 +423,7 @@ const batchStudentsReducer = (
 const initialClassPaymentsState = {
   byId: emptyObject,
   allIds: emptyArray,
-  idsByYear: emptyObject
+  idsByYear: emptyObject,
 }
 
 const batchClassPaymentsReducer = (
@@ -437,25 +437,25 @@ const batchClassPaymentsReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCLASSPAYMENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCLASSPAYMENT_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     default:
       return state
@@ -465,7 +465,7 @@ const batchClassPaymentsReducer = (
 const initialClassPaymentRemindersState = {
   byId: emptyObject,
   allIds: emptyArray,
-  idsByKey: emptyObject
+  idsByKey: emptyObject,
 }
 
 const batchClassPaymentRemindersReducer = (
@@ -481,27 +481,27 @@ const batchClassPaymentRemindersReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
         allIds: ids.add(state.allIds, data),
         idsByKey: {
           ...state.idsByKey,
-          [key]: ids.add(state.idsByKey[key], data)
-        }
+          [key]: ids.add(state.idsByKey[key], data),
+        },
       }
     case BATCHCLASSPAYMENT_REMINDER_SET_ALL:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
         allIds: ids.addBulk(state.allIds, data),
         idsByKey: {
           ...state.idsByKey,
-          [key]: ids.addBulk(state.idsByKey[key], data)
-        }
+          [key]: ids.addBulk(state.idsByKey[key], data),
+        },
       }
     default:
       return state
@@ -511,7 +511,7 @@ const batchClassPaymentRemindersReducer = (
 const initialCoursePaymentsState = {
   byId: emptyObject,
   allIds: emptyArray,
-  idsByYear: emptyObject
+  idsByYear: emptyObject,
 }
 
 const batchCoursePaymentsReducer = (
@@ -525,25 +525,25 @@ const batchCoursePaymentsReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case BATCHCOURSEPAYMENT_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case BATCHCOURSEPAYMENT_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     default:
       return state
@@ -553,7 +553,7 @@ const batchCoursePaymentsReducer = (
 const initialCoursePaymentRemindersState = {
   byId: emptyObject,
   allIds: emptyArray,
-  idsByKey: emptyObject
+  idsByKey: emptyObject,
 }
 
 const batchCoursePaymentRemindersReducer = (
@@ -569,27 +569,27 @@ const batchCoursePaymentRemindersReducer = (
         byId: {
           ...state.byId,
           [data.id]: {
-            ...data
-          }
+            ...data,
+          },
         },
         allIds: ids.add(state.allIds, data),
         idsByKey: {
           ...state.idsByKey,
-          [key]: ids.add(state.idsByKey[key], data)
-        }
+          [key]: ids.add(state.idsByKey[key], data),
+        },
       }
     case BATCHCOURSEPAYMENT_REMINDER_SET_ALL:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
         allIds: ids.addBulk(state.allIds, data),
         idsByKey: {
           ...state.idsByKey,
-          [key]: ids.addBulk(state.idsByKey[key], data)
-        }
+          [key]: ids.addBulk(state.idsByKey[key], data),
+        },
       }
     default:
       return state
@@ -605,5 +605,5 @@ export default combineReducers({
   courseEnrollments: batchCourseEnrollmentsReducer,
   coursePayments: batchCoursePaymentsReducer,
   coursePaymentReminders: batchCoursePaymentRemindersReducer,
-  students: batchStudentsReducer
+  students: batchStudentsReducer,
 })

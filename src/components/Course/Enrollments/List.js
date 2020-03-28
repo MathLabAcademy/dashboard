@@ -11,7 +11,7 @@ function _ListItemRow({
   user,
   enrollment,
   enrollmentId,
-  toggleEnrollmentStatus
+  toggleEnrollmentStatus,
 }) {
   return (
     <Table.Row>
@@ -39,7 +39,7 @@ const ListItemRow = connect(
 
     return {
       enrollment,
-      user
+      user,
     }
   },
   { toggleEnrollmentStatus }
@@ -70,7 +70,7 @@ function CourseEnrollmentList({ enrollments, enrollmentIds }) {
         </Table.Header>
 
         <Table.Body>
-          {enrollmentIds.map(id => (
+          {enrollmentIds.map((id) => (
             <ListItemRow key={id} enrollmentId={id} />
           ))}
         </Table.Body>
@@ -81,14 +81,14 @@ function CourseEnrollmentList({ enrollments, enrollmentIds }) {
 
 const mapStateToProps = ({ courses, enrollments }, { courseId }) => {
   const enrollmentIdPattern = new RegExp(`^${courseId}:.+`)
-  const enrollmentIds = enrollments.allIds.filter(id =>
+  const enrollmentIds = enrollments.allIds.filter((id) =>
     enrollmentIdPattern.test(id)
   )
   return {
     course: get(courses.byId, courseId),
     userIds: get(courses, ['enrollmentsById', courseId], emptyArray),
     enrollments,
-    enrollmentIds
+    enrollmentIds,
   }
 }
 

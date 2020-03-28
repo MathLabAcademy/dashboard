@@ -5,7 +5,9 @@ const defaultBlockRendererFn = (block, getStore) => {
   return null
 }
 
-const getBlockRendererFn = (getStore, pluginBlockRendererFns = []) => block => {
+const getBlockRendererFn = (getStore, pluginBlockRendererFns = []) => (
+  block
+) => {
   const blockRendererFns = [].concat(pluginBlockRendererFns)
 
   const next = () => blockRendererFns.shift()
@@ -30,7 +32,7 @@ const defaultKeyBindingFn = (event, getStore) => {
   }
 }
 
-const getKeyBindingFn = (getStore, pluginKeyBindingFns = []) => event => {
+const getKeyBindingFn = (getStore, pluginKeyBindingFns = []) => (event) => {
   const keyBindingFns = [].concat(pluginKeyBindingFns)
 
   const next = () => keyBindingFns.shift()
@@ -108,13 +110,13 @@ function useProps(getStore, plugins) {
 
   const keyBindingFn = useMemo(() => getKeyBindingFn(getStore, keyBindingFns), [
     getStore,
-    keyBindingFns
+    keyBindingFns,
   ])
 
   return {
     blockRendererFn,
     handleKeyCommand,
-    keyBindingFn
+    keyBindingFn,
   }
 }
 

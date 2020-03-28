@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import { Button, FormGroup, Message, Modal } from 'semantic-ui-react'
 import {
   createBatchClassEnrollmentForOldStudent,
-  getBatchClassEnrollmentNextSerial
+  getBatchClassEnrollmentNextSerial,
 } from 'store/actions/batches'
 import { emptyObject } from 'utils/defaults'
 import * as Yup from 'yup'
@@ -21,7 +21,7 @@ function FormModal({
   formik: { isSubmitting, isValid, values, status, setFieldValue },
   batchClassId,
   nextSerials,
-  getBatchClassEnrollmentNextSerial
+  getBatchClassEnrollmentNextSerial,
 }) {
   useEffect(() => {
     if (open) {
@@ -36,7 +36,7 @@ function FormModal({
     batchClassId,
     values.year,
     open,
-    setFieldValue
+    setFieldValue,
   ])
 
   return (
@@ -102,31 +102,19 @@ function FormModal({
 const getValidationSchema = () => {
   return Yup.object({
     userId: Yup.string().required(`required`),
-    year: Yup.number()
-      .integer()
-      .min(2000)
-      .max(2099)
-      .required(`required`),
-    serial: Yup.number()
-      .integer()
-      .min(1)
-      .max(999)
-      .required(`required`),
+    year: Yup.number().integer().min(2000).max(2099).required(`required`),
+    serial: Yup.number().integer().min(1).max(999).required(`required`),
     active: Yup.boolean().required(`required`),
-    waiver: Yup.number()
-      .integer()
-      .min(0)
-      .max(100)
-      .required(`required`)
+    waiver: Yup.number().integer().min(0).max(100).required(`required`),
   })
 }
 
-const getInitialValues = year => ({
+const getInitialValues = (year) => ({
   userId: '',
   year: year || new Date().getFullYear(),
   serial: '',
   active: true,
-  waiver: 0
+  waiver: 0,
 })
 
 function BatchClassEnrollmentAddOldStudentModal({
@@ -134,7 +122,7 @@ function BatchClassEnrollmentAddOldStudentModal({
   year,
   nextSerials,
   createBatchClassEnrollmentForOldStudent,
-  getBatchClassEnrollmentNextSerial
+  getBatchClassEnrollmentNextSerial,
 }) {
   const [open, handle] = useToggle(false)
 
@@ -148,7 +136,7 @@ function BatchClassEnrollmentAddOldStudentModal({
       try {
         await createBatchClassEnrollmentForOldStudent({
           batchClassId,
-          ...values
+          ...values,
         })
         actions.resetForm()
         handle.close()
@@ -180,7 +168,7 @@ function BatchClassEnrollmentAddOldStudentModal({
         enableReinitialize
         onSubmit={onSubmit}
       >
-        {props => (
+        {(props) => (
           <FormModal
             formik={props}
             open={open}
@@ -202,12 +190,12 @@ const mapStateToProps = ({ batches }, { batchClassId }) => ({
     batches.classes.byId,
     [batchClassId, 'nextSerials'],
     emptyObject
-  )
+  ),
 })
 
 const mapDispatchToProps = {
   createBatchClassEnrollmentForOldStudent,
-  getBatchClassEnrollmentNextSerial
+  getBatchClassEnrollmentNextSerial,
 }
 
 export default connect(

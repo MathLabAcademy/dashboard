@@ -62,11 +62,11 @@ function TransactionInfo({ userId, user, title, readCredit }) {
   )
 }
 const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId)
+  user: get(users.byId, userId),
 })
 
 const mapDispatchToProps = {
-  readCredit
+  readCredit,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionInfo)

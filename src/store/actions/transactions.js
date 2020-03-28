@@ -5,7 +5,7 @@ import { TRANSACTION_BULK_ADD } from './actionTypes'
 export const getAllTransactionsForUser = (
   userId,
   { query = '' } = defaultOptsFetchPage
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/users/${userId}/transactions`
   if (query) url += `?${query}`
 

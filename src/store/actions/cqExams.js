@@ -2,7 +2,7 @@ import api from 'utils/api'
 import { defaultOptsFetchPage } from 'utils/defaults'
 import { CQEXAM_ADD, CQEXAM_BULK_ADD, CQEXAM_UPDATE } from './actionTypes'
 
-export const createCQExam = cqExamData => async dispatch => {
+export const createCQExam = (cqExamData) => async (dispatch) => {
   const url = `/cqexams`
 
   const body = new FormData()
@@ -14,7 +14,7 @@ export const createCQExam = cqExamData => async dispatch => {
 
   const { data, error } = await api(url, {
     method: 'POST',
-    body
+    body,
   })
 
   if (error) throw error
@@ -24,7 +24,7 @@ export const createCQExam = cqExamData => async dispatch => {
   return data
 }
 
-export const getCQExam = cqExamId => async dispatch => {
+export const getCQExam = (cqExamId) => async (dispatch) => {
   let url = `/cqexams/${cqExamId}`
 
   const { data, error } = await api(url)
@@ -36,7 +36,7 @@ export const getCQExam = cqExamId => async dispatch => {
   return data
 }
 
-export const updateCQExam = (cqExamId, cqExamData) => async dispatch => {
+export const updateCQExam = (cqExamId, cqExamData) => async (dispatch) => {
   const url = `/cqexams/${cqExamId}`
 
   const body = new FormData()
@@ -48,7 +48,7 @@ export const updateCQExam = (cqExamId, cqExamData) => async dispatch => {
 
   const { data, error } = await api(url, {
     method: 'PATCH',
-    body
+    body,
   })
 
   if (error) throw error
@@ -61,7 +61,7 @@ export const updateCQExam = (cqExamId, cqExamData) => async dispatch => {
 export const getAllCQExamsForCourse = (
   courseId,
   { query = '' } = defaultOptsFetchPage
-) => async dispatch => {
+) => async (dispatch) => {
   let url = `/courses/${courseId}/cqexams`
   if (query) url += `?${query}`
 

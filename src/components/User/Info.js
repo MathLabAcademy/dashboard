@@ -61,7 +61,7 @@ function UserInfo({ userId, user, refreshUser }) {
 }
 
 const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId)
+  user: get(users.byId, userId),
 })
 
 const mapDispatchToProps = {}

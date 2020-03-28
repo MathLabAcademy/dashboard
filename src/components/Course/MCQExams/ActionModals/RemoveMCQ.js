@@ -82,7 +82,7 @@ function RemoveMCQ({ mcqExamId, mcqId, mcq, removeQuestionFromMCQExam }) {
 const mapStateToProps = null
 
 const mapDispatchToProps = {
-  removeQuestionFromMCQExam
+  removeQuestionFromMCQExam,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RemoveMCQ)

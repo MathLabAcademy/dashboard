@@ -12,8 +12,8 @@ const customStyleMap = {
     backgroundColor: 'rgba(0, 0, 0, 0.05)',
     fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
     fontSize: 16,
-    padding: 2
-  }
+    padding: 2,
+  },
 }
 
 function blockStyleFn(block) {
@@ -44,7 +44,7 @@ function DraftEditor({ rawState, readOnly: _readOnly, storeRef, style }) {
     setEditorState,
     readOnly,
     editorProps,
-    getStore
+    getStore,
   } = useEditor(rawState, _readOnly, plugins)
 
   useEffect(() => {
@@ -52,7 +52,7 @@ function DraftEditor({ rawState, readOnly: _readOnly, storeRef, style }) {
   }, [getStore, storeRef])
 
   const onChange = useCallback(
-    editorState => {
+    (editorState) => {
       setEditorState(editorState)
     },
     [setEditorState]
@@ -62,12 +62,7 @@ function DraftEditor({ rawState, readOnly: _readOnly, storeRef, style }) {
 
   let className = 'RichEditor-editor'
   if (!contentState.hasText()) {
-    if (
-      contentState
-        .getBlockMap()
-        .first()
-        .getType() !== 'unstyled'
-    ) {
+    if (contentState.getBlockMap().first().getType() !== 'unstyled') {
       className += ' RichEditor-hidePlaceholder'
     }
   }

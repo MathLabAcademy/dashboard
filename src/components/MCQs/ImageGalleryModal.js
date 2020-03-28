@@ -57,7 +57,7 @@ function MCQImageGalleryModal({ mcqId, images, getAllMCQImages }) {
   }, [uploaderHandle])
 
   const openReplacer = useCallback(
-    serial => {
+    (serial) => {
       setReplacerSerial(serial)
       uploaderHandle.open()
     },
@@ -66,7 +66,7 @@ function MCQImageGalleryModal({ mcqId, images, getAllMCQImages }) {
 
   return (
     <Card.Group centered itemsPerRow={4}>
-      {Object.values(images).map(image => (
+      {Object.values(images).map((image) => (
         <ImageCard
           key={`${mcqId}-${get(image, 'serial')}`}
           image={image}
@@ -109,11 +109,11 @@ function MCQImageGalleryModal({ mcqId, images, getAllMCQImages }) {
 }
 
 const mapStateToProps = ({ mcqs }, { mcqId }) => ({
-  images: get(mcqs.imagesById, mcqId, emptyObject)
+  images: get(mcqs.imagesById, mcqId, emptyObject),
 })
 
 const mapDispatchToProps = {
-  getAllMCQImages
+  getAllMCQImages,
 }
 
 export default connect(

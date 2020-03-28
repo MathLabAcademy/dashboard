@@ -10,7 +10,7 @@ function useCountdown({ endTime, interval = 1000 }) {
 
   useEffect(() => {
     function tick() {
-      setCountdown(countdown =>
+      setCountdown((countdown) =>
         countdown > interval ? countdown - interval : 0
       )
     }

@@ -13,26 +13,26 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    name: Yup.string().required(`required`)
+    name: Yup.string().required(`required`),
   })
 }
 
-const getInitialValues = batchClass => ({
-  name: get(batchClass, 'name', '')
+const getInitialValues = (batchClass) => ({
+  name: get(batchClass, 'name', ''),
 })
 
 function BatchClassEdit({
   batchClassId,
   batchClass,
   getBatchClass,
-  updateBatchClass
+  updateBatchClass,
 }) {
   useEffect(() => {
     if (!batchClass) getBatchClass(batchClassId)
   }, [batchClass, batchClassId, getBatchClass])
 
   const initialValues = useMemo(() => getInitialValues(batchClass), [
-    batchClass
+    batchClass,
   ])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -111,12 +111,12 @@ function BatchClassEdit({
 }
 
 const mapStateToProps = ({ batches }, { batchClassId }) => ({
-  batchClass: get(batches.classes.byId, batchClassId)
+  batchClass: get(batches.classes.byId, batchClassId),
 })
 
 const mapDispatchToProps = {
   getBatchClass,
-  updateBatchClass
+  updateBatchClass,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BatchClassEdit)

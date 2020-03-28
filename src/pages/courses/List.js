@@ -20,7 +20,7 @@ function CourseList({ pagination, fetchPage, courseTags }) {
   const [queryObject, setQueryObject] = useState({ length: 20 })
 
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage, {
-    queryObject
+    queryObject,
   })
 
   const filterByTags = useCallback(() => {
@@ -28,12 +28,12 @@ function CourseList({ pagination, fetchPage, courseTags }) {
 
     const value = tagsRef.current.state.value
 
-    setQueryObject(obj => ({
+    setQueryObject((obj) => ({
       ...obj,
       filter: {
         ...get(obj, 'filter', emptyObject),
-        tagIds: value.length ? { '@>': value.map(Number) } : undefined
-      }
+        tagIds: value.length ? { '@>': value.map(Number) } : undefined,
+      },
     }))
   }, [])
 
@@ -41,7 +41,7 @@ function CourseList({ pagination, fetchPage, courseTags }) {
     return formatDropdownOptions(
       zipObject(
         courseTags.allIds,
-        courseTags.allIds.map(id => get(courseTags.byId, [id, 'name']))
+        courseTags.allIds.map((id) => get(courseTags.byId, [id, 'name']))
       )
     )
   }, [courseTags.allIds, courseTags.byId])
@@ -86,7 +86,7 @@ function CourseList({ pagination, fetchPage, courseTags }) {
         </Segment>
       )}
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map(id => (
+      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
         <ListItem key={id} id={id} />
       ))}
 
@@ -101,11 +101,11 @@ function CourseList({ pagination, fetchPage, courseTags }) {
 
 const mapStateToProps = ({ pagination, courseTags }) => ({
   pagination: pagination.courses,
-  courseTags
+  courseTags,
 })
 
 const mapDispatchToProps = {
-  fetchPage: fetchCoursePage
+  fetchPage: fetchCoursePage,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseList)

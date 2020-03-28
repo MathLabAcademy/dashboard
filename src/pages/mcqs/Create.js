@@ -18,17 +18,13 @@ const getValidationSchema = () => {
   return Yup.object({
     text: Yup.string().required(`required`),
     guide: Yup.string().required(`required`),
-    answerIndex: Yup.number()
-      .integer()
-      .min(0)
-      .max(3)
-      .required(`required`),
+    answerIndex: Yup.number().integer().min(0).max(3).required(`required`),
     options: Yup.array()
       .of(Yup.string().required(`required`))
       .min(4)
       .max(4)
       .required(`required`),
-    tagIds: Yup.array().of(Yup.number().integer())
+    tagIds: Yup.array().of(Yup.number().integer()),
   })
 }
 
@@ -37,7 +33,7 @@ const getInitialValues = () => ({
   guide: '',
   answerIndex: '0',
   options: ['', '', '', ''],
-  tagIds: []
+  tagIds: [],
 })
 
 const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
@@ -49,7 +45,7 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
   const tagOptions = useMemo(() => {
     return zipObject(
       mcqTags.allIds,
-      mcqTags.allIds.map(id => get(mcqTags.byId, [id, 'name']))
+      mcqTags.allIds.map((id) => get(mcqTags.byId, [id, 'name']))
     )
   }, [mcqTags.allIds, mcqTags.byId])
 
@@ -181,11 +177,11 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
 }
 
 const mapStateToProps = ({ mcqTags }) => ({
-  mcqTags
+  mcqTags,
 })
 
 const mapDispatchToProps = {
-  createMCQ
+  createMCQ,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQCreate)

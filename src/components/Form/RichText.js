@@ -13,7 +13,7 @@ function RichTextField({
   hideLabel,
   isStatic,
   disabled,
-  disableImage
+  disableImage,
 }) {
   const storeRef = useRef(null)
 
@@ -87,7 +87,7 @@ function FormRichText({
   hideLabel = false,
   static: isStatic = false,
   disabled,
-  disableImage
+  disableImage,
 }) {
   id = id || name
 

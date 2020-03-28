@@ -4,7 +4,7 @@ import React, { useMemo } from 'react'
 
 const componentByType = {
   block: 'div',
-  inline: 'span'
+  inline: 'span',
 }
 
 function TeX({ data, onParseError, onClick, ...props }) {
@@ -19,7 +19,7 @@ function TeX({ data, onParseError, onClick, ...props }) {
     try {
       html = katex.renderToString(tex, {
         displayMode,
-        throwOnError: typeof onParseError === 'function'
+        throwOnError: typeof onParseError === 'function',
       })
     } catch (err) {
       html = katex.renderToString(tex, { displayMode, throwOnError: false })

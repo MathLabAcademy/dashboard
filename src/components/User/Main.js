@@ -70,11 +70,11 @@ function User({ userId, user, getUser }) {
 }
 
 const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId)
+  user: get(users.byId, userId),
 })
 
 const mapDispatchToProps = {
-  getUser
+  getUser,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(User)

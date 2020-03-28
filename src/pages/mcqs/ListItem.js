@@ -47,7 +47,7 @@ function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
 
         {mcq.tagIds.length ? (
           <Label.Group size="tiny" style={{ marginTop: '1em' }}>
-            {get(mcq, 'tagIds', emptyArray).map(id => (
+            {get(mcq, 'tagIds', emptyArray).map((id) => (
               <Label key={id}>{get(mcqTags.byId, [id, 'name'])}</Label>
             ))}
           </Label.Group>
@@ -60,12 +60,12 @@ function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
 const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => ({
   mcq: get(mcqs.byId, mcqId),
   answerId: get(mcqs.answerById, mcqId),
-  mcqTags
+  mcqTags,
 })
 
 const mapDispatchToProps = {
   getMCQ,
-  readMCQAnswer
+  readMCQAnswer,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(MCQListItem)

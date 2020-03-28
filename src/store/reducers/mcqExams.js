@@ -9,7 +9,7 @@ import {
   MCQEXAM_REMOVE,
   MCQEXAM_UPDATE,
   MCQSUBMISSION_BULK_ADD,
-  MCQSUBMISSION_UPDATE
+  MCQSUBMISSION_UPDATE,
 } from 'store/actions/actionTypes'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from './helpers/ids-reducers'
@@ -19,7 +19,7 @@ const initialState = {
   allIds: emptyArray,
   trackersById: emptyObject,
   questionsById: emptyObject,
-  submissionsById: emptyObject
+  submissionsById: emptyObject,
 }
 
 const mcqExamsReducer = (state = initialState, { type, data }) => {
@@ -29,24 +29,24 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
         ...state,
         byId: {
           ...state.byId,
-          [data.id]: data
+          [data.id]: data,
         },
-        allIds: ids.add(state.allIds, data)
+        allIds: ids.add(state.allIds, data),
       }
     case MCQEXAM_BULK_ADD:
       return {
         ...state,
         byId: {
           ...state.byId,
-          ...keyBy(data.items, 'id')
+          ...keyBy(data.items, 'id'),
         },
-        allIds: ids.addBulk(state.allIds, data)
+        allIds: ids.addBulk(state.allIds, data),
       }
     case MCQEXAM_REMOVE:
       return {
         ...state,
         byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data)
+        allIds: ids.remove(state.allIds, data),
       }
     case MCQEXAM_UPDATE:
       return {
@@ -55,9 +55,9 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
           ...state.byId,
           [data.id]: {
             ...get(state.byId, data.id, emptyObject),
-            ...data
-          }
-        }
+            ...data,
+          },
+        },
       }
     case MCQEXAMQUESTION_ADD:
       return {
@@ -67,8 +67,8 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
           [data.mcqExamId]: union(
             get(state.questionsById, data.mcqExamId, emptyArray),
             [data.mcqId]
-          )
-        }
+          ),
+        },
       }
     case MCQEXAMQUESTION_REMOVE:
       return {
@@ -79,8 +79,8 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
             state.questionsById,
             data.mcqExamId,
             emptyArray
-          ).filter(id => id !== data.mcqId)
-        }
+          ).filter((id) => id !== data.mcqId),
+        },
       }
     case MCQEXAMQUESTION_BULK_ADD:
       return {
@@ -92,8 +92,8 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
               get(state.questionsById, mcqExamId, emptyArray),
               map(items, 'mcqId')
             )
-          )
-        }
+          ),
+        },
       }
     case MCQEXAMTRACKER_UPDATE:
       return {
@@ -103,10 +103,10 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
           [data.mcqExamId]: {
             ...get(state.trackersById, data.mcqExamId, emptyObject),
             [data.userId]: {
-              ...data
-            }
-          }
-        }
+              ...data,
+            },
+          },
+        },
       }
     case MCQSUBMISSION_UPDATE:
       return {
@@ -122,11 +122,11 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
                 emptyObject
               ),
               [data.mcqId]: {
-                ...data
-              }
-            }
-          }
-        }
+                ...data,
+              },
+            },
+          },
+        },
       }
     case MCQSUBMISSION_BULK_ADD:
       return {
@@ -139,11 +139,11 @@ const mcqExamsReducer = (state = initialState, { type, data }) => {
               ...get(state.submissionsById, mcqExamId, emptyObject),
               ...mapValues(groupBy(items, 'userId'), (items, userId) => ({
                 ...get(state.submissionsById, [mcqExamId, userId], emptyObject),
-                ...mapValues(groupBy(items, 'mcqId'), items => items[0])
-              }))
+                ...mapValues(groupBy(items, 'mcqId'), (items) => items[0]),
+              })),
             })
-          )
-        }
+          ),
+        },
       }
     default:
       return state

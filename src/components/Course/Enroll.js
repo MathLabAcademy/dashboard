@@ -15,17 +15,13 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () => {
   return Yup.object({
-    price: Yup.number()
-      .integer()
-      .required(`required`),
+    price: Yup.number().integer().required(`required`),
     credit: Yup.number()
       .integer()
       // .min(Yup.ref('price'))
       .required(`required`),
     couponId: Yup.string().notRequired(),
-    confirm: Yup.bool()
-      .oneOf([true], 'must confirm')
-      .required(`required`)
+    confirm: Yup.bool().oneOf([true], 'must confirm').required(`required`),
   })
 }
 
@@ -33,7 +29,7 @@ const getInitialValues = (course, currentUser) => ({
   credit: get(currentUser, 'credit') / 100,
   price: get(course, 'price') / 100,
   couponId: '',
-  confirm: false
+  confirm: false,
 })
 
 function CourseEnroll({
@@ -42,7 +38,7 @@ function CourseEnroll({
   enrollments,
   currentUser,
   enroll,
-  navigate
+  navigate,
 }) {
   const isEnrolled = useMemo(() => {
     return enrollments.includes(currentUser.id)
@@ -50,7 +46,7 @@ function CourseEnroll({
 
   const initialValues = useMemo(() => getInitialValues(course, currentUser), [
     course,
-    currentUser
+    currentUser,
   ])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -190,11 +186,11 @@ function CourseEnroll({
 const mapStateToProps = ({ courses, user }, { courseId }) => ({
   course: get(courses.byId, courseId),
   enrollments: get(courses, ['enrollmentsById', courseId], emptyArray),
-  currentUser: user.data
+  currentUser: user.data,
 })
 
 const mapDispatchToProps = {
-  enroll
+  enroll,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseEnroll)
