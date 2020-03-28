@@ -2,7 +2,7 @@ import Course from 'components/Course/Main'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { getCourse, getAllEnrollments } from 'store/actions/courses'
+import { getCourse, getAllEnrollments } from 'store/courses'
 
 function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
   useEffect(() => {

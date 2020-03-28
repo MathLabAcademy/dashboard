@@ -1,17 +1,22 @@
 import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
 import {
-  COURSE_ADD,
-  COURSE_BULK_ADD,
-  COURSE_REMOVE,
-  COURSE_UPDATE,
   CQEXAM_ADD,
   CQEXAM_BULK_ADD,
   MCQEXAM_ADD,
   MCQEXAM_BULK_ADD,
 } from 'store/actions/actionTypes'
-import { emptyArray, emptyObject } from 'utils/defaults'
-import * as ids from './helpers/ids-reducers'
+import {
+  COURSE_ADD,
+  COURSE_BULK_ADD,
+  COURSE_REMOVE,
+  COURSE_UPDATE,
+  COURSE_VIDEO_ADD,
+  COURSE_VIDEO_BULK_ADD,
+  COURSE_VIDEO_REMOVE,
+} from 'store/courses'
 import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
+import { emptyArray, emptyObject } from 'utils/defaults'
+import * as ids from '../reducers/helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,
@@ -19,9 +24,13 @@ const initialState = {
   enrollmentsById: emptyObject,
   cqExamsById: emptyObject,
   mcqExamsById: emptyObject,
+  videosById: emptyObject,
 }
 
-const coursesReducer = (state = initialState, { type, data }) => {
+const coursesReducer = (
+  state = initialState,
+  { type, data, courseId, courseVideoId }
+) => {
   switch (type) {
     case COURSE_ADD:
       return {
@@ -121,6 +130,37 @@ const coursesReducer = (state = initialState, { type, data }) => {
           ...state.mcqExamsById,
           ...mapValues(groupBy(data.items, 'courseId'), (items) =>
             map(items, 'id')
+          ),
+        },
+      }
+    case COURSE_VIDEO_ADD:
+      return {
+        ...state,
+        videosById: {
+          ...state.videosById,
+          [data.courseId]: union(
+            get(state.videosById, data.courseId, emptyArray),
+            [data.id]
+          ),
+        },
+      }
+    case COURSE_VIDEO_BULK_ADD:
+      return {
+        ...state,
+        videosById: {
+          ...state.videosById,
+          ...mapValues(groupBy(data.items, 'courseId'), (items) =>
+            map(items, 'id')
+          ),
+        },
+      }
+    case COURSE_VIDEO_REMOVE:
+      return {
+        ...state,
+        videosById: {
+          ...state.videosById,
+          [courseId]: get(state.videosById, courseId, emptyArray).filter(
+            (id) => id !== courseVideoId
           ),
         },
       }

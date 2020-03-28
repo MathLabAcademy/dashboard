@@ -1,3 +1,4 @@
+import { Box, Stack } from '@chakra-ui/core'
 import { Link, Router } from '@reach/router'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
@@ -11,6 +12,7 @@ import CourseCQExams from './CQExams/Main'
 import Enroll from './Enroll'
 import CourseEnrollments from './Enrollments'
 import CourseMCQExams from './MCQExams/Main'
+import CourseVideos from './Videos/Main'
 
 function CourseInfo({ courseId, course, courseTags }) {
   return (
@@ -45,8 +47,17 @@ function CourseInfo({ courseId, course, courseTags }) {
         </Table>
       </Segment>
 
-      <CourseCQExams courseId={courseId} />
-      <CourseMCQExams courseId={courseId} />
+      <Stack spacing={4}>
+        <Box>
+          <CourseCQExams courseId={courseId} />
+        </Box>
+        <Box>
+          <CourseMCQExams courseId={courseId} />
+        </Box>
+        <Box>
+          <CourseVideos courseId={courseId} />
+        </Box>
+      </Stack>
     </>
   )
 }

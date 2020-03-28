@@ -28,10 +28,6 @@ import {
   COURSETAG_PAGE_REMOVE,
   COURSETAG_PAGE_REQUEST,
   COURSETAG_PAGINATION_PURGE,
-  COURSE_PAGE_ADD,
-  COURSE_PAGE_REMOVE,
-  COURSE_PAGE_REQUEST,
-  COURSE_PAGINATION_PURGE,
   MCQTAG_PAGE_ADD,
   MCQTAG_PAGE_REMOVE,
   MCQTAG_PAGE_REQUEST,
@@ -45,6 +41,12 @@ import {
   USER_PAGE_REQUEST,
   USER_PAGINATION_PURGE,
 } from 'store/actions/actionTypes'
+import {
+  COURSE_PAGE_ADD,
+  COURSE_PAGE_REMOVE,
+  COURSE_PAGE_REQUEST,
+  COURSE_PAGINATION_PURGE,
+} from 'store/courses'
 import getPaginationReducer from './helpers/get-pagination-reducer'
 
 const batchClasses = getPaginationReducer({

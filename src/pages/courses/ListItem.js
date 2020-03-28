@@ -4,7 +4,7 @@ import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getCourse } from 'store/actions/courses'
+import { getCourse } from 'store/courses'
 
 function CourseListItem({ id, data, getData }) {
   useEffect(() => {

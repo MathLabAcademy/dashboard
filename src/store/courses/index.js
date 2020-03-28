@@ -1,16 +1,20 @@
 import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import api from 'utils/api'
 import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
-import {
-  COURSE_ADD,
-  COURSE_BULK_ADD,
-  COURSE_PAGE_ADD,
-  COURSE_PAGE_REMOVE,
-  COURSE_PAGE_REQUEST,
-  COURSE_PAGINATION_PURGE,
-  COURSE_UPDATE,
-  USER_BULK_ADD,
-} from './actionTypes'
+import { USER_BULK_ADD } from '../actions/actionTypes'
+
+export const COURSE_ADD = 'COURSE_ADD'
+export const COURSE_BULK_ADD = 'COURSE_BULK_ADD'
+export const COURSE_REMOVE = 'COURSE_REMOVE'
+export const COURSE_UPDATE = 'COURSE_UPDATE'
+export const COURSE_PAGE_ADD = 'COURSE_PAGE_ADD'
+export const COURSE_PAGE_REMOVE = 'COURSE_PAGE_REMOVE'
+export const COURSE_PAGE_REQUEST = 'COURSE_PAGE_REQUEST'
+export const COURSE_PAGINATION_PURGE = 'COURSE_PAGINATION_PURGE'
+
+export const COURSE_VIDEO_ADD = 'COURSE_VIDEO_ADD'
+export const COURSE_VIDEO_BULK_ADD = 'COURSE_VIDEO_BULK_ADD'
+export const COURSE_VIDEO_REMOVE = 'COURSE_VIDEO_REMOVE'
 
 export const createCourse = (courseData) => async (dispatch) => {
   const url = `/courses`
@@ -129,6 +133,47 @@ export const getAllEnrollments = (courseId) => async (dispatch) => {
 
   dispatch({ type: USER_BULK_ADD, data: usersData })
   dispatch({ type: ENROLLMENT_BULK_ADD, data })
+
+  return data
+}
+
+export const createCourseVideo = (
+  courseId,
+  { videoId, videoProvider }
+) => async (dispatch) => {
+  const { data, error } = await api(`/courses/${courseId}/videos`, {
+    method: 'POST',
+    body: {
+      videoId,
+      videoProvider,
+    },
+  })
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_VIDEO_ADD, data })
+
+  return data
+}
+
+export const removeCourseVideo = (courseId, courseVideoId) => async (
+  dispatch
+) => {
+  const { error } = await api(`/courses/${courseId}/videos/${courseVideoId}`, {
+    method: 'DELETE',
+  })
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_VIDEO_REMOVE, courseId, courseVideoId })
+}
+
+export const readAllCourseVideo = (courseId) => async (dispatch) => {
+  const { data, error } = await api(`/courses/${courseId}/videos`)
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_VIDEO_BULK_ADD, data })
 
   return data
 }

@@ -10,7 +10,7 @@ import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, updateCourse } from 'store/actions/courses'
+import { getCourse, updateCourse } from 'store/courses'
 import * as Yup from 'yup'
 
 const getInitialValues = (course) => ({

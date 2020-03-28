@@ -9,7 +9,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
-import { enroll } from 'store/actions/courses'
+import { enroll } from 'store/courses'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
