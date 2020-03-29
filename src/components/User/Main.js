@@ -11,7 +11,7 @@ import AddCredit from './AddCredit'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
 
-const labeledRoles = ['teacher']
+const labeledRoles = ['teacher', 'assistant']
 
 function User({ userId, user, getUser }) {
   const refreshUser = useCallback(() => {
