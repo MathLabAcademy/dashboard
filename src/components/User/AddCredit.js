@@ -1,6 +1,7 @@
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
+import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
@@ -14,13 +15,20 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     amount: Yup.number().integer().required(`required`),
+    transactionTypeId: Yup.string().oneOf(['CASH', 'BKASH']),
   })
 }
 
 const getInitialValues = (user) => ({
   credit: get(user, 'credit') / 100,
   amount: 0,
+  transactionTypeId: '',
 })
+
+const transactionTypeOptions = {
+  CASH: 'Cash',
+  BKASH: 'bKash',
+}
 
 function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
   useEffect(() => {
@@ -31,12 +39,13 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
   const initialValues = useMemo(() => getInitialValues(user), [user])
 
   const onSubmit = useCallback(
-    async ({ amount }, actions) => {
+    async ({ amount, transactionTypeId }, actions) => {
       actions.setStatus(null)
 
       try {
         await addCredit(userId, {
           amount: amount * 100,
+          transactionTypeId,
         })
         navigate('..')
       } catch (err) {
@@ -106,6 +115,12 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
                 step="100"
                 name="amount"
                 label={`Amount to Add`}
+              />
+
+              <FormSelect
+                name="transactionTypeId"
+                label={`Type`}
+                options={transactionTypeOptions}
               />
 
               <Message compact color="red" as={'strong'}>
