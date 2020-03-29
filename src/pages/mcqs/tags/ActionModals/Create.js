@@ -52,7 +52,7 @@ function TagCreateModal({ createTag }) {
   )
 
   return (
-    <Permit teacher>
+    <Permit teacher assistant>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

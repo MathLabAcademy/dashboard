@@ -80,7 +80,7 @@ function MCQList({ pagination, fetchPage, mcqTags }) {
           Left={<Header>Multiple Choice Questions</Header>}
           Right={
             <>
-              <Permit teacher>
+              <Permit teacher assistant>
                 <Button as={Link} to={`create`} color="blue">
                   Create
                 </Button>

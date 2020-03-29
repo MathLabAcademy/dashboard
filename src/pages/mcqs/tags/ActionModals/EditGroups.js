@@ -59,7 +59,7 @@ function TagGroupsEditModal({ mcqTags }) {
   }, [mcqTags.allIds, mcqTags.byId])
 
   return (
-    <Permit teacher>
+    <Permit teacher assistant>
       <Modal
         trigger={
           <Button
