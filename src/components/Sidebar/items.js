@@ -32,12 +32,12 @@ export const sidebarItems = [
   {
     title: `MCQs`,
     link: '/mcqs',
-    permits: ['teacher'],
+    permits: ['teacher', 'assistant'],
     items: [
       {
         title: `Tags`,
         link: '/mcqs/tags',
-        permits: ['teacher'],
+        permits: ['teacher', 'assistant'],
       },
     ],
   },
