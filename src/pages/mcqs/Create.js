@@ -141,7 +141,7 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
                 options={answerIndexOptions}
               />
 
-              <FormRichText name="guide" label={`Guide`} disableImage />
+              <FormRichText name="guide" label={`Guide`} />
 
               <Segment secondary>
                 <ErrorMessage

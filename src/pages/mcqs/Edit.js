@@ -193,7 +193,7 @@ function MCQEdit({
                 options={answerIndexOptions}
               />
 
-              <FormRichText name="guide" label={`Guide`} disableImage />
+              <FormRichText name="guide" label={`Guide`} />
 
               <Segment secondary>
                 {Object.keys(values.options).map((mcqOptionId, index) => (
