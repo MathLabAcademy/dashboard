@@ -54,12 +54,7 @@ function MCQTmpImageGalleryModal({ images, getAllMCQTmpImages }) {
             open={uploaderOpen}
             onClose={uploaderHandle.close}
             trigger={
-              <Button
-                fluid
-                type="button"
-                disabled={images.length >= 5}
-                onClick={uploaderHandle.open}
-              >
+              <Button fluid type="button" onClick={uploaderHandle.open}>
                 Add
               </Button>
             }
