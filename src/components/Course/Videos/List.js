@@ -39,7 +39,7 @@ function ListItem({ id, courseId, data = emptyObject }) {
               </Box>
             </Permit>
           </Flex>
-          <VimeoEmbed video={video} maxWidth={400} mx="auto" />
+          <VimeoEmbed video={video} maxWidth={512} mx="auto" />
           <Box my={1}>
             <Text>{get(video, 'data.description')}</Text>
           </Box>
@@ -69,7 +69,7 @@ function CourseVideoList({ courseId, cqExamIds, linkToBase }) {
             }
           />
 
-          <SimpleGrid columns={3}>
+          <SimpleGrid mt={4} columns={2} spacing={6} minChildWidth={400}>
             {videos.allIds.map((id) => (
               <ListItem
                 key={id}
