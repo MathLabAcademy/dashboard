@@ -8,7 +8,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import { Box } from 'reflexbox'
 import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
-import bkashPaymentTempImage from './bkash-payment-temp.jpeg'
+import paymentMethodImage from './payment-method.jpeg'
 
 function DailyTransactionsForYearStats() {
   const yearRef = useRef()
@@ -72,14 +72,12 @@ function DailyTransactionsForYearStats() {
   )
 }
 
-function BkashPaymentTemp({ userData }) {
+function PaymentMethod({ userData }) {
   return (
     <Box p={4} sx={{ borderWidth: 1, boxShadow: 'md' }}>
-      <HeaderGrid Left={<Header>Payment by bKash</Header>} Right={null} />
-
-      <Stack isInline spacing={12} flexWrap="wrap" alignItems="center">
+      <Stack isInline spacing={16} flexWrap="wrap" alignItems="center">
         <Box minWidth="400px">
-          <Image src={bkashPaymentTempImage} />
+          <Image src={paymentMethodImage} />
         </Box>
         <Stack spacing={4}>
           <Box p={2}>
@@ -87,7 +85,15 @@ function BkashPaymentTemp({ userData }) {
               bKash Account Number
             </Text>
             <Text fontWeight="bold" fontSize={6}>
-              01913254460
+              01316350436
+            </Text>
+          </Box>
+          <Box p={2}>
+            <Text color="gray.500" fontSize={3} as="p">
+              Nagad Virtual Card Number
+            </Text>
+            <Text fontWeight="bold" fontSize={6}>
+              9856000164774156
             </Text>
           </Box>
           <Box p={2}>
@@ -107,7 +113,7 @@ function BkashPaymentTemp({ userData }) {
 function DashIndex({ userData }) {
   return (
     <Box>
-      <BkashPaymentTemp userData={userData} />
+      <PaymentMethod userData={userData} />
       <DailyTransactionsForYearStats />
     </Box>
   )
