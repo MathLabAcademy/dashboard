@@ -1,4 +1,4 @@
-import { Redirect, Router } from '@reach/router'
+import { Router } from '@reach/router'
 import Permit from 'components/Permit'
 import { useCourseAccess } from 'hooks/useCourseAccess'
 import React from 'react'
@@ -11,7 +11,7 @@ function CourseCQExams({ courseId }) {
   const hasAccess = useCourseAccess(courseId)
 
   if (!hasAccess) {
-    return <Redirect to={'..'} noThrow />
+    return null
   }
 
   return (
