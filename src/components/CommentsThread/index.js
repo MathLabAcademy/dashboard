@@ -8,6 +8,8 @@ import {
   Textarea,
   useToast,
 } from '@chakra-ui/core'
+import NavLink from 'components/Link/NavLink'
+import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
@@ -80,7 +82,14 @@ function CommentBox({
           </Box>
           <Stack justifyContent="center" spacing={1}>
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
-              {get(user, 'Person.fullName')}
+              {get(user, 'Person.fullName')}{' '}
+              <Permit roles="teacher">
+                (ID:{' '}
+                <NavLink to={`/users/${get(user, 'id')}`}>
+                  {get(user, 'id')}
+                </NavLink>
+                )
+              </Permit>
             </Text>
             <Text fontSize={2} fontWeight="bold">
               {replyToCommentId ? 'Reply to comment' : 'Write a comment'}
