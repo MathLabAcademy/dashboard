@@ -75,7 +75,7 @@ function CourseVideoList({ courseId }) {
             }
           />
 
-          <SimpleGrid mt={4} columns={4} spacing={6}>
+          <SimpleGrid mt={4} columns={4} spacing={6} minChildWidth={320}>
             {videos.allIds.map((id) => (
               <ListItem
                 key={id}
