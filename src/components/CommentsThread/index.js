@@ -84,11 +84,13 @@ function CommentBox({
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
               {get(user, 'Person.fullName')}{' '}
               <Permit roles="teacher">
-                (ID:{' '}
-                <NavLink to={`/users/${get(user, 'id')}`}>
-                  {get(user, 'id')}
-                </NavLink>
-                )
+                <span>
+                  (ID:{' '}
+                  <NavLink to={`/users/${get(user, 'id')}`}>
+                    {get(user, 'id')}
+                  </NavLink>
+                  )
+                </span>
               </Permit>
             </Text>
             <Text fontSize={2} fontWeight="bold">
