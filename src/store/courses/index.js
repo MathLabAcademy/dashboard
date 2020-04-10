@@ -156,6 +156,19 @@ export const createCourseVideo = (
   return data
 }
 
+export const getCourseVideo = (courseId, courseVideoId) => async (dispatch) => {
+  const { data, error } = await api(
+    `/courses/${courseId}/videos/${courseVideoId}`,
+    {
+      method: 'GET',
+    }
+  )
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_VIDEO_ADD, data })
+}
+
 export const removeCourseVideo = (courseId, courseVideoId) => async (
   dispatch
 ) => {

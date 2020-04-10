@@ -53,7 +53,7 @@ function MCQExamResult({
   }, [data])
 
   return (
-    <Permit student>
+    <Permit roles="student">
       {get(data, 'Questions', emptyArray).map((question, index) => (
         <Segment key={get(question, 'id')}>
           <HeaderGrid

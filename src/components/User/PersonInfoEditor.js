@@ -64,7 +64,7 @@ function PersonInfoEditor({
   )
 
   return (
-    <Permit teacher userId={userId}>
+    <Permit roles="teacher" userId={userId}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

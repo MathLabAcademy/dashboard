@@ -25,7 +25,7 @@ function UserTransactions({
   }, [transactions.allIds, transactions.byId, userId])
 
   return (
-    <Permit admin teacher userId={userId}>
+    <Permit roles="teacher" userId={userId}>
       {!basic && (
         <Segment>
           <HeaderGrid Left={<Header>Transaction History</Header>} />

@@ -73,7 +73,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
   const [galleryOpen, galleryHandler] = useToggle(false)
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

@@ -53,7 +53,7 @@ function CourseList({ pagination, fetchPage, courseTags }) {
           Left={<Header>Online Courses</Header>}
           Right={
             <>
-              <Permit teacher>
+              <Permit roles="teacher">
                 <Button as={Link} to={`create`} color="blue">
                   Create
                 </Button>

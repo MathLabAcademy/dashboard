@@ -2,63 +2,45 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
-import React, { useEffect, useMemo } from 'react'
-import { connect } from 'react-redux'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getAllCQExamsForCourse } from 'store/actions/cqExams'
 import { emptyArray } from 'utils/defaults'
 import ListItem from './ListItem'
 
-function CourseCQExamList({
-  courseId,
-  cqExamIds,
-  getAllCQExamsForCourse,
-  currentUser,
-  enrollments,
-  linkToBase,
-}) {
-  useEffect(() => {
-    getAllCQExamsForCourse(courseId)
-  }, [courseId, getAllCQExamsForCourse])
+function CourseCQExamList({ courseId }) {
+  const cqExamIds = useSelector((state) =>
+    get(state.courses.cqExamsById, courseId, emptyArray)
+  )
 
-  const isEnrolled = useMemo(() => {
-    return (
-      currentUser.roleId !== 'student' || enrollments.includes(currentUser.id)
-    )
-  }, [currentUser.id, currentUser.roleId, enrollments])
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllCQExamsForCourse(courseId))
+  }, [courseId, dispatch])
 
   return (
-    <Permit admin teacher student>
-      {isEnrolled && (
-        <Segment>
-          <HeaderGrid
-            Left={<Header>CQ Exams</Header>}
-            Right={
-              <Permit teacher>
-                <Button as={Link} to={`${linkToBase}create`} color="blue">
-                  Create
-                </Button>
-              </Permit>
-            }
-          />
+    <Permit roles="teacher,student">
+      <Segment>
+        <HeaderGrid
+          Left={<Header>CQ Exams</Header>}
+          Right={
+            <Permit roles="teacher">
+              <Button as={Link} to={`create`} color="blue">
+                Create
+              </Button>
+            </Permit>
+          }
+        />
+      </Segment>
 
-          {cqExamIds.map((id) => (
-            <ListItem key={id} id={id} linkToBase={linkToBase} />
-          ))}
-        </Segment>
-      )}
+      <Segment>
+        {cqExamIds.map((id) => (
+          <ListItem key={id} id={id} />
+        ))}
+      </Segment>
     </Permit>
   )
 }
 
-const mapStateToProps = ({ courses, user }, { courseId }) => ({
-  currentUser: user.data,
-  cqExamIds: get(courses.cqExamsById, courseId, emptyArray),
-  enrollments: get(courses.enrollmentsById, courseId, emptyArray),
-})
-
-const mapDispatchToProps = {
-  getAllCQExamsForCourse,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseCQExamList)
+export default CourseCQExamList

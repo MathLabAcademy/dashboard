@@ -200,7 +200,7 @@ function MCQExamTake({
   }
 
   return (
-    <Permit student>
+    <Permit roles="student">
       <Segment>
         <HeaderGrid
           Left={

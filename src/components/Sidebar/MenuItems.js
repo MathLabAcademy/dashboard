@@ -9,7 +9,6 @@ import {
 import { Match } from '@reach/router'
 import NavLink from 'components/Link/NavLink'
 import Permit from 'components/Permit'
-import { zipObject } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
 import { emptyArray } from 'utils/defaults'
 
@@ -34,8 +33,8 @@ function ParentItem({ link, title, match, children }) {
 }
 
 function Item({ link, title, permits = emptyArray, children, isChild }) {
-  const permitsObject = useMemo(() => {
-    return zipObject(permits, permits.map(Boolean))
+  const roles = useMemo(() => {
+    return permits.join(',')
   }, [permits])
 
   const matchPath = useMemo(() => {
@@ -43,7 +42,7 @@ function Item({ link, title, permits = emptyArray, children, isChild }) {
   }, [link])
 
   return (
-    <Permit {...permitsObject}>
+    <Permit roles={roles}>
       <Match path={matchPath}>
         {({ match }) =>
           children ? (

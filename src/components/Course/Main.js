@@ -1,4 +1,4 @@
-import { Box, Stack } from '@chakra-ui/core'
+import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/core'
 import { Link, Router } from '@reach/router'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
@@ -6,15 +6,18 @@ import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Label, Segment, Table } from 'semantic-ui-react'
+import { Header, Label, Segment, Table } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults'
 import CourseCQExams from './CQExams/Main'
 import Enroll from './Enroll'
 import CourseEnrollments from './Enrollments'
 import CourseMCQExams from './MCQExams/Main'
 import CourseVideos from './Videos/Main'
+import { useCourseAccess } from 'hooks/useCourseAccess'
 
-function CourseInfo({ courseId, course, courseTags }) {
+function CourseInfo({ course, courseId, courseTags }) {
+  const hasAccess = useCourseAccess(courseId)
+
   return (
     <>
       <Segment>
@@ -47,17 +50,76 @@ function CourseInfo({ courseId, course, courseTags }) {
         </Table>
       </Segment>
 
-      <Stack spacing={4}>
-        <Box>
-          <CourseCQExams courseId={courseId} />
-        </Box>
-        <Box>
-          <CourseMCQExams courseId={courseId} />
-        </Box>
-        <Box>
-          <CourseVideos courseId={courseId} />
-        </Box>
-      </Stack>
+      {hasAccess && (
+        <Stack spacing={4}>
+          <Flex
+            borderWidth={1}
+            shadow="md"
+            p={4}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Heading fontSize={4}>CQ Exams</Heading>
+            </Box>
+            <Box>
+              <Button
+                size="lg"
+                variantColor="blue"
+                as={Link}
+                to={`cqexams`}
+                _hover={{ color: 'white' }}
+              >
+                Open
+              </Button>
+            </Box>
+          </Flex>
+          <Flex
+            borderWidth={1}
+            shadow="md"
+            p={4}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Heading fontSize={4}>MCQ Exams</Heading>
+            </Box>
+            <Box>
+              <Button
+                size="lg"
+                variantColor="blue"
+                as={Link}
+                to={`mcqexams`}
+                _hover={{ color: 'white' }}
+              >
+                Open
+              </Button>
+            </Box>
+          </Flex>
+          <Flex
+            borderWidth={1}
+            shadow="md"
+            p={4}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Heading fontSize={4}>Videos</Heading>
+            </Box>
+            <Box>
+              <Button
+                size="lg"
+                variantColor="blue"
+                as={Link}
+                to={`videos`}
+                _hover={{ color: 'white' }}
+              >
+                Open
+              </Button>
+            </Box>
+          </Flex>
+        </Stack>
+      )}
     </>
   )
 }
@@ -71,37 +133,55 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
     <>
       <Segment loading={!course}>
         <HeaderGrid
-          Left={<Header>{get(course, 'name')}</Header>}
+          Left={
+            <Header>
+              <Link to={`/courses/${courseId}`}>{get(course, 'name')}</Link>
+            </Header>
+          }
           Right={
-            <>
-              <Permit teacher>
-                <Button as={Link} to={`edit`}>
+            <Stack isInline spacing={2}>
+              <Permit roles="teacher">
+                <Button as={Link} to={`edit`} variantColor="gray">
                   Edit
                 </Button>
-                <Button as={Link} to={`enrollments`} color="blue">
+                <Button
+                  as={Link}
+                  to={`enrollments`}
+                  variantColor="blue"
+                  _hover={{ color: 'white' }}
+                >
                   Enrollments
                 </Button>
               </Permit>
 
-              <Permit student>
+              <Permit roles="student">
                 {!isEnrolled && (
-                  <Button as={Link} to={`enroll`}>
+                  <Button
+                    as={Link}
+                    to={`enroll`}
+                    variantColor="green"
+                    _hover={{ color: 'white' }}
+                  >
                     Enroll
                   </Button>
                 )}
               </Permit>
-            </>
+            </Stack>
           }
         />
       </Segment>
 
       <Router>
         <CourseInfo
-          path="/*"
+          path="/"
           course={course}
           courseId={courseId}
           courseTags={courseTags}
         />
+        <CourseCQExams courseId={courseId} path="cqexams/*" />
+        <CourseMCQExams courseId={courseId} path="mcqexams/*" />
+        <CourseVideos courseId={courseId} path="videos/*" />
+
         <CourseEnrollments path="enrollments" courseId={courseId} />
         <Enroll path="enroll" courseId={courseId} />
       </Router>

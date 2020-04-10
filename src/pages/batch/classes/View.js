@@ -32,7 +32,7 @@ function BatchClassView({ batchClassId, batchClass, getBatchClass }) {
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <Permit teacher>
+              <Permit roles="teacher">
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>

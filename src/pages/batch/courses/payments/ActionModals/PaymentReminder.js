@@ -64,7 +64,7 @@ function BatchCoursePaymentReminderModal({
   }, [batchCourseId, year, paymentReminders])
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Modal
         trigger={
           <Button type="button" color="blue" onClick={handle.open}>

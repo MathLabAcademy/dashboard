@@ -31,7 +31,7 @@ function MCQ({ mcq, index }) {
   }, [mcq.Options])
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <HeaderGrid
         Left={
           <Header>

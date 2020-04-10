@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getMCQExam } from 'store/actions/mcqExams'
 
-function CourseMCQExamListItem({ id, data, getData, linkToBase }) {
+function CourseMCQExamListItem({ id, data, getData }) {
   useEffect(() => {
     if (!data) getData(id)
   }, [data, getData, id])
@@ -16,7 +16,7 @@ function CourseMCQExamListItem({ id, data, getData, linkToBase }) {
       <HeaderGrid
         Left={<Header>{get(data, 'name')}</Header>}
         Right={
-          <Button as={Link} to={`${linkToBase}${id}`}>
+          <Button as={Link} to={`${id}`}>
             Open
           </Button>
         }

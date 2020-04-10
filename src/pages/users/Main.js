@@ -6,7 +6,7 @@ import View from './View'
 
 function Users() {
   return (
-    <Permit admin teacher>
+    <Permit roles="admin,teacher">
       <Router>
         <List path="/" />
         <View path="/:userId/*" />

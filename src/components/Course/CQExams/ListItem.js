@@ -7,7 +7,7 @@ import { Button, Header, Segment } from 'semantic-ui-react'
 import { getCQExam } from 'store/actions/cqExams'
 import { DateTime } from 'luxon'
 
-function CourseCQExamListItem({ id, data, getData, linkToBase }) {
+function CourseCQExamListItem({ id, data, getData }) {
   useEffect(() => {
     if (!data) getData(id)
   }, [data, getData, id])
@@ -25,7 +25,7 @@ function CourseCQExamListItem({ id, data, getData, linkToBase }) {
           </Header>
         }
         Right={
-          <Button as={Link} to={`${linkToBase}${id}`}>
+          <Button as={Link} to={`${id}`}>
             Open
           </Button>
         }

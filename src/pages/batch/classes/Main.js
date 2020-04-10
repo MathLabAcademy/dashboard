@@ -8,7 +8,7 @@ import Permit from 'components/Permit'
 
 function BatchClasses() {
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Router>
         <List path="/" />
         <Create path="create" />

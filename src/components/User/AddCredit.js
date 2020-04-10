@@ -67,7 +67,7 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
   )
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

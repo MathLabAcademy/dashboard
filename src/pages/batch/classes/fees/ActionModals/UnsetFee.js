@@ -47,7 +47,7 @@ function BatchCourseFeeUnsetModal({
   if (!isSet) return null
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Button onClick={handler.open}>Clear</Button>
       <Confirm
         open={open}

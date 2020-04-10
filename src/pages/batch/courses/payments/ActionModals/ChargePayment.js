@@ -48,7 +48,7 @@ function BatchCoursePaymentChargeModal({
   }, [batchCourseId, year, onDone, chargeCoursePaymentForYear, handle])
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Modal
         trigger={
           <Button type="button" color="blue" onClick={handle.open}>

@@ -70,7 +70,7 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
   )
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

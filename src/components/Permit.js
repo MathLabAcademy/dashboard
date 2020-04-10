@@ -1,23 +1,22 @@
 import { get } from 'lodash-es'
-import { connect } from 'react-redux'
+import { Children, cloneElement } from 'react'
+import { useCurrentUser } from 'store/currentUser/hooks'
+import { emptyArray } from 'utils/defaults'
 
-function Permit({ children, currentUser, userId, ...roleIds }) {
-  const allowedRoleIds = Object.keys(roleIds)
+function Permit({ userId, roles = emptyArray, children, ...props }) {
+  const currentUser = useCurrentUser()
 
-  if (!allowedRoleIds.length && !userId) return children
+  let permitted = false
 
-  if (userId === get(currentUser, 'id')) return children
+  if (!roles.length && !userId) permitted = true
 
-  if (allowedRoleIds.includes(get(currentUser, 'roleId'))) return children
+  if (userId === get(currentUser, 'id')) permitted = true
 
-  return null
+  if (roles.includes(get(currentUser, 'roleId'))) permitted = true
+
+  return permitted
+    ? Children.toArray(children).map((child) => cloneElement(child, props))
+    : null
 }
 
-const mapStateToProps = ({ user }) => ({
-  currentUser: user.data,
-})
-
-export default connect(
-  mapStateToProps,
-  {} // without the empty {}, `dispatch` will be injected to props
-)(Permit)
+export default Permit

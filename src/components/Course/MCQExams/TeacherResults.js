@@ -61,7 +61,7 @@ function MCQExamResult({ mcqExamId }) {
   }, [data])
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Segment>
         <HeaderGrid
           Left={<Header>Result Summary </Header>}

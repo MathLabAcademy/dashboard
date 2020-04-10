@@ -1,5 +1,6 @@
-import { Router } from '@reach/router'
+import { Redirect, Router } from '@reach/router'
 import Permit from 'components/Permit'
+import { useCourseAccess } from 'hooks/useCourseAccess'
 import React from 'react'
 import Create from './Create'
 import Edit from './Edit'
@@ -7,14 +8,19 @@ import List from './List'
 import View from './View'
 
 function CourseCQExams({ courseId }) {
+  const hasAccess = useCourseAccess(courseId)
+
+  if (!hasAccess) {
+    return <Redirect to={'..'} noThrow />
+  }
+
   return (
-    <Permit admin teacher student>
+    <Permit roles="teacher,student">
       <Router>
-        <List path="/" courseId={courseId} linkToBase="cqexams/" />
-        <List path="cqexams" courseId={courseId} linkToBase="" />
-        <Create path="cqexams/create" courseId={courseId} />
-        <Edit path="cqexams/:cqExamId/edit" courseId={courseId} />
-        <View path="cqexams/:cqExamId/*" courseId={courseId} />
+        <List path="/" courseId={courseId} />
+        <Create path="create" courseId={courseId} />
+        <Edit path=":cqExamId/edit" courseId={courseId} />
+        <View path=":cqExamId/*" courseId={courseId} />
       </Router>
     </Permit>
   )

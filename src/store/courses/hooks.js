@@ -26,3 +26,12 @@ export function useCourseVideos(courseId) {
 
   return { allIds, byId }
 }
+
+export function useCourseVideo(courseId, courseVideoId) {
+  const data = useMemo(() => {
+    const [, videoProvider, videoId] = courseVideoId.split(':')
+    return { id: courseVideoId, courseId, videoProvider, videoId }
+  }, [courseId, courseVideoId])
+
+  return data
+}

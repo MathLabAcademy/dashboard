@@ -53,7 +53,7 @@ function TagEditModal({ tagId, tag, updateTag }) {
   )
 
   return (
-    <Permit teacher assistant>
+    <Permit roles="teacher,assistant">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

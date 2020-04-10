@@ -1,75 +1,81 @@
-import { Box, Button, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/core'
+import {
+  AspectRatioBox,
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  SimpleGrid,
+  Spinner,
+  Text,
+} from '@chakra-ui/core'
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import VimeoEmbed from 'components/VimeoEmbed'
 import { useCourseAccess } from 'hooks/useCourseAccess'
 import { useVideo } from 'hooks/useVideo'
 import { get } from 'lodash-es'
-import React, { useCallback } from 'react'
-import { connect, useDispatch } from 'react-redux'
+import React from 'react'
+import { connect } from 'react-redux'
 import { Header, Segment } from 'semantic-ui-react'
-import { removeCourseVideo } from 'store/courses'
 import { useCourseVideos } from 'store/courses/hooks'
 import { emptyArray, emptyObject } from 'utils/defaults'
 
-function ListItem({ id, courseId, data = emptyObject }) {
+function ListItem({ id, data = emptyObject }) {
   const { videoProvider, videoId } = data
 
   const video = useVideo(videoProvider, videoId)
 
-  const dispatch = useDispatch()
-  const onRemove = useCallback(async () => {
-    await dispatch(removeCourseVideo(courseId, id))
-  }, [courseId, dispatch, id])
-
   return (
     <Box borderWidth={1} shadow="md" p={3}>
-      {videoProvider === 'vimeo' ? (
+      {video.loading ? (
+        <Flex justifyContent="center" alignItems="center">
+          <Spinner size="xl" />
+        </Flex>
+      ) : videoProvider === 'vimeo' ? (
         <>
-          <Flex justifyContent="space-between">
-            <Box>
-              <Heading>{get(video, 'data.name')}</Heading>
-            </Box>
-            <Permit teacher>
-              <Box>
-                <Button size="sm" variantColor="red" onClick={onRemove}>
-                  Remove
-                </Button>
-              </Box>
-            </Permit>
-          </Flex>
-          <VimeoEmbed video={video} maxWidth={512} mx="auto" />
+          <Box>
+            <Heading>{get(video, 'data.name')}</Heading>
+          </Box>
           <Box my={1}>
             <Text>{get(video, 'data.description')}</Text>
           </Box>
+          <Link to={`${id}`}>
+            <AspectRatioBox ratio={16 / 9}>
+              <Flex justifyContent="center" alignItems="center">
+                <Image
+                  src={`http://f.vimeocdn.com/p/images/crawler_play.png`}
+                />
+              </Flex>
+            </AspectRatioBox>
+          </Link>
         </>
       ) : null}
     </Box>
   )
 }
 
-function CourseVideoList({ courseId, cqExamIds, linkToBase }) {
+function CourseVideoList({ courseId }) {
   const videos = useCourseVideos(courseId)
 
   const canAccess = useCourseAccess(courseId)
 
   return (
-    <Permit teacher student>
+    <Permit roles="teacher,student">
       {canAccess ? (
         <Segment>
           <HeaderGrid
             Left={<Header>Videos</Header>}
             Right={
-              <Permit teacher>
-                <Button as={Link} to={`${linkToBase}create`} color="blue">
+              <Permit roles="teacher">
+                <Button as={Link} to={`create`} color="blue">
                   Add New
                 </Button>
               </Permit>
             }
           />
 
-          <SimpleGrid mt={4} columns={2} spacing={6} minChildWidth={400}>
+          <SimpleGrid mt={4} columns={4} spacing={6}>
             {videos.allIds.map((id) => (
               <ListItem
                 key={id}

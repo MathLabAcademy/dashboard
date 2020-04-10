@@ -8,7 +8,7 @@ import View from './View'
 
 function BatchCourses() {
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Router>
         <List path="/" />
         <Create path="create" />

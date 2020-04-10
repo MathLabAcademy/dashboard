@@ -14,7 +14,7 @@ function UserList({ pagination, fetchPage }) {
   const [[page, handlePageChange]] = usePagination(pagination, fetchPage)
 
   return (
-    <Permit admin teacher>
+    <Permit roles="admin,teacher">
       <Segment>
         <HeaderGrid Left={<Header>Users</Header>} />
       </Segment>

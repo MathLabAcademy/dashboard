@@ -24,7 +24,7 @@ function DailyTransactionsForYearStats() {
   const [data = [], loading] = useStats('daily-transactions-for-year', { year })
 
   return (
-    <Permit teacher>
+    <Permit roles="teacher">
       <Card fluid>
         <Card.Content>
           <Card.Header>

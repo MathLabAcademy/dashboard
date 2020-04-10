@@ -85,7 +85,7 @@ function CourseEnroll({
   }, [course, currentUser])
 
   return (
-    <Permit student>
+    <Permit roles="student">
       {isEnrolled ? (
         <Segment>
           <HeaderGrid

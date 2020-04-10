@@ -16,10 +16,10 @@ import TeacherView from './TeacherView'
 function View({ courseId, mcqExamId }) {
   return (
     <>
-      <Permit student>
+      <Permit roles="student">
         <TakeExam courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
-      <Permit teacher>
+      <Permit roles="teacher">
         <TeacherView courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
     </>
@@ -60,7 +60,7 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
           }
           Right={
             <>
-              <Permit teacher>
+              <Permit roles="teacher">
                 <Button as={Link} to={`results`} color="blue">
                   Results
                 </Button>

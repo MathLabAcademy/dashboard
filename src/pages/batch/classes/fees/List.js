@@ -23,7 +23,7 @@ function _ListItemRow({ batchClassId, year, month, monthName, batchFee }) {
       <Table.Cell collapsing>{monthName}</Table.Cell>
       <Table.Cell collapsing>{amount}</Table.Cell>
       <Table.Cell textAlign="right">
-        <Permit teacher>
+        <Permit roles="teacher">
           <UnsetFee
             batchClassId={batchClassId}
             year={year}

@@ -33,13 +33,13 @@ function TransactionInfo({ userId, user, title, readCredit }) {
           <>
             <Button type="button" icon="refresh" onClick={refreshCredit} />
             {isStudent && (
-              <Permit teacher>
+              <Permit roles="teacher">
                 <Button as={Link} to={'add-credit'}>
                   Add Credit
                 </Button>
               </Permit>
             )}
-            {/* <Permit teacher userId={userId}>
+            {/* <Permit roles="teacher" userId={userId}>
               <Button as={Link} to={'transactions'}>
                 Transactions
               </Button>
