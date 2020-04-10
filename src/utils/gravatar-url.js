@@ -3,10 +3,16 @@ import { stringify } from 'query-string'
 
 const baseUrl = 'https://www.gravatar.com/avatar'
 
-const gravatarUrl = (email = 'user@example.com', options = {}) => {
+const gravatarUrl = (
+  email = 'user@example.com',
+  options = { d: 'robohash' },
+  noThrow = false
+) => {
   options = Object.assign({ d: 'retro' }, options)
 
   if (!~email.indexOf('@')) {
+    if (noThrow) return null
+
     throw new Error('invalid email')
   }
 

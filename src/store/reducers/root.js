@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import { CURRENT_USER_REMOVE } from 'store/currentUser'
+import comments from '../comments/reducer'
 import courses from '../courses/reducer'
 import user from '../currentUser/reducer'
 import enrollments from '../enrollments/reducer'
@@ -17,6 +18,7 @@ import users from './users'
 
 const rootReducer = combineReducers({
   batches,
+  comments,
   courses,
   courseTags,
   cqExams,
