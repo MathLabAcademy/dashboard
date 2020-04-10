@@ -5,15 +5,22 @@ import Permit from 'components/Permit'
 import usePagination from 'hooks/usePagination'
 import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { connect } from 'react-redux'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { connect, useDispatch } from 'react-redux'
 import { Button, Dropdown, Header, Segment } from 'semantic-ui-react'
 import { fetchCoursePage } from 'store/courses'
+import { getOwnEnrollments } from 'store/enrollments'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import formatDropdownOptions from 'utils/format-dropdown-options'
 import ListItem from './ListItem'
+import { Stack } from '@chakra-ui/core'
 
 function CourseList({ pagination, fetchPage, courseTags }) {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getOwnEnrollments())
+  }, [dispatch])
+
   const tagsRef = useRef()
   const [open, handler] = useToggle(false)
 
@@ -86,9 +93,11 @@ function CourseList({ pagination, fetchPage, courseTags }) {
         </Segment>
       )}
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
-        <ListItem key={id} id={id} />
-      ))}
+      <Stack spacing={4} mb={6}>
+        {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
+          <ListItem key={id} id={id} />
+        ))}
+      </Stack>
 
       <Switcher
         activePage={page}

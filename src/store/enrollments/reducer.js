@@ -6,9 +6,6 @@ import * as ids from '../reducers/helpers/ids-reducers'
 const initialState = {
   byId: emptyObject,
   allIds: emptyArray,
-  enrollmentsById: emptyObject,
-  cqExamsById: emptyObject,
-  mcqExamsById: emptyObject,
 }
 
 const enrollmentsReducer = (state = initialState, { type, data }) => {

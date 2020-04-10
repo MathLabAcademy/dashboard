@@ -19,3 +19,15 @@ export const toggleEnrollmentStatus = (enrollmentId) => async (dispatch) => {
 
   return data
 }
+
+export const getOwnEnrollments = () => async (dispatch) => {
+  const { data, error } = await api(`/user/enrollments`, {
+    method: 'GET',
+  })
+
+  if (error) throw error
+
+  dispatch({ type: ENROLLMENT_BULK_ADD, data })
+
+  return data
+}
