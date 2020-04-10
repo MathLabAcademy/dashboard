@@ -34,6 +34,10 @@ function CommentBox({
   const onSubmit = useCallback(async () => {
     setLoading(true)
     try {
+      if (!textRef.current.value.trim()) {
+        throw new Error("Don't you wanna write something? ¯\\_(ツ)_/¯")
+      }
+
       await addComment({
         type: 'plain',
         text: textRef.current.value,
@@ -84,13 +88,13 @@ function CommentBox({
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
               {get(user, 'Person.fullName')}{' '}
               <Permit roles="teacher">
-                <span>
+                <Text as="span" fontSize="0.8em">
                   (ID:{' '}
                   <NavLink to={`/users/${get(user, 'id')}`}>
                     {get(user, 'id')}
                   </NavLink>
                   )
-                </span>
+                </Text>
               </Permit>
             </Text>
             <Text fontSize={2} fontWeight="bold">
@@ -169,7 +173,16 @@ function CommentItem({
         </Box>
         <Stack justifyContent="center" spacing={1}>
           <Text fontSize={3} fontWeight="bold">
-            {get(comment, 'User.Person.fullName')}
+            {get(comment, 'User.Person.fullName')}{' '}
+            <Permit roles="teacher">
+              <Text as="span" fontSize="0.8em">
+                (ID:{' '}
+                <NavLink to={`/users/${get(comment, 'User.id')}`}>
+                  {get(comment, 'User.id')}
+                </NavLink>
+                )
+              </Text>
+            </Permit>
           </Text>
           <Text>
             {DateTime.fromISO(get(comment, 'created')).toLocaleString(
