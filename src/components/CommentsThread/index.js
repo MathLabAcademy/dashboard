@@ -38,14 +38,24 @@ function CommentBox({
         throw new Error("Don't you wanna write something? ¯\\_(ツ)_/¯")
       }
 
+      const parentId = get(parentComment, 'id', null)
+
       await addComment({
         type: 'plain',
         text: textRef.current.value,
-        parentId: get(parentComment, 'id', null),
+        parentId,
       })
       textRef.current.value = ''
       setLoading(false)
-      setReplyToCommentId(null)
+      toast({
+        title: parentId
+          ? `Replied to ${get(parentComment, 'User.Person.fullName')}`
+          : 'Comment added!',
+        duration: 2000,
+        isClosable: true,
+        status: 'success',
+      })
+      setReplyToCommentId()
     } catch (err) {
       setLoading(false)
       let title = 'Comment Error!'
