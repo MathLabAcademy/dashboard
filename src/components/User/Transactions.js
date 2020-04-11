@@ -4,9 +4,9 @@ import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Text } from 'rebass'
 import { Header, Segment, Table } from 'semantic-ui-react'
 import { getAllTransactionsForUser } from 'store/actions/transactions'
-import { Text } from 'rebass'
 
 function UserTransactions({
   userId,
@@ -41,7 +41,9 @@ function UserTransactions({
             <Table.HeaderCell collapsing textAlign="right">
               Amount (BDT)
             </Table.HeaderCell>
-            <Table.HeaderCell>Meta</Table.HeaderCell>
+            <Permit roles="teacher">
+              <Table.HeaderCell>Meta</Table.HeaderCell>
+            </Permit>
           </Table.Row>
         </Table.Header>
 
@@ -60,11 +62,13 @@ function UserTransactions({
                 <Table.Cell collapsing textAlign="right">
                   {amount / 100}
                 </Table.Cell>
-                <Table.Cell>
-                  <Text sx={{ wordBreak: 'break-all' }}>
-                    {JSON.stringify(data)}
-                  </Text>
-                </Table.Cell>
+                <Permit roles="teacher">
+                  <Table.Cell>
+                    <Text sx={{ wordBreak: 'break-all' }}>
+                      {JSON.stringify(data)}
+                    </Text>
+                  </Table.Cell>
+                </Permit>
               </Table.Row>
             ))}
         </Table.Body>
