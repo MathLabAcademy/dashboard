@@ -1,8 +1,9 @@
+import { Stack } from '@chakra-ui/core'
 import { Redirect } from '@reach/router'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Grid, Header } from 'semantic-ui-react'
+import { Header } from 'semantic-ui-react'
 import EmailLoginForm from './EmailLoginForm'
 import PhoneLoginForm from './PhoneLoginForm'
 
@@ -10,26 +11,19 @@ function LogIn({ userStatus }) {
   return userStatus.authed ? (
     <Redirect to="/" noThrow />
   ) : (
-    <Grid columns={1} centered padded>
-      <Grid.Column
-        mobile={16}
-        tablet={12}
-        computer={8}
-        style={{ maxWidth: '512px' }}
-      >
-        <Header as="h2" textAlign="center">
-          Login with Email
-        </Header>
+    <Stack maxWidth="512px" mx="auto" px={2} py={8}>
+      <Header as="h2" textAlign="center">
+        Login with Phone
+      </Header>
 
-        <EmailLoginForm />
+      <PhoneLoginForm />
 
-        <Header as="h2" textAlign="center">
-          Login with Phone
-        </Header>
+      <Header as="h2" textAlign="center">
+        Login with Email
+      </Header>
 
-        <PhoneLoginForm />
-      </Grid.Column>
-    </Grid>
+      <EmailLoginForm />
+    </Stack>
   )
 }
 

@@ -29,7 +29,7 @@ function Sidebar({ isOpen, onToggle }) {
         isRound
         onClick={onToggle}
         position="absolute"
-        top="1rem"
+        top="4.75rem"
         right="-1rem"
         transition="0.2s"
         transform={`rotate(${isOpen ? '0' : '180'}deg)`}
