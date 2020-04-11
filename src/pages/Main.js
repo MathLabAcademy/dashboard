@@ -16,7 +16,7 @@ import Users from './users/Main'
 function Dashboard() {
   const { status: userStatus } = useSelector((state) => state.user)
 
-  const { isOpen, onToggle, onClose } = useDisclosure(false)
+  const { isOpen, onToggle, onClose } = useDisclosure(true)
 
   return userStatus.loading ? (
     <div>Loading...</div>
