@@ -3,20 +3,21 @@ import { stringify } from 'query-string'
 
 const baseUrl = 'https://www.gravatar.com/avatar'
 
-const gravatarUrl = (
-  email = 'user@example.com',
-  options = { d: 'robohash' },
-  noThrow = false
-) => {
-  options = Object.assign({ d: 'retro' }, options)
+const defaultOptions = { noThrow: true, d: 'robohash' }
 
-  if (!~email.indexOf('@')) {
+const gravatarUrl = (
+  email,
+  { noThrow = true, ...gravatarParams } = defaultOptions
+) => {
+  if (!email || !~email.indexOf('@')) {
     if (noThrow) return null
 
     throw new Error('invalid email')
   }
 
-  return `${baseUrl}/${md5(email.toLowerCase().trim())}?${stringify(options)}`
+  const params = Object.assign({ d: defaultOptions.d }, gravatarParams)
+
+  return `${baseUrl}/${md5(email.toLowerCase().trim())}?${stringify(params)}`
 }
 
 export default gravatarUrl
