@@ -4,6 +4,7 @@ import Sidebar from 'components/Sidebar'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from 'reflexbox'
+import { usePageviewAnalytics } from 'utils/analytics'
 import BatchClasses from './batch/classes/Main'
 import BatchCourses from './batch/courses/Main'
 import Courses from './courses/Main'
@@ -14,6 +15,8 @@ import Profile from './profile/Main'
 import Users from './users/Main'
 
 function Dashboard() {
+  usePageviewAnalytics()
+
   const { status: userStatus } = useSelector((state) => state.user)
 
   const { isOpen, onToggle, onClose } = useDisclosure(true)

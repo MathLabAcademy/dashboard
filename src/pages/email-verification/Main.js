@@ -3,9 +3,12 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Container, Segment } from 'semantic-ui-react'
+import { usePageviewAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 
 function EmailVerification({ token, userStatus, forGuardian }) {
+  usePageviewAnalytics()
+
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [verified, setVerified] = useState(false)

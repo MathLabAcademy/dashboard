@@ -4,10 +4,13 @@ import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
 import { Header } from 'semantic-ui-react'
+import { usePageviewAnalytics } from 'utils/analytics'
 import EmailLoginForm from './EmailLoginForm'
 import PhoneLoginForm from './PhoneLoginForm'
 
 function LogIn({ userStatus }) {
+  usePageviewAnalytics()
+
   return userStatus.authed ? (
     <Redirect to="/" noThrow />
   ) : (

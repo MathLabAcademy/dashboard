@@ -3,6 +3,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Container, Grid, Header, Segment } from 'semantic-ui-react'
+import { usePageviewAnalytics } from 'utils/analytics'
 import getPersonName from 'utils/get-person-name'
 import Form from './Form'
 
@@ -36,6 +37,8 @@ function SuccessMessage({ data }) {
 }
 
 function Register({ userStatus }) {
+  usePageviewAnalytics()
+
   const [data, setData] = useState(null)
 
   const onSuccess = useCallback((data) => {
