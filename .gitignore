@@ -25,3 +25,6 @@ yarn-error.log*
 # i18n
 src/i18n/locales/_build/
 src/i18n/locales/**/*.js
+
+# Local Netlify folder
+.netlify
