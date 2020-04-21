@@ -28,10 +28,18 @@ export function useCourseVideos(courseId) {
 }
 
 export function useCourseVideo(courseId, courseVideoId) {
+  const courseHasVideo = useSelector((state) =>
+    get(state.courses.videosById, courseId, emptyArray).includes(courseVideoId)
+  )
+
   const data = useMemo(() => {
+    if (!courseHasVideo) {
+      return {}
+    }
+
     const [, videoProvider, videoId] = courseVideoId.split(':')
     return { id: courseVideoId, courseId, videoProvider, videoId }
-  }, [courseId, courseVideoId])
+  }, [courseHasVideo, courseId, courseVideoId])
 
   return data
 }

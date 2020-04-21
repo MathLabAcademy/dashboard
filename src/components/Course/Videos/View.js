@@ -43,11 +43,11 @@ function CourseVideoView({ courseId }) {
   return (
     <Stack spacing={4}>
       <Box borderWidth={1} shadow="md" p={3}>
-        {videoProvider === 'vimeo' ? (
+        {videoProvider === 'vimeo' && video.data ? (
           <>
             <Flex justifyContent="space-between">
               <Box>
-                <Heading>{get(video, 'data.name')}</Heading>
+                <Heading>{get(video.data, 'name')}</Heading>
               </Box>
               <Permit roles="teacher">
                 <Box>
@@ -58,7 +58,7 @@ function CourseVideoView({ courseId }) {
               </Permit>
             </Flex>
             <Box my={1}>
-              <Text>{get(video, 'data.description')}</Text>
+              <Text>{get(video.data, 'description')}</Text>
             </Box>
             <VimeoEmbed video={video} maxWidth={960} mx="auto" />
           </>
