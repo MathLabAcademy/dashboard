@@ -1,38 +1,47 @@
+import { Box, Button, Heading, Stack, Text } from '@chakra-ui/core'
 import { Link, Redirect } from '@reach/router'
 import { get } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Container, Grid, Header, Segment } from 'semantic-ui-react'
+import { Grid } from 'semantic-ui-react'
 import { usePageviewAnalytics } from 'utils/analytics'
-import getPersonName from 'utils/get-person-name'
 import Form from './Form'
 
 function SuccessMessage({ data }) {
   if (!data) return null
 
   return (
-    <Container text as={Segment} textAlign="center">
-      <h2>Hello {getPersonName(get(data, 'Person'))}!</h2>
-      <p>You are successfully registered!</p>
-      <p>
+    <Box borderWidth={1} shadow="md" p={6}>
+      <Stack spacing={2} textAlign="center">
+        <Heading as="h2">Hello {get(data, 'Person.fullName')}!</Heading>
+        <Text fontSize={4}>You are successfully registered!</Text>
+        {/* <p>
         We've sent a verification email to <strong>{get(data, 'email')}</strong>
         <br />
         Check your mailbox and verify your email address to get started!
-      </p>
-      <p>
+        </p>
+        <p>
         <em>Didn't receive the email?</em>
         <br />
         <em>
-          Wait a few minutes and make sure you've checked your spam folder!
+        Wait a few minutes and make sure you've checked your spam folder!
         </em>
-      </p>
-      <p>You can login to your account now!</p>
-      <p>
-        <Button color="blue" as={Link} to={`/login`}>
-          Log In
-        </Button>
-      </p>
-    </Container>
+      </p> */}
+        <Text fontSize={4}>You can login to your account now!</Text>
+
+        <Box mt={4}>
+          <Button
+            variantColor="blue"
+            _hover={{ color: 'white' }}
+            size="lg"
+            as={Link}
+            to={`/login`}
+          >
+            Log In
+          </Button>
+        </Box>
+      </Stack>
+    </Box>
   )
 }
 
@@ -49,10 +58,10 @@ function Register({ userStatus }) {
     <Redirect to="/" noThrow />
   ) : (
     <Grid columns={1} centered padded>
-      <Grid.Column mobile={16} tablet={12} style={{ maxWidth: '840px' }}>
-        <Header as="h2" textAlign="center">
-          Register
-        </Header>
+      <Grid.Column mobile={16} tablet={12} style={{ maxWidth: '720px' }}>
+        <Heading as="h2" textAlign="center" my={6}>
+          {data ? '🎉 Register 🎉' : 'Register'}
+        </Heading>
 
         <SuccessMessage data={data} />
 
