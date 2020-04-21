@@ -1,8 +1,9 @@
-import { Box, Button, Flex, Heading, Stack } from '@chakra-ui/core'
+import { Badge, Box, Button, Flex, Heading, Stack } from '@chakra-ui/core'
 import { Link, Router } from '@reach/router'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
+import { useCourseAccess } from 'hooks/useCourseAccess'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
@@ -13,7 +14,6 @@ import Enroll from './Enroll'
 import CourseEnrollments from './Enrollments'
 import CourseMCQExams from './MCQExams/Main'
 import CourseVideos from './Videos/Main'
-import { useCourseAccess } from 'hooks/useCourseAccess'
 
 function CourseInfo({ course, courseId, courseTags }) {
   const hasAccess = useCourseAccess(courseId)
@@ -136,6 +136,28 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
           Left={
             <Header>
               <Link to={`/courses/${courseId}`}>{get(course, 'name')}</Link>
+
+              {isEnrolled && (
+                <Badge
+                  variant="solid"
+                  variantColor="green"
+                  ml={4}
+                  fontSize="0.8em"
+                >
+                  ENROLLED
+                </Badge>
+              )}
+
+              {!get(course, 'active', true) && (
+                <Badge
+                  variant="solid"
+                  variantColor="gray"
+                  ml={4}
+                  fontSize="0.8em"
+                >
+                  INACTIVE
+                </Badge>
+              )}
             </Header>
           }
           Right={

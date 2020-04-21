@@ -1,3 +1,4 @@
+import { Flex, FormLabel, Switch } from '@chakra-ui/core'
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
@@ -10,14 +11,15 @@ import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, updateCourse } from 'store/courses'
+import { getCourse, toggleCourseStatus, updateCourse } from 'store/courses'
+import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
 const getInitialValues = (course) => ({
   name: get(course, 'name') || '',
   description: get(course, 'description') || '',
   price: (get(course, 'price') || 0) / 100,
-  tagIds: get(course, 'tagIds').map(String),
+  tagIds: get(course, 'tagIds', emptyArray).map(String),
 })
 
 const getValidationSchema = () => {
@@ -29,7 +31,14 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
+function CourseEdit({
+  courseId,
+  course,
+  getCourse,
+  courseTags,
+  updateCourse,
+  toggleCourseStatus,
+}) {
   useEffect(() => {
     if (!course) getCourse(courseId)
   }, [courseId, course, getCourse])
@@ -106,6 +115,21 @@ function CourseEdit({ courseId, course, getCourse, courseTags, updateCourse }) {
             <Segment>
               {status ? <Message color="yellow">{status}</Message> : null}
 
+              <Flex alignItems="center" justifyContent="flex-end" mb={2}>
+                <FormLabel htmlFor="course-active" fontSize={2}>
+                  Course is active?
+                </FormLabel>
+
+                <Switch
+                  id="course-active"
+                  size="lg"
+                  isChecked={get(course, 'active')}
+                  onClick={async () => {
+                    await toggleCourseStatus(courseId)
+                  }}
+                />
+              </Flex>
+
               <FormInput id="name" name="name" label={`Name`} />
 
               <FormRichText name="description" label={`Description`} />
@@ -143,6 +167,7 @@ const mapStateToProps = ({ courses, courseTags }, { courseId }) => ({
 const mapDispatchToProps = {
   getCourse,
   updateCourse,
+  toggleCourseStatus,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseEdit)

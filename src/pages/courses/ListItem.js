@@ -35,6 +35,16 @@ function CourseListItem({ id, ...props }) {
                   ENROLLED
                 </Badge>
               )}
+              {!get(data, 'active', true) && (
+                <Badge
+                  variant="solid"
+                  variantColor="gray"
+                  ml={4}
+                  fontSize="0.8em"
+                >
+                  INACTIVE
+                </Badge>
+              )}
             </Heading>
           </Box>
         }

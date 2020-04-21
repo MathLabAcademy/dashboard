@@ -116,6 +116,18 @@ export const enroll = (courseId, { couponId } = {}) => async (dispatch) => {
   return data
 }
 
+export const toggleCourseStatus = (courseId) => async (dispatch) => {
+  const url = `/courses/${courseId}/action/toggle-status`
+
+  const { data, error } = await api(url, { method: 'POST' })
+
+  if (error) throw error
+
+  dispatch({ type: COURSE_UPDATE, data })
+
+  return data
+}
+
 export const getAllEnrollments = (courseId) => async (dispatch) => {
   const url = `/courses/${courseId}/enrollments`
 
