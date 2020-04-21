@@ -37,3 +37,14 @@ export function usePageviewAnalytics() {
     }
   }, [page])
 }
+
+export function trackEventAnalytics({
+  category,
+  action,
+  label,
+  value,
+  nonInteraction,
+  transport,
+}) {
+  ReactGA.event({ category, action, label, value, nonInteraction, transport })
+}

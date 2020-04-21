@@ -11,6 +11,7 @@ import {
   Segment,
 } from 'semantic-ui-react'
 import { loginWithPhone } from 'store/currentUser'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
@@ -32,6 +33,11 @@ function PhoneLoginRequest({ setPhone, setToken }) {
             body: {
               phone: `+88${phone}`,
             },
+          })
+
+          trackEventAnalytics({
+            category: 'User',
+            action: 'Requested Login OTP',
           })
 
           if (error) {
@@ -95,6 +101,11 @@ function PhoneLoginForm({ loginWithPhone }) {
 
       try {
         await loginWithPhone({ phone, code, token })
+
+        trackEventAnalytics({
+          category: 'User',
+          action: 'Logged In with Phone',
+        })
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>

@@ -12,6 +12,7 @@ import {
   Segment,
 } from 'semantic-ui-react'
 import { logIn } from 'store/currentUser'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -32,6 +33,11 @@ function EmailLogInForm({ logIn }) {
 
       try {
         await logIn(values)
+
+        trackEventAnalytics({
+          category: 'User',
+          action: 'Logged In with Email',
+        })
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>

@@ -16,6 +16,7 @@ import { FormInput } from 'components/HookForm/Input'
 import { DateTime } from 'luxon'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import { bangladeshMobileNumberPattern } from 'utils/regex'
 import * as Yup from 'yup'
@@ -84,6 +85,11 @@ function RegisterForm({ onSuccess }) {
 
       if (data) {
         onSuccess(data)
+
+        trackEventAnalytics({
+          category: 'User',
+          action: 'Registered Account',
+        })
       }
     },
     [tokens, form, toast, onSuccess]
@@ -108,6 +114,11 @@ function RegisterForm({ onSuccess }) {
       if (error) {
         return handleAPIError(error, { form, toast })
       }
+
+      trackEventAnalytics({
+        category: 'User',
+        action: 'Requested Registration OTP',
+      })
 
       setTokens((tokens) => tokens.concat(data.token))
 
