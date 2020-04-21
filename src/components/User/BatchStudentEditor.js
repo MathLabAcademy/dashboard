@@ -1,3 +1,4 @@
+import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import FormSelect from 'components/Form/Select'
@@ -130,14 +131,18 @@ function BatchStudentEditor({
                     content={`Active${batchType === 'class' ? ' Months' : ''}`}
                   />
                   <Table.Cell>
-                    <FormSelect
-                      name={batchType === 'class' ? 'activeMonths' : 'active'}
-                      label={`Active${batchType === 'class' ? ' Months' : ''}`}
-                      hideLabel
-                      options={monthOptions}
-                      multiple
-                      search
-                    />
+                    {batchType === 'class' ? (
+                      <FormSelect
+                        name="activeMonths"
+                        label="Active Months"
+                        hideLabel
+                        options={monthOptions}
+                        multiple
+                        search
+                      />
+                    ) : batchType === 'course' ? (
+                      <FormCheckbox name="active" label={`Active`} hideLabel />
+                    ) : null}
                   </Table.Cell>
                 </Table.Row>
 
