@@ -8,6 +8,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { updatePassword } from 'store/currentUser'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -37,6 +38,12 @@ function ChangePassword({ userId, updatePassword, navigate }) {
 
       try {
         await updatePassword(values)
+
+        trackEventAnalytics({
+          category: 'User',
+          action: `Changed Password`,
+        })
+
         navigate('..')
       } catch (err) {
         if (err.errors) {

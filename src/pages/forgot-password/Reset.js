@@ -12,6 +12,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
@@ -50,6 +51,11 @@ function ResetPassword({ userId, token }) {
       const { error } = await api('/auth/action/reset-password', {
         method: 'POST',
         body: values,
+      })
+
+      trackEventAnalytics({
+        category: 'User',
+        action: `Reset Password`,
       })
 
       if (error) throw error

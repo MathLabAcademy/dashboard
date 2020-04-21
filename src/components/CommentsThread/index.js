@@ -15,6 +15,7 @@ import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useComment } from 'store/comments/hooks'
 import { useCurrentUser } from 'store/currentUser/hooks'
+import { trackEventAnalytics } from 'utils/analytics'
 import gravatarUrl from 'utils/gravatar-url'
 
 function CommentBox({
@@ -45,6 +46,12 @@ function CommentBox({
         text: textRef.current.value,
         parentId,
       })
+
+      trackEventAnalytics({
+        category: 'User',
+        action: parentId ? `Commented on Video` : `Replied to Comment on Video`,
+      })
+
       textRef.current.value = ''
       setLoading(false)
       toast({

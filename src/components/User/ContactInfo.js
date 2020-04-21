@@ -1,30 +1,31 @@
+import Form from 'components/Form/Form'
+import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
+import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle'
 import { get } from 'lodash-es'
 import React, { memo, useCallback, useState } from 'react'
 import { connect } from 'react-redux'
+import { Flex } from 'reflexbox'
 import {
   Button,
+  FormField,
+  FormGroup,
   Header,
   Icon,
   Label,
+  List,
+  Message,
   Modal,
   Popup,
   Segment,
   Table,
-  Message,
-  FormGroup,
-  FormField,
-  List,
 } from 'semantic-ui-react'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
-import Editor from './ContactInfoEditor'
-import { Formik } from 'formik'
 import * as Yup from 'yup'
-import Form from 'components/Form/Form'
-import FormInput from 'components/Form/Input'
-import { Flex } from 'reflexbox'
+import Editor from './ContactInfoEditor'
 
 function ResendEmailVerificationButton({ userId, personId, ...props }) {
   const [loading, setLoading] = useState(false)
@@ -49,6 +50,11 @@ function ResendEmailVerificationButton({ userId, personId, ...props }) {
     if (error) {
       console.error(error)
     } else {
+      trackEventAnalytics({
+        category: 'User',
+        action: `Requested Email Verification`,
+      })
+
       setSent(true)
     }
   }, [userId, personId])
@@ -92,6 +98,11 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
         if (error) {
           throw error
         }
+
+        trackEventAnalytics({
+          category: 'User',
+          action: `Changed Phone`,
+        })
 
         refreshUser()
         handler.close()
@@ -186,6 +197,11 @@ function VerifyPhoneModal({ hide, personId, phoneTrx, refreshUser }) {
 
                           throw error
                         }
+
+                        trackEventAnalytics({
+                          category: 'User',
+                          action: `Requested Verification OTP`,
+                        })
 
                         setState((state) => ({
                           ...state,

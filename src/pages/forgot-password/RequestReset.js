@@ -12,6 +12,7 @@ import {
   Message,
   Segment,
 } from 'semantic-ui-react'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import * as Yup from 'yup'
 
@@ -41,6 +42,11 @@ function RequestPasswordReset({ location }) {
       await api('/auth/action/request-password-reset', {
         method: 'POST',
         body: values,
+      })
+
+      trackEventAnalytics({
+        category: 'User',
+        action: `Requested Password Reset`,
       })
 
       setSent(true)

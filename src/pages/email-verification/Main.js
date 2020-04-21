@@ -3,7 +3,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Container, Segment } from 'semantic-ui-react'
-import { usePageviewAnalytics } from 'utils/analytics'
+import { trackEventAnalytics, usePageviewAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 
 function EmailVerification({ token, userStatus, forGuardian }) {
@@ -41,6 +41,11 @@ function EmailVerification({ token, userStatus, forGuardian }) {
         setError('Verification Error!')
       }
     } else {
+      trackEventAnalytics({
+        category: 'User',
+        action: `Verified Email${forGuardian ? ' (Guardian)' : ''}`,
+      })
+
       setVerified(true)
     }
   }, [token, forGuardian])
