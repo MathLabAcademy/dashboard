@@ -14,13 +14,19 @@ import { useDispatch } from 'react-redux'
 import { Box } from 'reflexbox'
 import { logOut } from 'store/currentUser'
 import { useCurrentUser } from 'store/currentUser/hooks'
+import { trackEventAnalytics } from 'utils/analytics'
 
 function CurrentUserPopover() {
   const user = useCurrentUser()
 
   const dispatch = useDispatch()
-  const logoutUser = useCallback(() => {
-    dispatch(logOut())
+  const logoutUser = useCallback(async () => {
+    await dispatch(logOut())
+
+    trackEventAnalytics({
+      category: 'User',
+      action: 'Logged Out',
+    })
   }, [dispatch])
 
   return user ? (

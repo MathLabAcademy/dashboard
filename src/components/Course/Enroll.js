@@ -10,6 +10,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
 import { enroll } from 'store/courses'
+import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
@@ -56,6 +57,12 @@ function CourseEnroll({
 
       try {
         await enroll(courseId, { couponId })
+
+        trackEventAnalytics({
+          category: 'Student',
+          action: 'Enrolled in Course',
+        })
+
         navigate('..')
       } catch (err) {
         if (err.errors) {

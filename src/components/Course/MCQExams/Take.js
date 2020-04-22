@@ -25,6 +25,7 @@ import {
   startTracker,
 } from 'store/actions/mcqExams'
 import { getAllMCQsForExam, submit as submitMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import MCQExamResult from './Result'
 
@@ -182,6 +183,11 @@ function MCQExamTake({
   const startExam = useCallback(async () => {
     try {
       await startTracker(mcqExamId)
+
+      trackEventAnalytics({
+        category: 'Student',
+        action: 'Started MCQ Exam',
+      })
     } catch (err) {
       if (err.message) {
         setError(err.message)
