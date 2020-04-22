@@ -72,9 +72,11 @@ function MCQExamResult({
                   {optionLetters[index]}.{' '}
                   <DraftViewer rawValue={option.text} inline />{' '}
                   {submittedOptionIdByQuestionId[question.id] === option.id &&
-                    option.id !== get(question, 'Answer.id') && (
+                    (option.id === get(question, 'Answer.id') ? (
+                      <Icon name="check" color="blue" />
+                    ) : (
                       <Icon name="x" color="red" />
-                    )}
+                    ))}
                   {option.id === get(question, 'Answer.id') && (
                     <Icon name="check" color="green" />
                   )}
