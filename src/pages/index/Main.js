@@ -5,9 +5,9 @@ import Permit from 'components/Permit'
 import { useStats } from 'hooks/useStats'
 import { get } from 'lodash-es'
 import React, { useCallback, useRef, useState } from 'react'
-import { connect } from 'react-redux'
 import { Box } from 'reflexbox'
 import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
+import { useCurrentUser } from 'store/currentUser/hooks'
 import paymentMethodImage from './payment-method.jpeg'
 
 function DailyTransactionsForYearStats() {
@@ -72,7 +72,9 @@ function DailyTransactionsForYearStats() {
   )
 }
 
-function PaymentMethod({ userData }) {
+function PaymentMethod() {
+  const userData = useCurrentUser()
+
   return (
     <Box p={4} sx={{ borderWidth: 1, boxShadow: 'md' }}>
       <Stack isInline spacing={16} flexWrap="wrap" alignItems="center">
@@ -110,19 +112,13 @@ function PaymentMethod({ userData }) {
   )
 }
 
-function DashIndex({ userData }) {
+function DashIndex() {
   return (
     <Box>
-      <PaymentMethod userData={userData} />
+      <PaymentMethod />
       <DailyTransactionsForYearStats />
     </Box>
   )
 }
 
-const mapStateToProps = ({ user }) => ({
-  userData: get(user, 'data'),
-})
-
-const mapDispatchToProps = {}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashIndex)
+export default DashIndex

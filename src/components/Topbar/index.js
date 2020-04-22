@@ -1,13 +1,29 @@
 import { Button, Text } from '@chakra-ui/core'
 import { Match } from '@reach/router'
 import NavLink from 'components/Link/NavLink'
-import React, { memo } from 'react'
+import { get } from 'lodash-es'
+import React, { memo, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Flex } from 'reflexbox'
+import { useCurrentUser } from 'store/currentUser/hooks'
 import CurrentUserPopover from './CurrentUserPopover'
 
 function Topbar() {
+  const userData = useCurrentUser()
   const userStatus = useSelector((state) => state.user.status)
+
+  const isDobToday = useMemo(() => {
+    const dob = get(userData, 'Person.dob', null)
+
+    if (!dob) return false
+
+    const date = new Date(dob)
+    const today = new Date()
+
+    return (
+      date.getDate() === today.getDate() && date.getMonth() === today.getMonth()
+    )
+  }, [userData])
 
   return (
     <Flex
@@ -36,6 +52,29 @@ function Topbar() {
           </Text>
         </NavLink>
       </Box>
+
+      {isDobToday && (
+        <Box>
+          <span role="img" aria-label="Confetti Ball">
+            🎊
+          </span>
+          <Text display={['none', 'none', 'inline-block']}>
+            {' '}
+            Happy Birthday {get(userData, 'Person.shortName')}!{' '}
+          </Text>
+          <span role="img" aria-label="Birthday Cake">
+            🎂
+          </span>
+          <Text display={['none', 'none', 'inline-block']}>
+            {' '}
+            Have a blast!{' '}
+          </Text>
+          <span role="img" aria-label="Party Popper">
+            🎉
+          </span>
+        </Box>
+      )}
+
       <Box>
         {!userStatus.loading && !userStatus.authed ? (
           <Box>
