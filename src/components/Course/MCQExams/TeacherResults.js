@@ -20,6 +20,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Text } from 'rebass'
 import { Header, Segment } from 'semantic-ui-react'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import { emptyArray, emptyObject } from 'utils/defaults'
 
@@ -30,6 +31,11 @@ function RemoveSubmissionsButton({ mcqExamId, userId, fullName }) {
     await api(`/mcqexams/${mcqExamId}/action/remove-submissions-for-student`, {
       method: 'POST',
       body: { userId },
+    })
+
+    trackEventAnalytics({
+      category: 'Teacher',
+      action: 'Removed MCQExam Result of Student',
     })
 
     window.location.reload()
