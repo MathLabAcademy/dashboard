@@ -2,7 +2,7 @@ import { get, keyBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { emptyArray } from 'utils/defaults'
-import { readAllCourseVideo } from '.'
+import { getAllEnrollments, readAllCourseVideo } from '.'
 
 export function useCourseVideos(courseId) {
   const allIds = useSelector((state) =>
@@ -42,4 +42,19 @@ export function useCourseVideo(courseId, courseVideoId) {
   }, [courseHasVideo, courseId, courseVideoId])
 
   return data
+}
+
+export function useCourseEnrolledUserIds(courseId) {
+  const userIds = useSelector((state) =>
+    get(state.courses.enrollmentsById, courseId, emptyArray)
+  )
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (courseId && userIds === emptyArray) {
+      dispatch(getAllEnrollments(courseId))
+    }
+  }, [courseId, dispatch, userIds])
+
+  return userIds
 }

@@ -51,4 +51,16 @@ export const sidebarItems = [
     link: '/batchcourses',
     permits: ['teacher'],
   },
+  {
+    title: `Notification`,
+    link: '/notifications',
+    permits: ['teacher'],
+    items: [
+      {
+        title: `SMS`,
+        link: `/notifications/sms`,
+        permits: ['teacher'],
+      },
+    ],
+  },
 ]

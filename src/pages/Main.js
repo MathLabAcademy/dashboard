@@ -11,6 +11,7 @@ import Courses from './courses/Main'
 import FindUser from './find-user/Main'
 import Index from './index/Main'
 import MCQs from './mcqs/Main'
+import Notifications from './notifications'
 import Profile from './profile/Main'
 import Users from './users/Main'
 
@@ -46,6 +47,7 @@ function Dashboard() {
           <Profile path="profile/*" />
           <Users path="users/*" />
           <FindUser path="find-user/*" />
+          <Notifications path="notifications/*" />
         </Router>
       </Box>
     </>
