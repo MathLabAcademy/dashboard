@@ -2,7 +2,35 @@ import { get, keyBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { emptyArray } from 'utils/defaults'
-import { getAllEnrollments, readAllCourseVideo } from '.'
+import { getAllEnrollments, getCourse, readAllCourseVideo } from '.'
+
+export function useCourse(courseId) {
+  const course = useSelector((state) => get(state.courses.byId, courseId, null))
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (courseId && course === null) {
+      dispatch(getCourse(courseId))
+    }
+  }, [course, courseId, dispatch])
+
+  return course
+}
+
+export function useCourseEnrolledUserIds(courseId) {
+  const userIds = useSelector((state) =>
+    get(state.courses.enrollmentsById, courseId, emptyArray)
+  )
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (courseId && userIds === emptyArray) {
+      dispatch(getAllEnrollments(courseId))
+    }
+  }, [courseId, dispatch, userIds])
+
+  return userIds
+}
 
 export function useCourseVideos(courseId) {
   const allIds = useSelector((state) =>
@@ -42,19 +70,4 @@ export function useCourseVideo(courseId, courseVideoId) {
   }, [courseHasVideo, courseId, courseVideoId])
 
   return data
-}
-
-export function useCourseEnrolledUserIds(courseId) {
-  const userIds = useSelector((state) =>
-    get(state.courses.enrollmentsById, courseId, emptyArray)
-  )
-
-  const dispatch = useDispatch()
-  useEffect(() => {
-    if (courseId && userIds === emptyArray) {
-      dispatch(getAllEnrollments(courseId))
-    }
-  }, [courseId, dispatch, userIds])
-
-  return userIds
 }
