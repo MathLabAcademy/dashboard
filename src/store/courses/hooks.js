@@ -1,5 +1,5 @@
 import { get, keyBy } from 'lodash-es'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { emptyArray } from 'utils/defaults'
 import { getAllEnrollments, getCourse, readAllCourseVideo } from '.'
@@ -18,6 +18,8 @@ export function useCourse(courseId) {
 }
 
 export function useCourseEnrolledUserIds(courseId) {
+  const [loading, setLoading] = useState(false)
+
   const userIds = useSelector((state) =>
     get(state.courses.enrollmentsById, courseId, emptyArray)
   )
@@ -25,11 +27,12 @@ export function useCourseEnrolledUserIds(courseId) {
   const dispatch = useDispatch()
   useEffect(() => {
     if (courseId && userIds === emptyArray) {
-      dispatch(getAllEnrollments(courseId))
+      setLoading(true)
+      dispatch(getAllEnrollments(courseId)).finally(() => setLoading(false))
     }
   }, [courseId, dispatch, userIds])
 
-  return userIds
+  return { data: userIds, loading }
 }
 
 export function useCourseVideos(courseId) {

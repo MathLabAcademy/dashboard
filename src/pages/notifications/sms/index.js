@@ -3,11 +3,14 @@ import {
   Button,
   Checkbox,
   FormLabel,
+  Spinner,
   Stack,
   Tag,
   Text,
   Textarea,
+  useToast,
 } from '@chakra-ui/core'
+import { handleAPIError } from 'components/HookForm/helpers'
 import { DataTable } from 'components/Table/DataTable'
 import useInterval from 'hooks/useInterval'
 import { get } from 'lodash-es'
@@ -140,8 +143,8 @@ function NotificationsSMSPage() {
   const users = useSelector((state) => state.users)
   const userIds = useCourseEnrolledUserIds(courseId)
   const userData = useMemo(() => {
-    return userIds.map((id) => users.byId[id])
-  }, [userIds, users.byId])
+    return userIds.data.map((id) => users.byId[id])
+  }, [userIds.data, users.byId])
 
   const [selectedUserIds, setSelectedUserIds] = useState(emptyArray)
 
@@ -160,21 +163,56 @@ function NotificationsSMSPage() {
   }, [course, users])
   useInterval(refreshPreview, 1500)
 
+  const toast = useToast()
+
+  const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const onSubmit = useCallback(() => {
+  const onReset = useCallback(() => {
+    setPreview('')
+    setSent(false)
+    templateRef.current.value = ''
+  }, [])
+
+  const onSubmit = useCallback(async () => {
     setLoading(true)
 
     const _template = templateRef.current.value
-    const template = hydrateTemplate(_template, { course, users })
 
-    setTimeout(() => {
-      window.alert(`Not Yet Implemented!`)
-      console.log({ userIds, template })
+    if (!_template) {
+      return
+    }
 
-      setLoading(false)
-    }, 2000)
-  }, [course, userIds, users])
+    const template = hydrateTemplate(_template, { course, users }, false)
+
+    try {
+      const { error } = await api('/notifications/sms/bulk-send', {
+        method: 'POST',
+        body: {
+          userIds: selectedUserIds,
+          template,
+        },
+      })
+
+      if (error) {
+        throw error
+      }
+
+      toast({
+        status: 'success',
+        title: 'Successfully Queued SMS notifications!',
+        description: `SMS notifications will be sent to ${selectedUserIds.length} students...`,
+        duration: 10000,
+        isClosable: true,
+      })
+
+      setSent(true)
+    } catch (err) {
+      handleAPIError(err, { toast })
+    }
+
+    setLoading(false)
+  }, [course, selectedUserIds, toast, users])
 
   return (
     <Box>
@@ -191,13 +229,14 @@ function NotificationsSMSPage() {
             pluginHooks={tablePluginHooks}
             onStateChange={onTableStateChange}
           />
+          {userIds.loading && <Spinner size="lg" />}
         </Box>
 
         <Box flexGrow={1} maxWidth="600px" mx="auto">
           <Stack spacing={8}>
             <Box>
               <Text fontSize={2} as="strong" mb={2} display="block">
-                SMS Placeholders
+                Placeholders
               </Text>
               <Stack isInline spacing={2}>
                 {Object.keys(placeholderMap.replacer).map((item) => (
@@ -207,14 +246,19 @@ function NotificationsSMSPage() {
             </Box>
 
             <Box>
-              <FormLabel htmlFor="template">
-                <Text fontSize={2} as="strong">
-                  SMS Template
-                </Text>
-              </FormLabel>
+              <Stack isInline justifyContent="space-between">
+                <FormLabel htmlFor="template">
+                  <Text fontSize={2} as="strong">
+                    Template
+                  </Text>
+                </FormLabel>
+                <Text>Approximate Length: {preview.length}</Text>
+              </Stack>
               <Textarea
                 id="template"
                 ref={templateRef}
+                isDisabled={!selectedUserIds.length || loading || sent}
+                placeholder="Write your SMS template here..."
                 fontSize={2}
                 resize="vertical"
                 height="auto"
@@ -224,7 +268,7 @@ function NotificationsSMSPage() {
 
             <Box>
               <Text fontSize={2} as="strong">
-                SMS Preview
+                Preview
               </Text>
               <Textarea
                 value={preview}
@@ -232,20 +276,36 @@ function NotificationsSMSPage() {
                 isDisabled={true}
                 height="auto"
                 rows="5"
+                _disabled={{
+                  opacity: 1,
+                }}
               />
             </Box>
 
-            <Stack isInline justifyContent="flex-end">
-              <Button
-                type="button"
-                variantColor="blue"
-                size="lg"
-                isLoading={loading}
-                isDisabled={loading || !selectedUserIds.length}
-                onClick={onSubmit}
-              >
-                Send SMS
-              </Button>
+            <Stack isInline justifyContent="space-between" alignItems="center">
+              <Box>
+                <Text>Selected Student: {selectedUserIds.length}</Text>
+              </Box>
+              <Stack isInline spacing={4}>
+                <Button
+                  type="button"
+                  size="lg"
+                  onClick={onReset}
+                  isDisabled={loading}
+                >
+                  Reset
+                </Button>
+                <Button
+                  type="button"
+                  size="lg"
+                  variantColor="blue"
+                  isLoading={loading}
+                  isDisabled={!selectedUserIds.length || loading || sent}
+                  onClick={onSubmit}
+                >
+                  {sent ? 'Sent!' : 'Send SMS'}
+                </Button>
+              </Stack>
             </Stack>
           </Stack>
         </Box>
