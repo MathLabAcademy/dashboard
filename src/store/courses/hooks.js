@@ -17,20 +17,32 @@ export function useCourse(courseId) {
   return course
 }
 
-export function useCourseEnrolledUserIds(courseId) {
+export function useCourseEnrolledUserIds(courseId, onlyActive = false) {
   const [loading, setLoading] = useState(false)
 
-  const userIds = useSelector((state) =>
-    get(state.courses.enrollmentsById, courseId, emptyArray)
-  )
+  const enrollments = useSelector((state) => state.enrollments)
+
+  const userIds = useMemo(() => {
+    const enrollmentIdPattern = new RegExp(`^${courseId}:.+`)
+    const userIds = enrollments.allIds
+      .filter((id) => enrollmentIdPattern.test(id))
+      .reduce((userIds, enrollmentId) => {
+        const enrollment = enrollments.byId[enrollmentId]
+        if (!onlyActive || enrollment.active) {
+          userIds.push(enrollment.userId)
+        }
+        return userIds
+      }, [])
+    return userIds
+  }, [courseId, enrollments.allIds, enrollments.byId, onlyActive])
 
   const dispatch = useDispatch()
   useEffect(() => {
-    if (courseId && userIds === emptyArray) {
+    if (courseId) {
       setLoading(true)
       dispatch(getAllEnrollments(courseId)).finally(() => setLoading(false))
     }
-  }, [courseId, dispatch, userIds])
+  }, [courseId, dispatch])
 
   return { data: userIds, loading }
 }

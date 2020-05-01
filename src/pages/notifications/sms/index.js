@@ -141,7 +141,7 @@ function NotificationsSMSPage() {
   const course = useCourse(courseId)
 
   const users = useSelector((state) => state.users)
-  const userIds = useCourseEnrolledUserIds(courseId)
+  const userIds = useCourseEnrolledUserIds(courseId, true)
   const userData = useMemo(() => {
     return userIds.data.map((id) => users.byId[id])
   }, [userIds.data, users.byId])
