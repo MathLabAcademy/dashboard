@@ -15,7 +15,7 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     amount: Yup.number().integer().required(`required`),
-    transactionTypeId: Yup.string().oneOf(['CASH', 'BKASH']),
+    transactionTypeId: Yup.string().oneOf(['CASH', 'BKASH', 'NAGAD']),
   })
 }
 
@@ -28,6 +28,7 @@ const getInitialValues = (user) => ({
 const transactionTypeOptions = {
   CASH: 'Cash',
   BKASH: 'bKash',
+  NAGAD: 'Nagad',
 }
 
 function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
