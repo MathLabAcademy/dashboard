@@ -1,9 +1,14 @@
-import { Stack } from '@chakra-ui/core'
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel,
+  Heading,
+} from '@chakra-ui/core'
 import { Redirect } from '@reach/router'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Header } from 'semantic-ui-react'
 import { usePageviewAnalytics } from 'utils/analytics'
 import EmailLoginForm from './EmailLoginForm'
 import PhoneLoginForm from './PhoneLoginForm'
@@ -14,19 +19,29 @@ function LogIn({ userStatus }) {
   return userStatus.authed ? (
     <Redirect to="/" noThrow />
   ) : (
-    <Stack maxWidth="512px" mx="auto" px={2} py={8}>
-      <Header as="h2" textAlign="center">
-        Login with Phone
-      </Header>
+    <Accordion maxWidth="512px" mx="auto" px={2} py={8}>
+      <AccordionItem>
+        <AccordionHeader>
+          <Heading flex="1" fontSize={4} textAlign="center" p={2}>
+            Login with Email
+          </Heading>
+        </AccordionHeader>
+        <AccordionPanel pb={4}>
+          <EmailLoginForm />
+        </AccordionPanel>
+      </AccordionItem>
 
-      <PhoneLoginForm />
-
-      <Header as="h2" textAlign="center">
-        Login with Email
-      </Header>
-
-      <EmailLoginForm />
-    </Stack>
+      <AccordionItem>
+        <AccordionHeader>
+          <Heading flex="1" fontSize={4} textAlign="center" p={2}>
+            Login with Phone
+          </Heading>
+        </AccordionHeader>
+        <AccordionPanel pb={4}>
+          <PhoneLoginForm />
+        </AccordionPanel>
+      </AccordionItem>
+    </Accordion>
   )
 }
 
