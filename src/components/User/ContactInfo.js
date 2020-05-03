@@ -26,6 +26,7 @@ import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import * as Yup from 'yup'
 import Editor from './ContactInfoEditor'
+import { Box } from '@chakra-ui/core'
 
 function ResendEmailVerificationButton({ userId, personId, ...props }) {
   const [loading, setLoading] = useState(false)
@@ -506,7 +507,7 @@ function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {
       />
     </Permit>
   ) : (
-    <Segment>
+    <Box borderWidth={1} shadow="md" p={4} h="100%">
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
@@ -550,7 +551,7 @@ function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {
           />
         </Table.Body>
       </Table>
-    </Segment>
+    </Box>
   )
 }
 

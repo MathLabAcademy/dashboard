@@ -44,6 +44,29 @@ export const loginWithPhone = (loginData) => async (dispatch) => {
   }
 }
 
+export const loginWithFacebook = ({
+  facebookUserId,
+  facebookAccessToken,
+}) => async (dispatch) => {
+  try {
+    dispatch({ type: CURRENT_USER_LOGIN_REQUEST })
+
+    const { data, error } = await api('/auth/login/facebook', {
+      method: 'POST',
+      body: { facebookUserId, facebookAccessToken },
+    })
+
+    if (error) throw error
+
+    dispatch({ type: CURRENT_USER_UPDATE, data })
+
+    return data
+  } catch (err) {
+    dispatch({ type: CURRENT_USER_REMOVE })
+    throw err
+  }
+}
+
 export const logOut = () => async (dispatch) => {
   const { data, error } = await api('/auth/logout', {
     method: 'POST',
@@ -75,4 +98,22 @@ export const updatePassword = (passwordData) => async (dispatch) => {
   })
 
   if (error) throw error
+}
+
+export const connectFacebookAccount = ({
+  facebookUserId,
+  facebookAccessToken,
+}) => async (dispatch) => {
+  const { data, error } = await api('/user/action/connect-facebook-account', {
+    method: 'POST',
+    body: { facebookUserId, facebookAccessToken },
+  })
+
+  if (error) {
+    throw error
+  }
+
+  dispatch({ type: CURRENT_USER_UPDATE, data })
+
+  return data
 }

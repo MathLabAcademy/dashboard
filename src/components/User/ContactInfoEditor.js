@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/core'
 import isMobilePhone from '@muniftanjim/is-mobile-phone-number-bd'
 import Form from 'components/Form/Form'
 import Input from 'components/Form/Input'
@@ -7,7 +8,7 @@ import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Message, Segment, Table } from 'semantic-ui-react'
+import { Button, Header, Message, Table } from 'semantic-ui-react'
 import { updateEmail, updatePhone } from 'store/actions/users'
 import * as Yup from 'yup'
 
@@ -113,7 +114,7 @@ function ContactInfoEditor({
       >
         {({ isSubmitting, isValid, status }) => (
           <Form>
-            <Segment>
+            <Box borderWidth={1} shadow="md" p={4} h="100%">
               <HeaderGrid
                 Left={<Header content={editorTitle[field]} />}
                 Right={
@@ -181,7 +182,7 @@ function ContactInfoEditor({
                   </Table.Row>
                 </Table.Body>
               </Table>
-            </Segment>
+            </Box>
           </Form>
         )}
       </Formik>
