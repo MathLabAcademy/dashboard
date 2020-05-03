@@ -14,7 +14,7 @@ import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useComment } from 'store/comments/hooks'
-import { useCurrentUser } from 'store/currentUser/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import gravatarUrl from 'utils/gravatar-url'
 
@@ -27,7 +27,7 @@ function CommentBox({
 }) {
   const toast = useToast()
 
-  const user = useCurrentUser()
+  const currentUser = useCurrentUserData()
   const parentComment = useComment(replyToCommentId)
 
   const [loading, setLoading] = useState(false)
@@ -96,19 +96,19 @@ function CommentBox({
         <Flex flexDirection="row" px={2}>
           <Box mr={3} opacity="0.6">
             <Avatar
-              name={get(user, 'Person.fullName')}
-              src={gravatarUrl(get(user, 'Person.email'))}
+              name={get(currentUser, 'Person.fullName')}
+              src={gravatarUrl(get(currentUser, 'Person.email'))}
               size="lg"
             />
           </Box>
           <Stack justifyContent="center" spacing={1}>
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
-              {get(user, 'Person.fullName')}{' '}
+              {get(currentUser, 'Person.fullName')}{' '}
               <Permit roles="teacher">
                 <Text as="span" fontSize="0.8em">
                   (ID:{' '}
-                  <NavLink to={`/users/${get(user, 'id')}`}>
-                    {get(user, 'id')}
+                  <NavLink to={`/users/${get(currentUser, 'id')}`}>
+                    {get(currentUser, 'id')}
                   </NavLink>
                   )
                 </Text>

@@ -1,11 +1,11 @@
 import { get } from 'lodash-es'
 import { Children, cloneElement, useMemo } from 'react'
-import { useCurrentUser } from 'store/currentUser/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 
 function Permit({ userId, roles = '', children, ...props }) {
   const allowedRoles = useMemo(() => roles.split(',').filter(Boolean), [roles])
 
-  const currentUser = useCurrentUser()
+  const currentUser = useCurrentUserData()
 
   let permitted = false
 

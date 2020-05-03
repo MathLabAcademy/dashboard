@@ -1,11 +1,11 @@
 import { get } from 'lodash-es'
 import { useSelector } from 'react-redux'
-import { useCurrentUser } from 'store/currentUser/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 
 export function useCourseAccess(courseId) {
-  const user = useCurrentUser()
+  const currentUser = useCurrentUserData()
   const isEnrolled = useSelector((state) =>
-    get(state.enrollments.byId[`${courseId}:${user.id}`], 'active')
+    get(state.enrollments.byId[`${courseId}:${currentUser.id}`], 'active')
   )
-  return user.roleId === 'teacher' || isEnrolled
+  return currentUser.roleId === 'teacher' || isEnrolled
 }

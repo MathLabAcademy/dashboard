@@ -7,7 +7,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useRef, useState } from 'react'
 import { Box } from 'reflexbox'
 import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
-import { useCurrentUser } from 'store/currentUser/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 import paymentMethodImage from './payment-method.jpeg'
 
 function DailyTransactionsForYearStats() {
@@ -73,7 +73,7 @@ function DailyTransactionsForYearStats() {
 }
 
 function PaymentMethod() {
-  const userData = useCurrentUser()
+  const userData = useCurrentUserData()
 
   return (
     <Box p={4} sx={{ borderWidth: 1, boxShadow: 'md' }}>

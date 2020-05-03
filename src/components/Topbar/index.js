@@ -3,14 +3,12 @@ import { Match } from '@reach/router'
 import NavLink from 'components/Link/NavLink'
 import { get } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
-import { useSelector } from 'react-redux'
 import { Box, Flex } from 'reflexbox'
 import { useCurrentUser } from 'store/currentUser/hooks'
 import CurrentUserPopover from './CurrentUserPopover'
 
 function Topbar() {
-  const userData = useCurrentUser()
-  const userStatus = useSelector((state) => state.user.status)
+  const { data: userData, status: userStatus } = useCurrentUser()
 
   const isDobToday = useMemo(() => {
     const dob = get(userData, 'Person.dob', null)

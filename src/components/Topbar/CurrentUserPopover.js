@@ -13,11 +13,11 @@ import React, { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 import { Box } from 'reflexbox'
 import { logOut } from 'store/currentUser'
-import { useCurrentUser } from 'store/currentUser/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 
 function CurrentUserPopover() {
-  const user = useCurrentUser()
+  const currentUser = useCurrentUserData()
 
   const dispatch = useDispatch()
   const logoutUser = useCallback(async () => {
@@ -29,17 +29,17 @@ function CurrentUserPopover() {
     })
   }, [dispatch])
 
-  return user ? (
+  return currentUser ? (
     <Popover>
       <PopoverTrigger>
-        <Button variant="ghost">{get(user, 'Person.fullName')}</Button>
+        <Button variant="ghost">{get(currentUser, 'Person.fullName')}</Button>
       </PopoverTrigger>
       <PopoverContent zIndex={4}>
         <PopoverArrow />
         <PopoverBody>
           <Box>
             <Text as="strong">Phone: </Text>
-            {get(user, 'Person.phone')}
+            {get(currentUser, 'Person.phone')}
           </Box>
         </PopoverBody>
         <PopoverFooter>
