@@ -1,3 +1,4 @@
+import { USER_UPDATE } from 'store/actions/actionTypes'
 import api from 'utils/api'
 
 export const CURRENT_USER_LOGIN_REQUEST = 'CURRENT_USER_LOGIN_REQUEST'
@@ -114,6 +115,7 @@ export const connectFacebookAccount = ({
   }
 
   dispatch({ type: CURRENT_USER_UPDATE, data })
+  dispatch({ type: USER_UPDATE, data })
 
   return data
 }

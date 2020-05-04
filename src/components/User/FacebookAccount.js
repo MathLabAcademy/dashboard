@@ -10,113 +10,55 @@ import {
 } from '@chakra-ui/core'
 import { handleAPIError } from 'components/HookForm/helpers'
 import Permit from 'components/Permit'
-import loadjs from 'loadjs'
+import { useFacebookSdk } from 'hooks/facebookSdk'
 import { get } from 'lodash-es'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { connectFacebookAccount } from 'store/currentUser'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
-
-function loadFacebookJavaScriptSDK() {
-  if (!loadjs.isDefined('facebook-jssdk')) {
-    loadjs(['https://connect.facebook.net/en_US/sdk.js'], 'facebook-jssdk', {
-      before: (_path, scriptEl) => {
-        scriptEl.defer = true
-      },
-      success: () => {
-        console.log('Facebook JavaScript SDK successfully loaded!')
-      },
-      error: (depsNotFound) => {
-        console.error('Facebook JavaScript SDK failed to load!', depsNotFound)
-      },
-    })
-  }
-}
+import { getFacebookPermissions, initiateFacebookLogin } from 'utils/facebook'
 
 const requiredScopes = ['public_profile', 'email']
 
 function ConnectFacebookAccount() {
-  const [initialized, setInitialized] = useState(false)
+  const { initialized } = useFacebookSdk()
+
   const [loading, setLoading] = useState(false)
-  const [authResponse, setAuthResponse] = useState(null)
-  const [insufficientPermission, setInsufficientPermission] = useState(false)
-
-  const handleFacebookLoginStatus = useCallback(({ status, authResponse }) => {
-    if (status !== 'connected') {
-      console.warn(`Facebook login status: ${status}`)
-      return
-    }
-
-    setLoading(true)
-
-    window.FB.api('/me/permissions', {}, (response) => {
-      const grantedScopes = response.data.reduce(
-        (scopes, { permission, status }) => {
-          if (status === 'granted') {
-            scopes.push(permission)
-          }
-          return scopes
-        },
-        []
-      )
-
-      setAuthResponse(authResponse)
-      setInsufficientPermission(
-        !requiredScopes.every((scope) => grantedScopes.includes(scope))
-      )
-
-      setLoading(false)
-    })
-  }, [])
-
-  useEffect(() => {
-    if (typeof window.fbAsyncInit === 'undefined') {
-      window.fbAsyncInit = () => {
-        window.FB.init({
-          appId: process.env.REACT_APP_FACEBOOK_APP_ID,
-          autoLogAppEvents: true,
-          version: 'v6.0',
-          xfbml: false,
-        })
-
-        window.FB.getLoginStatus(handleFacebookLoginStatus)
-        setInitialized(true)
-      }
-    }
-
-    loadFacebookJavaScriptSDK()
-  }, [handleFacebookLoginStatus])
-
-  const initiateFacebookLogin = useCallback(() => {
-    setLoading(true)
-    window.FB.login(handleFacebookLoginStatus, {
-      scope: requiredScopes.join(','),
-      auth_type: insufficientPermission ? 'rerequest' : null,
-    })
-  }, [handleFacebookLoginStatus, insufficientPermission])
+  const [status, setStatus] = useState('')
 
   const toast = useToast()
   const dispatch = useDispatch()
-  useEffect(() => {
-    if (authResponse && !insufficientPermission) {
-      dispatch(
+
+  const handleConnectFacebookAccount = useCallback(async () => {
+    setLoading(true)
+    try {
+      const { authResponse } = await initiateFacebookLogin({
+        scope: requiredScopes.join(','),
+        authType: status === 'need_more_permission' ? 'rerequest' : null,
+      })
+      const permissions = await getFacebookPermissions()
+      const hasSufficientPermission = requiredScopes.every(
+        (scope) => permissions[scope] === 'granted'
+      )
+      if (!hasSufficientPermission) {
+        return setStatus('need_more_permission')
+      }
+      await dispatch(
         connectFacebookAccount({
           facebookUserId: authResponse.userID,
           facebookAccessToken: authResponse.accessToken,
         })
       )
-        .then(() => {
-          trackEventAnalytics({
-            category: 'User',
-            action: 'Connected Facebook Account',
-          })
-        })
-        .catch((error) => {
-          handleAPIError(error, { toast })
-        })
+      trackEventAnalytics({
+        category: 'User',
+        action: 'Connected Facebook Account',
+      })
+    } catch (err) {
+      handleAPIError(err, { toast })
+      setLoading(false)
     }
-  }, [authResponse, dispatch, insufficientPermission, toast])
+  }, [dispatch, status, toast])
 
   return (
     <>
@@ -127,12 +69,12 @@ function ConnectFacebookAccount() {
           variantColor="facebook"
           isLoading={loading || !initialized}
           isDisabled={loading || !initialized}
-          onClick={initiateFacebookLogin}
+          onClick={handleConnectFacebookAccount}
         >
           Connect Facebook Account
         </Button>
 
-        {authResponse && insufficientPermission && (
+        {status === 'need_more_permission' && (
           <Box>
             <Alert status="warning" variant="top-accent">
               <AlertIcon />
