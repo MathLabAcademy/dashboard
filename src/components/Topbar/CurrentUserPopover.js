@@ -37,10 +37,24 @@ function CurrentUserPopover() {
       <PopoverContent zIndex={4}>
         <PopoverArrow />
         <PopoverBody>
-          <Box>
-            <Text as="strong">Phone: </Text>
-            {get(currentUser, 'Person.phone')}
-          </Box>
+          {get(currentUser, 'Person.email') && (
+            <Box>
+              <Text as="strong">Email: </Text>
+              {get(currentUser, 'Person.email')}
+            </Box>
+          )}
+          {get(currentUser, 'facebookAccount') && (
+            <Box>
+              <Text as="strong">Facebook: </Text>
+              Connected
+            </Box>
+          )}
+          {get(currentUser, 'Person.phone') && (
+            <Box>
+              <Text as="strong">Phone: </Text>
+              {get(currentUser, 'Person.phone', '').slice(-11)}
+            </Box>
+          )}
         </PopoverBody>
         <PopoverFooter>
           <Button width="full" variantColor="red" onClick={logoutUser}>
