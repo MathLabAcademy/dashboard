@@ -39,6 +39,7 @@ function FacebookLoginForm({ isOpen }) {
         (scope) => permissions[scope] === 'granted'
       )
       if (!hasSufficientPermission) {
+        setLoading(false)
         return setStatus('need_more_permission')
       }
       await dispatch(
