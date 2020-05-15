@@ -14,14 +14,14 @@ const months = Info.months()
 
 function _ListItemRow({ enrollmentId, enrollment, user, month }) {
   const data = useMemo(() => {
-    const credit = get(user, 'credit', 0) / 100
+    const balance = get(user, 'balance', 0) / 100
     const payment = get(enrollment, 'Payments', emptyArray).find(
       (payment) => payment.month === month
     )
     const transactionId = get(payment, 'id', '---')
     const amount = get(payment, 'Transaction.amount') / 100 || '---'
     return {
-      credit,
+      balance,
       transactionId,
       amount,
     }
@@ -32,7 +32,7 @@ function _ListItemRow({ enrollmentId, enrollment, user, month }) {
       <Table.Cell collapsing>
         <Link to={`../enrollments/${enrollmentId}`}>{enrollmentId}</Link>
       </Table.Cell>
-      <Table.Cell collapsing>{data.credit}</Table.Cell>
+      <Table.Cell collapsing>{data.balance}</Table.Cell>
       <Table.Cell collapsing>{data.transactionId}</Table.Cell>
       <Table.Cell collapsing>{data.amount}</Table.Cell>
     </Table.Row>
@@ -179,7 +179,7 @@ function BatchClassPaymentList({
             <Table.HeaderCell collapsing>
               Student Enrollment ID
             </Table.HeaderCell>
-            <Table.HeaderCell collapsing>Credit Balance</Table.HeaderCell>
+            <Table.HeaderCell collapsing>Account Balance</Table.HeaderCell>
             <Table.HeaderCell collapsing>Transaction ID</Table.HeaderCell>
             <Table.HeaderCell collapsing>Amount (BDT)</Table.HeaderCell>
           </Table.Row>

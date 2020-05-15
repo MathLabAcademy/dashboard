@@ -7,7 +7,7 @@ import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
 import { getUser } from 'store/actions/users'
-import AddCredit from './AddCredit'
+import AddBalance from './AddBalance'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
 
@@ -62,7 +62,7 @@ function User({ userId, user, getUser }) {
 
       <Router>
         <Info path="/" userId={userId} refreshUser={refreshUser} />
-        <AddCredit path="add-credit" userId={userId} />
+        <AddBalance path="add-balance" userId={userId} />
         <ChangePassword path="change-password" userId={userId} />
       </Router>
     </Permit>

@@ -67,8 +67,8 @@ function BatchCoursePaymentChargeModal({
           </Message>
 
           <Text>
-            This will deduct amount from the students' available credit (if
-            sufficient amount is available)
+            This will deduct amount from the students' available account balance
+            (if sufficient amount is available)
           </Text>
         </Modal.Content>
 

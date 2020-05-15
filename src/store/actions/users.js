@@ -156,8 +156,8 @@ export const updatePerson = (
   return data
 }
 
-export const readCredit = (userId) => async (dispatch) => {
-  const url = `/users/${userId}/credit`
+export const readBalance = (userId) => async (dispatch) => {
+  const url = `/users/${userId}/balance`
 
   const { data, error } = await api(url)
 
@@ -168,8 +168,8 @@ export const readCredit = (userId) => async (dispatch) => {
   return data
 }
 
-export const addCredit = (userId, transactionData) => async (dispatch) => {
-  const url = `/users/${userId}/action/add-credit`
+export const addBalance = (userId, transactionData) => async (dispatch) => {
+  const url = `/users/${userId}/action/add-balance`
 
   const { data, error } = await api(url, {
     method: 'POST',

@@ -5,25 +5,25 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
-import { readCredit } from 'store/actions/users'
+import { readBalance } from 'store/actions/users'
 import Transactions from './Transactions'
 
-function TransactionInfo({ userId, user, title, readCredit }) {
-  const creditTaka = useMemo(() => {
-    const credit = get(user, 'credit') || 0
-    const inTaka = Number(credit / 100).toFixed(2)
-    return `${inTaka} BDT`
+function TransactionInfo({ userId, user, title, readBalance }) {
+  const balanceTaka = useMemo(() => {
+    const balance = get(user, 'balance') || 0
+    const inTaka = Number(balance / 100).toFixed(2)
+    return `BDT ${inTaka}`
   }, [user])
 
   const isStudent = useMemo(() => get(user, 'roleId') === 'student', [user])
 
-  const refreshCredit = useCallback(() => {
-    if (userId) readCredit(userId)
-  }, [readCredit, userId])
+  const refreshBalance = useCallback(() => {
+    if (userId) readBalance(userId)
+  }, [readBalance, userId])
 
   useEffect(() => {
-    refreshCredit()
-  }, [refreshCredit])
+    refreshBalance()
+  }, [refreshBalance])
 
   return (
     <Segment>
@@ -31,11 +31,11 @@ function TransactionInfo({ userId, user, title, readCredit }) {
         Left={<Header content={title} />}
         Right={
           <>
-            <Button type="button" icon="refresh" onClick={refreshCredit} />
+            <Button type="button" icon="refresh" onClick={refreshBalance} />
             {isStudent && (
               <Permit roles="teacher">
-                <Button as={Link} to={'add-credit'}>
-                  Add Credit
+                <Button as={Link} to={'add-balance'}>
+                  Add Balance
                 </Button>
               </Permit>
             )}
@@ -51,8 +51,8 @@ function TransactionInfo({ userId, user, title, readCredit }) {
       <Table basic="very" compact className="horizontal-info">
         <Table.Body>
           <Table.Row>
-            <Table.HeaderCell collapsing content={`Credit`} />
-            <Table.Cell content={creditTaka} />
+            <Table.HeaderCell collapsing content={`Account Balance`} />
+            <Table.Cell content={`${balanceTaka}`} />
           </Table.Row>
         </Table.Body>
       </Table>
@@ -66,7 +66,7 @@ const mapStateToProps = ({ users }, { userId }) => ({
 })
 
 const mapDispatchToProps = {
-  readCredit,
+  readBalance,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionInfo)

@@ -9,7 +9,7 @@ import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { addCredit, readCredit } from 'store/actions/users'
+import { addBalance, readBalance } from 'store/actions/users'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -20,7 +20,7 @@ const getValidationSchema = () => {
 }
 
 const getInitialValues = (user) => ({
-  credit: get(user, 'credit') / 100,
+  balance: get(user, 'balance') / 100,
   amount: 0,
   transactionTypeId: '',
 })
@@ -31,10 +31,10 @@ const transactionTypeOptions = {
   NAGAD: 'Nagad',
 }
 
-function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
+function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
   useEffect(() => {
-    readCredit(userId)
-  }, [readCredit, userId])
+    readBalance(userId)
+  }, [readBalance, userId])
 
   const validationSchema = useMemo(() => getValidationSchema(), [])
   const initialValues = useMemo(() => getInitialValues(user), [user])
@@ -44,7 +44,7 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
       actions.setStatus(null)
 
       try {
-        await addCredit(userId, {
+        await addBalance(userId, {
           amount: amount * 100,
           transactionTypeId,
         })
@@ -64,7 +64,7 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
 
       actions.setSubmitting(false)
     },
-    [addCredit, navigate, userId]
+    [addBalance, navigate, userId]
   )
 
   return (
@@ -79,7 +79,7 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
           <Form>
             <Segment>
               <HeaderGrid
-                Left={<Header>Add Credit</Header>}
+                Left={<Header>Add Account Balance</Header>}
                 Right={
                   <>
                     <Button as={Link} to="..">
@@ -105,8 +105,8 @@ function UserAddCredit({ userId, user, addCredit, readCredit, navigate }) {
               </Message>
 
               <FormInput
-                name="credit"
-                label={`Current Credit`}
+                name="balance"
+                label={`Current Balance`}
                 disabled
                 static
               />
@@ -140,8 +140,8 @@ const mapStateToProps = ({ users }, { userId }) => ({
 })
 
 const mapDispatchToProps = {
-  addCredit,
-  readCredit,
+  addBalance,
+  readBalance,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserAddCredit)
+export default connect(mapStateToProps, mapDispatchToProps)(UserAddBalance)

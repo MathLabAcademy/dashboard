@@ -10,12 +10,12 @@ import PaymentReminder from './ActionModals/PaymentReminder'
 
 function _ListItemRow({ enrollmentId, enrollment, user }) {
   const data = useMemo(() => {
-    const credit = get(user, 'credit', 0) / 100
+    const balance = get(user, 'balance', 0) / 100
     const transactionId = get(enrollment, 'Payments[0].id', '---')
     const amount =
       get(enrollment, 'Payments[0].Transaction.amount') / 100 || '---'
     return {
-      credit,
+      balance,
       transactionId,
       amount,
     }
@@ -26,7 +26,7 @@ function _ListItemRow({ enrollmentId, enrollment, user }) {
       <Table.Cell collapsing>
         <Link to={`../enrollments/${enrollmentId}`}>{enrollmentId}</Link>
       </Table.Cell>
-      <Table.Cell collapsing>{data.credit}</Table.Cell>
+      <Table.Cell collapsing>{data.balance}</Table.Cell>
       <Table.Cell collapsing>{data.transactionId}</Table.Cell>
       <Table.Cell collapsing>{data.amount}</Table.Cell>
     </Table.Row>
@@ -123,7 +123,7 @@ function BatchCoursePaymentList({
             <Table.HeaderCell collapsing>
               Student Enrollment ID
             </Table.HeaderCell>
-            <Table.HeaderCell collapsing>Credit Balance</Table.HeaderCell>
+            <Table.HeaderCell collapsing>Account Balance</Table.HeaderCell>
             <Table.HeaderCell collapsing>Transaction ID</Table.HeaderCell>
             <Table.HeaderCell collapsing>Amount (BDT)</Table.HeaderCell>
             <Table.HeaderCell collapsing textAlign="right" />

@@ -17,7 +17,7 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     price: Yup.number().integer().required(`required`),
-    credit: Yup.number()
+    balance: Yup.number()
       .integer()
       // .min(Yup.ref('price'))
       .required(`required`),
@@ -27,7 +27,7 @@ const getValidationSchema = () => {
 }
 
 const getInitialValues = (course, currentUser) => ({
-  credit: get(currentUser, 'credit') / 100,
+  balance: get(currentUser, 'balance') / 100,
   price: get(course, 'price') / 100,
   couponId: '',
   confirm: false,
@@ -83,12 +83,12 @@ function CourseEnroll({
   )
 
   const amountDeficit = useMemo(() => {
-    const credit = get(currentUser, 'credit')
+    const balance = get(currentUser, 'balance')
     const price = get(course, 'price')
 
-    if (price < credit) return 0
+    if (price < balance) return 0
 
-    return (price - credit) / 100
+    return (price - balance) / 100
   }, [course, currentUser])
 
   return (
@@ -137,8 +137,9 @@ function CourseEnroll({
                 color="yellow"
                 hidden={!amountDeficit || !!values.couponId}
               >
-                Insufficient balance! You need {amountDeficit.toFixed(2)}{' '}
-                additional credit to enroll...
+                Insufficient account balance! You need{' '}
+                {amountDeficit.toFixed(2)} additional account balance to
+                enroll...
               </Message>
 
               <Message color="yellow" hidden={!status}>
@@ -154,9 +155,9 @@ function CourseEnroll({
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.HeaderCell collapsing content={`Your Credit`} />
+                    <Table.HeaderCell collapsing content={`Your Balance`} />
                     <Table.Cell>
-                      {Number(values.credit).toFixed(2)} BDT
+                      BDT {Number(values.balance).toFixed(2)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
