@@ -1,12 +1,10 @@
-import { Box, Heading, Text, Stack } from '@chakra-ui/core'
-import Permit from 'components/Permit'
+import { Box, Stack } from '@chakra-ui/core'
 import ContactInfo from 'components/User/ContactInfo'
 import PersonInfo from 'components/User/PersonInfo'
 import TransactionInfo from 'components/User/TransactionInfo'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
-import { useCurrentUserData } from 'store/currentUser/hooks'
 import EnrollmentInfo from './EnrollmentInfo'
 import FacebookAccount from './FacebookAccount'
 

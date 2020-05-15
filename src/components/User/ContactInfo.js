@@ -1,3 +1,4 @@
+import { Box } from '@chakra-ui/core'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -19,14 +20,12 @@ import {
   Message,
   Modal,
   Popup,
-  Segment,
   Table,
 } from 'semantic-ui-react'
 import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 import * as Yup from 'yup'
 import Editor from './ContactInfoEditor'
-import { Box } from '@chakra-ui/core'
 
 function ResendEmailVerificationButton({ userId, personId, ...props }) {
   const [loading, setLoading] = useState(false)
