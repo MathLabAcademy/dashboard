@@ -29,7 +29,7 @@ const initialState = {
 
 const coursesReducer = (
   state = initialState,
-  { type, data, courseId, courseVideoId }
+  { type, data, courseId, videoId }
 ) => {
   switch (type) {
     case COURSE_ADD:
@@ -138,9 +138,9 @@ const coursesReducer = (
         ...state,
         videosById: {
           ...state.videosById,
-          [data.courseId]: union(
+          [data.courseId]: ids.add(
             get(state.videosById, data.courseId, emptyArray),
-            [data.id]
+            { id: data.videoId }
           ),
         },
       }
@@ -150,7 +150,7 @@ const coursesReducer = (
         videosById: {
           ...state.videosById,
           ...mapValues(groupBy(data.items, 'courseId'), (items) =>
-            map(items, 'id')
+            map(items, 'videoId')
           ),
         },
       }
@@ -159,9 +159,9 @@ const coursesReducer = (
         ...state,
         videosById: {
           ...state.videosById,
-          [courseId]: get(state.videosById, courseId, emptyArray).filter(
-            (id) => id !== courseVideoId
-          ),
+          [courseId]: ids.remove(get(state.videosById, courseId), {
+            id: videoId,
+          }),
         },
       }
     default:

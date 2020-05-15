@@ -13,26 +13,22 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { useCourseAccess } from 'hooks/useCourseAccess'
-import { useVideo } from 'hooks/useVideo'
 import { get } from 'lodash-es'
 import React from 'react'
-import { connect } from 'react-redux'
 import { Header, Segment } from 'semantic-ui-react'
 import { useCourseVideos } from 'store/courses/hooks'
-import { emptyArray, emptyObject } from 'utils/defaults'
+import { useVideo } from 'store/videos/hooks'
 
-function ListItem({ id, data = emptyObject }) {
-  const { videoProvider, videoId } = data
-
-  const video = useVideo(videoProvider, videoId)
+function ListItem({ id }) {
+  const video = useVideo(id)
 
   return (
     <Box borderWidth={1} shadow="md" p={3}>
-      {video.loading ? (
+      {!video ? (
         <Flex justifyContent="center" alignItems="center">
           <Spinner size="xl" />
         </Flex>
-      ) : videoProvider === 'vimeo' ? (
+      ) : video.provider === 'vimeo' ? (
         <>
           <Box>
             <Heading>{get(video, 'data.name')}</Heading>
@@ -56,9 +52,9 @@ function ListItem({ id, data = emptyObject }) {
 }
 
 function CourseVideoList({ courseId }) {
-  const videos = useCourseVideos(courseId)
-
   const canAccess = useCourseAccess(courseId)
+
+  const videos = useCourseVideos(courseId)
 
   return (
     <Permit roles="teacher,student">
@@ -77,12 +73,7 @@ function CourseVideoList({ courseId }) {
 
           <SimpleGrid mt={4} columns={4} spacing={6} minChildWidth={320}>
             {videos.allIds.map((id) => (
-              <ListItem
-                key={id}
-                id={id}
-                courseId={courseId}
-                data={videos.byId[id]}
-              />
+              <ListItem key={id} id={id} />
             ))}
           </SimpleGrid>
         </Segment>
@@ -91,10 +82,4 @@ function CourseVideoList({ courseId }) {
   )
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  cqExamIds: get(courses.cqExamsById, courseId, emptyArray),
-})
-
-const mapDispatchToProps = {}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseVideoList)
+export default CourseVideoList

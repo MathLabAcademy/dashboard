@@ -2,7 +2,12 @@ import { get, keyBy } from 'lodash-es'
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { emptyArray } from 'utils/defaults'
-import { getAllEnrollments, getCourse, readAllCourseVideo } from '.'
+import {
+  getAllEnrollments,
+  getCourse,
+  getCourseVideo,
+  readAllCourseVideo,
+} from '.'
 
 export function useCourse(courseId) {
   const course = useSelector((state) => get(state.courses.byId, courseId, null))
@@ -48,19 +53,17 @@ export function useCourseEnrolledUserIds(courseId, onlyActive = false) {
 }
 
 export function useCourseVideos(courseId) {
+  const videosById = useSelector((state) => state.videos.byId)
   const allIds = useSelector((state) =>
     get(state.courses.videosById, courseId, emptyArray)
   )
 
   const byId = useMemo(() => {
     return keyBy(
-      allIds.map((id) => {
-        const [courseId, videoProvider, videoId] = id.split(':')
-        return { id, courseId, videoProvider, videoId }
-      }),
+      allIds.map((id) => videosById[id]),
       'id'
     )
-  }, [allIds])
+  }, [allIds, videosById])
 
   const dispatch = useDispatch()
   useEffect(() => {
@@ -70,19 +73,17 @@ export function useCourseVideos(courseId) {
   return { allIds, byId }
 }
 
-export function useCourseVideo(courseId, courseVideoId) {
+export function useCourseVideo(courseId, videoId) {
+  const video = useSelector((state) => state.videos.byId[videoId])
+
   const courseHasVideo = useSelector((state) =>
-    get(state.courses.videosById, courseId, emptyArray).includes(courseVideoId)
+    get(state.courses.videosById, courseId, emptyArray).includes(videoId)
   )
 
-  const data = useMemo(() => {
-    if (!courseHasVideo) {
-      return {}
-    }
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getCourseVideo(courseId, videoId))
+  }, [courseId, dispatch, videoId])
 
-    const [, videoProvider, videoId] = courseVideoId.split(':')
-    return { id: courseVideoId, courseId, videoProvider, videoId }
-  }, [courseHasVideo, courseId, courseVideoId])
-
-  return data
+  return courseHasVideo ? video : null
 }

@@ -8,8 +8,11 @@ export function useComment(commentId) {
   return useSelector((state) => state.comments.byId[commentId])
 }
 
-export function useCourseVideoComments(courseId, courseVideoId, depth = null) {
-  const thread = useMemo(() => `course-video-${courseVideoId}`, [courseVideoId])
+export function useCourseVideoComments(courseId, videoId, depth = null) {
+  const thread = useMemo(() => `courses/${courseId}/videos/${videoId}`, [
+    courseId,
+    videoId,
+  ])
 
   const commentIds = useSelector((state) =>
     get(state.comments.idsByThread, thread, emptyArray)
@@ -24,8 +27,8 @@ export function useCourseVideoComments(courseId, courseVideoId, depth = null) {
 
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getAllCommentsForCourseVideo(courseId, courseVideoId))
-  }, [courseId, courseVideoId, dispatch])
+    dispatch(getAllCommentsForCourseVideo(courseId, videoId))
+  }, [courseId, dispatch, videoId])
 
   return {
     byId,

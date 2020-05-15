@@ -5,11 +5,11 @@ export const COMMENT_BULK_ADD = 'COMMENT_BULK_ADD'
 
 export const createCommentForCourseVideo = (
   courseId,
-  courseVideoId,
+  videoId,
   { type, text, parentId }
 ) => async (dispatch) => {
   const { data, error } = await api(
-    `/courses/${courseId}/videos/${courseVideoId}/comments`,
+    `/courses/${courseId}/videos/${videoId}/comments`,
     {
       method: 'POST',
       body: { type, text, parentId },
@@ -23,11 +23,11 @@ export const createCommentForCourseVideo = (
   return data
 }
 
-export const getAllCommentsForCourseVideo = (courseId, courseVideoId) => async (
+export const getAllCommentsForCourseVideo = (courseId, videoId) => async (
   dispatch
 ) => {
   const { data: _data, error } = await api(
-    `/courses/${courseId}/videos/${courseVideoId}/comments`,
+    `/courses/${courseId}/videos/${videoId}/comments`,
     {
       method: 'GET',
     }
@@ -37,9 +37,9 @@ export const getAllCommentsForCourseVideo = (courseId, courseVideoId) => async (
 
   const data = {
     items: _data.items.map((item) => {
-      if (item.Children) {
-        item.childIds = item.Children.map(({ id }) => id)
-        delete item.Children
+      if (item.children) {
+        item.childIds = item.children.map(({ id }) => id)
+        delete item.children
       }
       return item
     }),

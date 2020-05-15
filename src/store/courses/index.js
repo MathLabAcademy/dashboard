@@ -1,4 +1,6 @@
+import { batch } from 'react-redux'
 import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
+import { VIDEO_ADD, VIDEO_BULK_ADD } from 'store/videos'
 import api from 'utils/api'
 import { defaultOptsFetchAllPages, defaultOptsFetchPage } from 'utils/defaults'
 import { USER_BULK_ADD } from '../actions/actionTypes'
@@ -151,46 +153,49 @@ export const getAllEnrollments = (courseId) => async (dispatch) => {
 
 export const createCourseVideo = (
   courseId,
-  { videoId, videoProvider }
+  { videoExternalId, videoProvider }
 ) => async (dispatch) => {
   const { data, error } = await api(`/courses/${courseId}/videos`, {
     method: 'POST',
     body: {
-      videoId,
       videoProvider,
+      videoExternalId,
     },
   })
 
   if (error) throw error
 
-  dispatch({ type: COURSE_VIDEO_ADD, data })
+  batch(() => {
+    dispatch({ type: COURSE_VIDEO_ADD, data })
+    dispatch({ type: VIDEO_ADD, data: data.video })
+  })
 
   return data
 }
 
-export const getCourseVideo = (courseId, courseVideoId) => async (dispatch) => {
-  const { data, error } = await api(
-    `/courses/${courseId}/videos/${courseVideoId}`,
-    {
-      method: 'GET',
-    }
-  )
+export const getCourseVideo = (courseId, videoId) => async (dispatch) => {
+  const { data, error } = await api(`/courses/${courseId}/videos/${videoId}`, {
+    method: 'GET',
+  })
 
   if (error) throw error
 
-  dispatch({ type: COURSE_VIDEO_ADD, data })
+  batch(() => {
+    dispatch({ type: COURSE_VIDEO_ADD, data })
+    dispatch({ type: VIDEO_ADD, data: data.video })
+  })
+
+  return data
 }
 
-export const removeCourseVideo = (courseId, courseVideoId) => async (
-  dispatch
-) => {
-  const { error } = await api(`/courses/${courseId}/videos/${courseVideoId}`, {
+export const removeCourseVideo = (courseId, videoId) => async (dispatch) => {
+  const { error } = await api(`/courses/${courseId}/videos/${videoId}`, {
     method: 'DELETE',
   })
 
   if (error) throw error
 
-  dispatch({ type: COURSE_VIDEO_REMOVE, courseId, courseVideoId })
+  dispatch({ type: COURSE_VIDEO_REMOVE, courseId, videoId })
 }
 
 export const readAllCourseVideo = (courseId) => async (dispatch) => {
@@ -198,7 +203,12 @@ export const readAllCourseVideo = (courseId) => async (dispatch) => {
 
   if (error) throw error
 
-  dispatch({ type: COURSE_VIDEO_BULK_ADD, data })
+  const videoItems = data.items.map((item) => item.video)
+
+  batch(() => {
+    dispatch({ type: COURSE_VIDEO_BULK_ADD, data })
+    dispatch({ type: VIDEO_BULK_ADD, data: { items: videoItems } })
+  })
 
   return data
 }

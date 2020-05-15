@@ -11,7 +11,7 @@ import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import VimeoEmbed from 'components/VimeoEmbed'
-import { useVideo } from 'hooks/useVideo'
+import { useVideoPreview } from 'hooks/useVideoPreview'
 import React, { useCallback, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Header, Message, Segment } from 'semantic-ui-react'
@@ -27,7 +27,7 @@ function CourseVideoCreate({ courseId, navigate }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const vimeoVideo = useVideo(videoProvider, vimeoVideoId)
+  const videoPreview = useVideoPreview(videoProvider, vimeoVideoId)
 
   const onPreview = useCallback(() => {
     setVimeoVideoId(vimeoVideoIdRef.current.value)
@@ -37,13 +37,13 @@ function CourseVideoCreate({ courseId, navigate }) {
   const onSubmit = useCallback(async () => {
     setLoading(true)
     try {
-      await dispatch(
+      const courseVideo = await dispatch(
         createCourseVideo(courseId, {
-          videoId: vimeoVideoId,
           videoProvider,
+          videoExternalId: vimeoVideoId,
         })
       )
-      navigate(`/courses/${courseId}/videos`)
+      navigate(`/courses/${courseId}/videos/${courseVideo.videoId}`)
     } catch (err) {
       if (err.errors) {
         setError(
@@ -92,8 +92,8 @@ function CourseVideoCreate({ courseId, navigate }) {
             <InputRightElement width="5rem" pr="0.5rem">
               <Button
                 h="2rem"
-                isLoading={vimeoVideo.loading}
-                isDisabled={vimeoVideo.loading}
+                isLoading={videoPreview.loading}
+                isDisabled={videoPreview.loading}
                 onClick={onPreview}
                 variantColor="blue"
                 px="0.5rem"
@@ -105,7 +105,7 @@ function CourseVideoCreate({ courseId, navigate }) {
 
           <Button
             isLoading={loading}
-            isDisabled={loading || !vimeoVideo.data}
+            isDisabled={loading || !videoPreview.data}
             variantColor="green"
             onClick={onSubmit}
           >
@@ -115,7 +115,7 @@ function CourseVideoCreate({ courseId, navigate }) {
 
         {vimeoVideoId && (
           <Box p={4}>
-            <VimeoEmbed video={vimeoVideo} maxWidth={600} mx="auto" />
+            <VimeoEmbed video={videoPreview} maxWidth={600} mx="auto" />
           </Box>
         )}
       </Segment>

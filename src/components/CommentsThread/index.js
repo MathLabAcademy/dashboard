@@ -183,19 +183,19 @@ function CommentItem({
       <Flex flexDirection="row" px={2}>
         <Box mr={3}>
           <Avatar
-            name={get(comment, 'User.Person.fullName')}
-            src={gravatarUrl(get(comment, 'User.Person.email'))}
+            name={get(comment, 'user.Person.fullName')}
+            src={gravatarUrl(get(comment, 'user.Person.email'))}
             size="lg"
           />
         </Box>
         <Stack justifyContent="center" spacing={1}>
           <Text fontSize={3} fontWeight="bold">
-            {get(comment, 'User.Person.fullName')}{' '}
+            {get(comment, 'user.Person.fullName')}{' '}
             <Permit roles="teacher">
               <Text as="span" fontSize="0.8em">
                 (ID:{' '}
-                <NavLink to={`/users/${get(comment, 'User.id')}`}>
-                  {get(comment, 'User.id')}
+                <NavLink to={`/users/${get(comment, 'user.id')}`}>
+                  {get(comment, 'user.id')}
                 </NavLink>
                 )
               </Text>

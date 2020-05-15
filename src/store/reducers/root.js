@@ -4,6 +4,7 @@ import comments from '../comments/reducer'
 import courses from '../courses/reducer'
 import user from '../currentUser/reducer'
 import enrollments from '../enrollments/reducer'
+import videos from '../videos/reducer'
 import batches from './batches'
 import courseTags from './courseTags'
 import cqExams from './cqExams'
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   transactions,
   ui,
   users,
+  videos,
 })
 
 export default (state, action) => {

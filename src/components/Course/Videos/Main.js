@@ -17,7 +17,7 @@ function CourseVideos({ courseId }) {
     <Permit roles="teacher,student">
       <Router>
         <List path="/" courseId={courseId} />
-        <View path=":courseVideoId" courseId={courseId} />
+        <View path=":videoId" courseId={courseId} />
         <Create path="create" courseId={courseId} />
       </Router>
     </Permit>

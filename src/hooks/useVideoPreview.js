@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from 'utils/api'
 
-export function useVideo(videoProvider, videoId) {
+export function useVideoPreview(videoProvider, videoId) {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -10,15 +10,17 @@ export function useVideo(videoProvider, videoId) {
     if (videoId && videoProvider) {
       setLoading(true)
 
-      api(`/videos/${videoProvider}/${videoId}`).then(({ data, error }) => {
-        if (error) {
-          setError(error)
-        } else {
-          setData(data)
-        }
+      api(`/videos/preview/${videoProvider}/${videoId}`).then(
+        ({ data, error }) => {
+          if (error) {
+            setError(error)
+          } else {
+            setData(data)
+          }
 
-        setLoading(false)
-      })
+          setLoading(false)
+        }
+      )
     }
   }, [videoId, videoProvider])
 
