@@ -58,6 +58,23 @@ function DailyTransactionsForYearStats() {
                 data={data}
                 from={`${year}-01-01`}
                 to={`${year}-12-31`}
+                minValue="auto"
+                colors={[
+                  '#CC0022',
+                  '#FF002B',
+                  '#FF3355',
+                  '#FF667F',
+                  '#FF99AA',
+                  '#FFCCD5',
+                  '#CCFFCC',
+                  '#99FF99',
+                  '#66FF66',
+                  '#33FF33',
+                  '#00FF00',
+                  '#00CC00',
+                  '#009900',
+                  '#006600',
+                ]}
                 emptyColor="#eee"
                 margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
                 monthBorderColor="#fff"
