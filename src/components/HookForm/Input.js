@@ -1,8 +1,8 @@
 import { FormControl, FormLabel, Input, InputGroup } from '@chakra-ui/core'
-import ErrorMessage from './ErrorMessage'
 import { get } from 'lodash-es'
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
+import ErrorMessage from './ErrorMessage'
 
 export const FormInput = ({
   name,
@@ -12,6 +12,7 @@ export const FormInput = ({
   required = false,
   validate,
   label,
+  labelProps,
   InputLeft = null,
   InputRight = null,
   ...props
@@ -29,7 +30,7 @@ export const FormInput = ({
       <FormLabel
         htmlFor={id}
         display={label ? 'block' : 'none'}
-        {...(props.labelProps && { ...props.labelProps })}
+        {...labelProps}
       >
         {label}
       </FormLabel>

@@ -6,15 +6,10 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Segment, Table } from 'semantic-ui-react'
 import { readBalance } from 'store/actions/users'
+import SetCreditLimit from './modals/SetCreditLimit'
 import Transactions from './Transactions'
 
 function TransactionInfo({ userId, user, title, readBalance }) {
-  const balanceTaka = useMemo(() => {
-    const balance = get(user, 'balance') || 0
-    const inTaka = Number(balance / 100).toFixed(2)
-    return `BDT ${inTaka}`
-  }, [user])
-
   const isStudent = useMemo(() => get(user, 'roleId') === 'student', [user])
 
   const refreshBalance = useCallback(() => {
@@ -37,6 +32,7 @@ function TransactionInfo({ userId, user, title, readBalance }) {
                 <Button as={Link} to={'add-balance'}>
                   Add Balance
                 </Button>
+                <SetCreditLimit userId={userId} />
               </Permit>
             )}
             {/* <Permit roles="teacher" userId={userId}>
@@ -52,7 +48,19 @@ function TransactionInfo({ userId, user, title, readBalance }) {
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell collapsing content={`Account Balance`} />
-            <Table.Cell content={`${balanceTaka}`} />
+            <Table.Cell
+              content={`BDT ${Number(get(user, 'balance', 0) / 100).toFixed(
+                2
+              )}`}
+            />
+          </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell collapsing content={`Credit Limit`} />
+            <Table.Cell
+              content={`BDT ${Number(get(user, 'creditLimit', 0) / 100).toFixed(
+                2
+              )}`}
+            />
           </Table.Row>
         </Table.Body>
       </Table>

@@ -183,6 +183,21 @@ export const addBalance = (userId, transactionData) => async (dispatch) => {
   return data
 }
 
+export const setCreditLimit = (userId, { creditLimit }) => async (dispatch) => {
+  const url = `/users/${userId}/action/set-credit-limit`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: { creditLimit },
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
 export const getAllEnrollmentsForUser = (userId, type) => async (dispatch) => {
   const url = `/users/${userId}/enrollments?type=${type}`
 

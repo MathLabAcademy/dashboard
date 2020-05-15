@@ -17,38 +17,23 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     price: Yup.number().integer().required(`required`),
-    balance: Yup.number()
-      .integer()
-      // .min(Yup.ref('price'))
-      .required(`required`),
     couponId: Yup.string().notRequired(),
     confirm: Yup.bool().oneOf([true], 'must confirm').required(`required`),
   })
 }
 
-const getInitialValues = (course, currentUser) => ({
-  balance: get(currentUser, 'balance') / 100,
+const getInitialValues = (course) => ({
   price: get(course, 'price') / 100,
   couponId: '',
   confirm: false,
 })
 
-function CourseEnroll({
-  courseId,
-  course,
-  enrollments,
-  currentUser,
-  enroll,
-  navigate,
-}) {
+function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
   const isEnrolled = useMemo(() => {
     return enrollments.includes(currentUser.id)
   }, [currentUser.id, enrollments])
 
-  const initialValues = useMemo(() => getInitialValues(course, currentUser), [
-    course,
-    currentUser,
-  ])
+  const initialValues = useMemo(() => getInitialValues(course), [course])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -63,7 +48,7 @@ function CourseEnroll({
           action: 'Enrolled in Course',
         })
 
-        navigate('..')
+        window.location.reload()
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -79,16 +64,18 @@ function CourseEnroll({
 
       actions.setSubmitting(false)
     },
-    [courseId, enroll, navigate]
+    [courseId, enroll]
   )
 
   const amountDeficit = useMemo(() => {
     const balance = get(currentUser, 'balance')
+    const creditLimit = get(currentUser, 'creditLimit')
     const price = get(course, 'price')
 
-    if (price < balance) return 0
+    const balanceAfterCharged = balance - price
+    const balanceAfterCreditApplied = creditLimit + balanceAfterCharged
 
-    return (price - balance) / 100
+    return balanceAfterCreditApplied
   }, [course, currentUser])
 
   return (
@@ -132,14 +119,13 @@ function CourseEnroll({
                   </>
                 }
               />
-              {console.log(values)}
+
               <Message
                 color="yellow"
-                hidden={!amountDeficit || !!values.couponId}
+                hidden={amountDeficit >= 0 || !!values.couponId}
               >
-                Insufficient account balance! You need{' '}
-                {amountDeficit.toFixed(2)} additional account balance to
-                enroll...
+                Credit limit will exceed! You need to pay your dues before you
+                can enroll in this course.
               </Message>
 
               <Message color="yellow" hidden={!status}>
@@ -155,9 +141,22 @@ function CourseEnroll({
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.HeaderCell collapsing content={`Your Balance`} />
+                    <Table.HeaderCell
+                      collapsing
+                      content={`Your Account Balance`}
+                    />
                     <Table.Cell>
-                      BDT {Number(values.balance).toFixed(2)}
+                      BDT {Number(get(currentUser, 'balance') / 100).toFixed(2)}
+                    </Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.HeaderCell
+                      collapsing
+                      content={`Your Credit Limit`}
+                    />
+                    <Table.Cell>
+                      BDT{' '}
+                      {Number(get(currentUser, 'creditLimit') / 100).toFixed(2)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
