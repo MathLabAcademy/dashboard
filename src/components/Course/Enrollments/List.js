@@ -19,7 +19,8 @@ function _ListItemRow({
         <Link to={`/users/${get(user, 'id')}`}>{get(user, 'id')}</Link>
       </Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
-      <Table.Cell>BDT {get(user, 'balance') / 100}</Table.Cell>
+      <Table.Cell>BDT {get(user, 'balance', 0) / 100}</Table.Cell>
+      <Table.Cell>BDT {get(user, 'creditLimit', 0) / 100}</Table.Cell>
       <Table.Cell>
         <Checkbox
           checked={get(enrollment, 'active')}
@@ -66,6 +67,7 @@ function CourseEnrollmentList({ enrollments, enrollmentIds }) {
             <Table.HeaderCell>User ID</Table.HeaderCell>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Account Balance</Table.HeaderCell>
+            <Table.HeaderCell>Credit Limit</Table.HeaderCell>
             <Table.HeaderCell>Active</Table.HeaderCell>
             <Table.HeaderCell collapsing />
           </Table.Row>

@@ -37,6 +37,10 @@ function CurrentUserPopover() {
       <PopoverContent zIndex={4}>
         <PopoverArrow />
         <PopoverBody>
+          <Box>
+            <Text as="strong">User ID: </Text>
+            {get(currentUser, 'id')}
+          </Box>
           {get(currentUser, 'Person.email') && (
             <Box>
               <Text as="strong">Email: </Text>
