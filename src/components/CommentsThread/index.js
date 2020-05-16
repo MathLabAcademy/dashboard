@@ -15,7 +15,14 @@ import NavLink from 'components/Link/NavLink'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { MdNotifications, MdNotificationsOff } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { subscribeToComment, unsubscribeFromComment } from 'store/comments'
@@ -23,6 +30,27 @@ import { useComment } from 'store/comments/hooks'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import gravatarUrl from 'utils/gravatar-url'
+
+function removeLocationHash() {
+  // https://stackoverflow.com/questions/1397329/how-to-remove-the-hash-from-window-location-url-with-javascript-without-page-r/5298684#5298684
+
+  let scrollV
+  let scrollH
+  let loc = window.location
+  if ('pushState' in window.history)
+    window.history.pushState('', document.title, loc.pathname + loc.search)
+  else {
+    // Prevent scrolling by storing the page's current scroll offset
+    scrollV = document.body.scrollTop
+    scrollH = document.body.scrollLeft
+
+    loc.hash = ''
+
+    // Restore the scroll offset, should be flicker free
+    document.body.scrollTop = scrollV
+    document.body.scrollLeft = scrollH
+  }
+}
 
 function CommentSubscriptionButton({ comment, toast }) {
   const [loading, setLoading] = useState(false)
@@ -223,6 +251,7 @@ function CommentItem({
   setReplyToCommentId,
   commentBoxTextRef,
   addComment,
+  locationHash,
   ...props
 }) {
   const comment = useComment(id)
@@ -231,72 +260,83 @@ function CommentItem({
   const childIds = get(comment, 'childIds')
 
   return (
-    <Stack id={`comment-${id}`} {...props}>
-      <Stack isInline justifyContent="space-between" alignItems="center" px={2}>
-        <Stack isInline>
-          <Box mr={3}>
-            <Avatar
-              name={get(comment, 'user.person.shortName')}
-              src={gravatarUrl(get(comment, 'user.person.email'))}
-              size="lg"
-            />
-          </Box>
-          <Stack justifyContent="center" spacing={1}>
-            <Text fontSize={3} fontWeight="bold">
-              {get(comment, 'user.person.shortName')}{' '}
-              <Permit roles="teacher">
-                <Text as="span" fontSize="0.8em">
-                  (ID:{' '}
-                  <NavLink to={`/users/${get(comment, 'user.id')}`}>
-                    {get(comment, 'user.id')}
-                  </NavLink>
-                  )
-                </Text>
-              </Permit>
-            </Text>
-            <Text>
-              {DateTime.fromISO(get(comment, 'created')).toLocaleString(
-                DateTime.DATETIME_MED
-              )}
-            </Text>
+    <Stack id={`comment-${id}`} spacing={0} {...props}>
+      <Stack
+        p={4}
+        mb={0}
+        borderColor="primary"
+        borderStyle="dashed"
+        borderWidth={locationHash === `comment-${id}` ? 1 : 0}
+      >
+        <Stack
+          isInline
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+        >
+          <Stack isInline>
+            <Box mr={3}>
+              <Avatar
+                name={get(comment, 'user.person.shortName')}
+                src={gravatarUrl(get(comment, 'user.person.email'))}
+                size="lg"
+              />
+            </Box>
+            <Stack justifyContent="center" spacing={1}>
+              <Text fontSize={3} fontWeight="bold">
+                {get(comment, 'user.person.shortName')}{' '}
+                <Permit roles="teacher">
+                  <Text as="span" fontSize="0.8em">
+                    (ID:{' '}
+                    <NavLink to={`/users/${get(comment, 'user.id')}`}>
+                      {get(comment, 'user.id')}
+                    </NavLink>
+                    )
+                  </Text>
+                </Permit>
+              </Text>
+              <Text>
+                {DateTime.fromISO(get(comment, 'created')).toLocaleString(
+                  DateTime.DATETIME_MED
+                )}
+              </Text>
+            </Stack>
           </Stack>
+          <Box>
+            <CommentSubscriptionButton comment={comment} />
+          </Box>
         </Stack>
-        <Box>
-          <CommentSubscriptionButton comment={comment} />
+
+        <Box
+          borderWidth={1}
+          shadow="sm"
+          borderRadius="0.25rem"
+          p={4}
+          position="relative"
+        >
+          <Text fontSize={2}>{get(comment, 'text')}</Text>
+          {depth < 1 && replyToCommentId !== id && (
+            <Button
+              position="absolute"
+              bottom="-1rem"
+              right="-0.25rem"
+              size="md"
+              shadow="sm"
+              variant="solid"
+              variantColor="blue"
+              onClick={() => setReplyToCommentId(id)}
+            >
+              Reply
+            </Button>
+          )}
         </Box>
       </Stack>
 
-      <Box
-        borderWidth={1}
-        shadow="sm"
-        borderRadius="0.25rem"
-        p={4}
-        position="relative"
-      >
-        <Text fontSize={2}>{get(comment, 'text')}</Text>
-        {depth < 1 && replyToCommentId !== id && (
-          <Button
-            position="absolute"
-            bottom="-1rem"
-            right="-0.25rem"
-            size="md"
-            shadow="sm"
-            variant="solid"
-            variantColor="blue"
-            onClick={() => setReplyToCommentId(id)}
-          >
-            Reply
-          </Button>
-        )}
-      </Box>
-
-      <Stack
-        ml={`${3 * (depth + 1)}rem`}
-        mt={2}
-        spacing={2}
-        position="relative"
-      >
-        {childIds && childIds.map((id) => <CommentItem key={id} id={id} />)}
+      <Stack ml={`${3 * (depth + 1)}rem`} spacing={2} position="relative">
+        {childIds &&
+          childIds.map((id) => (
+            <CommentItem key={id} id={id} locationHash={locationHash} />
+          ))}
 
         {replyToCommentId === id ? (
           <CommentBox
@@ -325,6 +365,8 @@ function CommentItem({
 }
 
 function CommentsThread({ comments, addComment }) {
+  const locationHash = useMemo(() => window.location.hash.slice(1), [])
+
   const commentBoxTextRef = useRef()
   const [replyToCommentId, setReplyToCommentId] = useState()
 
@@ -333,6 +375,20 @@ function CommentsThread({ comments, addComment }) {
       commentBoxTextRef.current.focus()
     }
   }, [replyToCommentId])
+
+  useLayoutEffect(() => {
+    if (comments.allIds.length) {
+      const elem = window.document.getElementById(locationHash)
+      setTimeout(() => {
+        window.requestAnimationFrame(() => {
+          if (elem) {
+            elem.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+          removeLocationHash()
+        })
+      }, 50)
+    }
+  }, [comments.allIds.length, locationHash])
 
   return (
     <Stack mb={4} spacing={8} id="comments">
@@ -344,6 +400,7 @@ function CommentsThread({ comments, addComment }) {
           setReplyToCommentId={setReplyToCommentId}
           commentBoxTextRef={commentBoxTextRef}
           addComment={addComment}
+          locationHash={locationHash}
         />
       ))}
 

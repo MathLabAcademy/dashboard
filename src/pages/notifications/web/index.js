@@ -1,7 +1,7 @@
 import { Box, Button, Stack, Text } from '@chakra-ui/core'
 import { Link } from '@reach/router'
 import React, { useCallback } from 'react'
-import { MdCheck } from 'react-icons/md'
+import { MdCheck, MdComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { markWebNotificationAsRead } from 'store/notifications'
 import { useWebNotifications } from 'store/notifications/hooks'
@@ -20,7 +20,7 @@ function WebNotificationItem({ data: { id, topic, data, read }, ...props }) {
       shadow="md"
       borderWidth={1}
       p={4}
-      fontSize={2}
+      fontSize={3}
       opacity={read ? 0.6 : 1}
       {...props}
     >
@@ -28,14 +28,17 @@ function WebNotificationItem({ data: { id, topic, data, read }, ...props }) {
         <Link
           to={`/courses/${data.courseId}/videos/${data.videoId}#comment-${data.commentId}`}
         >
-          <Text>
-            {data.userName}{' '}
-            {data.event === 'new'
-              ? `commented on the ${data.videoName} video on ${data.courseName} Course!`
-              : data.event === 'reply'
-              ? `replied on a comment you are subscribed to on the ${data.videoName} video on ${data.courseName} Course!`
-              : ''}
-          </Text>
+          <Stack isInline spacing={4} alignItems="center">
+            <Box as={MdComment} />
+            <Text>
+              {data.userName}{' '}
+              {data.event === 'new'
+                ? `commented on the ${data.videoName} video on ${data.courseName} Course!`
+                : data.event === 'reply'
+                ? `replied on a comment you are subscribed to on the ${data.videoName} video on ${data.courseName} Course!`
+                : ''}
+            </Text>
+          </Stack>
         </Link>
       ) : null}
       <Button isDisabled={read} onClick={onMarkRead}>
@@ -50,6 +53,12 @@ function WebNotificationsPage() {
 
   return (
     <Box p={4}>
+      {webNotifications.allIds.length === 0 && (
+        <Box p={4}>
+          <Text fontSize={4}>No new notifications!</Text>
+        </Box>
+      )}
+
       <Stack spacing={4}>
         {webNotifications.allIds.map((id) => (
           <WebNotificationItem key={id} data={webNotifications.byId[id]} />
