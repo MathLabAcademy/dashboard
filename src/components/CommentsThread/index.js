@@ -3,20 +3,72 @@ import {
   Box,
   Button,
   Flex,
+  PseudoBox,
   Stack,
   Text,
   Textarea,
+  Tooltip,
   useToast,
 } from '@chakra-ui/core'
+import { handleAPIError } from 'components/HookForm/helpers'
 import NavLink from 'components/Link/NavLink'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { MdNotifications, MdNotificationsOff } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
+import { subscribeToComment, unsubscribeFromComment } from 'store/comments'
 import { useComment } from 'store/comments/hooks'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import gravatarUrl from 'utils/gravatar-url'
+
+function CommentSubscriptionButton({ comment, toast }) {
+  const [loading, setLoading] = useState(false)
+
+  const dispatch = useDispatch()
+  const onClick = useCallback(async () => {
+    try {
+      setLoading(true)
+      await dispatch(
+        comment.isSubscribed
+          ? unsubscribeFromComment(comment.id)
+          : subscribeToComment(comment.id)
+      )
+    } catch (err) {
+      handleAPIError(err, { toast })
+    }
+    setLoading(false)
+  }, [comment.id, comment.isSubscribed, dispatch, toast])
+
+  if (comment.depth !== 0) {
+    return null
+  }
+
+  return (
+    <Tooltip label={comment.isSubscribed ? 'Unsubscribe!' : 'Subscribe!'}>
+      <Button
+        variant="ghost"
+        isLoading={loading}
+        isDisabled={loading}
+        onClick={onClick}
+      >
+        <PseudoBox
+          size="2rem"
+          color={comment.isSubscribed ? 'blue.500' : 'gray.500'}
+          as={comment.isSubscribed ? MdNotifications : MdNotificationsOff}
+          _hover={{
+            color: comment.isSubscribed ? 'red.500' : 'green.500',
+          }}
+          _focus={{
+            color: comment.isSubscribed ? 'red.500' : 'green.500',
+          }}
+        />
+      </Button>
+    </Tooltip>
+  )
+}
 
 function CommentBox({
   textRef,
@@ -180,34 +232,40 @@ function CommentItem({
 
   return (
     <Stack {...props}>
-      <Flex flexDirection="row" px={2}>
-        <Box mr={3}>
-          <Avatar
-            name={get(comment, 'user.person.shortName')}
-            src={gravatarUrl(get(comment, 'user.person.email'))}
-            size="lg"
-          />
-        </Box>
-        <Stack justifyContent="center" spacing={1}>
-          <Text fontSize={3} fontWeight="bold">
-            {get(comment, 'user.person.shortName')}{' '}
-            <Permit roles="teacher">
-              <Text as="span" fontSize="0.8em">
-                (ID:{' '}
-                <NavLink to={`/users/${get(comment, 'user.id')}`}>
-                  {get(comment, 'user.id')}
-                </NavLink>
-                )
-              </Text>
-            </Permit>
-          </Text>
-          <Text>
-            {DateTime.fromISO(get(comment, 'created')).toLocaleString(
-              DateTime.DATETIME_MED
-            )}
-          </Text>
+      <Stack isInline justifyContent="space-between" alignItems="center" px={2}>
+        <Stack isInline>
+          <Box mr={3}>
+            <Avatar
+              name={get(comment, 'user.person.shortName')}
+              src={gravatarUrl(get(comment, 'user.person.email'))}
+              size="lg"
+            />
+          </Box>
+          <Stack justifyContent="center" spacing={1}>
+            <Text fontSize={3} fontWeight="bold">
+              {get(comment, 'user.person.shortName')}{' '}
+              <Permit roles="teacher">
+                <Text as="span" fontSize="0.8em">
+                  (ID:{' '}
+                  <NavLink to={`/users/${get(comment, 'user.id')}`}>
+                    {get(comment, 'user.id')}
+                  </NavLink>
+                  )
+                </Text>
+              </Permit>
+            </Text>
+            <Text>
+              {DateTime.fromISO(get(comment, 'created')).toLocaleString(
+                DateTime.DATETIME_MED
+              )}
+            </Text>
+          </Stack>
         </Stack>
-      </Flex>
+        <Box>
+          <CommentSubscriptionButton comment={comment} />
+        </Box>
+      </Stack>
+
       <Box
         borderWidth={1}
         shadow="sm"
@@ -247,7 +305,7 @@ function CommentItem({
             setReplyToCommentId={setReplyToCommentId}
             addComment={addComment}
           />
-        ) : depth === 0 && childIds.length > 0 ? (
+        ) : depth === 0 && childIds && childIds.length > 0 ? (
           <Button
             position="absolute"
             bottom="-1rem"
@@ -277,7 +335,7 @@ function CommentsThread({ comments, addComment }) {
   }, [replyToCommentId])
 
   return (
-    <Stack mb={4} spacing={8}>
+    <Stack mb={4} spacing={8} id="comments">
       {comments.allIds.map((id) => (
         <CommentItem
           key={id}

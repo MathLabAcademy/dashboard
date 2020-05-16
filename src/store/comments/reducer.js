@@ -1,7 +1,12 @@
 import { get, groupBy, keyBy, mapValues } from 'lodash-es'
+import {
+  COMMENT_ADD,
+  COMMENT_BULK_ADD,
+  COMMENT_SUBSCRIBE,
+  COMMENT_UNSUBSCRIBE,
+} from 'store/comments'
 import * as ids from 'store/reducers/helpers/ids-reducers'
 import { emptyArray, emptyObject } from 'utils/defaults'
-import { COMMENT_ADD, COMMENT_BULK_ADD } from '.'
 
 const initialState = {
   byId: emptyObject,
@@ -9,7 +14,7 @@ const initialState = {
   idsByThread: emptyObject,
 }
 
-const commentsReducer = (state = initialState, { type, data }) => {
+const commentsReducer = (state = initialState, { type, data, commentId }) => {
   switch (type) {
     case COMMENT_ADD:
       return {
@@ -51,6 +56,28 @@ const commentsReducer = (state = initialState, { type, data }) => {
           ...mapValues(groupBy(data.items, 'thread'), (items, thread) =>
             ids.addBulk(get(state.idsByThread, thread, emptyArray), { items })
           ),
+        },
+      }
+    case COMMENT_SUBSCRIBE:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [commentId]: {
+            ...state.byId[commentId],
+            isSubscribed: true,
+          },
+        },
+      }
+    case COMMENT_UNSUBSCRIBE:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [commentId]: {
+            ...state.byId[commentId],
+            isSubscribed: false,
+          },
         },
       }
     default:

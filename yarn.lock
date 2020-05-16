@@ -9750,6 +9750,13 @@ react-hook-form@^5.5.2:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-5.5.2.tgz#2165a9f90219d95660a25841b50834857f545031"
   integrity sha512-WVe4khICYn5iks5nMAp5zBSQpF6kIqc0po/N6TlNSFNhpYzWXeYWv3VV51YXS9aDOzky/gbEb/aAUO2NLlUf/Q==
 
+react-icons@^3.10.0:
+  version "3.10.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-3.10.0.tgz#6c217a2dde2e8fa8d293210023914b123f317297"
+  integrity sha512-WsQ5n1JToG9VixWilSo1bHv842Cj5aZqTGiS3Ud47myF6aK7S/IUY2+dHcBdmkQcCFRuHsJ9OMUI0kTDfjyZXQ==
+  dependencies:
+    camelcase "^5.0.0"
+
 react-immutable-proptypes@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-immutable-proptypes/-/react-immutable-proptypes-2.2.0.tgz#cce96d68cc3c18e89617cbf3092d08e35126af4a"
