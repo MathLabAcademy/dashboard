@@ -54,13 +54,10 @@ export const sidebarItems = [
   {
     title: `Notification`,
     link: '/notifications',
+  },
+  {
+    title: `SMS`,
+    link: `/sms`,
     permits: ['teacher'],
-    items: [
-      {
-        title: `SMS`,
-        link: `/notifications/sms`,
-        permits: ['teacher'],
-      },
-    ],
   },
 ]

@@ -1,11 +1,12 @@
-import { Router } from '@reach/router'
+import { Redirect, Router } from '@reach/router'
 import React from 'react'
-import NotificationsSMSPage from './sms'
+import WebNotificationsPage from './web'
 
 function NotificationsPage() {
   return (
     <Router>
-      <NotificationsSMSPage path="sms/*" />
+      <Redirect from="/" to="web/" noThrow />
+      <WebNotificationsPage path="web/*" />
     </Router>
   )
 }

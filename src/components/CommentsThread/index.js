@@ -231,7 +231,7 @@ function CommentItem({
   const childIds = get(comment, 'childIds')
 
   return (
-    <Stack {...props}>
+    <Stack id={`comment-${id}`} {...props}>
       <Stack isInline justifyContent="space-between" alignItems="center" px={2}>
         <Stack isInline>
           <Box mr={3}>

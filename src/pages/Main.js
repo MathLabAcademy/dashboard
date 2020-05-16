@@ -13,6 +13,7 @@ import Index from './index/Main'
 import MCQs from './mcqs/Main'
 import Notifications from './notifications'
 import Profile from './profile/Main'
+import SMSPage from './sms'
 import Users from './users/Main'
 
 function Dashboard() {
@@ -48,6 +49,7 @@ function Dashboard() {
           <Users path="users/*" />
           <FindUser path="find-user/*" />
           <Notifications path="notifications/*" />
+          <SMSPage path="sms/*" />
         </Router>
       </Box>
     </>

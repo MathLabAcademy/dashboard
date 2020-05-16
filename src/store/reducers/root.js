@@ -4,6 +4,7 @@ import comments from '../comments/reducer'
 import courses from '../courses/reducer'
 import user from '../currentUser/reducer'
 import enrollments from '../enrollments/reducer'
+import notifications from '../notifications/reducer'
 import videos from '../videos/reducer'
 import batches from './batches'
 import courseTags from './courseTags'
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   mcqExams,
   mcqs,
   mcqTags,
+  notifications,
   pagination,
   transactions,
   ui,

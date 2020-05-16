@@ -1,4 +1,4 @@
-import { Button, Text } from '@chakra-ui/core'
+import { Button, Stack, Text } from '@chakra-ui/core'
 import { Match } from '@reach/router'
 import NavLink from 'components/Link/NavLink'
 import { get } from 'lodash-es'
@@ -6,6 +6,7 @@ import React, { memo, useMemo } from 'react'
 import { Box, Flex } from 'reflexbox'
 import { useCurrentUser } from 'store/currentUser/hooks'
 import CurrentUserPopover from './CurrentUserPopover'
+import WebNotificationButton from './WebNotificationButton'
 
 function Topbar() {
   const { data: userData, status: userStatus } = useCurrentUser()
@@ -73,7 +74,9 @@ function Topbar() {
         </Box>
       )}
 
-      <Box>
+      <Stack isInline spacing={2} alignItems="center">
+        {userStatus.authed && <WebNotificationButton />}
+
         {!userStatus.loading && !userStatus.authed ? (
           <Box>
             <Match path="/login">
@@ -93,7 +96,7 @@ function Topbar() {
         ) : userStatus.authed ? (
           <CurrentUserPopover />
         ) : null}
-      </Box>
+      </Stack>
     </Flex>
   )
 }

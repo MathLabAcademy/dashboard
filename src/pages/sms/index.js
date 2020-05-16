@@ -136,7 +136,7 @@ const hydrateTemplate = (template, data, preview = false) => {
   return hydratedTemplate
 }
 
-function NotificationsSMSPage() {
+function SMSPage() {
   const [courseId, setCourseId] = useState()
   const course = useCourse(courseId)
 
@@ -314,4 +314,4 @@ function NotificationsSMSPage() {
   )
 }
 
-export default NotificationsSMSPage
+export default SMSPage
