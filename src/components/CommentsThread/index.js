@@ -56,7 +56,7 @@ function CommentBox({
       setLoading(false)
       toast({
         title: parentId
-          ? `Replied to ${get(parentComment, 'User.Person.fullName')}`
+          ? `Replied to ${get(parentComment, 'user.person.shortName')}`
           : 'Comment added!',
         duration: 2000,
         isClosable: true,
@@ -87,7 +87,7 @@ function CommentBox({
   }, [addComment, parentComment, setReplyToCommentId, textRef, toast])
 
   return (
-    <Stack mb={2} {...props}>
+    <Stack {...props}>
       <Flex
         flexDirection="row"
         justifyContent="space-between"
@@ -96,14 +96,14 @@ function CommentBox({
         <Flex flexDirection="row" px={2}>
           <Box mr={3} opacity="0.6">
             <Avatar
-              name={get(currentUser, 'Person.fullName')}
+              name={get(currentUser, 'Person.shortName')}
               src={gravatarUrl(get(currentUser, 'Person.email'))}
               size="lg"
             />
           </Box>
           <Stack justifyContent="center" spacing={1}>
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
-              {get(currentUser, 'Person.fullName')}{' '}
+              {get(currentUser, 'Person.shortName')}{' '}
               <Permit roles="teacher">
                 <Text as="span" fontSize="0.8em">
                   (ID:{' '}
@@ -157,8 +157,8 @@ function CommentBox({
           _disabled={{ opacity: 1 }}
         >
           {replyToCommentId
-            ? `Reply to ${get(parentComment, 'User.Person.fullName')}`
-            : 'Comment'}
+            ? `Reply to ${get(parentComment, 'user.person.shortName')}`
+            : 'Comment on Video'}
         </Button>
       </Box>
     </Stack>
@@ -179,18 +179,18 @@ function CommentItem({
   const childIds = get(comment, 'childIds')
 
   return (
-    <Stack mb={2} {...props}>
+    <Stack {...props}>
       <Flex flexDirection="row" px={2}>
         <Box mr={3}>
           <Avatar
-            name={get(comment, 'user.Person.fullName')}
-            src={gravatarUrl(get(comment, 'user.Person.email'))}
+            name={get(comment, 'user.person.shortName')}
+            src={gravatarUrl(get(comment, 'user.person.email'))}
             size="lg"
           />
         </Box>
         <Stack justifyContent="center" spacing={1}>
           <Text fontSize={3} fontWeight="bold">
-            {get(comment, 'user.Person.fullName')}{' '}
+            {get(comment, 'user.person.shortName')}{' '}
             <Permit roles="teacher">
               <Text as="span" fontSize="0.8em">
                 (ID:{' '}
@@ -232,17 +232,35 @@ function CommentItem({
         )}
       </Box>
 
-      <Stack ml={`${2 * (depth + 1)}rem`}>
+      <Stack
+        ml={`${3 * (depth + 1)}rem`}
+        mt={2}
+        spacing={2}
+        position="relative"
+      >
         {childIds && childIds.map((id) => <CommentItem key={id} id={id} />)}
 
-        {replyToCommentId === id && (
+        {replyToCommentId === id ? (
           <CommentBox
             textRef={commentBoxTextRef}
             replyToCommentId={replyToCommentId}
             setReplyToCommentId={setReplyToCommentId}
             addComment={addComment}
           />
-        )}
+        ) : depth === 0 && childIds.length > 0 ? (
+          <Button
+            position="absolute"
+            bottom="-1rem"
+            right="-0.25rem"
+            size="sm"
+            shadow="sm"
+            variant="solid"
+            variantColor="blue"
+            onClick={() => setReplyToCommentId(id)}
+          >
+            Reply to {get(comment, 'user.person.shortName')}'s Comment
+          </Button>
+        ) : null}
       </Stack>
     </Stack>
   )
@@ -259,7 +277,7 @@ function CommentsThread({ comments, addComment }) {
   }, [replyToCommentId])
 
   return (
-    <Stack mb={4} spacing={4}>
+    <Stack mb={4} spacing={8}>
       {comments.allIds.map((id) => (
         <CommentItem
           key={id}
