@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { addBalance, readBalance } from 'store/actions/users'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -47,6 +48,10 @@ function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
         await addBalance(userId, {
           amount: amount * 100,
           transactionTypeId,
+        })
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Manually Add Account Balance ',
         })
         navigate('..')
       } catch (err) {

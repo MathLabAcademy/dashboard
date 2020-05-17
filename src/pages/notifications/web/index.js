@@ -5,11 +5,17 @@ import { MdCheck, MdComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { markWebNotificationAsRead } from 'store/notifications'
 import { useWebNotifications } from 'store/notifications/hooks'
+import { trackEventAnalytics } from 'utils/analytics'
 
 function WebNotificationItem({ data: { id, topic, data, read }, ...props }) {
   const dispatch = useDispatch()
   const onMarkRead = useCallback(async () => {
     await dispatch(markWebNotificationAsRead(id))
+
+    trackEventAnalytics({
+      category: 'User',
+      action: 'Marked Web Notification as Read',
+    })
   }, [dispatch, id])
 
   return (

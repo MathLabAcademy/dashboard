@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCreditLimit } from 'store/actions/users'
 import * as Yup from 'yup'
+import { trackEventAnalytics } from 'utils/analytics'
 
 const getDefaultValues = (user) => ({
   creditLimit: get(user, 'creditLimit', 0) / 100,
@@ -55,6 +56,10 @@ function SetCreditLimit({ userId }) {
         await dispatch(
           setCreditLimit(userId, { creditLimit: creditLimit * 100 })
         )
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Set Credit Limit ',
+        })
         onClose()
       } catch (err) {
         handleAPIError(err, { toast })
