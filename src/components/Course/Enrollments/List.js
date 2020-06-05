@@ -1,11 +1,108 @@
+import {
+  Button,
+  ButtonGroup,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/core'
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
+import { handleAPIError } from 'components/HookForm/helpers'
 import { get } from 'lodash-es'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
-import { Button, Checkbox, Header, Segment, Table } from 'semantic-ui-react'
+import { Checkbox, Header, Segment, Table } from 'semantic-ui-react'
 import { toggleEnrollmentStatus } from 'store/enrollments'
+import { trackEventAnalytics } from 'utils/analytics'
+import api from 'utils/api'
 import { emptyArray } from 'utils/defaults'
+
+function RevertEnrollment({ user, enrollment }) {
+  const toast = useToast()
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [loading, setLoading] = useState(false)
+
+  const onSubmit = useCallback(async () => {
+    try {
+      setLoading(true)
+
+      const { error } = await api(
+        `/courses/${get(enrollment, 'courseId')}/action/revert-enrollment`,
+        {
+          method: 'POST',
+          body: {
+            userId: get(enrollment, 'userId'),
+          },
+        }
+      )
+
+      if (error) {
+        throw error
+      }
+
+      trackEventAnalytics({
+        category: 'Teacher',
+        action: 'Reverted Course Enrollment',
+      })
+
+      setLoading(false)
+
+      window.location.reload()
+    } catch (err) {
+      setLoading(false)
+      handleAPIError(err, { toast })
+    }
+  }, [enrollment, toast])
+
+  return (
+    <>
+      <Button onClick={onOpen} size="sm" variantColor="red">
+        Revert
+      </Button>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            Revert Enrollment for {get(user, 'Person.fullName')}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody fontSize={2}>
+            <Text fontWeight="bold">Are you sure?</Text>
+            <Text>
+              This will try to remove the enrollment and adjust the account
+              balance
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <ButtonGroup>
+              <Button
+                variantColor="red"
+                isDisabled={loading}
+                onClick={onSubmit}
+              >
+                Revert Enrollment
+              </Button>
+              <Button variantColor="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
 
 function _ListItemRow({
   user,
@@ -30,6 +127,9 @@ function _ListItemRow({
           }}
         />
       </Table.Cell>
+      <Table.Cell>
+        <RevertEnrollment user={user} enrollment={enrollment} />
+      </Table.Cell>
     </Table.Row>
   )
 }
@@ -47,7 +147,7 @@ const ListItemRow = connect(
   { toggleEnrollmentStatus }
 )(_ListItemRow)
 
-function CourseEnrollmentList({ enrollments, enrollmentIds }) {
+function CourseEnrollmentList({ enrollmentIds }) {
   return (
     <>
       <Segment>
