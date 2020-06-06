@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   ButtonGroup,
   Modal,
@@ -8,6 +9,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Stack,
+  Stat,
+  StatHelpText,
+  StatLabel,
+  StatNumber,
   Text,
   useDisclosure,
   useToast,
@@ -15,14 +21,14 @@ import {
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import { handleAPIError } from 'components/HookForm/helpers'
-import { get } from 'lodash-es'
-import React, { useCallback, useState } from 'react'
-import { connect } from 'react-redux'
+import { get, sum } from 'lodash-es'
+import React, { useCallback, useMemo, useState } from 'react'
+import { connect, useSelector } from 'react-redux'
 import { Checkbox, Header, Segment, Table } from 'semantic-ui-react'
+import { useCourse, useCourseEnrolledUserIds } from 'store/courses/hooks'
 import { toggleEnrollmentStatus } from 'store/enrollments'
 import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
-import { emptyArray } from 'utils/defaults'
 
 function RevertEnrollment({ user, enrollment }) {
   const toast = useToast()
@@ -147,12 +153,88 @@ const ListItemRow = connect(
   { toggleEnrollmentStatus }
 )(_ListItemRow)
 
-function CourseEnrollmentList({ enrollmentIds }) {
+function CourseEnrollmentList({ courseId }) {
+  const course = useCourse(courseId)
+
+  const { data: enrolledUserIds } = useCourseEnrolledUserIds(courseId)
+
+  const enrollments = useSelector(({ enrollments }) => enrollments)
+
+  const users = useSelector(({ users }) => users)
+
+  const enrollmentIdPattern = useMemo(() => new RegExp(`^${courseId}:.+`), [
+    courseId,
+  ])
+
+  const enrollmentIds = useMemo(() => {
+    return enrollments.allIds.filter((id) => enrollmentIdPattern.test(id))
+  }, [enrollmentIdPattern, enrollments.allIds])
+
+  const summary = useMemo(() => {
+    const price = get(course, 'price')
+    const dueItems = enrolledUserIds.reduce((totalDue, userId) => {
+      const balance = get(users.byId[userId], 'balance')
+
+      if (balance >= 0) {
+        return totalDue
+      }
+
+      if (price < Math.abs(balance)) {
+        totalDue.push(price)
+      } else {
+        totalDue.push(Math.abs(balance))
+      }
+
+      return totalDue
+    }, [])
+
+    const totalDue = sum(dueItems) / 100
+
+    const totalPaid = ((enrolledUserIds.length - dueItems.length) * price) / 100
+
+    return {
+      totalStudents: enrolledUserIds.length,
+      totalDue,
+      totalStudentsInDue: dueItems.length,
+      totalPaid,
+    }
+  }, [course, enrolledUserIds, users.byId])
+
   return (
     <>
       <Segment>
         <HeaderGrid
-          Left={<Header>Online Course Enrollments</Header>}
+          Left={
+            <Stack>
+              <Box>
+                <Header>Online Course Enrollments</Header>
+              </Box>
+              <Box>
+                <Stack isInline>
+                  <Stat>
+                    <StatLabel>Total Enrolled</StatLabel>
+                    <StatNumber>{summary.totalStudents}</StatNumber>
+                    <StatHelpText>Students</StatHelpText>
+                  </Stat>
+                  <Stat>
+                    <StatLabel>Total Paid</StatLabel>
+                    <StatNumber>{summary.totalPaid}</StatNumber>
+                    <StatHelpText>BDT approx.</StatHelpText>
+                  </Stat>
+                  <Stat>
+                    <StatLabel>Total Due</StatLabel>
+                    <StatNumber>{summary.totalDue}</StatNumber>
+                    <StatHelpText>BDT approx.</StatHelpText>
+                  </Stat>
+                  <Stat>
+                    <StatLabel>Total in Due</StatLabel>
+                    <StatNumber>{summary.totalStudentsInDue}</StatNumber>
+                    <StatHelpText>Students</StatHelpText>
+                  </Stat>
+                </Stack>
+              </Box>
+            </Stack>
+          }
           Right={
             <Button as={Link} to={`..`}>
               Go Back
@@ -183,22 +265,4 @@ function CourseEnrollmentList({ enrollmentIds }) {
   )
 }
 
-const mapStateToProps = ({ courses, enrollments }, { courseId }) => {
-  const enrollmentIdPattern = new RegExp(`^${courseId}:.+`)
-  const enrollmentIds = enrollments.allIds.filter((id) =>
-    enrollmentIdPattern.test(id)
-  )
-  return {
-    course: get(courses.byId, courseId),
-    userIds: get(courses, ['enrollmentsById', courseId], emptyArray),
-    enrollments,
-    enrollmentIds,
-  }
-}
-
-const mapDispatchToProps = {}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CourseEnrollmentList)
+export default CourseEnrollmentList
