@@ -22,5 +22,5 @@ export function useStats(key, queryObject = emptyObject) {
       })
   }, [key, query])
 
-  return [data, loading]
+  return { data, loading }
 }

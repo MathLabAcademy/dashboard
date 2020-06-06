@@ -21,7 +21,10 @@ function DailyTransactionsForYearStats() {
     setYear(Number(year))
   }, [])
 
-  const [data = [], loading] = useStats('daily-transactions-for-year', { year })
+  const { data = [], loading } = useStats('daily-transactions-for-year', {
+    year,
+  })
+  const totalDueStat = useStats('total-due')
 
   return (
     <Permit roles="teacher">
@@ -29,7 +32,15 @@ function DailyTransactionsForYearStats() {
         <Card.Content>
           <Card.Header>
             <HeaderGrid
-              Left={<Header>Transaction Stats for {year}</Header>}
+              Left={
+                <Header>
+                  Transaction Stats for {year}{' '}
+                  <Text as="span" fontSize={2}>
+                    (Total {get(totalDueStat.data, 'totalDue', 0) / 100} BDT Due
+                    from {get(totalDueStat.data, 'totalUsers', 0)} Students){' '}
+                  </Text>
+                </Header>
+              }
               Right={
                 <Input
                   ref={yearRef}
