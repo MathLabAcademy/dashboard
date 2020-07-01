@@ -1,14 +1,16 @@
+import { Badge } from '@chakra-ui/core'
 import { Link } from '@reach/router'
+import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft'
 import { get, isUndefined, sortBy } from 'lodash-es'
 import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Flex } from 'reflexbox'
 import { Button, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
-import { Flex } from 'reflexbox'
+import MCQDeleteModal from './ActionModals/Delete'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
@@ -66,6 +68,13 @@ function MCQView({
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>
+                {mcq.deleted ? (
+                  <Badge variantColor="red" fontSize={4} p={2}>
+                    Deleted!
+                  </Badge>
+                ) : (
+                  <MCQDeleteModal mcqId={mcqId} />
+                )}
               </Permit>
             </>
           }

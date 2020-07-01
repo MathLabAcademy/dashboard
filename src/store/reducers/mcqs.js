@@ -1,4 +1,4 @@
-import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
+import { get, groupBy, keyBy, map, mapValues, union } from 'lodash-es'
 import {
   MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
@@ -23,7 +23,7 @@ const initialState = {
   },
 }
 
-const mcqsReducer = (state = initialState, { type, data }) => {
+const mcqsReducer = (state = initialState, { type, data, mcqId }) => {
   switch (type) {
     case MCQ_ADD:
       return {
@@ -46,8 +46,14 @@ const mcqsReducer = (state = initialState, { type, data }) => {
     case MCQ_REMOVE:
       return {
         ...state,
-        byId: pickBy(state.byId, ({ id }) => id !== data.id),
-        allIds: ids.remove(state.allIds, data),
+        byId: {
+          ...state.byId,
+          [mcqId]: {
+            ...get(state.byId, mcqId, emptyObject),
+            deleted: true,
+          },
+        },
+        allIds: ids.remove(state.allIds, { id: mcqId }),
       }
     case MCQ_UPDATE:
       return {

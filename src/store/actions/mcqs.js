@@ -15,6 +15,7 @@ import {
   MCQ_PAGE_REMOVE,
   MCQ_PAGE_REQUEST,
   MCQ_PAGINATION_PURGE,
+  MCQ_REMOVE,
   MCQ_UPDATE,
 } from './actionTypes'
 
@@ -69,6 +70,20 @@ export const updateMCQ = (mcqId, mcqData) => async (dispatch) => {
   dispatch({ type: MCQ_UPDATE, data })
 
   dispatch(readMCQAnswer(data.id))
+
+  return data
+}
+
+export const deleteMCQ = (mcqId) => async (dispatch) => {
+  const url = `/mcqs/${mcqId}`
+
+  const { data, error } = await api(url, {
+    method: 'DELETE',
+  })
+
+  if (error) throw error
+
+  dispatch({ type: MCQ_REMOVE, mcqId })
 
   return data
 }
