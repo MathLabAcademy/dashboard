@@ -5,7 +5,7 @@ import List from './List'
 
 function Tags() {
   return (
-    <Permit roles="admin,teacher">
+    <Permit roles="teacher,analyst">
       <Router>
         <List path="/" />
       </Router>
