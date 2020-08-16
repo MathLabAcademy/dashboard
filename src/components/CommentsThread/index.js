@@ -184,7 +184,7 @@ function CommentBox({
           <Stack justifyContent="center" spacing={1}>
             <Text fontSize={3} fontWeight="bold" opacity="0.6">
               {get(currentUser, 'Person.shortName')}{' '}
-              <Permit roles="teacher">
+              <Permit roles="teacher,analyst">
                 <Text as="span" fontSize="0.8em">
                   (ID:{' '}
                   <NavLink to={`/users/${get(currentUser, 'id')}`}>
@@ -285,7 +285,7 @@ function CommentItem({
             <Stack justifyContent="center" spacing={1}>
               <Text fontSize={3} fontWeight="bold">
                 {get(comment, 'user.person.shortName')}{' '}
-                <Permit roles="teacher">
+                <Permit roles="teacher,analyst">
                   <Text as="span" fontSize="0.8em">
                     (ID:{' '}
                     <NavLink to={`/users/${get(comment, 'user.id')}`}>

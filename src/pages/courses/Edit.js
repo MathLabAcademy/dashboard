@@ -81,7 +81,7 @@ function CourseEdit({
   }, [courseTags.allIds, courseTags.byId])
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

@@ -28,7 +28,7 @@ function _ListItemRow({
         />
       </Table.Cell>
       <Table.Cell collapsing>
-        {/* <Permit roles="teacher"> */}
+        {/* <Permit roles="teacher,analyst"> */}
         {/* <EditStudent batchStudentId={batchStudentId} /> */}
         {/* </Permit> */}
 

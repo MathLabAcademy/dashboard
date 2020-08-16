@@ -19,7 +19,7 @@ function View({ courseId, mcqExamId }) {
       <Permit roles="student">
         <TakeExam courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
-      <Permit roles="teacher">
+      <Permit roles="teacher,analyst">
         <TeacherView courseId={courseId} mcqExamId={mcqExamId} />
       </Permit>
     </>
@@ -60,7 +60,7 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
           }
           Right={
             <>
-              <Permit roles="teacher">
+              <Permit roles="teacher,analyst">
                 <Button as={Link} to={`results`} color="blue">
                   Results
                 </Button>

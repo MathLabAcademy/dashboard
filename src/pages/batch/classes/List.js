@@ -28,7 +28,7 @@ function _ListItem({ batchClassId, batchClass, getBatchClass }) {
         }
         Right={
           <>
-            <Permit roles="teacher">
+            <Permit roles="teacher,analyst">
               <Button as={Link} to={`${batchClassId}/edit`}>
                 Edit
               </Button>
@@ -60,7 +60,7 @@ function BatchClassList({ pagination, fetchPage }) {
         <HeaderGrid
           Left={<Header>Batch Classes</Header>}
           Right={
-            <Permit roles="teacher">
+            <Permit roles="teacher,analyst">
               <Button as={Link} to={`create`} color="blue">
                 Create
               </Button>

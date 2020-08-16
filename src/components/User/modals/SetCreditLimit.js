@@ -69,7 +69,7 @@ function SetCreditLimit({ userId }) {
   )
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Button onClick={onOpen} variantColor="blue">
         Set Credit Limit
       </Button>

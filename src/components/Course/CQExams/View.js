@@ -25,7 +25,7 @@ function CourseCQExamView({ courseId, cqExamId, cqExam, getCQExam }) {
           }
           Right={
             <>
-              <Permit roles="teacher">
+              <Permit roles="teacher,analyst">
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>

@@ -26,7 +26,7 @@ function MCQDeleteModal({ mcqId }) {
   }, [dispatch, handle, mcqId])
 
   return (
-    <Permit roles="teacher,assistant">
+    <Permit roles="teacher,analyst,assistant">
       <Modal
         trigger={
           <Button type="button" color="red" onClick={handle.open}>

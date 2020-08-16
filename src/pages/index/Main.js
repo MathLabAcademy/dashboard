@@ -27,7 +27,7 @@ function DailyTransactionsForYearStats() {
   const totalDueStat = useStats('total-due')
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Card fluid>
         <Card.Content>
           <Card.Header>

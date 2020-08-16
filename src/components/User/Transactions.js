@@ -25,7 +25,7 @@ function UserTransactions({
   }, [transactions.allIds, transactions.byId, userId])
 
   return (
-    <Permit roles="teacher" userId={userId}>
+    <Permit roles="teacher,analyst" userId={userId}>
       {!basic && (
         <Segment>
           <HeaderGrid Left={<Header>Transaction History</Header>} />
@@ -41,7 +41,7 @@ function UserTransactions({
             <Table.HeaderCell collapsing textAlign="right">
               Amount (BDT)
             </Table.HeaderCell>
-            <Permit roles="teacher">
+            <Permit roles="teacher,analyst">
               <Table.HeaderCell>Meta</Table.HeaderCell>
             </Permit>
           </Table.Row>
@@ -62,7 +62,7 @@ function UserTransactions({
                 <Table.Cell collapsing textAlign="right">
                   {amount / 100}
                 </Table.Cell>
-                <Permit roles="teacher">
+                <Permit roles="teacher,analyst">
                   <Table.Cell>
                     <Text sx={{ wordBreak: 'break-all' }}>
                       {JSON.stringify(data)}

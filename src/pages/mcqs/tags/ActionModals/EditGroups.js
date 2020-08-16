@@ -59,7 +59,7 @@ function TagGroupsEditModal({ mcqTags }) {
   }, [mcqTags.allIds, mcqTags.byId])
 
   return (
-    <Permit roles="teacher,assistant">
+    <Permit roles="teacher,analyst,assistant">
       <Modal
         trigger={
           <Button

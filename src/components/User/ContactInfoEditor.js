@@ -105,7 +105,7 @@ function ContactInfoEditor({
   )
 
   return (
-    <Permit roles="teacher" userId={userId}>
+    <Permit roles="teacher,analyst" userId={userId}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

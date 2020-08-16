@@ -283,7 +283,7 @@ function AcceptPhoneModal({ personId, phone, phoneTrx, refreshUser }) {
   }, [personId, handler, refreshUser])
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Modal
         open={open}
         closeOnDimmerClick={false}
@@ -495,7 +495,7 @@ function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {
   const [editing, setEditing] = useState(null)
 
   return editing ? (
-    <Permit roles="teacher" userId={userId}>
+    <Permit roles="teacher,analyst" userId={userId}>
       <Editor
         userId={userId}
         person={person}
@@ -511,7 +511,7 @@ function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {
         Left={<Header content={title} />}
         Right={
           <>
-            <Permit roles="teacher" userId={userId}>
+            <Permit roles="teacher,analyst" userId={userId}>
               <Button
                 basic
                 icon="edit outline"

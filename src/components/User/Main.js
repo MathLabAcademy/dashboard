@@ -21,7 +21,7 @@ function User({ userId, user, getUser }) {
   const email = get(user, 'Person.email') || get(user, 'Person.emailTrx')
 
   return (
-    <Permit roles="teacher" userId={userId}>
+    <Permit roles="teacher,analyst" userId={userId}>
       <Segment loading={!user}>
         <HeaderGrid
           leftClassName="auto wide"

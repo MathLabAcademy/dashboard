@@ -120,7 +120,7 @@ function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
   )
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

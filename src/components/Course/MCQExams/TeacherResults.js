@@ -123,7 +123,7 @@ function MCQExamResult({ mcqExamId }) {
   }, [data])
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Segment>
         <HeaderGrid
           Left={<Header>Result Summary </Header>}

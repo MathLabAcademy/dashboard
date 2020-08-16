@@ -15,7 +15,7 @@ function CourseMCQExams({ courseId }) {
   }
 
   return (
-    <Permit roles="teacher,student">
+    <Permit roles="teacher,analyst,student">
       <Router>
         <List path="/" courseId={courseId} />
         <Create path="create" courseId={courseId} />

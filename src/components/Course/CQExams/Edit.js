@@ -64,7 +64,7 @@ function CourseCQExamEdit({ cqExamId, data, getData, updateCQExam }) {
   )
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,analyst">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

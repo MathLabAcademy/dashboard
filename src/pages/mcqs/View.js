@@ -64,7 +64,7 @@ function MCQView({
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <Permit roles="teacher,assistant">
+              <Permit roles="teacher,analyst,assistant">
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>

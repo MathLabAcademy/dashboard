@@ -57,13 +57,13 @@ function CourseVideoList({ courseId }) {
   const videos = useCourseVideos(courseId)
 
   return (
-    <Permit roles="teacher,student">
+    <Permit roles="teacher,analyst,student">
       {canAccess ? (
         <Segment>
           <HeaderGrid
             Left={<Header>Videos</Header>}
             Right={
-              <Permit roles="teacher">
+              <Permit roles="teacher,analyst">
                 <Button as={Link} to={`create`} color="blue">
                   Add New
                 </Button>

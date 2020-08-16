@@ -122,7 +122,7 @@ function MCQEdit({
   const [galleryOpen, galleryHandler] = useToggle(false)
 
   return (
-    <Permit roles="teacher,assistant">
+    <Permit roles="teacher,analyst,assistant">
       <Flex justifyContent="space-between" mb={3}>
         <Button disabled={!prevMCQId} as={Link} to={`../../${prevMCQId}/edit`}>
           Previous
