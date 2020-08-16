@@ -10,46 +10,46 @@ export const sidebarItems = [
   {
     title: `Users`,
     link: '/users',
-    permits: ['teacher'],
+    permits: ['teacher', 'analyst'],
   },
   {
     title: `Find User`,
     link: '/find-user',
-    permits: ['teacher'],
+    permits: ['teacher', 'analyst'],
   },
   {
     title: `Online Courses`,
     link: '/courses',
-    permits: ['teacher', 'student'],
+    permits: ['teacher', 'analyst', 'student'],
     items: [
       {
         title: `Tags`,
         link: '/courses/tags',
-        permits: ['teacher'],
+        permits: ['teacher', 'analyst'],
       },
     ],
   },
   {
     title: `MCQs`,
     link: '/mcqs',
-    permits: ['teacher', 'assistant'],
+    permits: ['teacher', 'analyst', 'assistant'],
     items: [
       {
         title: `Tags`,
         link: '/mcqs/tags',
-        permits: ['teacher', 'assistant'],
+        permits: ['teacher', 'analyst', 'assistant'],
       },
     ],
   },
   {
     title: `Batch Classes`,
     link: '/batchclasses',
-    permits: ['teacher'],
+    permits: ['teacher', 'analyst'],
   },
   {
     title: `Batch Courses`,
     link: '/batchcourses',
-    permits: ['teacher'],
+    permits: ['teacher', 'analyst'],
   },
   {
     title: `Notification`,
@@ -58,6 +58,6 @@ export const sidebarItems = [
   {
     title: `SMS`,
     link: `/sms`,
-    permits: ['teacher'],
+    permits: ['teacher', 'analyst'],
   },
 ]
