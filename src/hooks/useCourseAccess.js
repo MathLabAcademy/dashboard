@@ -7,5 +7,5 @@ export function useCourseAccess(courseId) {
   const isEnrolled = useSelector((state) =>
     get(state.enrollments.byId[`${courseId}:${currentUser.id}`], 'active')
   )
-  return currentUser.roleId === 'teacher' || isEnrolled
+  return ['teacher', 'analyst'].includes(currentUser.roleId) || isEnrolled
 }
