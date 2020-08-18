@@ -48,11 +48,7 @@ function CourseCQExamView({ courseId, cqExamId, cqExam, getCQExam }) {
               <Table.HeaderCell collapsing content={`Question Paper`} />
               <Table.Cell
                 content={
-                  <Button
-                    as="a"
-                    href={`/api${get(cqExam, 'filePath')}`}
-                    target="_blank"
-                  >
+                  <Button as="a" href={get(cqExam, 'filePath')} target="_blank">
                     Download
                   </Button>
                 }
