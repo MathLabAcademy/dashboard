@@ -7,19 +7,13 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Icon,
-  IconButton,
   Image,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
   Spinner,
   Stack,
   useDisclosure,
 } from '@chakra-ui/core'
 import { get } from 'lodash-es'
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import { FaImages } from 'react-icons/fa'
 import useSWR from 'swr'
 import api from 'utils/api'
@@ -67,18 +61,18 @@ const fetcher = async (url) => {
 function MCQImageGallery({ mcqId }) {
   const swr = useSWR(`/mcqs/${mcqId}/images`, fetcher)
 
-  const onNewImage = useCallback(
-    (image) => {
-      swr.mutate(
-        (data) => ({
-          items: [image, ...data.items],
-          totalItems: data.totalItems + 1,
-        }),
-        false
-      )
-    },
-    [swr]
-  )
+  // const onNewImage = useCallback(
+  //   (image) => {
+  //     swr.mutate(
+  //       (data) => ({
+  //         items: [image, ...data.items],
+  //         totalItems: data.totalItems + 1,
+  //       }),
+  //       false
+  //     )
+  //   },
+  //   [swr]
+  // )
 
   const { isOpen, onOpen, onClose } = useDisclosure(false)
 

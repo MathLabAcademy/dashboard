@@ -2,7 +2,7 @@ import { Box, IconButton, Stack } from '@chakra-ui/core'
 import RichEditor from 'components/Draft/index'
 import { convertToRaw } from 'draft-js'
 import { ErrorMessage, Field, getIn } from 'formik'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { FormField } from 'semantic-ui-react'
 
 function RichTextField({

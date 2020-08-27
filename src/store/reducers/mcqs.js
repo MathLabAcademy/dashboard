@@ -1,11 +1,9 @@
-import { get, groupBy, keyBy, map, mapValues, union } from 'lodash-es'
+import { get, groupBy, keyBy, mapValues } from 'lodash-es'
 import {
   MCQANSWER_ADD,
   MCQANSWER_BULK_ADD,
   MCQIMAGE_ADD,
   MCQIMAGE_BULK_ADD,
-  MCQIMAGE_TMP_ADD,
-  MCQIMAGE_TMP_BULK_ADD,
   MCQ_ADD,
   MCQ_BULK_ADD,
   MCQ_REMOVE,
