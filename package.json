@@ -13,7 +13,7 @@
     "i18n:compile": "lingui compile"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.7.0",
+    "@chakra-ui/core": "^0.8.0",
     "@craco/craco": "^5.6.4",
     "@draft-js-modules/editor": "^0.1.0",
     "@draft-js-modules/katex": "^0.1.0",
@@ -57,6 +57,7 @@
     "semantic-ui-react": "^0.88.2",
     "slate": "^0.47.3",
     "slate-react": "^0.22.3",
+    "swr": "^0.3.1",
     "yup": "^0.28.3"
   },
   "devDependencies": {

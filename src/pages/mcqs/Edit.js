@@ -3,10 +3,9 @@ import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
-import ImageGalleryModal from 'components/MCQs/ImageGalleryModal'
+import ImageGallery from 'components/MCQs/ImageGallery'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import useToggle from 'hooks/useToggle'
 import {
   get,
   isUndefined,
@@ -19,7 +18,7 @@ import {
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Flex } from 'reflexbox'
-import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
+import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
@@ -119,8 +118,6 @@ function MCQEdit({
     )
   }, [mcqTags.allIds, mcqTags.byId])
 
-  const [galleryOpen, galleryHandler] = useToggle(false)
-
   return (
     <Permit roles="teacher,analyst,assistant">
       <Flex justifyContent="space-between" mb={3}>
@@ -146,23 +143,7 @@ function MCQEdit({
                 Left={<Header>Edit MCQ #{mcqId}</Header>}
                 Right={
                   <>
-                    <Modal
-                      closeIcon
-                      open={galleryOpen}
-                      onClose={galleryHandler.close}
-                      trigger={
-                        <Button
-                          type="button"
-                          icon="images"
-                          onClick={galleryHandler.open}
-                        />
-                      }
-                    >
-                      <Modal.Header>MCQ Image Gallery</Modal.Header>
-                      <Modal.Content>
-                        <ImageGalleryModal mcqId={mcqId} />
-                      </Modal.Content>
-                    </Modal>
+                    <ImageGallery mcqId={mcqId} />
 
                     <Button as={Link} to={`..`}>
                       Go Back

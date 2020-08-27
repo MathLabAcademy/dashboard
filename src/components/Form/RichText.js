@@ -1,9 +1,9 @@
-import HeaderGrid from 'components/HeaderGrid'
-import { convertToRaw } from 'draft-js'
+import { Box, IconButton, Stack } from '@chakra-ui/core'
 import RichEditor from 'components/Draft/index'
+import { convertToRaw } from 'draft-js'
 import { ErrorMessage, Field, getIn } from 'formik'
-import React, { useRef, useState } from 'react'
-import { Button, FormField, Segment } from 'semantic-ui-react'
+import React, { useEffect, useRef, useState } from 'react'
+import { FormField } from 'semantic-ui-react'
 
 function RichTextField({
   field: { name, value },
@@ -25,55 +25,57 @@ function RichTextField({
       error={Boolean(getIn(form.errors, name))}
       className={isStatic ? 'static' : ''}
     >
-      <HeaderGrid
-        Left={
+      <Stack isInline justifyContent="space-between" alignItems="center" mb={1}>
+        <Box>
           <label htmlFor={id} className={hideLabel ? 'sr-only' : ''}>
             <strong>{label}</strong>
           </label>
-        }
-        Right={
-          <>
-            {editing && (
-              <Button
-                type="button"
-                icon="close"
-                onClick={() => setEditing(false)}
-              />
-            )}
-
-            <Button
+        </Box>
+        <Stack isInline spacing={2}>
+          {editing && (
+            <IconButton
               type="button"
-              icon={editing ? 'check' : 'edit'}
-              disabled={disabled}
-              onClick={() => {
-                if (!storeRef.current) return
-
-                if (editing) {
-                  const editorState = storeRef.current().getEditorState()
-                  const contentState = editorState.getCurrentContent()
-                  const newValue = contentState.hasText()
-                    ? JSON.stringify(convertToRaw(contentState))
-                    : ''
-
-                  form.setFieldValue(name, newValue)
-                  setEditing(false)
-                } else {
-                  setEditing(true)
-                }
-              }}
+              icon="close"
+              variantColor="red"
+              size="sm"
+              onClick={() => setEditing(false)}
             />
-          </>
-        }
-      />
+          )}
 
-      <Segment>
+          <IconButton
+            type="button"
+            icon={editing ? 'check' : 'edit'}
+            isDisabled={disabled}
+            variantColor={editing ? 'green' : 'cyan'}
+            size="sm"
+            onClick={() => {
+              if (!storeRef.current) return
+
+              if (editing) {
+                const editorState = storeRef.current().getEditorState()
+                const contentState = editorState.getCurrentContent()
+                const newValue = contentState.hasText()
+                  ? JSON.stringify(convertToRaw(contentState))
+                  : ''
+
+                form.setFieldValue(name, newValue)
+                setEditing(false)
+              } else {
+                setEditing(true)
+              }
+            }}
+          />
+        </Stack>
+      </Stack>
+
+      <Box borderWidth="1px" p={2} bg="white">
         <RichEditor
           rawState={value}
           readOnly={!editing}
           storeRef={storeRef}
           disableImage={disableImage}
         />
-      </Segment>
+      </Box>
 
       <ErrorMessage name={name} component="p" className="red text" />
     </FormField>

@@ -2,7 +2,6 @@ import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
-import TmpImageGalleryModal from 'components/MCQs/TmpImageGalleryModal'
 import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
 import useToggle from 'hooks/useToggle'
@@ -70,8 +69,6 @@ function AddMCQ({ mcqExamId, createMCQ }) {
     [createMCQ, handle]
   )
 
-  const [galleryOpen, galleryHandler] = useToggle(false)
-
   return (
     <Permit roles="teacher,analyst">
       <Formik
@@ -92,28 +89,7 @@ function AddMCQ({ mcqExamId, createMCQ }) {
             onClose={handle.close}
           >
             <Modal.Header>
-              <HeaderGrid
-                Left={<Header>Add New MCQ</Header>}
-                Right={
-                  <Modal
-                    closeIcon
-                    open={galleryOpen}
-                    onClose={galleryHandler.close}
-                    trigger={
-                      <Button
-                        type="button"
-                        icon="images"
-                        onClick={galleryHandler.open}
-                      />
-                    }
-                  >
-                    <Modal.Header>Temporary Images</Modal.Header>
-                    <Modal.Content>
-                      <TmpImageGalleryModal />
-                    </Modal.Content>
-                  </Modal>
-                }
-              />
+              <HeaderGrid Left={<Header>Add New MCQ</Header>} />
             </Modal.Header>
 
             <Modal.Content>

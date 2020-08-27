@@ -11,26 +11,26 @@ function ImageBlock({ block, blockProps: { getStore }, contentState }) {
   const data = useMemo(() => {
     const blockData = block.getData()
 
+    const rawSrc = blockData.get('src')
+
+    const src = /^s3::/.test(rawSrc)
+      ? rawSrc.replace(/^s3::/, '')
+      : `/api${rawSrc}`
+
     return {
-      src: blockData.get('src'),
+      src,
       caption: blockData.get('caption'),
     }
   }, [block])
 
   return readOnly ? (
-    <img src={`/api${data.src}`} alt={data.caption} />
+    <img src={data.src} alt={data.caption} />
   ) : (
     <Modal
       closeIcon
       open={open}
       onClose={handler.close}
-      trigger={
-        <img
-          src={`/api${data.src}`}
-          alt={data.caption}
-          onClick={handler.open}
-        />
-      }
+      trigger={<img src={data.src} alt={data.caption} onClick={handler.open} />}
     >
       <Editor
         toUpdate

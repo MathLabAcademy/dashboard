@@ -18,6 +18,7 @@ import {
   MCQ_REMOVE,
   MCQ_UPDATE,
 } from './actionTypes'
+import { stringify } from 'query-string'
 
 export const createMCQ = (mcqData) => async (dispatch) => {
   const url = `/mcqs`
@@ -188,7 +189,11 @@ export const fetchMCQPage = (
 }
 
 export const getAllMCQImages = (mcqId) => async (dispatch) => {
-  const url = `/mcqs/${mcqId}/images`
+  const url = `/mcqs/images?${stringify({
+    filter: JSON.stringify({
+      mcqId: { '=': mcqId },
+    }),
+  })}`
 
   const { data, error } = await api(url)
 
@@ -211,18 +216,12 @@ export const getAllMCQTmpImages = () => async (dispatch) => {
   return data
 }
 
-export const uploadMCQImage = (mcqId, mcqImageData) => async (dispatch) => {
+export const uploadMCQImage = ({ mcqId, image }) => async (dispatch) => {
   const url = `/mcqs/${mcqId}/images`
 
   const body = new FormData()
 
-  for (const [key, value] of Object.entries(mcqImageData)) {
-    if (value instanceof File) {
-      body.set(key, value, value.name)
-    } else if (typeof value !== 'undefined') {
-      body.set(key, value)
-    }
-  }
+  body.set('image', image, image.name)
 
   const { data, error } = await api(url, {
     method: 'POST',

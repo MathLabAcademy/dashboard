@@ -3,14 +3,13 @@ import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
 import HeaderGrid from 'components/HeaderGrid'
-import TmpImageGalleryModal from 'components/MCQs/TmpImageGalleryModal'
 import Permit from 'components/Permit'
 import { ErrorMessage, Formik } from 'formik'
-import useToggle from 'hooks/useToggle'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
-import { connect } from 'react-redux'
-import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button, Header, Message, Segment } from 'semantic-ui-react'
+import { Box, Stack } from '@chakra-ui/core'
 import { createMCQ } from 'store/actions/mcqs'
 import * as Yup from 'yup'
 
@@ -41,7 +40,8 @@ const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
   return opts
 }, {})
 
-function MCQCreate({ createMCQ, mcqTags, navigate }) {
+function MCQCreate({ navigate }) {
+  const mcqTags = useSelector((state) => state.mcqTags)
   const tagOptions = useMemo(() => {
     return zipObject(
       mcqTags.allIds,
@@ -52,14 +52,15 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
   const initialValues = useMemo(() => getInitialValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
+  const dispatch = useDispatch()
   const onSubmit = useCallback(
     async (values, actions) => {
       actions.setStatus(null)
 
       try {
-        await createMCQ(values)
+        const mcq = await dispatch(createMCQ(values))
         actions.resetForm()
-        navigate('..')
+        navigate(`/mcqs/${mcq.id}`)
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>
@@ -75,10 +76,8 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
 
       actions.setSubmitting(false)
     },
-    [createMCQ, navigate]
+    [dispatch, navigate]
   )
-
-  const [galleryOpen, galleryHandler] = useToggle(false)
 
   return (
     <Permit roles="teacher,analyst,assistant">
@@ -94,32 +93,15 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
                 Left={<Header>Create MCQ</Header>}
                 Right={
                   <>
-                    <Modal
-                      closeIcon
-                      open={galleryOpen}
-                      onClose={galleryHandler.close}
-                      trigger={
-                        <Button
-                          type="button"
-                          icon="images"
-                          onClick={galleryHandler.open}
-                        />
-                      }
-                    >
-                      <Modal.Header>Temporary Images</Modal.Header>
-                      <Modal.Content>
-                        <TmpImageGalleryModal />
-                      </Modal.Content>
-                    </Modal>
                     <Button as={Link} to={`..`}>
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>
                     <Button
-                      positive
                       type="submit"
-                      loading={isSubmitting}
-                      disabled={!isValid || isSubmitting}
+                      isLoading={isSubmitting}
+                      isDisabled={!isValid || isSubmitting}
+                      variantColor="green"
                     >
                       Save
                     </Button>
@@ -128,36 +110,37 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
               />
             </Segment>
 
-            <Segment>
+            <Stack borderWidth="1px" boxShadow="md" p={4} spacing={4}>
               <Message color="yellow" hidden={!status}>
                 {status}
               </Message>
 
-              <FormRichText name="text" label={`Question`} />
+              <Box>
+                <FormRichText name="text" label={`Question`} />
+              </Box>
 
-              <FormSelect
-                name="answerIndex"
-                label={'Answer'}
-                options={answerIndexOptions}
-              />
-
-              <FormRichText name="guide" label={`Guide`} />
-
-              <Segment secondary>
-                <ErrorMessage
-                  name={`options`}
-                  component="p"
-                  className="red text"
+              <Box>
+                <FormSelect
+                  name="answerIndex"
+                  label={'Answer'}
+                  options={answerIndexOptions}
                 />
+              </Box>
 
+              <Box>
+                <FormRichText name="guide" label={`Guide`} />
+              </Box>
+
+              <Stack borderWidth="1px" boxShadow="sm" p={4} spacing={4}>
                 {values.options.map((_, index) => (
-                  <FormRichText
-                    key={`options.${index}`}
-                    name={`options.${index}`}
-                    label={`Option ${index + 1}`}
-                  />
+                  <Box key={`options.${index}`}>
+                    <FormRichText
+                      name={`options.${index}`}
+                      label={`Option ${index + 1}`}
+                    />
+                  </Box>
                 ))}
-              </Segment>
+              </Stack>
 
               <FormSelect
                 name="tagIds"
@@ -168,7 +151,7 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
                 search
                 selection
               />
-            </Segment>
+            </Stack>
           </Form>
         )}
       </Formik>
@@ -176,12 +159,4 @@ function MCQCreate({ createMCQ, mcqTags, navigate }) {
   )
 }
 
-const mapStateToProps = ({ mcqTags }) => ({
-  mcqTags,
-})
-
-const mapDispatchToProps = {
-  createMCQ,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MCQCreate)
+export default MCQCreate

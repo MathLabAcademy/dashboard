@@ -89,7 +89,7 @@ const mcqsReducer = (state = initialState, { type, data, mcqId }) => {
           ...state.imagesById,
           [data.mcqId]: {
             ...get(state.imagesById, data.mcqId, emptyObject),
-            [data.serial]: {
+            [data.s3ObjectId]: {
               ...data,
             },
           },
@@ -102,24 +102,8 @@ const mcqsReducer = (state = initialState, { type, data, mcqId }) => {
           ...state.imagesById,
           ...mapValues(groupBy(data.items, 'mcqId'), (items, mcqId) => ({
             ...get(state.imagesById, mcqId, emptyObject),
-            ...keyBy(items, 'serial'),
+            ...keyBy(items, 's3ObjectId'),
           })),
-        },
-      }
-    case MCQIMAGE_TMP_ADD:
-      return {
-        ...state,
-        imagesById: {
-          ...state.imagesById,
-          tmp: union(state.imagesById.tmp, [data.filePath]),
-        },
-      }
-    case MCQIMAGE_TMP_BULK_ADD:
-      return {
-        ...state,
-        imagesById: {
-          ...state.imagesById,
-          tmp: map(data.items, 'filePath'),
         },
       }
     default:

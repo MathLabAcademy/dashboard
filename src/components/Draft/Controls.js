@@ -1,8 +1,15 @@
+import { Box, Button, Stack } from '@chakra-ui/core'
 import { RichUtils } from 'draft-js'
 import React, { useCallback } from 'react'
-import { Button } from 'semantic-ui-react'
+import {
+  MdFormatBold,
+  MdFormatItalic,
+  MdFormatListBulleted,
+  MdFormatListNumbered,
+  MdFormatUnderlined,
+} from 'react-icons/md'
 
-function StyleButton({ style, onToggle, active, label, icon }) {
+function StyleButton({ style, onToggle, active, label, icon, ...props }) {
   const _onToggle = useCallback(
     (e) => {
       e.preventDefault()
@@ -13,12 +20,14 @@ function StyleButton({ style, onToggle, active, label, icon }) {
 
   return (
     <Button
+      {...props}
       type="button"
       active={active}
       onClick={_onToggle}
       icon={icon}
-      content={label}
-    />
+    >
+      {icon ? <Box as={icon} /> : label}
+    </Button>
   )
 }
 
@@ -30,12 +39,12 @@ const BLOCK_TYPES = [
   // { label: 'H5', style: 'header-five' },
   // { label: 'H6', style: 'header-six' },
   // { style: 'blockquote', icon: 'quote left' },
-  { style: 'unordered-list-item', icon: 'list ul' },
-  { style: 'ordered-list-item', icon: 'list ol' },
+  { style: 'unordered-list-item', icon: MdFormatListBulleted },
+  { style: 'ordered-list-item', icon: MdFormatListNumbered },
   // { label: 'Code Block', style: 'code-block' }
 ]
 
-function BlockStyleControls({ editorState, onToggle }) {
+function BlockStyleControls({ editorState, onToggle, ...props }) {
   const selection = editorState.getSelection()
   const blockType = editorState
     .getCurrentContent()
@@ -44,6 +53,7 @@ function BlockStyleControls({ editorState, onToggle }) {
 
   return BLOCK_TYPES.map((type) => (
     <StyleButton
+      {...props}
       key={type.label || type.icon}
       active={type.style === blockType}
       label={type.label}
@@ -55,17 +65,18 @@ function BlockStyleControls({ editorState, onToggle }) {
 }
 
 const INLINE_STYLES = [
-  { style: 'BOLD', icon: 'bold' },
-  { style: 'ITALIC', icon: 'italic' },
-  { style: 'UNDERLINE', icon: 'underline' },
+  { style: 'BOLD', icon: MdFormatBold },
+  { style: 'ITALIC', icon: MdFormatItalic },
+  { style: 'UNDERLINE', icon: MdFormatUnderlined },
   // { style: 'CODE', icon: 'code' }
 ]
 
-function InlineStyleControls({ editorState, onToggle }) {
+function InlineStyleControls({ editorState, onToggle, ...props }) {
   const currentStyle = editorState.getCurrentInlineStyle()
 
   return INLINE_STYLES.map((type) => (
     <StyleButton
+      {...props}
       key={type.label || type.icon}
       active={currentStyle.has(type.style)}
       label={type.label}
@@ -105,17 +116,19 @@ function RichEditorControls({ store, children }) {
         marginBottom: '10px',
       }}
     >
-      <BlockStyleControls
-        editorState={editorState}
-        onToggle={toggleBlockType}
-      />
+      <Stack isInline spacing={2}>
+        <BlockStyleControls
+          editorState={editorState}
+          onToggle={toggleBlockType}
+        />
 
-      <InlineStyleControls
-        editorState={editorState}
-        onToggle={toggleInlineStyle}
-      />
+        <InlineStyleControls
+          editorState={editorState}
+          onToggle={toggleInlineStyle}
+        />
 
-      {children}
+        {children}
+      </Stack>
     </div>
   )
 }

@@ -1,163 +1,110 @@
-import imageCompression from 'browser-image-compression'
-import { get } from 'lodash-es'
-import React, { useCallback, useReducer, useMemo } from 'react'
-import { connect } from 'react-redux'
 import {
+  Box,
   Button,
-  Form,
-  FormField,
-  Grid,
   Image,
-  Input,
-  List,
-  Message,
-  Placeholder,
-  Segment,
-} from 'semantic-ui-react'
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Skeleton,
+  Stack,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/core'
+import { Form } from 'components/HookForm/Form'
+import { handleAPIError } from 'components/HookForm/helpers'
+import { FormButton } from 'components/HookForm/Button'
+import { FormInput } from 'components/HookForm/Input'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { uploadMCQImage } from 'store/actions/mcqs'
 
-const defaultState = {
-  file: null,
-  src: '',
-  loading: false,
-  error: '',
-}
+function MCQImageUploader({ mcqId, onSuccess }) {
+  const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure(false)
 
-const getIntialState = (data) => {
-  return data
-    ? {
-        file: null,
-        src: `/api${get(data, 'filePath')}`,
-        loading: false,
-        error: '',
-        serial: get(data, 'serial'),
-      }
-    : defaultState
-}
+  const form = useForm()
 
-function reducer(state, { type, data }) {
-  switch (type) {
-    case 'RESET':
-      return data
-    case 'UPDATE':
-      return {
-        ...state,
-        ...data,
-        error: '',
-      }
-    case 'ERROR':
-      return {
-        ...state,
-        error: data,
-      }
-    default:
-      throw new Error(`invalid actionType: ${type}`)
-  }
-}
-
-function MCQImageUploader({ mcqId, serial, image, uploadMCQImage, onSuccess }) {
-  const initialState = useMemo(() => getIntialState(image), [image])
-
-  const [state, dispatch] = useReducer(reducer, initialState)
-
-  const onReset = useCallback(
-    () => dispatch({ type: 'RESET', data: initialState }),
-    [initialState]
-  )
-
+  const dispatch = useDispatch()
   const onSubmit = useCallback(
-    async (state) => {
+    async ({ image }) => {
       try {
-        if (state.error) return
+        const data = await dispatch(uploadMCQImage({ mcqId, image: image[0] }))
 
-        dispatch({ type: 'UPDATE', data: { loading: true } })
-        await uploadMCQImage(mcqId, { serial: state.serial, image: state.file })
-        dispatch({ type: 'RESET', data: initialState })
-
-        if (state.serial) return window.location.reload(true)
-
-        onSuccess()
+        onSuccess(data)
+        onClose()
       } catch (err) {
-        dispatch({ type: 'ERROR', data: err.message || 'error occured' })
+        handleAPIError(err, { toast })
       }
     },
-    [initialState, mcqId, onSuccess, uploadMCQImage]
+    [dispatch, mcqId, onClose, onSuccess, toast]
   )
+
+  const image = form.watch('image')
+
+  const [localUri, setLocalUri] = useState(null)
+
+  useEffect(() => {
+    if (image && image[0]) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        setLocalUri(e.target.result)
+      }
+      reader.readAsDataURL(image[0])
+    } else {
+      setLocalUri(null)
+    }
+  }, [image])
 
   return (
-    <Segment basic>
-      <Form as="div">
-        <Message color="yellow" hidden={!state.error}>
-          {state.error}
-        </Message>
+    <>
+      <Button variantColor="blue" onClick={onOpen}>
+        Upload Image
+      </Button>
 
-        <Grid columns={2}>
-          <Grid.Column className="auto wide">
-            <FormField>
-              <Input
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={async (event) => {
-                  const imageFile = event.target.files[0]
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay />
 
-                  if (!imageFile) return
+        <ModalContent>
+          <Form form={form} onSubmit={onSubmit}>
+            <ModalHeader>Upload Image</ModalHeader>
 
-                  const image = await imageCompression(imageFile, {
-                    maxWidthOrHeight: 512,
-                  })
+            <ModalCloseButton />
 
-                  const base64EncodedImage = await imageCompression.getDataUrlFromFile(
-                    image
-                  )
+            <ModalBody>
+              <Stack spacing={4}>
+                <FormInput
+                  name="image"
+                  type="file"
+                  label="Select Image File"
+                  accept="image/png, image/jpeg"
+                />
 
-                  dispatch({
-                    type: 'UPDATE',
-                    data: { file: image, src: base64EncodedImage },
-                  })
-                }}
-                action={
-                  <Button
-                    type="button"
-                    disabled={Boolean(!state.file || state.error)}
-                    content={serial ? 'Replace' : 'Upload'}
-                    onClick={() => onSubmit(state)}
-                  />
-                }
-              />
-            </FormField>
+                <Box h="20rem">
+                  {localUri ? (
+                    <Image src={localUri} maxH="100%" maxW="100%" mx="auto" />
+                  ) : (
+                    <Skeleton height="100%" />
+                  )}
+                </Box>
+              </Stack>
+            </ModalBody>
 
-            <FormField>
-              <Button type="button" onClick={onReset} content={`Reset`} />
-            </FormField>
-
-            <List>
-              <List.Item>
-                <strong>Size</strong>:{' '}
-                {Number(get(state.file, 'size', 0) / 1024).toFixed(2)} KB
-              </List.Item>
-            </List>
-          </Grid.Column>
-          <Grid.Column className="grow wide">
-            {state.src ? (
-              <Image src={state.src} />
-            ) : (
-              <Placeholder fluid>
-                <Placeholder.Image />
-              </Placeholder>
-            )}
-          </Grid.Column>
-        </Grid>
-      </Form>
-    </Segment>
+            <ModalFooter>
+              <Button variantColor="blue" mr={3} onClick={onClose}>
+                Close
+              </Button>
+              <FormButton type="submit">Upload</FormButton>
+            </ModalFooter>
+          </Form>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 
-const mapStateToProps = ({ mcqs }, { mcqId, serial }) => ({
-  image: get(mcqs.imagesById, [mcqId, serial]),
-})
-
-const mapDispatchToProps = {
-  uploadMCQImage,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MCQImageUploader)
+export default MCQImageUploader
