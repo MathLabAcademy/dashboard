@@ -1,10 +1,9 @@
+import { Box, Button, Heading, Stack } from '@chakra-ui/core'
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
 import { getAllCQExamsForCourse } from 'store/actions/cqExams'
 import { emptyArray } from 'utils/defaults'
 import ListItem from './ListItem'
@@ -21,24 +20,36 @@ function CourseCQExamList({ courseId }) {
 
   return (
     <Permit roles="teacher,analyst,student">
-      <Segment>
-        <HeaderGrid
-          Left={<Header>CQ Exams</Header>}
-          Right={
-            <Permit roles="teacher,analyst">
-              <Button as={Link} to={`create`} color="blue">
+      <Box borderWidth="1px" boxShadow="sm" p={4} mb={4}>
+        <Stack isInline justifyContent="space-between" alignItems="center">
+          <Box>
+            <Heading fontSize={4}>CQ Exams</Heading>
+          </Box>
+
+          <Permit roles="teacher,analyst">
+            <Box>
+              <Button
+                as={Link}
+                to={`create`}
+                variantColor="blue"
+                _hover={{ color: 'white' }}
+              >
                 Create
               </Button>
-            </Permit>
-          }
-        />
-      </Segment>
+            </Box>
+          </Permit>
+        </Stack>
+      </Box>
 
-      <Segment>
-        {cqExamIds.map((id) => (
-          <ListItem key={id} id={id} />
-        ))}
-      </Segment>
+      {cqExamIds.length > 0 && (
+        <Stack spacing={4} borderWidth="1px" boxShadow="sm" p={2}>
+          {cqExamIds.map((id) => (
+            <Box key={id}>
+              <ListItem id={id} />
+            </Box>
+          ))}
+        </Stack>
+      )}
     </Permit>
   )
 }

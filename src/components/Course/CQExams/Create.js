@@ -1,128 +1,141 @@
+import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
 import { Link } from '@reach/router'
-import FormFile from 'components/Form/File'
-import Form from 'components/Form/Form'
-import FormInput from 'components/Form/Input'
-import HeaderGrid from 'components/HeaderGrid'
+import { FormButton } from 'components/HookForm/Button'
+import { FormDatePicker } from 'components/HookForm/DatePicker'
+import { Form } from 'components/HookForm/Form'
+import { handleAPIError } from 'components/HookForm/helpers'
+import { FormInput } from 'components/HookForm/Input'
 import Permit from 'components/Permit'
-import { Formik } from 'formik'
-import { DateTime } from 'luxon'
 import React, { useCallback, useMemo } from 'react'
-import { connect } from 'react-redux'
-import { Button, Header, Message, Segment } from 'semantic-ui-react'
+import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import { createCQExam } from 'store/actions/cqExams'
 import * as Yup from 'yup'
 
-const getInitialValues = (courseId) => ({
-  courseId: Number(courseId),
-  date: '',
+const getDefaultValues = () => ({
+  date: new Date(),
   name: '',
   description: '',
   questionPaperPdf: '',
+  submissionDeadline: new Date(),
 })
 
 const getValidationSchema = () => {
   return Yup.object({
     date: Yup.date()
-      .min(DateTime.local().toISODate(), `date already passed`)
+      .min(new Date(), `date already passed`)
       .required(`required`),
     name: Yup.string().notRequired(),
     description: Yup.string().notRequired(),
     questionPaperPdf: Yup.mixed().required(`required`),
+    submissionDeadline: Yup.date().min(Yup.ref('date')).notRequired(),
   })
 }
 
-function CourseMCQExamCreate({ courseId, createCQExam, navigate }) {
-  const initialValues = useMemo(() => getInitialValues(courseId), [courseId])
+function CourseMCQExamCreate({ courseId, navigate }) {
+  const toast = useToast()
+
+  const defaultValues = useMemo(() => getDefaultValues(), [])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
-  const onSubmit = useCallback(
-    async (values, actions) => {
-      actions.setStatus(null)
+  const form = useForm({
+    defaultValues,
+    validationSchema,
+  })
 
+  const dispatch = useDispatch()
+
+  const onSubmit = useCallback(
+    async ({
+      date,
+      name,
+      description,
+      questionPaperPdf,
+      submissionDeadline,
+    }) => {
       try {
-        await createCQExam(values)
+        await dispatch(
+          createCQExam({
+            courseId,
+            date,
+            name,
+            description,
+            questionPaperPdf: questionPaperPdf[0],
+            submissionDeadline,
+          })
+        )
+
         navigate(`/courses/${courseId}/cqexams`)
       } catch (err) {
-        if (err.errors) {
-          err.errors.forEach(({ param, message }) =>
-            actions.setFieldError(param, message)
-          )
-        } else if (err.message) {
-          actions.setStatus(err.message)
-        } else {
-          console.error(err)
-          actions.setStatus(null)
-        }
+        handleAPIError(err, { form, toast })
       }
-
-      actions.setSubmitting(false)
     },
-    [courseId, createCQExam, navigate]
+    [courseId, dispatch, form, navigate, toast]
   )
+
+  const date = form.watch('date')
 
   return (
     <Permit roles="teacher,analyst">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {({ isSubmitting, isValid, status }) => (
-          <Form>
-            <Segment>
-              <HeaderGrid
-                Left={<Header>New CQ Exam:</Header>}
-                Right={
-                  <>
-                    <Button as={Link} to="..">
-                      Cancel
-                    </Button>
-                    <Button type="reset">Reset</Button>
-                    <Button
-                      positive
-                      type="submit"
-                      loading={isSubmitting}
-                      disabled={!isValid || isSubmitting}
-                    >
-                      Create
-                    </Button>
-                  </>
-                }
+      <Form form={form} onSubmit={onSubmit}>
+        <Stack spacing={4}>
+          <Box borderWidth="1px" boxShadow="sm" p={4}>
+            <Stack isInline justifyContent="space-between" alignItems="center">
+              <Box>
+                <Heading fontSize={4}>New CQ Exam:</Heading>
+              </Box>
+              <Stack isInline spacing={2}>
+                <Button as={Link} to="..">
+                  Cancel
+                </Button>
+                <Button type="reset">Reset</Button>
+                <FormButton type="submit" variantColor="green">
+                  Create
+                </FormButton>
+              </Stack>
+            </Stack>
+          </Box>
+
+          <Stack borderWidth="1px" boxShadow="sm" p={4} spacing={4}>
+            <FormInput name="name" label={`Name`} />
+
+            <FormInput
+              id="description"
+              name="description"
+              label={`Description`}
+            />
+
+            <Box>
+              <FormDatePicker
+                name="date"
+                label={`Date`}
+                dateFormat="yyyy-dd-MM hh:mm aa"
+                minDate={new Date()}
+                showTimeSelect
               />
-            </Segment>
+            </Box>
 
-            <Segment>
-              <Message color="yellow" hidden={!status}>
-                {status}
-              </Message>
-
-              <FormInput type="date" name="date" label={`Date`} />
-
-              <FormInput name="name" label={`Name`} />
-
-              <FormInput
-                id="description"
-                name="description"
-                label={`Description`}
+            <Box>
+              <FormDatePicker
+                name="submissionDeadline"
+                label={`Submission Deadline`}
+                dateFormat="yyyy-dd-MM hh:mm aa"
+                minDate={date}
+                showTimeSelect
               />
+            </Box>
 
-              <FormFile
-                name="questionPaperPdf"
-                label={`Question Paper (PDF)`}
-                accept="application/pdf"
-              />
-            </Segment>
-          </Form>
-        )}
-      </Formik>
+            <FormInput
+              type="file"
+              name="questionPaperPdf"
+              label={`Question Paper (PDF)`}
+              accept="application/pdf"
+            />
+          </Stack>
+        </Stack>
+      </Form>
     </Permit>
   )
 }
 
-const mapStateToProps = null
-
-const mapDispatchToProps = {
-  createCQExam,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamCreate)
+export default CourseMCQExamCreate

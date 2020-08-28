@@ -1,36 +1,44 @@
+import { Box, Button, Heading, Stack } from '@chakra-ui/core'
 import { Link } from '@reach/router'
-import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
+import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Segment } from 'semantic-ui-react'
 import { getCQExam } from 'store/actions/cqExams'
-import { DateTime } from 'luxon'
 
 function CourseCQExamListItem({ id, data, getData }) {
   useEffect(() => {
     if (!data) getData(id)
   }, [data, getData, id])
 
+  if (!data) {
+    return null
+  }
+
   return (
-    <Segment loading={!data}>
-      <HeaderGrid
-        Left={
-          <Header>
+    <Box borderWidth="1px" boxShadow="sm" p={4}>
+      <Stack isInline justifyContent="space-between" alignItems="center">
+        <Box>
+          <Heading fontSize={3}>
             [
             {DateTime.fromISO(get(data, 'date')).toLocaleString(
               DateTime.DATE_MED
             )}
             ] {get(data, 'name')}
-          </Header>
-        }
-        Right={
-          <Button as={Link} to={`${id}`}>
+          </Heading>
+        </Box>
+        <Box>
+          <Button
+            as={Link}
+            to={`${id}`}
+            _hover={{ color: 'white' }}
+            variantColor="blue"
+          >
             Open
           </Button>
-        }
-      />
-    </Segment>
+        </Box>
+      </Stack>
+    </Box>
   )
 }
 

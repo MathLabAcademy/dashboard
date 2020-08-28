@@ -2,12 +2,26 @@ import api from 'utils/api'
 import { defaultOptsFetchPage } from 'utils/defaults'
 import { CQEXAM_ADD, CQEXAM_BULK_ADD, CQEXAM_UPDATE } from './actionTypes'
 
-export const createCQExam = (cqExamData) => async (dispatch) => {
+export const createCQExam = ({
+  courseId,
+  date,
+  name,
+  description,
+  questionPaperPdf,
+  submissionDeadline,
+}) => async (dispatch) => {
   const url = `/cqexams`
 
   const body = new FormData()
 
-  for (const [key, value] of Object.entries(cqExamData)) {
+  for (const [key, value] of Object.entries({
+    courseId,
+    date,
+    name,
+    description,
+    questionPaperPdf,
+    submissionDeadline,
+  })) {
     if (value instanceof File) body.set(key, value, value.name)
     else body.set(key, value)
   }
@@ -43,7 +57,7 @@ export const updateCQExam = (cqExamId, cqExamData) => async (dispatch) => {
 
   for (const [key, value] of Object.entries(cqExamData)) {
     if (value instanceof File) body.set(key, value, value.name)
-    else body.set(key, value)
+    else if (typeof value !== 'undefined') body.set(key, value)
   }
 
   const { data, error } = await api(url, {
