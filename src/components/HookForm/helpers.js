@@ -4,8 +4,8 @@ export function handleAPIError(error, { form, toast }) {
   }
 
   if (error.errors && form) {
-    error.errors.forEach(({ param, message }) => {
-      form.setError(param, 'FORM', message)
+    error.errors.forEach(({ location, message }) => {
+      form.setError(location, 'FORM', message)
     })
   }
 
@@ -14,7 +14,7 @@ export function handleAPIError(error, { form, toast }) {
 
     if (!form && error.errors) {
       description = error.errors
-        .map(({ param, message }) => `${param}: ${message}`)
+        .map(({ location, message }) => `${location}: ${message}`)
         .join('\n')
     }
 
