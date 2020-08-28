@@ -85,8 +85,8 @@ const mcqsReducer = (state = initialState, { type, data, mcqId }) => {
         ...state,
         imagesById: {
           ...state.imagesById,
-          [data.mcqId]: {
-            ...get(state.imagesById, data.mcqId, emptyObject),
+          [data.mapId]: {
+            ...get(state.imagesById, data.mapId, emptyObject),
             [data.s3ObjectId]: {
               ...data,
             },
@@ -98,7 +98,7 @@ const mcqsReducer = (state = initialState, { type, data, mcqId }) => {
         ...state,
         imagesById: {
           ...state.imagesById,
-          ...mapValues(groupBy(data.items, 'mcqId'), (items, mcqId) => ({
+          ...mapValues(groupBy(data.items, 'mapId'), (items, mcqId) => ({
             ...get(state.imagesById, mcqId, emptyObject),
             ...keyBy(items, 's3ObjectId'),
           })),
