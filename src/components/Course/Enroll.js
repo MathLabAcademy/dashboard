@@ -1,7 +1,6 @@
 import { Link } from '@reach/router'
 import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
-import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
@@ -17,14 +16,14 @@ import * as Yup from 'yup'
 const getValidationSchema = () => {
   return Yup.object({
     price: Yup.number().integer().required(`required`),
-    couponId: Yup.string().notRequired(),
+    // couponId: Yup.string().notRequired(),
     confirm: Yup.bool().oneOf([true], 'must confirm').required(`required`),
   })
 }
 
 const getInitialValues = (course) => ({
   price: get(course, 'price') / 100,
-  couponId: '',
+  // couponId: '',
   confirm: false,
 })
 
@@ -37,11 +36,11 @@ function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
-    async ({ couponId }, actions) => {
+    async (_, actions) => {
       actions.setStatus(null)
 
       try {
-        await enroll(courseId, { couponId })
+        await enroll(courseId, {})
 
         trackEventAnalytics({
           category: 'Student',
@@ -122,7 +121,8 @@ function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
 
               <Message
                 color="yellow"
-                hidden={amountDeficit >= 0 || !!values.couponId}
+                // hidden={amountDeficit >= 0 || !!values.couponId}
+                hidden={amountDeficit >= 0}
               >
                 Credit limit will exceed! You need to pay your dues before you
                 can enroll in this course.
@@ -159,17 +159,17 @@ function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
                       {Number(get(currentUser, 'creditLimit') / 100).toFixed(2)}
                     </Table.Cell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.HeaderCell collapsing content={`Coupon`} />
-                    <Table.Cell>
-                      <FormInput
-                        id="couponId"
-                        name="couponId"
-                        label={`Coupon`}
-                        hideLabel
-                      />
-                    </Table.Cell>
-                  </Table.Row>
+                  {/* <Table.Row> */}
+                  {/*   <Table.HeaderCell collapsing content={`Coupon`} /> */}
+                  {/*   <Table.Cell> */}
+                  {/*     <FormInput */}
+                  {/*       id="couponId" */}
+                  {/*       name="couponId" */}
+                  {/*       label={`Coupon`} */}
+                  {/*       hideLabel */}
+                  {/*     /> */}
+                  {/*   </Table.Cell> */}
+                  {/* </Table.Row> */}
 
                   <Table.Row>
                     <Table.HeaderCell />
