@@ -1,6 +1,5 @@
 import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
 import { MCQEXAM_ADD, MCQEXAM_BULK_ADD } from 'store/actions/actionTypes'
-import { CQEXAM_ADD, CQEXAM_BULK_ADD } from 'store/cqExams'
 import {
   COURSE_ADD,
   COURSE_BULK_ADD,
@@ -10,6 +9,7 @@ import {
   COURSE_VIDEO_BULK_ADD,
   COURSE_VIDEO_REMOVE,
 } from 'store/courses'
+import { CQEXAM_ADD, CQEXAM_BULK_ADD } from 'store/cqExams'
 import { ENROLLMENT_ADD, ENROLLMENT_BULK_ADD } from 'store/enrollments'
 import { emptyArray, emptyObject } from 'utils/defaults'
 import * as ids from '../reducers/helpers/ids-reducers'

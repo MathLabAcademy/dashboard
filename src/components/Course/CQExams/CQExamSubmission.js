@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Heading,
+  Text,
   Image,
   Modal,
   ModalBody,
@@ -28,6 +29,7 @@ import { useForm } from 'react-hook-form'
 import { useCQExam, useCQExamSubmissionsForUser } from 'store/cqExams/hooks'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import api from 'utils/api'
+import { DraftViewer } from 'components/Draft'
 
 function AddCQExamSubmission({ cqExamId, onSuccess }) {
   const toast = useToast()
@@ -170,6 +172,58 @@ function RemoveCQExamSubmission({ cqExamId, s3ObjectId, onSuccess }) {
   )
 }
 
+function SubmissionItem({
+  data,
+  cqExamId,
+  isSubmissionOpen,
+  onSubmissionRemove,
+  ...props
+}) {
+  return (
+    <Stack
+      isInline
+      flexWrap="wrap"
+      borderWidth="1px"
+      boxShadow="sm"
+      p={2}
+      {...props}
+    >
+      <Box
+        maxW="480px"
+        as="a"
+        href={get(data, 's3Object.url')}
+        target="_blank"
+        display="block"
+        position="relative"
+      >
+        <Image
+          size="100%"
+          objectFit="cover"
+          src={get(data, 's3Object.url')}
+          fallbackSrc="https://via.placeholder.com/250?text=..."
+        />
+
+        {isSubmissionOpen && (
+          <Box mt={2} position="absolute" bottom="0" right="0">
+            <RemoveCQExamSubmission
+              cqExamId={cqExamId}
+              s3ObjectId={get(data, 's3ObjectId')}
+              onSuccess={onSubmissionRemove}
+            />
+          </Box>
+        )}
+      </Box>
+
+      {!isSubmissionOpen && (
+        <Box flexGrow="1" fontSize={2} ml={2} p={2}>
+          <Text fontWeight="bold">Remark:</Text>
+          <DraftViewer rawValue={get(data, 'remark')} />
+        </Box>
+      )}
+    </Stack>
+  )
+}
+
 function CQExamSubmission({ courseId, cqExamId }) {
   const user = useCurrentUserData()
   const isEnrolled = useCourseEnrollment(courseId)
@@ -217,8 +271,6 @@ function CQExamSubmission({ courseId, cqExamId }) {
     return null
   }
 
-  console.log(submissions)
-
   return (
     <Permit roles="student">
       <Box borderWidth="1px" boxShadow="sm" p={4}>
@@ -248,35 +300,17 @@ function CQExamSubmission({ courseId, cqExamId }) {
             </Box>
           )}
         </Stack>
-        {submissions.data && (
-          <Stack isInline flexWrap="wrap" spacing={4}>
-            {submissions.data.items.map((item) => (
-              <Box key={get(item, 's3ObjectId')} my={2}>
-                <Box
-                  size="250px"
-                  as="a"
-                  href={get(item, 's3Object.url')}
-                  target="_blank"
-                  display="block"
-                >
-                  <Image
-                    size="100%"
-                    objectFit="cover"
-                    src={get(item, 's3Object.url')}
-                    fallbackSrc="https://via.placeholder.com/250?text=..."
-                  />
-                </Box>
 
-                {isSubmissionOpen && (
-                  <Box mt={2}>
-                    <RemoveCQExamSubmission
-                      cqExamId={cqExamId}
-                      s3ObjectId={get(item, 's3ObjectId')}
-                      onSuccess={onSubmissionRemove}
-                    />
-                  </Box>
-                )}
-              </Box>
+        {submissions.data && (
+          <Stack spacing={4} isInline={isSubmissionOpen} flexWrap="wrap">
+            {submissions.data.items.map((item) => (
+              <SubmissionItem
+                key={item.s3ObjectId}
+                cqExamId={cqExamId}
+                data={item}
+                isSubmissionOpen={isSubmissionOpen}
+                onSubmissionRemove={onSubmissionRemove}
+              />
             ))}
           </Stack>
         )}

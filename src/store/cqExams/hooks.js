@@ -18,16 +18,19 @@ export function useCQExam(cqExamId) {
   return cqExam
 }
 
-const cqExamSubmissionsForUserFetcher = async (key) => {
+const fetcher = async (key) => {
   const { data, error } = await api(key)
   if (error) throw error
   return data
 }
 export function useCQExamSubmissionsForUser(cqExamId, userId) {
-  const swr = useSWR(
-    `/cqexams/${cqExamId}/submissions/${userId}`,
-    cqExamSubmissionsForUserFetcher
-  )
+  const swr = useSWR(`/cqexams/${cqExamId}/submissions/${userId}`, fetcher)
+
+  return swr
+}
+
+export function useCQExamStudents(cqExamId) {
+  const swr = useSWR(`/cqexams/${cqExamId}/submissions/students`, fetcher)
 
   return swr
 }

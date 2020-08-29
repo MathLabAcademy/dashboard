@@ -7,6 +7,7 @@ import { DateTime } from 'luxon'
 import React from 'react'
 import { useCQExam } from 'store/cqExams/hooks'
 import CQExamSubmission from './CQExamSubmission'
+import TeacherCQExamSubmission from './TeacherCQExamSubmission'
 
 const tableStyle = {
   th: { borderWidth: 0, whiteSpace: 'nowrap' },
@@ -82,7 +83,12 @@ function CourseCQExamView({ courseId, cqExamId }) {
         </Table>
       </Box>
 
-      <CQExamSubmission courseId={courseId} cqExamId={cqExamId} />
+      <Permit roles="student">
+        <CQExamSubmission courseId={courseId} cqExamId={cqExamId} />
+      </Permit>
+      <Permit roles="teacher,analyst">
+        <TeacherCQExamSubmission courseId={courseId} cqExamId={cqExamId} />
+      </Permit>
     </Stack>
   )
 }
