@@ -11,7 +11,7 @@ import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCQExam, updateCQExam } from 'store/actions/cqExams'
+import { getCQExam, updateCQExam } from 'store/cqExams'
 import * as Yup from 'yup'
 
 const getDefaultValues = (data) => ({
@@ -26,9 +26,7 @@ const getDefaultValues = (data) => ({
 
 const getValidationSchema = () => {
   return Yup.object({
-    date: Yup.date()
-      .min(new Date(), `date already passed`)
-      .required(`required`),
+    date: Yup.date().required(`required`),
     name: Yup.string().notRequired(),
     description: Yup.string().notRequired(),
     questionPaperPdf: Yup.mixed().notRequired(),

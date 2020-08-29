@@ -1,10 +1,6 @@
 import { get, groupBy, keyBy, map, mapValues, pickBy, union } from 'lodash-es'
-import {
-  CQEXAM_ADD,
-  CQEXAM_BULK_ADD,
-  MCQEXAM_ADD,
-  MCQEXAM_BULK_ADD,
-} from 'store/actions/actionTypes'
+import { MCQEXAM_ADD, MCQEXAM_BULK_ADD } from 'store/actions/actionTypes'
+import { CQEXAM_ADD, CQEXAM_BULK_ADD } from 'store/cqExams'
 import {
   COURSE_ADD,
   COURSE_BULK_ADD,

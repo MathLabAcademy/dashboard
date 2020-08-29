@@ -1,6 +1,10 @@
 import api from 'utils/api'
 import { defaultOptsFetchPage } from 'utils/defaults'
-import { CQEXAM_ADD, CQEXAM_BULK_ADD, CQEXAM_UPDATE } from './actionTypes'
+
+export const CQEXAM_ADD = 'CQEXAM_ADD'
+export const CQEXAM_BULK_ADD = 'CQEXAM_BULK_ADD'
+export const CQEXAM_REMOVE = 'CQEXAM_REMOVE'
+export const CQEXAM_UPDATE = 'CQEXAM_UPDATE'
 
 export const createCQExam = ({
   courseId,

@@ -4,7 +4,7 @@ import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { getCQExam } from 'store/actions/cqExams'
+import { getCQExam } from 'store/cqExams'
 
 function CourseCQExamListItem({ id, data, getData }) {
   useEffect(() => {

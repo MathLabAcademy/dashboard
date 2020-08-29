@@ -9,7 +9,7 @@ import Permit from 'components/Permit'
 import React, { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
-import { createCQExam } from 'store/actions/cqExams'
+import { createCQExam } from 'store/cqExams'
 import * as Yup from 'yup'
 
 const getDefaultValues = () => ({

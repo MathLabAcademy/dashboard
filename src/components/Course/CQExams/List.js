@@ -4,7 +4,7 @@ import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllCQExamsForCourse } from 'store/actions/cqExams'
+import { getAllCQExamsForCourse } from 'store/cqExams'
 import { emptyArray } from 'utils/defaults'
 import ListItem from './ListItem'
 

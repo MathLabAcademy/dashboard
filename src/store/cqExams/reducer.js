@@ -4,9 +4,9 @@ import {
   CQEXAM_BULK_ADD,
   CQEXAM_REMOVE,
   CQEXAM_UPDATE,
-} from 'store/actions/actionTypes'
+} from './index'
 import { emptyArray, emptyObject } from 'utils/defaults'
-import * as ids from './helpers/ids-reducers'
+import * as ids from '../reducers/helpers/ids-reducers'
 
 const initialState = {
   byId: emptyObject,
