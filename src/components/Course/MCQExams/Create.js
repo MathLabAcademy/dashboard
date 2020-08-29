@@ -9,6 +9,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createMCQExam } from 'store/actions/mcqExams'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getInitialValues = (courseId) => ({
@@ -42,6 +43,10 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
           duration: duration * 60, // minutes -> seconds
         })
         actions.setStatus(null)
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created MCQExam',
+        })
         navigate(`/courses/${courseId}/mcqexams`)
       } catch (err) {
         if (err.errors) {

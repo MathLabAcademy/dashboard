@@ -9,6 +9,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Modal, Segment } from 'semantic-ui-react'
 import { createMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -50,6 +51,10 @@ function AddMCQ({ mcqExamId, createMCQ }) {
       try {
         await createMCQ(values)
         actions.resetForm()
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created MCQ from MCQExam screen',
+        })
         handle.close()
       } catch (err) {
         if (err.errors) {

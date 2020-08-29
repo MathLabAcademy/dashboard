@@ -7,6 +7,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
 import { createTag } from 'store/actions/courseTags'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -32,6 +33,10 @@ function TagCreateModal({ createTag }) {
       try {
         await createTag(values)
         actions.resetForm()
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created CourseTag',
+        })
         handle.close()
       } catch (err) {
         if (err.errors) {

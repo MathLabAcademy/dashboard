@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getCourse, toggleCourseStatus, updateCourse } from 'store/courses'
+import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
@@ -54,6 +55,10 @@ function CourseEdit({
         await updateCourse(courseId, {
           price: price * 100,
           ...values,
+        })
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited Course',
         })
       } catch (err) {
         if (err.errors) {

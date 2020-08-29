@@ -1,3 +1,4 @@
+import { Box, Stack } from '@chakra-ui/core'
 import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
@@ -9,8 +10,8 @@ import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { Box, Stack } from '@chakra-ui/core'
 import { createMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -60,6 +61,10 @@ function MCQCreate({ navigate }) {
       try {
         const mcq = await dispatch(createMCQ(values))
         actions.resetForm()
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created MCQ',
+        })
         navigate(`/mcqs/${mcq.id}`)
       } catch (err) {
         if (err.errors) {

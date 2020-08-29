@@ -12,6 +12,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCQExam, updateCQExam } from 'store/cqExams'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getDefaultValues = (data) => ({
@@ -67,6 +68,12 @@ function CourseCQExamEdit({ cqExamId, navigate }) {
             questionPaperPdf: questionPaperPdf[0],
           })
         )
+
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited CQExam',
+        })
+
         navigate('..')
       } catch (err) {
         handleAPIError(err, { form, toast })

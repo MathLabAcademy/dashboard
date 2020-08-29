@@ -6,6 +6,7 @@ import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
 import { removeQuestionFromMCQExam } from 'store/actions/mcqExams'
+import { trackEventAnalytics } from 'utils/analytics'
 
 function RemoveMCQ({ mcqExamId, mcqId, mcq, removeQuestionFromMCQExam }) {
   const [open, handle] = useToggle(false)
@@ -20,6 +21,10 @@ function RemoveMCQ({ mcqExamId, mcqId, mcq, removeQuestionFromMCQExam }) {
 
     try {
       await removeQuestionFromMCQExam(mcqExamId, { mcqId })
+      trackEventAnalytics({
+        category: 'Teacher',
+        action: 'Removed MCQ from MCQExam',
+      })
     } catch (err) {
       if (err.message) {
         setError(err.message)

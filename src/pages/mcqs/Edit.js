@@ -20,6 +20,7 @@ import { connect } from 'react-redux'
 import { Flex } from 'reflexbox'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
 
@@ -86,6 +87,10 @@ function MCQEdit({
 
       try {
         await updateMCQ(id, values)
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited MCQ',
+        })
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>

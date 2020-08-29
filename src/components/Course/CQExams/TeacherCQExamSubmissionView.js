@@ -1,25 +1,26 @@
 import {
   Box,
+  Button,
   Heading,
   Image,
   Stack,
   Text,
-  Button,
   useToast,
 } from '@chakra-ui/core'
 import { Link } from '@reach/router'
+import { FormButton } from 'components/HookForm/Button'
+import { Form } from 'components/HookForm/Form'
+import { handleAPIError } from 'components/HookForm/helpers'
+import { FormRichText } from 'components/HookForm/RichText'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useEffect, useMemo, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { useForm } from 'react-hook-form'
 import { useCQExam, useCQExamSubmissionsForUser } from 'store/cqExams/hooks'
 import { useUser } from 'store/users/hooks'
-import { useForm } from 'react-hook-form'
-import { handleAPIError } from 'components/HookForm/helpers'
-import { FormRichText } from 'components/HookForm/RichText'
-import { Form } from 'components/HookForm/Form'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
-import { FormButton } from 'components/HookForm/Button'
 
 const getDefaultValues = (submission) => ({
   remark: get(submission, 'remark') || '',
@@ -59,9 +60,15 @@ function SubmissionItem({
             },
           }
         )
+
         if (error) {
           throw error
         }
+
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Updated CQExam Submission Remark',
+        })
 
         onRemarkUpdate(responseData)
       } catch (err) {

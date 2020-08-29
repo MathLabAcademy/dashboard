@@ -9,6 +9,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal, Segment } from 'semantic-ui-react'
 import { updateMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = (options) => {
@@ -52,6 +53,10 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
 
       try {
         await updateMCQ(id, values)
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited MCQ from MCQExam screen',
+        })
         handle.close()
       } catch (err) {
         if (err.errors) {

@@ -8,6 +8,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Message, Modal } from 'semantic-ui-react'
 import { updateTag } from 'store/actions/mcqTags'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getValidationSchema = () => {
@@ -33,6 +34,10 @@ function TagEditModal({ tagId, tag, updateTag }) {
       try {
         await updateTag(tagId, values)
         actions.resetForm()
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited MCQTag',
+        })
         handle.close()
       } catch (err) {
         if (err.errors) {

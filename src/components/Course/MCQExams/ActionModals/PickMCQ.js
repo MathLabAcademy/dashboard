@@ -1,7 +1,7 @@
+import { DraftViewer } from 'components/Draft/index'
 import Form from 'components/Form/Form'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { DraftViewer } from 'components/Draft/index'
 import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle'
 import { get } from 'lodash-es'
@@ -18,6 +18,7 @@ import {
 } from 'semantic-ui-react'
 import { addQuestionToMCQExam } from 'store/actions/mcqExams'
 import { getMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 function _Picker({ mcqId, mcqs, getMCQ, name, setFieldValue, setFieldError }) {
@@ -100,6 +101,10 @@ function PickMCQ({ mcqExamId, mcqIds, addQuestionToMCQExam }) {
 
       try {
         await addQuestionToMCQExam(mcqExamId, values)
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Added MCQ to MCQExam',
+        })
         actions.resetForm()
       } catch (err) {
         if (err.errors) {

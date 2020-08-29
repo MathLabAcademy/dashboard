@@ -11,6 +11,7 @@ import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createCourse } from 'store/courses'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getInitialValues = () => ({
@@ -48,6 +49,10 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
         await createCourse({
           price: price * 100,
           ...values,
+        })
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created Course',
         })
         actions.resetForm()
         navigate('..')

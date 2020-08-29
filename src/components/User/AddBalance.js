@@ -49,10 +49,12 @@ function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
           amount: amount * 100,
           transactionTypeId,
         })
+
         trackEventAnalytics({
           category: 'Teacher',
-          action: 'Manually Add Account Balance ',
+          action: 'Manually Add Account Balance',
         })
+
         navigate('..')
       } catch (err) {
         if (err.errors) {

@@ -10,6 +10,7 @@ import React, { useCallback, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import { createCQExam } from 'store/cqExams'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getDefaultValues = () => ({
@@ -32,7 +33,7 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseMCQExamCreate({ courseId, navigate }) {
+function CourseCQExamCreate({ courseId, navigate }) {
   const toast = useToast()
 
   const defaultValues = useMemo(() => getDefaultValues(), [])
@@ -64,6 +65,11 @@ function CourseMCQExamCreate({ courseId, navigate }) {
             submissionDeadline,
           })
         )
+
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Created CQExam',
+        })
 
         navigate(`/courses/${courseId}/cqexams`)
       } catch (err) {
@@ -138,4 +144,4 @@ function CourseMCQExamCreate({ courseId, navigate }) {
   )
 }
 
-export default CourseMCQExamCreate
+export default CourseCQExamCreate

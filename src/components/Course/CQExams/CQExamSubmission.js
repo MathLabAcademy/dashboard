@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Heading,
-  Text,
   Image,
   Modal,
   ModalBody,
@@ -12,10 +11,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Stack,
+  Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/core'
 import imageCompression from 'browser-image-compression'
+import { DraftViewer } from 'components/Draft'
 import { FormButton } from 'components/HookForm/Button'
 import { Form } from 'components/HookForm/Form'
 import { handleAPIError } from 'components/HookForm/helpers'
@@ -24,12 +25,12 @@ import Permit from 'components/Permit'
 import { useCourseEnrollment } from 'hooks/useCourseEnrollment'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useCQExam, useCQExamSubmissionsForUser } from 'store/cqExams/hooks'
 import { useCurrentUserData } from 'store/currentUser/hooks'
+import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
-import { DraftViewer } from 'components/Draft'
 
 function AddCQExamSubmission({ cqExamId, onSuccess }) {
   const toast = useToast()
@@ -64,6 +65,11 @@ function AddCQExamSubmission({ cqExamId, onSuccess }) {
 
           onSuccess(data)
 
+          trackEventAnalytics({
+            category: 'Student',
+            action: 'Uploaded CQExam Submission',
+          })
+
           onClose()
         }
       } catch (err) {
@@ -72,8 +78,6 @@ function AddCQExamSubmission({ cqExamId, onSuccess }) {
     },
     [cqExamId, form, onClose, onSuccess, toast]
   )
-
-  console.log(form.watch())
 
   return (
     <>
@@ -131,6 +135,11 @@ function RemoveCQExamSubmission({ cqExamId, s3ObjectId, onSuccess }) {
       setIsLoading(false)
 
       onSuccess({ s3ObjectId })
+
+      trackEventAnalytics({
+        category: 'Student',
+        action: 'Deleted CQExam Submission',
+      })
 
       onClose()
     } catch (err) {

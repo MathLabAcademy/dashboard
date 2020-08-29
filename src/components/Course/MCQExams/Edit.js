@@ -10,6 +10,7 @@ import React, { useCallback, useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { getMCQExam, updateMCQExam } from 'store/actions/mcqExams'
+import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
 const getInitialValues = (data) => ({
@@ -46,6 +47,10 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
           duration: duration * 60, // minutes -> seconds
         })
         actions.setStatus(null)
+        trackEventAnalytics({
+          category: 'Teacher',
+          action: 'Edited MCQExam',
+        })
       } catch (err) {
         if (err.errors) {
           err.errors.forEach(({ param, message }) =>

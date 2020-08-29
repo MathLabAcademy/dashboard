@@ -5,6 +5,7 @@ import React, { useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Button, Modal } from 'semantic-ui-react'
 import { deleteMCQ } from 'store/actions/mcqs'
+import { trackEventAnalytics } from 'utils/analytics'
 
 function MCQDeleteModal({ mcqId }) {
   const [open, handle] = useToggle(false)
@@ -16,7 +17,10 @@ function MCQDeleteModal({ mcqId }) {
 
     try {
       await dispatch(deleteMCQ(mcqId))
-
+      trackEventAnalytics({
+        category: 'Teacher',
+        action: 'Deleted MCQ',
+      })
       handle.close()
     } catch (err) {
       console.error(err)
