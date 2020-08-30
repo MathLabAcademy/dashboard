@@ -19,6 +19,7 @@ const getDefaultValues = () => ({
   description: '',
   questionPaperPdf: '',
   submissionDeadline: new Date(),
+  totalMark: 0,
 })
 
 const getValidationSchema = () => {
@@ -30,6 +31,7 @@ const getValidationSchema = () => {
     description: Yup.string().notRequired(),
     questionPaperPdf: Yup.mixed().required(`required`),
     submissionDeadline: Yup.date().min(Yup.ref('date')).notRequired(),
+    totalMark: Yup.number().required(`required`),
   })
 }
 
@@ -53,6 +55,7 @@ function CourseCQExamCreate({ courseId, navigate }) {
       description,
       questionPaperPdf,
       submissionDeadline,
+      totalMark,
     }) => {
       try {
         await dispatch(
@@ -63,6 +66,7 @@ function CourseCQExamCreate({ courseId, navigate }) {
             description,
             questionPaperPdf: questionPaperPdf[0],
             submissionDeadline,
+            totalMark,
           })
         )
 
@@ -109,6 +113,13 @@ function CourseCQExamCreate({ courseId, navigate }) {
               id="description"
               name="description"
               label={`Description`}
+            />
+
+            <FormInput
+              type="number"
+              step={5}
+              name="totalMark"
+              label={`Total Mark`}
             />
 
             <Box>

@@ -13,6 +13,7 @@ export const createCQExam = ({
   description,
   questionPaperPdf,
   submissionDeadline,
+  totalMark,
 }) => async (dispatch) => {
   const url = `/cqexams`
 
@@ -25,9 +26,10 @@ export const createCQExam = ({
     description,
     questionPaperPdf,
     submissionDeadline,
+    totalMark,
   })) {
     if (value instanceof File) body.set(key, value, value.name)
-    else body.set(key, value)
+    else if (typeof value !== 'undefined') body.set(key, value)
   }
 
   const { data, error } = await api(url, {

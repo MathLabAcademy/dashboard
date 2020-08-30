@@ -8,7 +8,6 @@ import React from 'react'
 import { useCQExam } from 'store/cqExams/hooks'
 import CQExamSubmission from './CQExamSubmission'
 import TeacherCQExamSubmission from './TeacherCQExamSubmission'
-
 const tableStyle = {
   th: { borderWidth: 0, whiteSpace: 'nowrap' },
   td: { borderWidth: 0, width: '100%' },
@@ -47,6 +46,10 @@ function CourseCQExamView({ courseId, cqExamId }) {
             <Table.Row>
               <Table.HeaderCell>Description</Table.HeaderCell>
               <Table.Cell>{get(cqExam, 'description')}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.HeaderCell>Total Mark</Table.HeaderCell>
+              <Table.Cell>{get(cqExam, 'totalMark')}</Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.HeaderCell>Date</Table.HeaderCell>

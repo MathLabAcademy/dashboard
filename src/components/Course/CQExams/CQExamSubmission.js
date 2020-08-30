@@ -1,7 +1,9 @@
 import {
   Box,
   Button,
+  Flex,
   Heading,
+  Icon,
   Image,
   Modal,
   ModalBody,
@@ -23,7 +25,7 @@ import { handleAPIError } from 'components/HookForm/helpers'
 import { FormInput } from 'components/HookForm/Input'
 import Permit from 'components/Permit'
 import { useCourseEnrollment } from 'hooks/useCourseEnrollment'
-import { get } from 'lodash-es'
+import { get, sum } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -188,48 +190,101 @@ function SubmissionItem({
   onSubmissionRemove,
   ...props
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const { isEvaluated, marks } = useMemo(() => {
+    const marks = get(data, 'marks', [])
+    const isEvaluated = marks.length > 0
+    const totalMarks = sum(marks)
+    return {
+      isEvaluated,
+      marks,
+      totalMarks,
+    }
+  }, [data])
+
   return (
-    <Stack
-      isInline
-      flexWrap="wrap"
-      borderWidth="1px"
-      boxShadow="sm"
-      p={2}
-      {...props}
-    >
-      <Box
-        maxW="480px"
-        as="a"
-        href={get(data, 's3Object.url')}
-        target="_blank"
-        display="block"
-        position="relative"
+    <Box borderWidth="1px" boxShadow="sm" p={2} {...props}>
+      <Button
+        onClick={onOpen}
+        variant="ghost"
+        height="320px"
+        width="320px"
+        p="0"
       >
         <Image
           size="100%"
           objectFit="cover"
           src={get(data, 's3Object.url')}
-          fallbackSrc="https://via.placeholder.com/250?text=..."
+          fallbackSrc="https://via.placeholder.com/320?text=..."
         />
+      </Button>
 
-        {isSubmissionOpen && (
-          <Box mt={2} position="absolute" bottom="0" right="0">
-            <RemoveCQExamSubmission
-              cqExamId={cqExamId}
-              s3ObjectId={get(data, 's3ObjectId')}
-              onSuccess={onSubmissionRemove}
-            />
-          </Box>
-        )}
-      </Box>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent width="90%" maxWidth="1024px">
+          <ModalHeader>Answer Sheet</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack spacing="4">
+              <Box>
+                <Image
+                  size="100%"
+                  objectFit="cover"
+                  src={get(data, 's3Object.url')}
+                />
+              </Box>
 
-      {!isSubmissionOpen && (
-        <Box flexGrow="1" fontSize={2} ml={2} p={2}>
-          <Text fontWeight="bold">Remark:</Text>
-          <DraftViewer rawValue={get(data, 'remark')} />
-        </Box>
-      )}
-    </Stack>
+              {!isSubmissionOpen && (
+                <Box fontSize={2}>
+                  <Text fontWeight="bold" mb={2}>
+                    Remark
+                  </Text>
+                  <DraftViewer rawValue={get(data, 'remark')} />
+                </Box>
+              )}
+
+              {!isSubmissionOpen && (
+                <Box fontSize={2}>
+                  <Text fontWeight="bold" mb={2}>
+                    Marks
+                  </Text>
+                  {isEvaluated ? (
+                    <Stack isInline spacing={2}>
+                      {marks.map((mark, index) => (
+                        <Flex key={index} alignItems="center">
+                          <Box borderWidth="1px" boxShadow="sm" p={2}>
+                            {mark}
+                          </Box>
+                          {index < marks.length - 1 && (
+                            <Icon name="add" ml={2} />
+                          )}
+                        </Flex>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Text fontSize={1}>(Not Evaluated Yet)</Text>
+                  )}
+                </Box>
+              )}
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button variantColor="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            {isSubmissionOpen && (
+              <RemoveCQExamSubmission
+                cqExamId={cqExamId}
+                s3ObjectId={get(data, 's3ObjectId')}
+                onSuccess={onSubmissionRemove}
+              />
+            )}
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Box>
   )
 }
 
@@ -249,6 +304,21 @@ function CQExamSubmission({ courseId, cqExamId }) {
 
     return diff >= 0
   }, [cqExam])
+
+  const marks = useMemo(() => {
+    const marks = get(submissions.data, 'items', []).reduce((marks, item) => {
+      marks.push(...get(item, 'marks', []))
+      return marks
+    }, [])
+
+    const isEvaluated = marks.length > 0
+    const total = Number(sum(marks)).toFixed(2)
+
+    return {
+      isEvaluated,
+      total,
+    }
+  }, [submissions.data])
 
   const onSubmissionAdd = useCallback(
     (item) => {
@@ -297,7 +367,9 @@ function CQExamSubmission({ courseId, cqExamId }) {
                   ).toLocaleString(DateTime.DATETIME_MED)}`
                 : isSubmissionOpen === null
                 ? `Answer Paper Submission is Closed!`
-                : `Answer Paper Submission Deadline Over!`}
+                : `Total Obtained Marks: ${
+                    marks.isEvaluated ? marks.total : '---'
+                  } / ${get(cqExam, 'totalMark')}`}
             </Heading>
           </Box>
           {isSubmissionOpen && (
@@ -311,7 +383,7 @@ function CQExamSubmission({ courseId, cqExamId }) {
         </Stack>
 
         {submissions.data && (
-          <Stack spacing={4} isInline={isSubmissionOpen} flexWrap="wrap">
+          <Stack spacing={4} isInline flexWrap="wrap">
             {submissions.data.items.map((item) => (
               <SubmissionItem
                 key={item.s3ObjectId}

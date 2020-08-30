@@ -23,6 +23,7 @@ const getDefaultValues = (data) => ({
   submissionDeadline: get(data, 'submissionDeadline')
     ? DateTime.fromISO(get(data, 'submissionDeadline')).toJSDate()
     : '',
+  totalMark: get(data, 'totalMark') || 0,
 })
 
 const getValidationSchema = () => {
@@ -32,6 +33,7 @@ const getValidationSchema = () => {
     description: Yup.string().notRequired(),
     questionPaperPdf: Yup.mixed().notRequired(),
     submissionDeadline: Yup.date().min(Yup.ref('date')).notRequired(),
+    totalMark: Yup.number().required(`required`),
   })
 }
 
@@ -111,6 +113,13 @@ function CourseCQExamEdit({ cqExamId, navigate }) {
               id="description"
               name="description"
               label={`Description`}
+            />
+
+            <FormInput
+              type="number"
+              step={5}
+              name="totalMark"
+              label={`Total Mark`}
             />
 
             <Box>
