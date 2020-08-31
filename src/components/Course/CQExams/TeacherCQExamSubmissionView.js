@@ -90,7 +90,7 @@ function SubmissionItem({
 
         trackEventAnalytics({
           category: 'Teacher',
-          action: 'Updated CQExam Submission Remark',
+          action: 'Updated CQExamSubmission Evaluation',
         })
 
         onRemarkUpdate(responseData)

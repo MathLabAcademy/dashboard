@@ -69,7 +69,7 @@ function AddCQExamSubmission({ cqExamId, onSuccess }) {
 
           trackEventAnalytics({
             category: 'Student',
-            action: 'Uploaded CQExam Submission',
+            action: 'Uploaded CQExamSubmission',
           })
 
           onClose()
@@ -140,7 +140,7 @@ function RemoveCQExamSubmission({ cqExamId, s3ObjectId, onSuccess }) {
 
       trackEventAnalytics({
         category: 'Student',
-        action: 'Deleted CQExam Submission',
+        action: 'Deleted CQExamSubmission',
       })
 
       onClose()
