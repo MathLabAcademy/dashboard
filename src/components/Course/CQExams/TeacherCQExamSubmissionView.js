@@ -311,7 +311,7 @@ function SubmissionItem({
 
         if (overlayImage) {
           const image = await imageCompression(overlayImage, {
-            maxSizeMB: 2,
+            maxSizeMB: 1,
           })
           body.set('overlayImage', image)
         }

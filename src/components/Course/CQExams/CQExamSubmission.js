@@ -46,7 +46,7 @@ function AddCQExamSubmission({ cqExamId, onSuccess }) {
       try {
         if (file && file[0]) {
           const image = await imageCompression(file[0], {
-            maxSizeMB: 2,
+            maxSizeMB: 1,
             maxWidthOrHeight: 2048,
           })
 
