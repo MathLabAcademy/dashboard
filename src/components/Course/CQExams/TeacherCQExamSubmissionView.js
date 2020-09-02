@@ -158,6 +158,7 @@ function SubmissionItem({
                           precision={2}
                           w="100px"
                           defaultValue={field.value}
+                          isDisabled={isSubmissionOpen}
                         >
                           <InputGroup size="lg">
                             <InputLeftElement width="2rem">
@@ -167,6 +168,7 @@ function SubmissionItem({
                                 onClick={() => remove(index)}
                                 variant="outline"
                                 variantColor="red"
+                                isDisabled={isSubmissionOpen}
                               />
                             </InputLeftElement>
                             <NumberInputField
@@ -186,6 +188,7 @@ function SubmissionItem({
                       icon="add"
                       type="button"
                       onClick={() => append(0)}
+                      isDisabled={isSubmissionOpen}
                     />
                   </Stack>
                 </Box>
