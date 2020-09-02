@@ -18,12 +18,26 @@ import {
   ModalOverlay,
   NumberInput,
   NumberInputField,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Slider,
+  SliderFilledTrack,
+  SliderThumb,
+  SliderTrack,
+  Spinner,
   Stack,
   Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/core'
 import { Link } from '@reach/router'
+import imageCompression from 'browser-image-compression'
+import { CanvasImageOverlay } from 'components/Canvas/CanvasImageOverlay'
 import { FormButton } from 'components/HookForm/Button'
 import { Form } from 'components/HookForm/Form'
 import { handleAPIError } from 'components/HookForm/helpers'
@@ -31,16 +45,230 @@ import { FormRichText } from 'components/HookForm/RichText'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import { MdBrush, MdClear, MdEdit, MdSave, MdUndo } from 'react-icons/md'
+import ResizeObserver from 'resize-observer-polyfill'
 import { useCQExam, useCQExamSubmissionsForUser } from 'store/cqExams/hooks'
 import { useUser } from 'store/users/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 
+const brushColors = { '#e53e34': 'red', '#38a169': 'green', '#3182ce': 'blue' }
+
+function ImageOverlay({ name, src, overlaySrc, isDisabled }) {
+  const { register, unregister, setValue } = useFormContext()
+
+  useEffect(() => {
+    register({ name })
+    return () => unregister(name)
+  }, [name, register, unregister])
+
+  const container = useRef(null)
+  const [image, setImage] = useState(null)
+  const [overlayImage, setOverlayImage] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    const image = new window.Image()
+    image.onload = () => {
+      setImage(image)
+    }
+    image.src = src
+  }, [src])
+
+  useEffect(() => {
+    if (overlaySrc) {
+      const image = new window.Image()
+      image.crossOrigin = 'anonymous'
+      image.onload = () => {
+        setOverlayImage(image)
+      }
+      image.src = overlaySrc
+    }
+  }, [overlaySrc])
+
+  const { isLoading, ratio } = useMemo(() => {
+    let ratio = 3 / 4
+
+    if (image) {
+      ratio = image.width / image.height
+    }
+
+    return { isLoading: !image, ratio }
+  }, [image])
+
+  const canvas = useRef(null)
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const box = container.current
+    const observer = new ResizeObserver(([entry]) => {
+      const { width } = entry.contentRect
+      const height = width / ratio
+      setCanvasSize({ width, height })
+    })
+    observer.observe(box)
+    return () => {
+      observer.unobserve(box)
+    }
+  }, [ratio])
+
+  const onClear = useCallback(async () => {
+    canvas.current.clearCanvas()
+    const blob = await canvas.current.getBlob('image/png')
+    setValue(name, blob ?? null)
+  }, [name, setValue])
+
+  const onSave = useCallback(async () => {
+    const blob = await canvas.current.getBlob('image/png')
+    setValue(name, blob ?? null)
+    setIsEditing(false)
+  }, [name, setValue])
+
+  const brushConfig = useDisclosure()
+  const [brushRadius, setBrushRadius] = useState(5)
+  const [brushColor, setBrushColor] = useState('#e53e34')
+
+  return (
+    <Box
+      width="100%"
+      maxWidth="1600px"
+      mx="auto"
+      ref={container}
+      pr="60px"
+      position="relative"
+    >
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <CanvasImageOverlay
+            ref={canvas}
+            image={image}
+            overlayImage={overlayImage}
+            canvasWidth={canvasSize.width}
+            canvasHeight={canvasSize.height}
+            isDisabled={!isEditing}
+            brushColor={brushColor}
+            brushRadius={brushRadius}
+          />
+
+          <Stack
+            position="absolute"
+            right="0"
+            width="60px"
+            top="0"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button
+              type="button"
+              size="md"
+              variantColor="blue"
+              onClick={() => setIsEditing(true)}
+              isDisabled={isEditing || isDisabled}
+            >
+              <Box as={MdEdit} />
+            </Button>
+
+            <Box>
+              <Popover
+                usePortal
+                isOpen={brushConfig.isOpen}
+                onClose={brushConfig.onClose}
+                closeOnBlur
+              >
+                <PopoverTrigger>
+                  <Button
+                    type="button"
+                    size="md"
+                    variantColor="blue"
+                    isDisabled={!isEditing}
+                    onClick={brushConfig.onOpen}
+                  >
+                    <Box as={MdBrush} />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent zIndex={99999}>
+                  <PopoverArrow />
+                  <PopoverCloseButton />
+                  <PopoverHeader>Brush</PopoverHeader>
+                  <PopoverBody>
+                    <Slider
+                      min={2}
+                      max={20}
+                      color={brushColors[brushColor]}
+                      value={brushRadius}
+                      onChange={setBrushRadius}
+                    >
+                      <SliderTrack />
+                      <SliderFilledTrack />
+                      <SliderThumb />
+                    </Slider>
+
+                    <Stack isInline spacing={2}>
+                      {Object.keys(brushColors).map((color) => (
+                        <Button
+                          key={color}
+                          type="button"
+                          variant="solid"
+                          size="sm"
+                          bg={color}
+                          borderRadius="50%"
+                          _hover={{ bg: color, transform: 'scale(1.2)' }}
+                          onClick={() => {
+                            if (brushColor !== color) {
+                              setBrushColor(color)
+                            }
+                            brushConfig.onClose()
+                          }}
+                        />
+                      ))}
+                    </Stack>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            </Box>
+
+            <Button
+              type="button"
+              size="md"
+              variantColor="blue"
+              onClick={() => canvas.current.undo()}
+              isDisabled={!isEditing}
+            >
+              <Box as={MdUndo} />
+            </Button>
+            <Button
+              type="button"
+              size="md"
+              variantColor="blue"
+              onClick={onClear}
+              isDisabled={!isEditing}
+            >
+              <Box as={MdClear} />
+            </Button>
+            <Button
+              type="button"
+              size="md"
+              variantColor="blue"
+              onClick={() => onSave()}
+              isDisabled={!isEditing}
+            >
+              <Box as={MdSave} />
+            </Button>
+          </Stack>
+        </>
+      )}
+    </Box>
+  )
+}
+
 const getDefaultValues = (submission) => ({
   remark: get(submission, 'remark') || '',
   marks: get(submission, 'marks') || [],
+  overlayImage: null,
 })
 
 function SubmissionItem({
@@ -69,18 +297,30 @@ function SubmissionItem({
   }, [defaultValues, formReset])
 
   const onSubmit = useCallback(
-    async ({ remark, marks }) => {
+    async ({ remark, marks = [], overlayImage }) => {
       try {
+        const body = new FormData()
+        body.set('userId', data.userId)
+        body.set('s3ObjectId', data.s3ObjectId)
+        if (remark) {
+          body.set('remark', remark)
+        }
+        marks.forEach((mark) => {
+          body.append('marks[]', mark)
+        })
+
+        if (overlayImage) {
+          const image = await imageCompression(overlayImage, {
+            maxSizeMB: 2,
+          })
+          body.set('overlayImage', image)
+        }
+
         const { data: responseData, error } = await api(
           `/cqexams/${cqExamId}/submissions/action/update-evaluation`,
           {
             method: 'POST',
-            body: {
-              userId: data.userId,
-              s3ObjectId: data.s3ObjectId,
-              remark,
-              marks,
-            },
+            body,
           }
         )
 
@@ -129,10 +369,11 @@ function SubmissionItem({
             <ModalBody>
               <Stack spacing="4">
                 <Box>
-                  <Image
-                    size="100%"
-                    objectFit="cover"
+                  <ImageOverlay
+                    name="overlayImage"
+                    isDisabled={isSubmissionOpen}
                     src={get(data, 's3Object.url')}
+                    overlaySrc={get(data, 'overlayS3Object.url')}
                   />
                 </Box>
 
