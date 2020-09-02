@@ -24,7 +24,9 @@ const fetcher = async (key) => {
   return data
 }
 export function useCQExamSubmissionsForUser(cqExamId, userId) {
-  const swr = useSWR(`/cqexams/${cqExamId}/submissions/${userId}`, fetcher)
+  const swr = useSWR(`/cqexams/${cqExamId}/submissions/${userId}`, fetcher, {
+    revalidateOnFocus: false,
+  })
 
   return swr
 }
