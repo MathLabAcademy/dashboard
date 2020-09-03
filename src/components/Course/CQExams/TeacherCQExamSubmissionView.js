@@ -56,7 +56,7 @@ import api from 'utils/api'
 
 const brushColors = { '#e53e34': 'red', '#38a169': 'green', '#3182ce': 'blue' }
 
-function ImageOverlay({ name, src, overlaySrc, isDisabled }) {
+function ImageOverlay({ name, imageKey, overlayImageKey, isDisabled }) {
   const { register, unregister, setValue } = useFormContext()
 
   useEffect(() => {
@@ -70,15 +70,19 @@ function ImageOverlay({ name, src, overlaySrc, isDisabled }) {
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
+    const src = `/api/user/utils/s3/sign?key=${imageKey}`
+
     const image = new window.Image()
     image.onload = () => {
       setImage(image)
     }
     image.src = src
-  }, [src])
+  }, [imageKey])
 
   useEffect(() => {
-    if (overlaySrc) {
+    if (overlayImageKey) {
+      const overlaySrc = `/api/user/utils/s3/sign?key=${overlayImageKey}`
+
       const image = new window.Image()
       image.crossOrigin = 'anonymous'
       image.onload = () => {
@@ -86,7 +90,7 @@ function ImageOverlay({ name, src, overlaySrc, isDisabled }) {
       }
       image.src = overlaySrc
     }
-  }, [overlaySrc])
+  }, [overlayImageKey])
 
   const { isLoading, ratio } = useMemo(() => {
     let ratio = 3 / 4
@@ -355,7 +359,7 @@ function SubmissionItem({
         <Image
           size="100%"
           objectFit="cover"
-          src={get(data, 's3Object.url')}
+          src={`/api/user/utils/s3/sign?key=${get(data, 's3Object.key')}`}
           fallbackSrc="https://via.placeholder.com/320?text=..."
         />
       </Button>
@@ -372,8 +376,8 @@ function SubmissionItem({
                   <ImageOverlay
                     name="overlayImage"
                     isDisabled={isSubmissionOpen}
-                    src={get(data, 's3Object.url')}
-                    overlaySrc={get(data, 'overlayS3Object.url')}
+                    imageKey={get(data, 's3Object.key')}
+                    overlayImageKey={get(data, 'overlayS3Object.key')}
                   />
                 </Box>
 

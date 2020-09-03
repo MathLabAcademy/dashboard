@@ -215,7 +215,7 @@ function SubmissionItem({
         <Image
           size="100%"
           objectFit="cover"
-          src={get(data, 's3Object.url')}
+          src={`/api/user/utils/s3/sign?key=${get(data, 's3Object.key')}`}
           fallbackSrc="https://via.placeholder.com/320?text=..."
         />
       </Button>
