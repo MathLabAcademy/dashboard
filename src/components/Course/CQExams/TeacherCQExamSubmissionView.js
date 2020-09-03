@@ -43,7 +43,7 @@ import { Form } from 'components/HookForm/Form'
 import { handleAPIError } from 'components/HookForm/helpers'
 import { FormRichText } from 'components/HookForm/RichText'
 import Permit from 'components/Permit'
-import { get } from 'lodash-es'
+import { get, sum } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
@@ -471,6 +471,21 @@ function TeacherCQExamSubmissionView({ courseId, cqExamId, userId }) {
     return diff >= 0
   }, [cqExam])
 
+  const marks = useMemo(() => {
+    const marks = get(submissions.data, 'items', []).reduce((marks, item) => {
+      marks.push(...get(item, 'marks', []))
+      return marks
+    }, [])
+
+    const isEvaluated = marks.length > 0
+    const total = Number(sum(marks)).toFixed(2)
+
+    return {
+      isEvaluated,
+      total,
+    }
+  }, [submissions.data])
+
   const onRemarkUpdate = useCallback(
     (updatedItem) => {
       submissions.mutate((data) => {
@@ -498,7 +513,7 @@ function TeacherCQExamSubmissionView({ courseId, cqExamId, userId }) {
           alignItems="center"
           mb={4}
         >
-          <Box>
+          <Stack spacing={2}>
             <Heading fontSize={2}>
               <Text as={Link} to={`/courses/${courseId}/cqexams/${cqExamId}`}>
                 {get(cqExam, 'name')}
@@ -508,7 +523,15 @@ function TeacherCQExamSubmissionView({ courseId, cqExamId, userId }) {
                 {get(student, 'Person.fullName')}
               </Text>{' '}
             </Heading>
-          </Box>
+
+            <Box>
+              <Text fontStyle="italic">Total Obtained Marks: </Text>
+              <Text>
+                {marks.isEvaluated ? marks.total : '---'} /{' '}
+                {get(cqExam, 'totalMark')}
+              </Text>
+            </Box>
+          </Stack>
           <Box>
             <Button as={Link} to={'../..'}>
               Go Back
