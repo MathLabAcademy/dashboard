@@ -12,12 +12,14 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spinner,
   Stack,
   Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/core'
 import imageCompression from 'browser-image-compression'
+import { CanvasImageOverlay } from 'components/Canvas/CanvasImageOverlay'
 import { DraftViewer } from 'components/Draft'
 import { FormButton } from 'components/HookForm/Button'
 import { Form } from 'components/HookForm/Form'
@@ -27,7 +29,7 @@ import Permit from 'components/Permit'
 import { useCourseEnrollment } from 'hooks/useCourseEnrollment'
 import { get, sum } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useCQExam, useCQExamSubmissionsForUser } from 'store/cqExams/hooks'
 import { useCurrentUserData } from 'store/currentUser/hooks'
@@ -183,6 +185,83 @@ function RemoveCQExamSubmission({ cqExamId, s3ObjectId, onSuccess }) {
   )
 }
 
+function ImageOverlay({ imageKey, overlayImageKey }) {
+  const container = useRef(null)
+  const [image, setImage] = useState(null)
+  const [overlayImage, setOverlayImage] = useState(null)
+
+  useEffect(() => {
+    const src = `/api/user/utils/s3/sign?key=${imageKey}`
+
+    const image = new window.Image()
+    image.onload = () => {
+      setImage(image)
+    }
+    image.src = src
+  }, [imageKey])
+
+  useEffect(() => {
+    if (overlayImageKey) {
+      const overlaySrc = `/api/user/utils/s3/sign?key=${overlayImageKey}`
+
+      const image = new window.Image()
+      image.crossOrigin = 'anonymous'
+      image.onload = () => {
+        setOverlayImage(image)
+      }
+      image.src = overlaySrc
+    }
+  }, [overlayImageKey])
+
+  const { isLoading, ratio } = useMemo(() => {
+    let ratio = 3 / 4
+
+    if (image) {
+      ratio = image.width / image.height
+    }
+
+    return { isLoading: !image, ratio }
+  }, [image])
+
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 })
+
+  useEffect(() => {
+    const box = container.current
+    const observer = new ResizeObserver(([entry]) => {
+      const { width } = entry.contentRect
+      const height = width / ratio
+      setCanvasSize({ width, height })
+    })
+    observer.observe(box)
+    return () => {
+      observer.unobserve(box)
+    }
+  }, [ratio])
+
+  return (
+    <Box
+      width="100%"
+      maxWidth="1600px"
+      mx="auto"
+      ref={container}
+      pr="60px"
+      position="relative"
+    >
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <CanvasImageOverlay
+          image={image}
+          overlayImage={overlayImage}
+          canvasWidth={canvasSize.width}
+          canvasHeight={canvasSize.height}
+          isDisabled={true}
+        />
+      )}
+    </Box>
+  )
+}
+
 function SubmissionItem({
   data,
   cqExamId,
@@ -228,10 +307,9 @@ function SubmissionItem({
           <ModalBody>
             <Stack spacing="4">
               <Box>
-                <Image
-                  size="100%"
-                  objectFit="cover"
-                  src={get(data, 's3Object.url')}
+                <ImageOverlay
+                  imageKey={get(data, 's3Object.key')}
+                  overlayImageKey={get(data, 'overlayS3Object.key')}
                 />
               </Box>
 
