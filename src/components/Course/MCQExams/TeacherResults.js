@@ -15,7 +15,8 @@ import {
 import { Link } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { get, groupBy, keyBy, map, mapValues } from 'lodash-es'
+import { get, groupBy, keyBy, mapValues } from 'lodash-es'
+import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { connect } from 'react-redux'
 import { Text } from 'rebass'
@@ -83,10 +84,9 @@ function MCQExamResult({ mcqExamId }) {
   }, [mcqExamId])
 
   const dataByUserId = useMemo(() => {
-    const users = map(
-      get(data, 'Trackers', emptyArray).filter((tracker) => tracker.end),
-      'User'
-    )
+    const trackerByUserId = keyBy(get(data, 'Trackers', emptyArray), 'userId')
+
+    const userIds = Object.keys(trackerByUserId)
 
     const totalQuestions = get(data, 'Questions', emptyArray).length
 
@@ -102,11 +102,19 @@ function MCQExamResult({ mcqExamId }) {
 
     const dataByUserId = {}
 
-    for (const user of users) {
-      const submissions = get(submissionsByUserId, user.id, emptyObject)
+    for (const userId of userIds) {
+      const tracker = get(trackerByUserId, userId)
 
-      dataByUserId[user.id] = {
-        id: get(user, 'id'),
+      if (!tracker.end) {
+        continue
+      }
+
+      const user = get(tracker, 'User')
+
+      const submissions = get(submissionsByUserId, userId, emptyObject)
+
+      dataByUserId[userId] = {
+        id: userId,
         fullName: get(user, 'Person.fullName'),
         phone: get(user, 'Person.phone'),
         answersSubmitted: Object.values(submissions).length,
@@ -116,6 +124,15 @@ function MCQExamResult({ mcqExamId }) {
           )
         }).length,
         totalQuestions,
+        startTime: DateTime.fromISO(tracker.start).toLocaleString(
+          DateTime.DATETIME_MED
+        ),
+        endTime: DateTime.fromISO(tracker.end).toLocaleString(
+          DateTime.DATETIME_MED
+        ),
+        lastPingtime: DateTime.fromISO(tracker.ping).toLocaleString(
+          DateTime.DATETIME_MED
+        ),
       }
     }
 
@@ -154,7 +171,20 @@ function MCQExamResult({ mcqExamId }) {
             </Text>
             <Text>
               <strong>Phone: </strong>
-              {data.phone}
+              {data.phone.slice(-11)}
+            </Text>
+            <br />
+            <Text>
+              <strong>Exam Start Time: </strong>
+              {data.startTime}
+            </Text>
+            <Text>
+              <strong>Last Ping Time: </strong>
+              {data.lastPingtime}
+            </Text>
+            <Text>
+              <strong>Exam End Time: </strong>
+              {data.endTime}
             </Text>
             <br />
             <Text>
