@@ -67,9 +67,11 @@ function UserInfo({ userId, user, refreshUser }) {
         )
       ) : null}
 
-      <EnrollmentInfo userId={userId} title={`Enrollments`} />
+      {isStudent && <EnrollmentInfo userId={userId} title={`Enrollments`} />}
 
-      <TransactionInfo userId={get(user, 'id')} title={`Transaction Info`} />
+      {isStudent && (
+        <TransactionInfo userId={get(user, 'id')} title={`Transaction Info`} />
+      )}
     </>
   )
 }

@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { Button, Header, Label, Segment } from 'semantic-ui-react'
 import { getUser } from 'store/actions/users'
 import AddBalance from './AddBalance'
+import AdjustBalance from './AdjustBalance'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
 
@@ -63,6 +64,7 @@ function User({ userId, user, getUser }) {
       <Router>
         <Info path="/" userId={userId} refreshUser={refreshUser} />
         <AddBalance path="add-balance" userId={userId} />
+        <AdjustBalance path="adjust-balance" userId={userId} />
         <ChangePassword path="change-password" userId={userId} />
       </Router>
     </Permit>

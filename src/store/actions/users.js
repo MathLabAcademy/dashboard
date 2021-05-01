@@ -156,10 +156,38 @@ export const updatePerson = (
   return data
 }
 
+export const recalculateBalance = (userId) => async (dispatch) => {
+  const { data, error } = await api(
+    `/users/${userId}/action/recalculate-balance`,
+    {
+      method: 'POST',
+    }
+  )
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
 export const readBalance = (userId) => async (dispatch) => {
   const url = `/users/${userId}/balance`
 
   const { data, error } = await api(url)
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
+export const adjustBalance = (userId, { amount, note }) => async (dispatch) => {
+  const { data, error } = await api(`/users/${userId}/action/adjust-balance`, {
+    method: 'POST',
+    body: { amount, note },
+  })
 
   if (error) throw error
 
