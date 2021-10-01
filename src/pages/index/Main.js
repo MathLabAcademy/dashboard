@@ -1,23 +1,32 @@
-import { Stack, Text } from '@chakra-ui/core'
+import {
+  Box,
+  Heading,
+  IconButton,
+  Image,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Stack,
+  Text,
+} from '@chakra-ui/core'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { useStats } from 'hooks/useStats'
 import { get } from 'lodash-es'
+import { FaCalendarAlt, FaSyncAlt } from 'react-icons/fa'
 import React, { useCallback, useRef, useState } from 'react'
-import { Box } from 'reflexbox'
-import { Button, Card, Header, Image, Input } from 'semantic-ui-react'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import paymentMethodImage from './payment-method.jpeg'
 
-function DailyTransactionsForYearStats() {
+function DailyTransactionsForYearStats({ ...props }) {
   const yearRef = useRef()
 
   const [year, setYear] = useState(new Date().getFullYear())
 
   const handleYearChange = useCallback(() => {
     if (!yearRef.current) return
-    const year = yearRef.current.inputRef.current.value
+    const year = yearRef.current.value
     setYear(Number(year))
   }, [])
 
@@ -28,83 +37,81 @@ function DailyTransactionsForYearStats() {
 
   return (
     <Permit roles="teacher,analyst">
-      <Card fluid>
-        <Card.Content>
-          <Card.Header>
-            <HeaderGrid
-              Left={
-                <Header>
-                  Transaction Stats for {year}{' '}
-                  <Text as="span" fontSize={2}>
-                    (Total {get(totalDueStat.data, 'totalDue', 0) / 100} BDT Due
-                    from {get(totalDueStat.data, 'totalUsers', 0)} Students){' '}
-                  </Text>
-                </Header>
-              }
-              Right={
-                <Input
-                  ref={yearRef}
-                  defaultValue={year}
-                  type="number"
-                  min="2000"
-                  max="2099"
-                  step="1"
-                  icon="calendar alternate"
-                  iconPosition="left"
-                  action={
-                    <Button
-                      loading={loading}
-                      type="button"
-                      icon="refresh"
-                      onClick={handleYearChange}
-                    />
-                  }
-                />
-              }
-            />
-          </Card.Header>
-          <Card.Description>
-            <Box height={200}>
-              <ResponsiveCalendar
-                data={data}
-                from={`${year}-01-01`}
-                to={`${year}-12-31`}
-                minValue="auto"
-                colors={[
-                  '#CC0022',
-                  '#FF002B',
-                  '#FF3355',
-                  '#FF667F',
-                  '#FF99AA',
-                  '#FFCCD5',
-                  '#CCFFCC',
-                  '#99FF99',
-                  '#66FF66',
-                  '#33FF33',
-                  '#00FF00',
-                  '#00CC00',
-                  '#009900',
-                  '#006600',
-                ]}
-                emptyColor="#eee"
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                monthBorderColor="#fff"
-                dayBorderWidth={2}
-                dayBorderColor="#fff"
+      <Box {...props} p={4} borderWidth={1} boxShadow="md">
+        <Stack isInline justify="space-between" alignItems="center">
+          <Box flexGrow={1}>
+            <Heading as="h3" fontSize={5}>
+              Transaction Stats for {year}{' '}
+              <Text as="span" fontSize={2}>
+                (Total {get(totalDueStat.data, 'totalDue', 0) / 100} BDT Due
+                from {get(totalDueStat.data, 'totalUsers', 0)} Students){' '}
+              </Text>
+            </Heading>
+          </Box>
+          <Box minWidth={150}>
+            <InputGroup size="lg">
+              <InputLeftElement
+                pointerEvents="none"
+                children={<FaCalendarAlt />}
               />
-            </Box>
-          </Card.Description>
-        </Card.Content>
-      </Card>
+              <Input
+                ref={yearRef}
+                defaultValue={year}
+                type="number"
+                min="2000"
+                max="2099"
+                step="1"
+              />
+              <InputRightElement>
+                <IconButton
+                  isLoading={loading}
+                  icon={FaSyncAlt}
+                  onClick={handleYearChange}
+                />
+              </InputRightElement>
+            </InputGroup>
+          </Box>
+        </Stack>
+
+        <Box height={200}>
+          <ResponsiveCalendar
+            data={data}
+            from={`${year}-01-01`}
+            to={`${year}-12-31`}
+            minValue="auto"
+            colors={[
+              '#CC0022',
+              '#FF002B',
+              '#FF3355',
+              '#FF667F',
+              '#FF99AA',
+              '#FFCCD5',
+              '#CCFFCC',
+              '#99FF99',
+              '#66FF66',
+              '#33FF33',
+              '#00FF00',
+              '#00CC00',
+              '#009900',
+              '#006600',
+            ]}
+            emptyColor="#eee"
+            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            monthBorderColor="#fff"
+            dayBorderWidth={2}
+            dayBorderColor="#fff"
+          />
+        </Box>
+      </Box>
     </Permit>
   )
 }
 
-function PaymentMethod() {
+function PaymentMethod({ ...props }) {
   const userData = useCurrentUserData()
 
   return (
-    <Box p={4} sx={{ borderWidth: 1, boxShadow: 'md' }}>
+    <Box {...props} p={4} borderWidth={1} boxShadow="md">
       <Stack isInline spacing={16} flexWrap="wrap" alignItems="center">
         <Box minWidth="400px">
           <Image src={paymentMethodImage} />
@@ -142,10 +149,10 @@ function PaymentMethod() {
 
 function DashIndex() {
   return (
-    <Box>
-      <PaymentMethod />
-      <DailyTransactionsForYearStats />
-    </Box>
+      <Stack spacing={8}>
+        <PaymentMethod />
+        <DailyTransactionsForYearStats />
+      </Stack>
   )
 }
 
