@@ -1,11 +1,19 @@
+import {
+  Box,
+  Button,
+  Heading,
+  IconButton,
+  Stack,
+  Tag,
+  Text,
+} from '@chakra-ui/core'
+import { FaSyncAlt } from 'react-icons/fa'
 import { Link, Router } from '@reach/router'
 import Gravatar from 'components/Gravatar'
-import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { capitalize, get } from 'lodash-es'
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
-import { Button, Header, Label, Segment } from 'semantic-ui-react'
 import { getUser } from 'store/actions/users'
 import AddBalance from './AddBalance'
 import AdjustBalance from './AdjustBalance'
@@ -23,43 +31,52 @@ function User({ userId, user, getUser }) {
 
   return (
     <Permit roles="teacher,analyst" userId={userId}>
-      <Segment loading={!user}>
-        <HeaderGrid
-          leftClassName="auto wide"
-          Left={
-            email ? <Gravatar email={email} params={{ d: 'robohash' }} /> : null
-          }
-          rightClassName="grow wide"
-          Right={
-            <HeaderGrid
-              Left={
-                <>
-                  <Header>
-                    {get(user, 'Person.fullName')}
-                    <Header.Subheader>
-                      {get(user, 'Person.email')}
-                    </Header.Subheader>
-                  </Header>
-                  <Permit userId={userId}>
-                    <Button as={Link} to={`change-password`}>
-                      Change Password
-                    </Button>
-                  </Permit>
-                </>
-              }
-              Right={
-                <Button type="button" icon="refresh" onClick={refreshUser} />
-              }
-            />
-          }
-        />
+      <Stack
+        alignItems="center"
+        borderWidth={1}
+        boxShadow="md"
+        flexWrap="wrap"
+        isInline
+        justifyContent="space-between"
+        mb={4}
+        p={3}
+        spacing={6}
+      >
+        <Box>
+          {email && <Gravatar email={email} params={{ d: 'robohash' }} />}
+        </Box>
+        <Box flexGrow={1}>
+          <Stack
+            flexWrap="wrap"
+            isInline
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box flexGrow={1}>
+              <Box mb={3}>
+                <Heading as="h3" fontSize={3}>
+                  {get(user, 'Person.fullName')}
+                </Heading>
+                <Text color="gray.500">{get(user, 'Person.email')}</Text>
 
-        {labeledRoles.includes(get(user, 'roleId')) && (
-          <Label color="black" size="tiny" attached="bottom right">
-            {capitalize(get(user, 'roleId'))}
-          </Label>
-        )}
-      </Segment>
+                {labeledRoles.includes(get(user, 'roleId')) && (
+                  <Tag variant="solid" size="md">
+                    {capitalize(get(user, 'roleId'))}
+                  </Tag>
+                )}
+              </Box>
+              <Permit userId={userId}>
+                <Button as={Link} to={`change-password`}>
+                  Change Password
+                </Button>
+              </Permit>
+            </Box>
+            <Box>
+              <IconButton icon={FaSyncAlt} onClick={refreshUser} />
+            </Box>
+          </Stack>
+        </Box>
+      </Stack>
 
       <Router>
         <Info path="/" userId={userId} refreshUser={refreshUser} />
