@@ -1,11 +1,10 @@
-import HeaderGrid from 'components/HeaderGrid'
+import { Box, Heading, Stack } from '@chakra-ui/core'
 import Switcher from 'components/Pagination/Switcher'
 import Permit from 'components/Permit'
 import usePagination from 'hooks/usePagination'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
-import { Header, Segment } from 'semantic-ui-react'
 import { fetchUserPage } from 'store/actions/users'
 import { emptyArray } from 'utils/defaults'
 import ListItem from './ListItem'
@@ -15,13 +14,17 @@ function UserList({ pagination, fetchPage }) {
 
   return (
     <Permit roles="teacher,analyst">
-      <Segment>
-        <HeaderGrid Left={<Header>Users</Header>} />
-      </Segment>
+      <Box borderWidth={1} boxShadow="sm" p={4} mb={4}>
+        <Heading as="h2" fontSize={3}>
+          Users
+        </Heading>
+      </Box>
 
-      {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
-        <ListItem key={id} id={id} />
-      ))}
+      <Stack spacing={4} mb={4}>
+        {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
+          <ListItem key={id} id={id} />
+        ))}
+      </Stack>
 
       <Switcher
         activePage={page}
