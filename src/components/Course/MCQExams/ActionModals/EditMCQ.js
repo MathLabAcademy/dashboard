@@ -84,7 +84,7 @@ function EditMCQ({ index, mcq, options, answerId, updateMCQ }) {
   }, [options])
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

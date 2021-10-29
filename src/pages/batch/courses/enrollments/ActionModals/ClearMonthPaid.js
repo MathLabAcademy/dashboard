@@ -45,7 +45,7 @@ function CourseStudentPaymentClearPaidModal({
   if (!batchPayment) return null
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Button onClick={handler.open}>Clear</Button>
       <Confirm
         open={open}

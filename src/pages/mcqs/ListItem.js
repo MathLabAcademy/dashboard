@@ -33,7 +33,7 @@ function MCQListItem({ mcqId, mcq, getMCQ, answerId, readMCQAnswer, mcqTags }) {
           Right={
             <>
               {!answerId && <Label color="yellow" content={`need answer`} />}
-              <Permit roles="teacher,analyst,assistant">
+              <Permit roles="teacher,assistant">
                 <Button as={Link} to={`${mcqId}/edit`}>
                   Edit
                 </Button>

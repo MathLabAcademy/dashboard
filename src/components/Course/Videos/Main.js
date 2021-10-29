@@ -14,7 +14,7 @@ function CourseVideos({ courseId }) {
   }
 
   return (
-    <Permit roles="teacher,analyst,student">
+    <Permit roles="teacher,analyst,assistant,student">
       <Router>
         <List path="/" courseId={courseId} />
         <View path=":videoId" courseId={courseId} />

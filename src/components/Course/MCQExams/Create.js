@@ -67,7 +67,7 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
   )
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher,assistant">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

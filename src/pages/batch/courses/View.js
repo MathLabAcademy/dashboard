@@ -33,14 +33,14 @@ function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
               <Button as={Link} to={`..`}>
                 Go Back
               </Button>
-              <Permit roles="teacher,analyst">
+              <Permit roles="teacher">
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>
-                <Button color="orange" as={Link} to={`payments`}>
-                  Payments
-                </Button>
               </Permit>
+              <Button color="orange" as={Link} to={`payments`}>
+                Payments
+              </Button>
             </>
           }
         />

@@ -5,7 +5,7 @@ import { Formik } from 'formik'
 import useToggle from 'hooks/useToggle'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
-import { Button, Message, Modal } from 'semantic-ui-react'
+import { Button, Message, Modal, Segment } from 'semantic-ui-react'
 import { createTag } from 'store/actions/courseTags'
 import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
@@ -57,7 +57,7 @@ function TagCreateModal({ createTag }) {
   )
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -66,13 +66,15 @@ function TagCreateModal({ createTag }) {
         {({ isSubmitting, isValid, values, status }) => (
           <Modal
             trigger={
-              <Button
-                type="button"
-                basic
-                color="blue"
-                icon="plus"
-                onClick={handle.open}
-              />
+              <Segment compact>
+                <Button
+                  type="button"
+                  basic
+                  color="blue"
+                  icon="plus"
+                  onClick={handle.open}
+                />
+              </Segment>
             }
             as={Form}
             closeIcon

@@ -42,7 +42,7 @@ function TransactionInfo({ userId, user, title }) {
                 />
               </Tooltip>
             </Box>
-            <Permit roles="teacher,analyst">
+            <Permit roles="teacher">
               <Stack isInline spacing={2}>
                 <Box>
                   <Tooltip

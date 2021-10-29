@@ -14,7 +14,7 @@ function TeacherCQExamSubmission({ cqExamId }) {
   }
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher,analyst,assistant">
       <Box borderWidth="1px" boxShadow="sm" p={4}>
         <Stack
           isInline

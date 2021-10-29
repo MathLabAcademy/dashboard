@@ -20,12 +20,12 @@ function CourseMCQExamList({ courseId }) {
   }, [courseId, dispatch])
 
   return (
-    <Permit roles="teacher,analyst,student">
+    <Permit roles="teacher,analyst,assistant,student">
       <Segment>
         <HeaderGrid
           Left={<Header>MCQ Exams</Header>}
           Right={
-            <Permit roles="teacher,analyst">
+            <Permit roles="teacher">
               <Button as={Link} to={`create`} color="blue">
                 Create
               </Button>

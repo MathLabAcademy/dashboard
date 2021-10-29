@@ -47,9 +47,7 @@ function TagList({ pagination, fetchPage }) {
           ))}
 
           <Grid.Column>
-            <Segment compact>
-              <Create />
-            </Segment>
+            <Create />
           </Grid.Column>
         </Grid>
       </Segment>

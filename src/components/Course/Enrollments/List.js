@@ -29,6 +29,8 @@ import { useCourse, useCourseEnrolledUserIds } from 'store/courses/hooks'
 import { toggleEnrollmentStatus } from 'store/enrollments'
 import { trackEventAnalytics } from 'utils/analytics'
 import api from 'utils/api'
+import Permit from 'components/Permit'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 
 function RevertEnrollment({ user, enrollment }) {
   const toast = useToast()
@@ -70,7 +72,7 @@ function RevertEnrollment({ user, enrollment }) {
   }, [enrollment, toast])
 
   return (
-    <>
+    <Permit roles="teacher">
       <Button onClick={onOpen} size="sm" variantColor="red">
         Revert
       </Button>
@@ -106,7 +108,7 @@ function RevertEnrollment({ user, enrollment }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Permit>
   )
 }
 
@@ -116,6 +118,8 @@ function _ListItemRow({
   enrollmentId,
   toggleEnrollmentStatus,
 }) {
+  const currentUser = useCurrentUserData()
+
   return (
     <Table.Row>
       <Table.Cell>
@@ -126,6 +130,7 @@ function _ListItemRow({
       <Table.Cell>BDT {get(user, 'creditLimit', 0) / 100}</Table.Cell>
       <Table.Cell>
         <Checkbox
+          disabled={get(currentUser,'roleId')!=='teacher'}
           checked={get(enrollment, 'active')}
           toggle
           onClick={async () => {

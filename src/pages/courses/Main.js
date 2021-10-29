@@ -20,7 +20,7 @@ function Courses({ tags, tagsPagination, fetchAllTagPage }) {
   }, [fetchAllTagPage, tags.allIds.length, tagsPagination.totalItems])
 
   return (
-    <Permit roles="teacher,analyst,student">
+    <Permit roles="teacher,analyst,assistant,student">
       <Router>
         <List path="/" />
         <Tags path="tags/*" />

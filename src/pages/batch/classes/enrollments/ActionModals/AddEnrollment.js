@@ -7,7 +7,7 @@ import AddEnrollmentBulk from './AddEnrollmentBulk'
 
 function AddEnrollment({ batchClassId, year, refreshData }) {
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Dropdown
         text="Add Enrollment"
         icon="add user"

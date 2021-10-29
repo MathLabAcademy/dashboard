@@ -47,7 +47,7 @@ function CourseVideoView({ courseId, navigate }) {
               <Box>
                 <Heading>{get(video.data, 'name')}</Heading>
               </Box>
-              <Permit roles="teacher,analyst">
+              <Permit roles="teacher">
                 <Box>
                   <Button size="sm" variantColor="red" onClick={onRemove}>
                     Remove

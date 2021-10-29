@@ -75,7 +75,7 @@ function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
   )
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}

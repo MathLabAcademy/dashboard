@@ -43,7 +43,7 @@ function RemoveSubmissionsButton({ mcqExamId, userId, fullName }) {
   }, [mcqExamId, userId])
 
   return (
-    <>
+    <Permit roles="teacher">
       <Button onClick={onOpen} variantColor="red">
         Remove
       </Button>
@@ -70,7 +70,7 @@ function RemoveSubmissionsButton({ mcqExamId, userId, fullName }) {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Permit>
   )
 }
 
@@ -140,7 +140,7 @@ function MCQExamResult({ mcqExamId }) {
   }, [data])
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher,analyst,assistant">
       <Segment>
         <HeaderGrid
           Left={<Header>Result Summary </Header>}

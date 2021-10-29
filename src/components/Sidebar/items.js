@@ -20,12 +20,12 @@ export const sidebarItems = [
   {
     title: `Online Courses`,
     link: '/courses',
-    permits: ['teacher', 'analyst', 'student'],
+    permits: ['teacher', 'analyst', 'assistant', 'student'],
     items: [
       {
         title: `Tags`,
         link: '/courses/tags',
-        permits: ['teacher', 'analyst'],
+        permits: ['teacher', 'analyst', 'assistant'],
       },
     ],
   },

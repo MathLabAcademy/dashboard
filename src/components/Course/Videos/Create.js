@@ -62,7 +62,7 @@ function CourseVideoCreate({ courseId, navigate }) {
   }, [courseId, dispatch, navigate, vimeoVideoId])
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Segment>
         <HeaderGrid
           Left={<Header>Add Video:</Header>}

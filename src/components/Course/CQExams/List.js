@@ -19,14 +19,14 @@ function CourseCQExamList({ courseId }) {
   }, [courseId, dispatch])
 
   return (
-    <Permit roles="teacher,analyst,student">
+    <Permit roles="teacher,analyst,assistant,student">
       <Box borderWidth="1px" boxShadow="sm" p={4} mb={4}>
         <Stack isInline justifyContent="space-between" alignItems="center">
           <Box>
             <Heading fontSize={4}>CQ Exams</Heading>
           </Box>
 
-          <Permit roles="teacher,analyst">
+          <Permit roles="teacher">
             <Box>
               <Button
                 as={Link}

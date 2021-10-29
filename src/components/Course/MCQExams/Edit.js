@@ -70,7 +70,7 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
   )
 
   return (
-    <Permit roles="teacher,analyst">
+    <Permit roles="teacher">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
