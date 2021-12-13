@@ -18,7 +18,7 @@ import * as Yup from 'yup'
 
 const getValidationSchema = () =>
   Yup.object().shape({
-    userId: Yup.number().integer().required(`required`),
+    userId: Yup.string().required(`required`),
     password: Yup.string()
       .min(8, `must be at least 8 characters long`)
       .required(`required`),
