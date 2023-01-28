@@ -11,7 +11,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { usePageviewAnalytics } from 'utils/analytics'
 import EmailLoginForm from './EmailLoginForm'
-import FacebookLoginForm from './FacebookLoginForm'
 import PhoneLoginForm from './PhoneLoginForm'
 
 function LogIn({ userStatus }) {
@@ -30,21 +29,6 @@ function LogIn({ userStatus }) {
         <AccordionPanel>
           <EmailLoginForm />
         </AccordionPanel>
-      </AccordionItem>
-
-      <AccordionItem>
-        {({ isExpanded }) => (
-          <>
-            <AccordionHeader>
-              <Heading flex="1" fontSize={4} textAlign="center" p={2}>
-                Login with Facebook
-              </Heading>
-            </AccordionHeader>
-            <AccordionPanel>
-              <FacebookLoginForm isOpen={isExpanded} />
-            </AccordionPanel>
-          </>
-        )}
       </AccordionItem>
 
       <AccordionItem>
