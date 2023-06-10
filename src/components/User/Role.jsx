@@ -104,7 +104,11 @@ export function UserRole({ user }) {
         <TagLabel>{get(role, 'name')}</TagLabel>
         <TagIcon
           cursor="pointer"
-          display={currentUser.id === user.id ? 'none' : null}
+          display={
+            currentUser.id === user.id || currentUser.roleId !== 'teacher'
+              ? 'none'
+              : null
+          }
           icon="edit"
           onClick={() => {
             setIsEditing(true)
