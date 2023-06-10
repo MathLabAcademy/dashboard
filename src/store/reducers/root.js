@@ -14,6 +14,7 @@ import mcqExams from './mcqExams'
 import mcqs from './mcqs'
 import mcqTags from './mcqTags'
 import pagination from './pagination'
+import roles from '../roles/reducer'
 import transactions from './transactions'
 import ui from './ui'
 import users from './users'
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   mcqTags,
   notifications,
   pagination,
+  roles,
   transactions,
   ui,
   users,

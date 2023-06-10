@@ -211,6 +211,19 @@ export const addBalance = (userId, transactionData) => async (dispatch) => {
   return data
 }
 
+export const updateRole = (userId, { roleId }) => async (dispatch) => {
+  const { data, error } = await api(`/users/${userId}/action/update-role`, {
+    method: 'POST',
+    body: { roleId },
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_UPDATE, data })
+
+  return data
+}
+
 export const setCreditLimit = (userId, { creditLimit }) => async (dispatch) => {
   const url = `/users/${userId}/action/set-credit-limit`
 
