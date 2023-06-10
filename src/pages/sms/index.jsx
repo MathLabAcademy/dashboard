@@ -240,7 +240,9 @@ function SMSPage() {
               </Text>
               <Stack isInline spacing={2}>
                 {Object.keys(placeholderMap.replacer).map((item) => (
-                  <Tag key={item}>{item}</Tag>
+                  <Tag key={item} whiteSpace="nowrap">
+                    {item}
+                  </Tag>
                 ))}
               </Stack>
             </Box>
