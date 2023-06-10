@@ -1,17 +1,9 @@
-import {
-  Box,
-  Button,
-  Heading,
-  IconButton,
-  Stack,
-  Tag,
-  Text,
-} from '@chakra-ui/core'
+import { Box, Button, Heading, IconButton, Stack, Text } from '@chakra-ui/core'
 import { FaSyncAlt } from 'react-icons/fa'
 import { Link, Router } from '@reach/router'
 import Gravatar from 'components/Gravatar'
 import Permit from 'components/Permit'
-import { capitalize, get } from 'lodash-es'
+import { get } from 'lodash-es'
 import React, { useCallback } from 'react'
 import { connect } from 'react-redux'
 import { getUser } from 'store/actions/users'
@@ -19,8 +11,7 @@ import AddBalance from './AddBalance'
 import AdjustBalance from './AdjustBalance'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
-
-const labeledRoles = ['teacher', 'assistant']
+import { UserRole } from './Role'
 
 function User({ userId, user, getUser }) {
   const refreshUser = useCallback(() => {
@@ -59,11 +50,7 @@ function User({ userId, user, getUser }) {
                 </Heading>
                 <Text color="gray.500">{get(user, 'Person.email')}</Text>
 
-                {labeledRoles.includes(get(user, 'roleId')) && (
-                  <Tag variant="solid" size="md">
-                    {capitalize(get(user, 'roleId'))}
-                  </Tag>
-                )}
+                <UserRole user={user} />
               </Box>
               <Permit userId={userId}>
                 <Button as={Link} to={`change-password`}>
