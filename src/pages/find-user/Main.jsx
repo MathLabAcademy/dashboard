@@ -27,7 +27,10 @@ const getInitialValues = () => ({
 })
 
 function FindUser({ findUser }) {
-  const [userId, setUserId] = useState()
+  const [userId, setUserId] = useState(() => {
+    const url = new URL(window.location)
+    return url.searchParams.get('userId') || null
+  })
 
   const validationSchema = useMemo(() => getValidationSchema(), [])
   const initialValues = useMemo(() => getInitialValues(), [])
@@ -41,14 +44,20 @@ function FindUser({ findUser }) {
 
       actions.setStatus(null)
 
+      const url = new URL(window.location)
       try {
         const user = await findUser(values)
         actions.resetForm()
         setUserId(user.id)
+
+        url.searchParams.set('userId', user.id)
       } catch (err) {
         actions.resetForm()
         actions.setStatus(err.message)
         setUserId(null)
+        url.searchParams.delete('userId')
+      } finally {
+        window.history.pushState(null, '', url)
       }
     },
     [findUser]
