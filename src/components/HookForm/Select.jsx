@@ -1,7 +1,7 @@
 import { FormControl, FormLabel } from '@chakra-ui/core'
 import ErrorMessage from './ErrorMessage'
 import { get } from 'lodash-es'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 import ReactSelect from 'react-select'
 
@@ -12,7 +12,6 @@ export function SelectField({
   isLoading,
   value,
   setValue,
-  register,
   ...props
 }) {
   const formattedOptions = useMemo(() => {
@@ -40,7 +39,6 @@ export function SelectField({
       value={formattedValue}
       options={formattedOptions}
       onChange={onChange}
-      ref={register}
     />
   )
 }
@@ -58,6 +56,10 @@ export function FormSelect({
   const { register, errors, watch, setValue } = useFormContext()
 
   const value = watch(name)
+
+  useEffect(() => {
+    register(name, { required, validate })
+  }, [name, register, required, validate])
 
   return (
     <FormControl
@@ -81,7 +83,6 @@ export function FormSelect({
         isLoading={loading}
         value={value}
         setValue={setValue}
-        register={() => register({ name, required, validate })}
       />
 
       <ErrorMessage name={name} />
