@@ -38,7 +38,7 @@ function RemoveMCQ({ mcqExamId, mcqId, mcq, removeQuestionFromMCQExam }) {
   }, [mcqExamId, mcqId, removeQuestionFromMCQExam])
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,assistant">
       <Modal
         trigger={
           <Button type="button" color="red" onClick={handle.open}>

@@ -33,7 +33,7 @@ function CourseCQExamView({ courseId, cqExamId }) {
             <Heading fontSize={3}>CQ Exam: {get(cqExam, 'name')}</Heading>
           </Box>
           <Box>
-            <Permit roles="teacher">
+            <Permit roles="teacher,assistant">
               <Button as={Link} to={`edit`}>
                 Edit
               </Button>

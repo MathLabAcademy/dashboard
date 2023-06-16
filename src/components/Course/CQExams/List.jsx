@@ -26,7 +26,7 @@ function CourseCQExamList({ courseId }) {
             <Heading fontSize={4}>CQ Exams</Heading>
           </Box>
 
-          <Permit roles="teacher">
+          <Permit roles="teacher,assistant">
             <Box>
               <Button
                 as={Link}

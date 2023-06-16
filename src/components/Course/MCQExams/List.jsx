@@ -25,7 +25,7 @@ function CourseMCQExamList({ courseId }) {
         <HeaderGrid
           Left={<Header>MCQ Exams</Header>}
           Right={
-            <Permit roles="teacher">
+            <Permit roles="teacher,assistant">
               <Button as={Link} to={`create`} color="blue">
                 Create
               </Button>

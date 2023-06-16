@@ -86,7 +86,7 @@ function CourseCQExamCreate({ courseId, navigate }) {
   const date = form.watch('date')
 
   return (
-    <Permit roles="teacher">
+    <Permit roles="teacher,assistant">
       <Form form={form} onSubmit={onSubmit}>
         <Stack spacing={4}>
           <Box borderWidth="1px" boxShadow="sm" p={4}>

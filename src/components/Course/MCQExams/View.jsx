@@ -65,7 +65,7 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
                   Results
                 </Button>
               </Permit>
-              <Permit roles="teacher">
+              <Permit roles="teacher,assistant">
                 <Button as={Link} to={`edit`}>
                   Edit
                 </Button>

@@ -63,7 +63,7 @@ function CourseVideoList({ courseId }) {
           <HeaderGrid
             Left={<Header>Videos</Header>}
             Right={
-              <Permit roles="teacher">
+              <Permit roles="teacher,assistant">
                 <Button as={Link} to={`create`} color="blue">
                   Add New
                 </Button>

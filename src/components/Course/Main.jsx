@@ -162,7 +162,7 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
           }
           Right={
             <Stack isInline spacing={2}>
-              <Permit roles="teacher">
+              <Permit roles="teacher,assistant">
                 <Button as={Link} to={`edit`} variantColor="gray">
                   Edit
                 </Button>
