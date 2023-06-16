@@ -13,7 +13,7 @@ import View from './View'
 const getValidationSchema = () => {
   return Yup.object({
     userId: Yup.string().min(5),
-    phone: Yup.string().matches(/^01\d{9}$/),
+    phone: Yup.string().matches(/^(88)?01\d{9}$/),
     batchClassEnrollmentId: Yup.string().max(7).min(7),
     batchCourseEnrollmentId: Yup.string().min(7).max(9),
   })
