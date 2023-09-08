@@ -1,5 +1,7 @@
 import { CSSReset, ThemeProvider } from '@chakra-ui/core'
 import { Global } from '@emotion/core'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { queryClient } from 'api'
 import RootErrorBoundary from 'components/RootErrorBoundary'
 import I18nProvider from 'i18n/index'
 import React from 'react'
@@ -25,7 +27,9 @@ const Root = ({ store, theme }) => (
             }}
           />
 
-          <App />
+          <QueryClientProvider client={queryClient}>
+            <App />
+          </QueryClientProvider>
         </ThemeProvider>
       </I18nProvider>
     </RootErrorBoundary>
