@@ -28,6 +28,7 @@
     "@rebass/forms": "^4.0.6",
     "@rebass/preset": "^4.0.5",
     "@semantic-ui-react/craco-less": "^1.2.1",
+    "@tanstack/react-query": "^4.35.0",
     "browser-image-compression": "^1.0.9",
     "catenary-curve": "^1.0.1",
     "draft-js": "^0.11.0",

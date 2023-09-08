@@ -9,6 +9,7 @@ import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Header, Label, Segment, Table } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults'
+import CourseAttendance from './Attendance'
 import CourseCQExams from './CQExams/Main'
 import Enroll from './Enroll'
 import CourseEnrollments from './Enrollments'
@@ -170,6 +171,16 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
               <Permit roles="teacher,assistant">
                 <Button
                   as={Link}
+                  to={`attendances`}
+                  variantColor="blue"
+                  _hover={{ color: 'white' }}
+                >
+                  Attendance
+                </Button>
+              </Permit>
+              <Permit roles="teacher,assistant">
+                <Button
+                  as={Link}
                   to={`enrollments`}
                   variantColor="blue"
                   _hover={{ color: 'white' }}
@@ -207,6 +218,7 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
         <CourseVideos courseId={courseId} path="videos/*" />
 
         <CourseEnrollments path="enrollments" courseId={courseId} />
+        <CourseAttendance path="attendances" courseId={courseId} />
         <Enroll path="enroll" courseId={courseId} />
       </Router>
     </>
