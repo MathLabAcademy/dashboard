@@ -212,7 +212,7 @@ function CourseEnrollmentList({ courseId }) {
           Left={
             <Stack>
               <Box>
-                <Header>Online Course Enrollments</Header>
+                <Header>Course Enrollments</Header>
               </Box>
               <Box>
                 <Stack isInline>

@@ -68,7 +68,7 @@ function CourseList({ pagination, fetchPage, courseTags }) {
     <>
       <Segment>
         <HeaderGrid
-          Left={<Header>Online Courses</Header>}
+          Left={<Header>Courses</Header>}
           Right={
             <>
               <Permit roles="teacher,assistant">

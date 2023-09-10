@@ -51,7 +51,7 @@ function CourseSearch({ onChange: _onChange, ...props }) {
     <Box minWidth="250px" {...props}>
       <FormLabel htmlFor="course">
         <Text fontSize={2} as="strong">
-          Online Course
+          Course
         </Text>
       </FormLabel>
       <ReactSelectAsync

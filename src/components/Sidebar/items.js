@@ -18,7 +18,7 @@ export const sidebarItems = [
     permits: ['teacher', 'analyst'],
   },
   {
-    title: `Online Courses`,
+    title: `Courses`,
     link: '/courses',
     permits: ['teacher', 'analyst', 'assistant', 'student'],
     items: [
