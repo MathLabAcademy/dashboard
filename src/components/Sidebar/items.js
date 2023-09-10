@@ -42,16 +42,6 @@ export const sidebarItems = [
     ],
   },
   {
-    title: `Batch Classes`,
-    link: '/batchclasses',
-    permits: ['teacher', 'analyst'],
-  },
-  {
-    title: `Batch Courses`,
-    link: '/batchcourses',
-    permits: ['teacher', 'analyst'],
-  },
-  {
     title: `Notification`,
     link: '/notifications',
   },
