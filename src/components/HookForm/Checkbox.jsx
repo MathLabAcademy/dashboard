@@ -15,10 +15,12 @@ export const FormCheckbox = ({
 }) => {
   const { register, errors } = useFormContext()
 
+  const isDisabled = props.disabled ?? props.isDisabled
+
   return (
     <FormControl
       isRequired={required}
-      isDisabled={props.disabled}
+      isDisabled={isDisabled}
       isInvalid={Boolean(get(errors, name))}
       isReadOnly={props.readonly}
     >
@@ -27,6 +29,7 @@ export const FormCheckbox = ({
           id={id}
           name={name}
           required={required}
+          isDisabled={isDisabled}
           {...props}
           ref={register({ required, validate })}
         />

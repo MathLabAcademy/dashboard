@@ -16,10 +16,11 @@ import { DateTime } from 'luxon'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useCourseEnrollments } from 'store/courses/hooks'
+import { useCurrentUserData } from 'store/currentUser/hooks'
 import { useUser } from 'store/users/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 
-function ListItemRow({ enrollment }) {
+function ListItemRow({ enrollment, isReadOnly }) {
   const userId = get(enrollment, 'userId')
   const user = useUser(userId)
 
@@ -30,10 +31,18 @@ function ListItemRow({ enrollment }) {
       </Table.Cell>
       <Table.Cell>{get(user, 'Person.fullName')}</Table.Cell>
       <Table.Cell>
-        <FormCheckbox name={`items.${userId}.present`} size="lg" />
+        <FormCheckbox
+          disabled={isReadOnly}
+          name={`items.${userId}.present`}
+          size="lg"
+        />
       </Table.Cell>
       <Table.Cell>
-        <FormInput name={`items.${userId}.note`} maxWith={50} />
+        <FormInput
+          disabled={isReadOnly}
+          name={`items.${userId}.note`}
+          maxWith={50}
+        />
       </Table.Cell>
     </Table.Row>
   )
@@ -62,6 +71,8 @@ function CourseAttendanceForm({
   attendanceByUserId,
 }) {
   const toast = useToast()
+
+  const isReadOnly = useCurrentUserData().roleId !== 'teacher'
 
   const defaultValues = useMemo(
     () => getDefaultValues(date, attendanceByUserId),
@@ -121,11 +132,11 @@ function CourseAttendanceForm({
             />
           }
           Right={
-            <div>
+            !isReadOnly && (
               <FormButton type="submit" variant="solid" variantColor="blue">
                 Save
               </FormButton>
-            </div>
+            )
           }
         />
       </Box>
@@ -145,7 +156,7 @@ function CourseAttendanceForm({
               <ListItemRow
                 key={enrollment.id}
                 enrollment={enrollment}
-                attendanceByUserId={attendanceByUserId}
+                isReadOnly={isReadOnly}
               />
             ))}
           </Table.Body>
@@ -181,7 +192,7 @@ function CourseAttendance({ courseId }) {
   }
 
   return (
-    <Permit roles="teacher,assistant">
+    <Permit roles="teacher,analyst,assistant">
       <CourseAttendanceForm
         courseId={courseId}
         enrollments={enrollments.data}
