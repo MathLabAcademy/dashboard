@@ -1,4 +1,4 @@
-import { Link, Router } from '@reach/router'
+import { Link, Routes, Route } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
@@ -75,10 +75,13 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
         />
       </Segment>
 
-      <Router>
-        <View path="/" courseId={courseId} />
-        <TeacherResults path="/results" courseId={courseId} />
-      </Router>
+      <Routes>
+        <Route element={<View courseId={courseId} />} path="/" />
+        <Route
+          element={<TeacherResults courseId={courseId} />}
+          path="/results"
+        />
+      </Routes>
     </>
   )
 }

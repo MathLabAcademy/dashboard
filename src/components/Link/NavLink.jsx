@@ -1,5 +1,5 @@
 import { Link } from '@chakra-ui/core'
-import { Link as RouterLink } from '@reach/router'
+import { Link as RouterLink } from 'react-router-dom'
 import React from 'react'
 
 function NavLink({ children, to, ...props }) {

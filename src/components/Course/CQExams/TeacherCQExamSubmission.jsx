@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React from 'react'

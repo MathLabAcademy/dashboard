@@ -1,10 +1,14 @@
 import Course from 'components/Course/Main'
-import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { getCourse, getAllEnrollments } from 'store/courses'
+import { useParams } from 'react-router-dom'
+import { getAllEnrollments, getCourse } from 'store/courses'
+import { useCourse } from 'store/courses/hooks'
 
-function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
+function CourseView({ getCourse, getAllEnrollments }) {
+  const { courseId } = useParams()
+  const course = useCourse(courseId)
+
   useEffect(() => {
     if (!course) getCourse(courseId)
   }, [courseId, course, getCourse])
@@ -16,13 +20,9 @@ function CourseView({ courseId, course, getCourse, getAllEnrollments }) {
   return <Course courseId={courseId} />
 }
 
-const mapStateToProps = ({ courses }, { courseId }) => ({
-  course: get(courses.byId, courseId),
-})
-
 const mapDispatchToProps = {
   getCourse,
   getAllEnrollments,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CourseView)
+export default connect(null, mapDispatchToProps)(CourseView)

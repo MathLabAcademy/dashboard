@@ -1,5 +1,5 @@
 import { Box, Button, Text } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import React, { useMemo } from 'react'
 import { MdNotificationsActive } from 'react-icons/md'
 import { useWebNotifications } from 'store/notifications/hooks'

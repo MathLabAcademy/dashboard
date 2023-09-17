@@ -1,4 +1,4 @@
-import { Link, Router } from '@reach/router'
+import { Link, Routes, Route } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
@@ -46,10 +46,16 @@ function BatchCourseView({ batchCourseId, batchCourse, getBatchCourse }) {
         />
       </Segment>
 
-      <Router>
-        <Payments path="payments/*" batchCourseId={batchCourseId} />
-        <Enrollments path="/*" batchCourseId={batchCourseId} />
-      </Router>
+      <Routes>
+        <Route
+          element={<Payments batchCourseId={batchCourseId} />}
+          path="payments/*"
+        />
+        <Route
+          element={<Enrollments batchCourseId={batchCourseId} />}
+          path="/*"
+        />
+      </Routes>
     </>
   )
 }

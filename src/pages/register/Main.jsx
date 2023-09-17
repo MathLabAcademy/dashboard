@@ -1,8 +1,9 @@
 import { Box, Button, Heading, Stack, Text } from '@chakra-ui/core'
-import { Link, Redirect } from '@reach/router'
+import { Redirect } from 'components/Redirect'
 import { get } from 'lodash-es'
 import React, { useCallback, useState } from 'react'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { Grid } from 'semantic-ui-react'
 import { usePageviewAnalytics } from 'utils/analytics'
 import Form from './Form'
@@ -55,7 +56,7 @@ function Register({ userStatus }) {
   }, [])
 
   return userStatus.authed ? (
-    <Redirect to="/" noThrow />
+    <Redirect to="/" />
   ) : (
     <Grid columns={1} centered padded>
       <Grid.Column mobile={16} tablet={12} style={{ maxWidth: '720px' }}>

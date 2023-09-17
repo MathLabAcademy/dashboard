@@ -1,5 +1,5 @@
 import { Badge } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'

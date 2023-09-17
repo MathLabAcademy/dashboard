@@ -1,7 +1,7 @@
-import { Router } from '@reach/router'
 import Permit from 'components/Permit'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 import { fetchAllTagPage } from 'store/actions/mcqTags'
 import Create from './Create'
 import Edit from './Edit'
@@ -21,13 +21,13 @@ function MCQs({ tags, tagsPagination, fetchAllTagPage }) {
 
   return (
     <Permit roles="teacher,analyst,assistant">
-      <Router>
-        <List path="/" />
-        <Tags path="tags/*" />
-        <Create path="create" />
-        <View path=":mcqId" />
-        <Edit path=":mcqId/edit" />
-      </Router>
+      <Routes>
+        <Route element={<List />} path="/" />
+        <Route element={<Tags />} path="tags/*" />
+        <Route element={<Create />} path="create" />
+        <Route element={<View />} path=":mcqId" />
+        <Route element={<Edit />} path=":mcqId/edit" />
+      </Routes>
     </Permit>
   )
 }

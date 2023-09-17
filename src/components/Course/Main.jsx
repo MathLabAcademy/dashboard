@@ -1,5 +1,4 @@
 import { Badge, Box, Button, Flex, Heading, Stack } from '@chakra-ui/core'
-import { Link, Router } from '@reach/router'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
@@ -7,6 +6,7 @@ import { useCourseAccess } from 'hooks/useCourseAccess'
 import { get } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Link, Route, Routes } from 'react-router-dom'
 import { Header, Label, Segment, Table } from 'semantic-ui-react'
 import { emptyArray } from 'utils/defaults'
 import CourseAttendance from './Attendance'
@@ -206,21 +206,37 @@ function Course({ courseId, course, courseTags, enrollments, currentUser }) {
         />
       </Segment>
 
-      <Router>
-        <CourseInfo
+      <Routes>
+        <Route
+          element={
+            <CourseInfo
+              course={course}
+              courseId={courseId}
+              courseTags={courseTags}
+            />
+          }
           path="/"
-          course={course}
-          courseId={courseId}
-          courseTags={courseTags}
         />
-        <CourseCQExams courseId={courseId} path="cqexams/*" />
-        <CourseMCQExams courseId={courseId} path="mcqexams/*" />
-        <CourseVideos courseId={courseId} path="videos/*" />
+        <Route
+          element={<CourseCQExams courseId={courseId} />}
+          path="cqexams/*"
+        />
+        <Route
+          element={<CourseMCQExams courseId={courseId} />}
+          path="mcqexams/*"
+        />
+        <Route element={<CourseVideos courseId={courseId} />} path="videos/*" />
 
-        <CourseEnrollments path="enrollments" courseId={courseId} />
-        <CourseAttendance path="attendances" courseId={courseId} />
-        <Enroll path="enroll" courseId={courseId} />
-      </Router>
+        <Route
+          element={<CourseEnrollments courseId={courseId} />}
+          path="enrollments"
+        />
+        <Route
+          element={<CourseAttendance courseId={courseId} />}
+          path="attendances"
+        />
+        <Route element={<Enroll courseId={courseId} />} path="enroll" />
+      </Routes>
     </>
   )
 }

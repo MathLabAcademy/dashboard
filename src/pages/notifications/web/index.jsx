@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Text } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import React, { useCallback } from 'react'
 import { MdCheck, MdComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'

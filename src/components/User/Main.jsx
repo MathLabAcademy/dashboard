@@ -1,11 +1,11 @@
 import { Box, Button, Heading, IconButton, Stack, Text } from '@chakra-ui/core'
-import { FaSyncAlt } from 'react-icons/fa'
-import { Link, Router } from '@reach/router'
 import Gravatar from 'components/Gravatar'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useCallback } from 'react'
+import { FaSyncAlt } from 'react-icons/fa'
 import { connect } from 'react-redux'
+import { Link, Route, Routes } from 'react-router-dom'
 import { getUser } from 'store/actions/users'
 import AddBalance from './AddBalance'
 import AdjustBalance from './AdjustBalance'
@@ -65,12 +65,21 @@ function User({ userId, user, getUser }) {
         </Box>
       </Stack>
 
-      <Router>
-        <Info path="/" userId={userId} refreshUser={refreshUser} />
-        <AddBalance path="add-balance" userId={userId} />
-        <AdjustBalance path="adjust-balance" userId={userId} />
-        <ChangePassword path="change-password" userId={userId} />
-      </Router>
+      <Routes>
+        <Route
+          element={<Info userId={userId} refreshUser={refreshUser} />}
+          path="/"
+        />
+        <Route element={<AddBalance userId={userId} />} path="add-balance" />
+        <Route
+          element={<AdjustBalance userId={userId} />}
+          path="adjust-balance"
+        />
+        <Route
+          element={<ChangePassword userId={userId} />}
+          path="change-password"
+        />
+      </Routes>
     </Permit>
   )
 }

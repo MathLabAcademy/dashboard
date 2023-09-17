@@ -1,9 +1,9 @@
-import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Link, Route, Routes } from 'react-router-dom'
 import { Button, Header, Segment } from 'semantic-ui-react'
 import { getBatchClass } from 'store/actions/batches'
 import Enrollments from './enrollments/Main'
@@ -48,11 +48,17 @@ function BatchClassView({ batchClassId, batchClass, getBatchClass }) {
         />
       </Segment>
 
-      <Router>
-        <Fees path="fees/*" batchClassId={batchClassId} />
-        <Payments path="payments/*" batchClassId={batchClassId} />
-        <Enrollments path="/*" batchClassId={batchClassId} />
-      </Router>
+      <Routes>
+        <Route element={<Fees batchClassId={batchClassId} />} path="fees/*" />
+        <Route
+          element={<Payments batchClassId={batchClassId} />}
+          path="payments/*"
+        />
+        <Route
+          element={<Enrollments batchClassId={batchClassId} />}
+          path="/*"
+        />
+      </Routes>
     </>
   )
 }

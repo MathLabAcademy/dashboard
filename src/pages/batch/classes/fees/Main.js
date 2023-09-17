@@ -1,14 +1,20 @@
-import { Router } from '@reach/router'
+import { Routes, Route } from 'react-router-dom'
 import React from 'react'
 import List from './List'
 
 function BatchClassFees({ batchClassId }) {
   return (
     <>
-      <Router>
-        <List path="/" batchClassId={batchClassId} linkToBase="fees/" />
-        <List path="fees" batchClassId={batchClassId} linkToBase="" />
-      </Router>
+      <Routes>
+        <Route
+          element={<List batchClassId={batchClassId} linkToBase="fees/" />}
+          path="/"
+        />
+        <Route
+          element={<List batchClassId={batchClassId} linkToBase="" />}
+          path="fees"
+        />
+      </Routes>
     </>
   )
 }

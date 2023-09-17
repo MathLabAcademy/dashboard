@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import { Box, Button, Heading, Stack, Tag, Text } from '@chakra-ui/core'
 import { capitalize, get } from 'lodash-es'
 import React from 'react'

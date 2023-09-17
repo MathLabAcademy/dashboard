@@ -1,5 +1,5 @@
 import { Heading, Text } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'

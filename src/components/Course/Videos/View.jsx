@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Stack, Text } from '@chakra-ui/core'
-import { useParams } from '@reach/router'
+import { useParams } from 'react-router-dom'
 import Permit from 'components/Permit'
 import VimeoEmbed from 'components/VimeoEmbed'
 import { get } from 'lodash-es'

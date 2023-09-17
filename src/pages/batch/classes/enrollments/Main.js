@@ -1,4 +1,4 @@
-import { Router } from '@reach/router'
+import { Routes, Route } from 'react-router-dom'
 import React from 'react'
 import List from './List'
 import View from './View'
@@ -6,14 +6,22 @@ import View from './View'
 function BatchClassEnrollments({ batchClassId }) {
   return (
     <>
-      <Router>
-        <List path="/" batchClassId={batchClassId} linkToBase="enrollments/" />
-        <List path="enrollments" batchClassId={batchClassId} linkToBase="" />
-        <View
-          path="enrollments/:batchClassEnrollmentId"
-          batchClassId={batchClassId}
+      <Routes>
+        <Route
+          element={
+            <List batchClassId={batchClassId} linkToBase="enrollments/" />
+          }
+          path="/"
         />
-      </Router>
+        <Route
+          element={<List batchClassId={batchClassId} linkToBase="" />}
+          path="enrollments"
+        />
+        <Route
+          element={<View batchClassId={batchClassId} />}
+          path="enrollments/:batchClassEnrollmentId"
+        />
+      </Routes>
     </>
   )
 }
