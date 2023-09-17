@@ -105,6 +105,28 @@ function CourseInfo({ course, courseId, courseTags }) {
             alignItems="center"
           >
             <Box>
+              <Heading fontSize={4}>Offline Exams</Heading>
+            </Box>
+            <Box>
+              <Button
+                size="lg"
+                variantColor="blue"
+                as={Link}
+                to={`offlineexams`}
+                _hover={{ color: 'white' }}
+              >
+                Open
+              </Button>
+            </Box>
+          </Flex>
+          <Flex
+            borderWidth={1}
+            shadow="md"
+            p={4}
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
               <Heading fontSize={4}>Videos</Heading>
             </Box>
             <Box>
