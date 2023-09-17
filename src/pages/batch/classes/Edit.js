@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -79,7 +79,7 @@ function BatchClassEdit({
                 }
                 Right={
                   <>
-                    <Button as={Link} to={`..`}>
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>

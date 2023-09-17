@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import FormExclusiveCheckboxField from 'components/Form/ExclusiveCheckboxField'
 import Form from 'components/Form/Form'
 import HeaderGrid from 'components/HeaderGrid'
@@ -150,7 +150,7 @@ function CourseMCQExamSetAnswers({
             Left={<Header>Set MCQ Answers</Header>}
             Right={
               <>
-                <Button as={Link} to={`..`}>
+                <Button as={Link} to="./..">
                   Go Back
                 </Button>
                 <Button type="reset">Reset</Button>

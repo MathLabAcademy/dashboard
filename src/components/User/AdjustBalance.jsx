@@ -1,5 +1,5 @@
 import { Heading, Text } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -26,7 +26,9 @@ const getInitialValues = (user) => ({
   note: '',
 })
 
-function UserAdjustBalance({ userId, user, navigate }) {
+function UserAdjustBalance({ userId, user }) {
+  const navigate = useNavigate()
+
   const dispatch = useDispatch()
   useEffect(() => {
     dispatch(readBalance(userId))
@@ -96,7 +98,7 @@ function UserAdjustBalance({ userId, user, navigate }) {
                 }
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Cancel
                     </Button>
                     <Button type="reset">Reset</Button>

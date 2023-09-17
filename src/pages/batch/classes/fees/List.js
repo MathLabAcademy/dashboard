@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
@@ -74,7 +74,7 @@ function BatchClassFeeList({
         <HeaderGrid
           Left={<Header>Batch Fees</Header>}
           Right={
-            <Button as={Link} to={`..`}>
+            <Button as={Link} to="./..">
               Go Back
             </Button>
           }

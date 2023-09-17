@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -31,7 +31,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
+function CourseMCQExamCreate({ courseId, createMCQExam }) {
+  const navigate = useNavigate()
+
   const initialValues = useMemo(() => getInitialValues(courseId), [courseId])
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
@@ -80,7 +82,7 @@ function CourseMCQExamCreate({ courseId, createMCQExam, navigate }) {
                 Left={<Header>New MCQ Exam:</Header>}
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Cancel
                     </Button>
                     <Button type="reset">Reset</Button>

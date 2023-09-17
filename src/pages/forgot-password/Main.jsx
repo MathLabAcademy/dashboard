@@ -1,7 +1,8 @@
-import { Redirect, Router } from '@reach/router'
+import { Redirect } from 'components/Redirect'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 import { usePageviewAnalytics } from 'utils/analytics'
 import RequestReset from './RequestReset'
 import Reset from './Reset'
@@ -10,12 +11,12 @@ function ForgotPassword({ userStatus }) {
   usePageviewAnalytics()
 
   return userStatus.authed ? (
-    <Redirect to="/" noThrow />
+    <Redirect to="/" />
   ) : (
-    <Router>
-      <RequestReset path="/" />
-      <Reset path=":userId/:token" />
-    </Router>
+    <Routes>
+      <Route element={<RequestReset />} path="/" />
+      <Route element={<Reset />} path=":userId/:token" />
+    </Routes>
   )
 }
 

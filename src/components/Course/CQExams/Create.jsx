@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import { FormButton } from 'components/HookForm/Button'
 import { FormDatePicker } from 'components/HookForm/DatePicker'
 import { Form } from 'components/HookForm/Form'
@@ -35,7 +35,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseCQExamCreate({ courseId, navigate }) {
+function CourseCQExamCreate({ courseId }) {
+  const navigate = useNavigate()
+
   const toast = useToast()
 
   const defaultValues = useMemo(() => getDefaultValues(), [])
@@ -95,7 +97,7 @@ function CourseCQExamCreate({ courseId, navigate }) {
                 <Heading fontSize={4}>New CQ Exam:</Heading>
               </Box>
               <Stack isInline spacing={2}>
-                <Button as={Link} to="..">
+                <Button as={Link} to="./..">
                   Cancel
                 </Button>
                 <Button type="reset">Reset</Button>

@@ -1,42 +1,33 @@
 import { Badge } from '@chakra-ui/core'
-import { Link } from '@reach/router'
 import { DraftViewer } from 'components/Draft'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
-import { get, isUndefined, sortBy } from 'lodash-es'
-import React, { useEffect, useMemo } from 'react'
+import { get, sortBy } from 'lodash-es'
+import React, { useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 import { Flex } from 'reflexbox'
 import { Button, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react'
-import { getMCQ, readMCQAnswer } from 'store/actions/mcqs'
+import { useMCQ, useMCQAnswerId, useNeighborMCQIds } from 'store/mcqs/hooks'
 import { emptyArray } from 'utils/defaults'
 import MCQDeleteModal from './ActionModals/Delete'
 
 const optionLetters = ['a', 'b', 'c', 'd']
 
-function MCQView({
-  mcqId,
-  mcq,
-  getMCQ,
-  answerId,
-  readMCQAnswer,
-  mcqTags,
-  prevMCQId,
-  nextMCQId,
-}) {
-  useEffect(() => {
-    if (!mcq) getMCQ(mcqId)
-  }, [getMCQ, mcq, mcqId, readMCQAnswer])
+function MCQView({ mcqTags }) {
+  const { mcqId } = useParams()
 
-  useEffect(() => {
-    if (isUndefined(answerId)) readMCQAnswer(mcqId)
-  }, [answerId, mcqId, readMCQAnswer])
+  const mcq = useMCQ(mcqId)
+  const answerId = useMCQAnswerId(mcqId)
+  const { prevMCQId, nextMCQId } = useNeighborMCQIds(mcqId)
 
   const options = useMemo(() => {
     return sortBy(get(mcq, 'Options'), 'id')
   }, [mcq])
 
-  if (!mcq) return null
+  if (!mcq) {
+    return null
+  }
 
   return (
     <>
@@ -61,7 +52,7 @@ function MCQView({
           Right={
             <>
               {!answerId && <Label color="yellow" content={`need answer`} />}
-              <Button as={Link} to={`..`}>
+              <Button as={Link} to="./..">
                 Go Back
               </Button>
               <Permit roles="teacher,assistant">
@@ -120,22 +111,8 @@ function MCQView({
   )
 }
 
-const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => {
-  const index = mcqs.allIds.indexOf(+mcqId)
-  const prevMCQId = mcqs.allIds[index - 1]
-  const nextMCQId = mcqs.allIds[index + 1]
+const mapStateToProps = ({ mcqTags }) => ({
+  mcqTags,
+})
 
-  return {
-    mcq: get(mcqs.byId, mcqId),
-    answerId: get(mcqs.answerById, mcqId),
-    mcqTags,
-    prevMCQId,
-    nextMCQId,
-  }
-}
-
-const mapDispatchToProps = {
-  getMCQ,
-  readMCQAnswer,
-}
-export default connect(mapStateToProps, mapDispatchToProps)(MCQView)
+export default connect(mapStateToProps)(MCQView)

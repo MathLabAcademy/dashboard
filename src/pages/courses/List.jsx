@@ -1,5 +1,5 @@
 import { Box, Checkbox, Stack } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import Switcher from 'components/Pagination/Switcher'
 import Permit from 'components/Permit'

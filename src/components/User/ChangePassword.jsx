@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import Input from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -29,7 +29,9 @@ const initialValues = {
   passwordConfirmation: '',
 }
 
-function ChangePassword({ userId, updatePassword, navigate }) {
+function ChangePassword({ userId, updatePassword }) {
+  const navigate = useNavigate()
+
   const validationSchema = useMemo(() => getValidationSchema(), [])
 
   const onSubmit = useCallback(
@@ -77,7 +79,7 @@ function ChangePassword({ userId, updatePassword, navigate }) {
                 Left={<Header>Change Password</Header>}
                 Right={
                   <>
-                    <Button as={Link} to={`..`}>
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>

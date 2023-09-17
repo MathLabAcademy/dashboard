@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import FormSelect from 'components/Form/Select'
@@ -32,7 +32,9 @@ const transactionTypeOptions = {
   NAGAD: 'Nagad',
 }
 
-function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
+function UserAddBalance({ userId, user, addBalance, readBalance }) {
+  const navigate = useNavigate()
+
   useEffect(() => {
     readBalance(userId)
   }, [readBalance, userId])
@@ -89,7 +91,7 @@ function UserAddBalance({ userId, user, addBalance, readBalance, navigate }) {
                 Left={<Header>Add Account Balance</Header>}
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Cancel
                     </Button>
                     <Button type="reset">Reset</Button>

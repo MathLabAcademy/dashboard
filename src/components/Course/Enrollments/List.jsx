@@ -18,7 +18,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import { handleAPIError } from 'components/HookForm/helpers'
 import { get, sum } from 'lodash-es'
@@ -241,7 +241,7 @@ function CourseEnrollmentList({ courseId }) {
             </Stack>
           }
           Right={
-            <Button as={Link} to={`..`}>
+            <Button as={Link} to="./..">
               Go Back
             </Button>
           }

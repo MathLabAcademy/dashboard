@@ -1,4 +1,3 @@
-import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormField from 'components/Form/Input'
 import HeaderGrid from 'components/HeaderGrid'
@@ -6,10 +5,12 @@ import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getMCQExam, updateMCQExam } from 'store/actions/mcqExams'
+import { updateMCQExam } from 'store/actions/mcqExams'
+import { useMCQExam } from 'store/mcqExams/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import * as Yup from 'yup'
 
@@ -31,10 +32,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
-  useEffect(() => {
-    if (!data) getData(mcqExamId)
-  }, [data, getData, mcqExamId])
+function CourseMCQExamEdit({ updateMCQExam }) {
+  const { mcqExamId } = useParams()
+  const data = useMCQExam(mcqExamId)
 
   const initialValues = useMemo(() => getInitialValues(data), [data])
   const validationSchema = useMemo(() => getValidationSchema(), [])
@@ -86,7 +86,7 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
                 }
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>
@@ -132,13 +132,8 @@ function CourseMCQExamEdit({ mcqExamId, data, getData, updateMCQExam }) {
   )
 }
 
-const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
-  data: get(mcqExams.byId, mcqExamId),
-})
-
 const mapDispatchToProps = {
-  getData: getMCQExam,
   updateMCQExam,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamEdit)
+export default connect(null, mapDispatchToProps)(CourseMCQExamEdit)

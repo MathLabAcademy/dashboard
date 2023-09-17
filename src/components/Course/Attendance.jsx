@@ -1,5 +1,5 @@
 import { Box, useToast } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import { useCourseAttendances, useCourseAttendancesMutation } from 'api/course'
 import HeaderGrid from 'components/HeaderGrid'
 import { FormButton } from 'components/HookForm/Button'

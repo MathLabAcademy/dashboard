@@ -1,4 +1,4 @@
-import { Router } from '@reach/router'
+import { Routes, Route } from 'react-router-dom'
 import Permit from 'components/Permit'
 import { useCourseAccess } from 'hooks/useCourseAccess'
 import React from 'react'
@@ -17,16 +17,16 @@ function CourseCQExams({ courseId }) {
 
   return (
     <Permit roles="teacher,analyst,assistant,student">
-      <Router>
-        <List path="/" courseId={courseId} />
-        <Create path="create" courseId={courseId} />
-        <Edit path=":cqExamId/edit" courseId={courseId} />
-        <TeacherCQExamSubmissionView
+      <Routes>
+        <Route element={<List courseId={courseId} />} path="/" />
+        <Route element={<Create courseId={courseId} />} path="create" />
+        <Route element={<Edit courseId={courseId} />} path=":cqExamId/edit" />
+        <Route
+          element={<TeacherCQExamSubmissionView courseId={courseId} />}
           path=":cqExamId/submissions/:userId"
-          courseId={courseId}
         />
-        <View path=":cqExamId/*" courseId={courseId} />
-      </Router>
+        <Route element={<View courseId={courseId} />} path=":cqExamId/*" />
+      </Routes>
     </Permit>
   )
 }

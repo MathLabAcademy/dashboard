@@ -5,7 +5,7 @@ import {
   AccordionPanel,
   Heading,
 } from '@chakra-ui/core'
-import { Redirect } from '@reach/router'
+import { Redirect } from 'components/Redirect'
 import { get } from 'lodash-es'
 import React from 'react'
 import { connect } from 'react-redux'
@@ -17,7 +17,7 @@ function LogIn({ userStatus }) {
   usePageviewAnalytics()
 
   return userStatus.authed ? (
-    <Redirect to="/" noThrow />
+    <Redirect to="/" />
   ) : (
     <Accordion maxWidth="512px" mx="auto" px={2} py={8}>
       <AccordionItem>

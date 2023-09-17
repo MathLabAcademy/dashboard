@@ -1,14 +1,13 @@
-import { Link, Router } from '@reach/router'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
+import React from 'react'
+import { Link, Route, Routes, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
 import { Box } from 'reflexbox'
 import { Button, Header, Segment } from 'semantic-ui-react'
-import { getMCQExam } from 'store/actions/mcqExams'
+import { useMCQExam } from 'store/mcqExams/hooks'
 import TakeExam from './Take'
 import TeacherResults from './TeacherResults'
 import TeacherView from './TeacherView'
@@ -26,10 +25,9 @@ function View({ courseId, mcqExamId }) {
   )
 }
 
-function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
-  useEffect(() => {
-    if (!mcqExam) getMCQExam(mcqExamId)
-  }, [mcqExam, getMCQExam, mcqExamId])
+function CourseMCQExamView({ courseId }) {
+  const { mcqExamId } = useParams()
+  const mcqExam = useMCQExam(mcqExamId)
 
   return (
     <>
@@ -75,20 +73,18 @@ function CourseMCQExamView({ courseId, mcqExamId, mcqExam, getMCQExam }) {
         />
       </Segment>
 
-      <Router>
-        <View path="/" courseId={courseId} />
-        <TeacherResults path="/results" courseId={courseId} />
-      </Router>
+      <Routes>
+        <Route
+          element={<View courseId={courseId} mcqExamId={mcqExamId} />}
+          path="/"
+        />
+        <Route
+          element={<TeacherResults courseId={courseId} mcqExamId={mcqExamId} />}
+          path="/results"
+        />
+      </Routes>
     </>
   )
 }
 
-const mapStateToProps = ({ mcqExams }, { mcqExamId }) => ({
-  mcqExam: get(mcqExams.byId, mcqExamId),
-})
-
-const mapDispatchToProps = {
-  getMCQExam,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseMCQExamView)
+export default CourseMCQExamView

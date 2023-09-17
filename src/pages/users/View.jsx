@@ -1,23 +1,11 @@
 import User from 'components/User/Main'
-import { get } from 'lodash-es'
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { getUser } from 'store/actions/users'
+import React from 'react'
+import { useParams } from 'react-router-dom'
 
-function UserView({ userId, user, getUser, onsite }) {
-  useEffect(() => {
-    if (!user) getUser(userId)
-  }, [user, getUser, userId])
+function UserView({ onsite }) {
+  const { userId } = useParams()
 
   return <User userId={userId} onsite={onsite} />
 }
 
-const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId),
-})
-
-const mapDispatchToProps = {
-  getUser,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserView)
+export default UserView

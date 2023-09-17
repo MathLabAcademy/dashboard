@@ -1,8 +1,9 @@
 import { useDisclosure } from '@chakra-ui/core'
-import { Redirect, Router } from '@reach/router'
+import { Redirect } from 'components/Redirect'
 import Sidebar from 'components/Sidebar'
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 import { Box } from 'reflexbox'
 import { usePageviewAnalytics } from 'utils/analytics'
 import BatchClasses from './batch/classes/Main'
@@ -39,22 +40,22 @@ function Dashboard() {
           ml: ({ sizes }) => (isOpen ? sizes.sidebar : '1rem'),
         }}
       >
-        <Router>
-          <Index path="/" />
-          <BatchClasses path="batchclasses/*" />
-          <BatchCourses path="batchcourses/*" />
-          <Courses path="courses/*" />
-          <MCQs path="mcqs/*" />
-          <Profile path="profile/*" />
-          <Users path="users/*" />
-          <FindUser path="find-user/*" />
-          <Notifications path="notifications/*" />
-          <SMSPage path="sms/*" />
-        </Router>
+        <Routes>
+          <Route element={<Index />} path="/" />
+          <Route element={<BatchClasses />} path="batchclasses/*" />
+          <Route element={<BatchCourses />} path="batchcourses/*" />
+          <Route element={<Courses />} path="courses/*" />
+          <Route element={<MCQs />} path="mcqs/*" />
+          <Route element={<Profile />} path="profile/*" />
+          <Route element={<Users />} path="users/*" />
+          <Route element={<FindUser />} path="find-user/*" />
+          <Route element={<Notifications />} path="notifications/*" />
+          <Route element={<SMSPage />} path="sms/*" />
+        </Routes>
       </Box>
     </>
   ) : (
-    <Redirect to="/login" noThrow />
+    <Redirect to="/login" />
   )
 }
 

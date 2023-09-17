@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Stack } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useParams } from 'react-router-dom'
 import Permit from 'components/Permit'
 import Table from 'components/Table'
 import { get } from 'lodash-es'
@@ -13,7 +13,8 @@ const tableStyle = {
   td: { borderWidth: 0, width: '100%' },
 }
 
-function CourseCQExamView({ courseId, cqExamId }) {
+function CourseCQExamView({ courseId }) {
+  const { cqExamId } = useParams()
   const cqExam = useCQExam(cqExamId)
 
   if (!cqExam) {

@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link, useParams } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import { Formik } from 'formik'
@@ -35,7 +35,9 @@ const getInitialValues = (userId, token) => ({
   token,
 })
 
-function ResetPassword({ userId, token }) {
+function ResetPassword() {
+  const { userId, token } = useParams()
+
   const [done, setDone] = useState(false)
 
   const initialValues = useMemo(() => getInitialValues(userId, token), [

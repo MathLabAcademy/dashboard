@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Stack, useToast } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { FormButton } from 'components/HookForm/Button'
 import { FormDatePicker } from 'components/HookForm/DatePicker'
 import { Form } from 'components/HookForm/Form'
@@ -37,7 +37,10 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseCQExamEdit({ cqExamId, navigate }) {
+function CourseCQExamEdit() {
+  const navigate = useNavigate()
+
+  const { cqExamId } = useParams()
   const data = useSelector((state) => state.cqExams.byId[cqExamId])
 
   const dispatch = useDispatch()
@@ -96,7 +99,7 @@ function CourseCQExamEdit({ cqExamId, navigate }) {
                 <Heading fontSize={4}>Edit CQ Exam #{get(data, 'id')}:</Heading>
               </Box>
               <Stack isInline spacing={2}>
-                <Button as={Link} to="..">
+                <Button as={Link} to="./..">
                   Go Back
                 </Button>
                 <FormButton type="submit" variantColor="green">

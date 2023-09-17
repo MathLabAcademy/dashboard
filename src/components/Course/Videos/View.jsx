@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Heading, Stack, Text } from '@chakra-ui/core'
-import { useParams } from '@reach/router'
+import { useParams, useNavigate } from 'react-router-dom'
 import Permit from 'components/Permit'
 import VimeoEmbed from 'components/VimeoEmbed'
 import { get } from 'lodash-es'
@@ -11,7 +11,9 @@ import { useCourseVideo } from 'store/courses/hooks'
 import { useCourseVideoComments } from 'store/comments/hooks'
 import CommentsThread from 'components/CommentsThread'
 
-function CourseVideoView({ courseId, navigate }) {
+function CourseVideoView({ courseId }) {
+  const navigate = useNavigate()
+
   const { videoId } = useParams()
 
   const video = useCourseVideo(courseId, videoId)

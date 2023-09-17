@@ -1,4 +1,3 @@
-import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
@@ -6,20 +5,14 @@ import HeaderGrid from 'components/HeaderGrid'
 import ImageGallery from 'components/MCQs/ImageGallery'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
-import {
-  get,
-  isUndefined,
-  keyBy,
-  map,
-  mapValues,
-  sortBy,
-  zipObject,
-} from 'lodash-es'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import { get, keyBy, map, mapValues, sortBy, zipObject } from 'lodash-es'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 import { Flex } from 'reflexbox'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getMCQ, readMCQAnswer, updateMCQ } from 'store/actions/mcqs'
+import { updateMCQ } from 'store/actions/mcqs'
+import { useMCQ, useMCQAnswerId, useNeighborMCQIds } from 'store/mcqs/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
@@ -50,24 +43,12 @@ const getInitialValues = (mcq, options, answerId) => ({
   tagIds: get(mcq, 'tagIds', emptyArray).map(String),
 })
 
-function MCQEdit({
-  mcqId,
-  mcq,
-  getMCQ,
-  answerId,
-  readMCQAnswer,
-  mcqTags,
-  updateMCQ,
-  prevMCQId,
-  nextMCQId,
-}) {
-  useEffect(() => {
-    if (!mcq) getMCQ(mcqId)
-  }, [getMCQ, mcq, mcqId])
+function MCQEdit({ mcqTags, updateMCQ }) {
+  const { mcqId } = useParams()
 
-  useEffect(() => {
-    if (isUndefined(answerId)) readMCQAnswer(mcqId)
-  }, [answerId, mcqId, readMCQAnswer])
+  const mcq = useMCQ(mcqId)
+  const answerId = useMCQAnswerId(mcqId)
+  const { prevMCQId, nextMCQId } = useNeighborMCQIds(mcqId)
 
   const options = useMemo(() => {
     return sortBy(get(mcq, 'Options'), 'id')
@@ -150,7 +131,7 @@ function MCQEdit({
                   <>
                     <ImageGallery mcqId={mcqId} />
 
-                    <Button as={Link} to={`..`}>
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>
@@ -218,23 +199,11 @@ function MCQEdit({
   )
 }
 
-const mapStateToProps = ({ mcqs, mcqTags }, { mcqId }) => {
-  const index = mcqs.allIds.indexOf(+mcqId)
-  const prevMCQId = mcqs.allIds[index - 1]
-  const nextMCQId = mcqs.allIds[index + 1]
-
-  return {
-    mcq: get(mcqs.byId, mcqId),
-    answerId: get(mcqs.answerById, mcqId),
-    mcqTags,
-    prevMCQId,
-    nextMCQId,
-  }
-}
+const mapStateToProps = ({ mcqTags }) => ({
+  mcqTags,
+})
 
 const mapDispatchToProps = {
-  getMCQ,
-  readMCQAnswer,
   updateMCQ,
 }
 

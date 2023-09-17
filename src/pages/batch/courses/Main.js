@@ -1,4 +1,4 @@
-import { Router } from '@reach/router'
+import { Routes, Route } from 'react-router-dom'
 import Permit from 'components/Permit'
 import React from 'react'
 import Create from './Create'
@@ -9,12 +9,12 @@ import View from './View'
 function BatchCourses() {
   return (
     <Permit roles="teacher,analyst,assistant">
-      <Router>
-        <List path="/" />
-        <Create path="create" />
-        <Edit path=":batchCourseId/edit" />
-        <View path=":batchCourseId/*" />
-      </Router>
+      <Routes>
+        <Route element={<List />} path="/" />
+        <Route element={<Create />} path="create" />
+        <Route element={<Edit />} path=":batchCourseId/edit" />
+        <Route element={<View />} path=":batchCourseId/*" />
+      </Routes>
     </Permit>
   )
 }

@@ -1,5 +1,5 @@
 import { Flex, FormLabel, Switch } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useParams } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import FormRichText from 'components/Form/RichText'
@@ -8,13 +8,14 @@ import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get, zipObject } from 'lodash-es'
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
-import { getCourse, toggleCourseStatus, updateCourse } from 'store/courses'
+import { toggleCourseStatus, updateCourse } from 'store/courses'
 import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
+import { useCourse } from 'store/courses/hooks'
 
 const getInitialValues = (course) => ({
   name: get(course, 'name') || '',
@@ -32,17 +33,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseEdit({
-  courseId,
-  course,
-  getCourse,
-  courseTags,
-  updateCourse,
-  toggleCourseStatus,
-}) {
-  useEffect(() => {
-    if (!course) getCourse(courseId)
-  }, [courseId, course, getCourse])
+function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
+  const { courseId } = useParams()
+  const course = useCourse(courseId)
 
   const initialValues = useMemo(() => getInitialValues(course), [course])
   const validationSchema = useMemo(() => getValidationSchema(), [])
@@ -100,7 +93,7 @@ function CourseEdit({
                 Left={<Header as="h2">Edit Course #{courseId}:</Header>}
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>
@@ -164,13 +157,11 @@ function CourseEdit({
   )
 }
 
-const mapStateToProps = ({ courses, courseTags }, { courseId }) => ({
-  course: get(courses.byId, courseId),
+const mapStateToProps = ({ courseTags }) => ({
   courseTags,
 })
 
 const mapDispatchToProps = {
-  getCourse,
   updateCourse,
   toggleCourseStatus,
 }

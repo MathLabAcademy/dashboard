@@ -1,5 +1,5 @@
 import { Box, Stack } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormRichText from 'components/Form/RichText'
 import FormSelect from 'components/Form/Select'
@@ -41,7 +41,9 @@ const answerIndexOptions = [0, 1, 2, 3].reduce((opts, index) => {
   return opts
 }, {})
 
-function MCQCreate({ navigate }) {
+function MCQCreate() {
+  const navigate = useNavigate()
+
   const mcqTags = useSelector((state) => state.mcqTags)
   const tagOptions = useMemo(() => {
     return zipObject(
@@ -98,7 +100,7 @@ function MCQCreate({ navigate }) {
                 Left={<Header>Create MCQ</Header>}
                 Right={
                   <>
-                    <Button as={Link} to={`..`}>
+                    <Button as={Link} to="./..">
                       Go Back
                     </Button>
                     <Button type="reset">Reset</Button>

@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link, useParams } from 'react-router-dom'
 import { get } from 'lodash-es'
 import React, { useCallback, useEffect, useState } from 'react'
 import { connect } from 'react-redux'
@@ -6,7 +6,9 @@ import { Button, Container, Segment } from 'semantic-ui-react'
 import { trackEventAnalytics, usePageviewAnalytics } from 'utils/analytics'
 import api from 'utils/api'
 
-function EmailVerification({ token, userStatus, forGuardian }) {
+function EmailVerification({ userStatus, forGuardian }) {
+  const { token } = useParams()
+
   usePageviewAnalytics()
 
   const [error, setError] = useState(null)
@@ -53,8 +55,6 @@ function EmailVerification({ token, userStatus, forGuardian }) {
   useEffect(() => {
     setTimeout(() => tryToVerify(), 750)
   }, [tryToVerify])
-
-  console.log(userStatus)
 
   return (
     <Container text textAlign="center" as={Segment}>

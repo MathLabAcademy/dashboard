@@ -1,19 +1,22 @@
 import { Box, Button, Heading, IconButton, Stack, Text } from '@chakra-ui/core'
-import { FaSyncAlt } from 'react-icons/fa'
-import { Link, Router } from '@reach/router'
 import Gravatar from 'components/Gravatar'
 import Permit from 'components/Permit'
 import { get } from 'lodash-es'
 import React, { useCallback } from 'react'
+import { FaSyncAlt } from 'react-icons/fa'
 import { connect } from 'react-redux'
+import { Link, Route, Routes } from 'react-router-dom'
 import { getUser } from 'store/actions/users'
 import AddBalance from './AddBalance'
 import AdjustBalance from './AdjustBalance'
 import ChangePassword from './ChangePassword'
 import Info from './Info'
 import { UserRole } from './Role'
+import { useUser } from 'store/users/hooks'
 
-function User({ userId, user, getUser }) {
+function User({ userId, getUser }) {
+  const user = useUser(userId)
+
   const refreshUser = useCallback(() => {
     getUser(userId)
   }, [getUser, userId])
@@ -65,22 +68,27 @@ function User({ userId, user, getUser }) {
         </Box>
       </Stack>
 
-      <Router>
-        <Info path="/" userId={userId} refreshUser={refreshUser} />
-        <AddBalance path="add-balance" userId={userId} />
-        <AdjustBalance path="adjust-balance" userId={userId} />
-        <ChangePassword path="change-password" userId={userId} />
-      </Router>
+      <Routes>
+        <Route
+          element={<Info userId={userId} refreshUser={refreshUser} />}
+          path="/"
+        />
+        <Route element={<AddBalance userId={userId} />} path="add-balance" />
+        <Route
+          element={<AdjustBalance userId={userId} />}
+          path="adjust-balance"
+        />
+        <Route
+          element={<ChangePassword userId={userId} />}
+          path="change-password"
+        />
+      </Routes>
     </Permit>
   )
 }
-
-const mapStateToProps = ({ users }, { userId }) => ({
-  user: get(users.byId, userId),
-})
 
 const mapDispatchToProps = {
   getUser,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(null, mapDispatchToProps)(User)

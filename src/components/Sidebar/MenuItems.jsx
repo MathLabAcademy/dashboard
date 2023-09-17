@@ -6,7 +6,7 @@ import {
   AccordionPanel,
   Box,
 } from '@chakra-ui/core'
-import { Match } from '@reach/router'
+import { useMatch } from 'react-router-dom'
 import NavLink from 'components/Link/NavLink'
 import Permit from 'components/Permit'
 import React, { memo, useMemo } from 'react'
@@ -41,41 +41,39 @@ function Item({ link, title, permits = emptyArray, children, isChild }) {
     return `${link}${link !== '/' ? '/*' : ''}`
   }, [link])
 
+  const match = useMatch(matchPath)
+
   return (
     <Permit roles={roles}>
-      <Match path={matchPath}>
-        {({ match }) =>
-          children ? (
-            <ParentItem
-              link={link}
-              title={title}
-              children={children}
-              match={match}
-            />
-          ) : (
-            <AccordionItem
-              borderWidth={0}
-              _last={{ borderWidth: 0 }}
-              isOpen={!!match}
-            >
-              <AccordionHeader
-                as={NavLink}
-                to={link}
-                py={isChild ? 2 : 3}
-                fontWeight={match ? 'bold' : 'normal'}
-                color={match ? (isChild ? 'primary' : 'white') : null}
-                bg={match && !isChild ? 'primary' : null}
-                _hover={{
-                  bg: isChild ? null : 'primary',
-                  color: isChild ? 'primary' : 'white',
-                }}
-              >
-                <Box>{title}</Box>
-              </AccordionHeader>
-            </AccordionItem>
-          )
-        }
-      </Match>
+      {children ? (
+        <ParentItem
+          link={link}
+          title={title}
+          children={children}
+          match={match}
+        />
+      ) : (
+        <AccordionItem
+          borderWidth={0}
+          _last={{ borderWidth: 0 }}
+          isOpen={!!match}
+        >
+          <AccordionHeader
+            as={NavLink}
+            to={link}
+            py={isChild ? 2 : 3}
+            fontWeight={match ? 'bold' : 'normal'}
+            color={match ? (isChild ? 'primary' : 'white') : null}
+            bg={match && !isChild ? 'primary' : null}
+            _hover={{
+              bg: isChild ? null : 'primary',
+              color: isChild ? 'primary' : 'white',
+            }}
+          >
+            <Box>{title}</Box>
+          </AccordionHeader>
+        </AccordionItem>
+      )}
     </Permit>
   )
 }

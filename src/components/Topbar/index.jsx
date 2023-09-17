@@ -1,5 +1,5 @@
 import { Button, Stack, Text } from '@chakra-ui/core'
-import { Match } from '@reach/router'
+import { useMatch } from 'react-router-dom'
 import NavLink from 'components/Link/NavLink'
 import { get } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
@@ -23,6 +23,8 @@ function Topbar() {
       date.getDate() === today.getDate() && date.getMonth() === today.getMonth()
     )
   }, [userData])
+
+  const isLoginPage = useMatch('/login')
 
   return (
     <Flex
@@ -79,19 +81,15 @@ function Topbar() {
 
         {!userStatus.loading && !userStatus.authed ? (
           <Box>
-            <Match path="/login">
-              {({ match }) =>
-                match ? (
-                  <Button as={NavLink} to="/register">
-                    Register
-                  </Button>
-                ) : (
-                  <Button as={NavLink} to="/login">
-                    Log In
-                  </Button>
-                )
-              }
-            </Match>
+            {isLoginPage ? (
+              <Button as={NavLink} to="/register">
+                Register
+              </Button>
+            ) : (
+              <Button as={NavLink} to="/login">
+                Log In
+              </Button>
+            )}
           </Box>
         ) : userStatus.authed ? (
           <CurrentUserPopover />

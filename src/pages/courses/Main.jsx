@@ -1,7 +1,7 @@
-import { Router } from '@reach/router'
 import Permit from 'components/Permit'
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { Route, Routes } from 'react-router-dom'
 import { fetchAllTagPage } from 'store/actions/courseTags'
 import Create from './Create'
 import Edit from './Edit'
@@ -21,13 +21,13 @@ function Courses({ tags, tagsPagination, fetchAllTagPage }) {
 
   return (
     <Permit roles="teacher,analyst,assistant,student">
-      <Router>
-        <List path="/" />
-        <Tags path="tags/*" />
-        <Create path="/create" />
-        <Edit path="/:courseId/edit" />
-        <View path="/:courseId/*" />
-      </Router>
+      <Routes>
+        <Route element={<List />} path="/" />
+        <Route element={<Tags />} path="tags/*" />
+        <Route element={<Create />} path="/create" />
+        <Route element={<Edit />} path="/:courseId/edit" />
+        <Route element={<View />} path="/:courseId/*" />
+      </Routes>
     </Permit>
   )
 }

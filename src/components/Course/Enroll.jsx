@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import FormCheckbox from 'components/Form/Checkbox'
 import Form from 'components/Form/Form'
 import HeaderGrid from 'components/HeaderGrid'
@@ -84,7 +84,7 @@ function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
           <HeaderGrid
             Left={<Header>You are already enrolled!</Header>}
             Right={
-              <Button as={Link} to="..">
+              <Button as={Link} to="./..">
                 Go Back
               </Button>
             }
@@ -103,7 +103,7 @@ function CourseEnroll({ courseId, course, enrollments, currentUser, enroll }) {
                 Left={<Header>Enroll</Header>}
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Cancel
                     </Button>
                     <Button type="reset">Reset</Button>

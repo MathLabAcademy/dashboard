@@ -1,4 +1,4 @@
-import { Router } from '@reach/router'
+import { Routes, Route } from 'react-router-dom'
 import Permit from 'components/Permit'
 import { useCourseAccess } from 'hooks/useCourseAccess'
 import React from 'react'
@@ -15,11 +15,11 @@ function CourseVideos({ courseId }) {
 
   return (
     <Permit roles="teacher,analyst,assistant,student">
-      <Router>
-        <List path="/" courseId={courseId} />
-        <View path=":videoId" courseId={courseId} />
-        <Create path="create" courseId={courseId} />
-      </Router>
+      <Routes>
+        <Route element={<List courseId={courseId} />} path="/" />
+        <Route element={<View courseId={courseId} />} path=":videoId" />
+        <Route element={<Create courseId={courseId} />} path="create" />
+      </Routes>
     </Permit>
   )
 }

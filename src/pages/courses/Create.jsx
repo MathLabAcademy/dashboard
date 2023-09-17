@@ -1,4 +1,3 @@
-import { Link } from '@reach/router'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import FormRichText from 'components/Form/RichText'
@@ -9,6 +8,7 @@ import { Formik } from 'formik'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
 import { connect } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { createCourse } from 'store/courses'
 import { trackEventAnalytics } from 'utils/analytics'
@@ -30,7 +30,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseCreate({ createCourse, courseTags, navigate }) {
+function CourseCreate({ createCourse, courseTags }) {
+  const navigate = useNavigate()
+
   const tagOptions = useMemo(() => {
     return zipObject(
       courseTags.allIds,
@@ -88,7 +90,7 @@ function CourseCreate({ createCourse, courseTags, navigate }) {
                 Left={<Header as="h2">New Course:</Header>}
                 Right={
                   <>
-                    <Button as={Link} to="..">
+                    <Button as={Link} to="./..">
                       Cancel
                     </Button>
                     <Button type="reset">Reset</Button>

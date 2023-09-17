@@ -1,4 +1,4 @@
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import { get } from 'lodash-es'
 import { Info } from 'luxon'
@@ -108,7 +108,7 @@ function BatchClassPaymentList({
           Left={<Header>Batch Class Payments</Header>}
           Right={
             <>
-              <Button as={Link} to={`..`}>
+              <Button as={Link} to="./..">
                 Go Back
               </Button>
               <ChargePayment

@@ -1,5 +1,5 @@
 import { Box, Button, Heading, Stack } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import { get } from 'lodash-es'
 import { DateTime } from 'luxon'
 import React, { useEffect } from 'react'

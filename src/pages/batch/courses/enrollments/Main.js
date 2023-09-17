@@ -1,23 +1,27 @@
-import { Router } from '@reach/router'
 import React from 'react'
+import { Route, Routes } from 'react-router-dom'
 import List from './List'
 import View from './View'
 
 function BatchCourseEnrollments({ batchCourseId }) {
   return (
     <>
-      <Router>
-        <List
+      <Routes>
+        <Route
+          element={
+            <List batchCourseId={batchCourseId} linkToBase="enrollments/" />
+          }
           path="/"
-          batchCourseId={batchCourseId}
-          linkToBase="enrollments/"
         />
-        <List path="enrollments" batchCourseId={batchCourseId} linkToBase="" />
-        <View
+        <Route
+          element={<List batchCourseId={batchCourseId} linkToBase="" />}
+          path="enrollments"
+        />
+        <Route
+          element={<View batchCourseId={batchCourseId} />}
           path="enrollments/:batchCourseEnrollmentId"
-          batchCourseId={batchCourseId}
         />
-      </Router>
+      </Routes>
     </>
   )
 }

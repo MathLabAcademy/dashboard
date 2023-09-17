@@ -4,7 +4,7 @@ import React, { useEffect, useMemo } from 'react'
 import { connect } from 'react-redux'
 import { Header, Segment, Table, Label } from 'semantic-ui-react'
 import { getAllEnrollmentsForUser } from 'store/actions/users'
-import { Link } from '@reach/router'
+import { Link } from 'react-router-dom'
 import { emptyObject } from 'utils/defaults'
 
 function EnrollmentInfo({

@@ -35,7 +35,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useParams } from 'react-router-dom'
 import imageCompression from 'browser-image-compression'
 import { CanvasImageOverlay } from 'components/Canvas/CanvasImageOverlay'
 import { FormButton } from 'components/HookForm/Button'
@@ -455,7 +455,9 @@ function SubmissionItem({
   )
 }
 
-function TeacherCQExamSubmissionView({ courseId, cqExamId, userId }) {
+function TeacherCQExamSubmissionView({ courseId }) {
+  const { cqExamId, userId } = useParams()
+
   const cqExam = useCQExam(cqExamId)
   const submissions = useCQExamSubmissionsForUser(cqExamId, userId)
   const student = useUser(userId)

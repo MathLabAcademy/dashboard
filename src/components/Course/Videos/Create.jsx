@@ -7,7 +7,7 @@ import {
   InputRightElement,
   Stack,
 } from '@chakra-ui/core'
-import { Link } from '@reach/router'
+import { Link, useNavigate } from 'react-router-dom'
 import HeaderGrid from 'components/HeaderGrid'
 import Permit from 'components/Permit'
 import VimeoEmbed from 'components/VimeoEmbed'
@@ -19,7 +19,9 @@ import { createCourseVideo } from 'store/courses'
 
 const videoProvider = 'vimeo'
 
-function CourseVideoCreate({ courseId, navigate }) {
+function CourseVideoCreate({ courseId }) {
+  const navigate = useNavigate()
+
   const vimeoVideoIdRef = useRef()
 
   const [vimeoVideoId, setVimeoVideoId] = useState('')
@@ -68,7 +70,7 @@ function CourseVideoCreate({ courseId, navigate }) {
           Left={<Header>Add Video:</Header>}
           Right={
             <>
-              <Button as={Link} to="..">
+              <Button as={Link} to="./..">
                 Cancel
               </Button>
             </>
