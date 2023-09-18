@@ -1,9 +1,8 @@
-import { Button, Stack, Text } from '@chakra-ui/core'
-import { useMatch } from 'react-router-dom'
+import { Box, Button, Flex, Stack, Text } from '@chakra-ui/core'
 import NavLink from 'components/Link/NavLink'
 import { get } from 'lodash-es'
 import React, { memo, useMemo } from 'react'
-import { Box, Flex } from 'reflexbox'
+import { useMatch } from 'react-router-dom'
 import { useCurrentUser } from 'store/currentUser/hooks'
 import CurrentUserPopover from './CurrentUserPopover'
 import WebNotificationButton from './WebNotificationButton'
@@ -32,18 +31,16 @@ function Topbar() {
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
-      sx={{
-        position: 'fixed',
-        top: 0,
-        zIndex: 500 || 'sticky',
-        bg: 'white',
-        left: 0,
-        right: 0,
-        borderBottomWidth: '1px',
-        width: '100%',
-        height: 'navbar',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.135571)',
-      }}
+      position="fixed"
+      top={0}
+      zIndex={500 || 'sticky'}
+      bg="white"
+      left={0}
+      right={0}
+      borderBottomWidth="1px"
+      width="100%"
+      height="navbar"
+      boxShadow={'0 2px 8px rgba(0, 0, 0, 0.135571)'}
       px={8}
     >
       <Box>

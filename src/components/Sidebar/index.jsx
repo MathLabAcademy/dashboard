@@ -14,7 +14,7 @@ function Sidebar({ isOpen, onToggle }) {
         transition: '0.2s',
         borderRight: '2px solid',
         borderRightColor: 'gray.200',
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         bottom: 0,
         left: ({ sizes }) => (isOpen ? 0 : `calc(-${sizes.sidebar} + 1rem)`),
@@ -29,7 +29,7 @@ function Sidebar({ isOpen, onToggle }) {
         isRound
         onClick={onToggle}
         position="absolute"
-        top="4.75rem"
+        top="3rem"
         right="-1rem"
         transition="0.2s"
         transform={`rotate(${isOpen ? '0' : '180'}deg)`}

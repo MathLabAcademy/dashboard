@@ -27,7 +27,7 @@ function Dashboard() {
   return userStatus.loading ? (
     <div>Loading...</div>
   ) : userStatus.authed ? (
-    <>
+    <Box position="relative">
       {userStatus.authed && (
         <Sidebar isOpen={isOpen} onToggle={onToggle} onClose={onClose} />
       )}
@@ -36,8 +36,14 @@ function Dashboard() {
         width="auto"
         p={6}
         sx={{
+          position: 'fixed',
+          top: ({ sizes }) => sizes.navbar,
+          bottom: 0,
+          right: 0,
+          left: 0,
           transition: '0.1s',
           ml: ({ sizes }) => (isOpen ? sizes.sidebar : '1rem'),
+          overflowY: 'auto',
         }}
       >
         <Routes>
@@ -53,7 +59,7 @@ function Dashboard() {
           <Route element={<SMSPage />} path="sms/*" />
         </Routes>
       </Box>
-    </>
+    </Box>
   ) : (
     <Redirect to="/login" />
   )
