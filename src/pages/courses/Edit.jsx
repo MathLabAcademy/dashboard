@@ -1,5 +1,4 @@
 import { Flex, FormLabel, Switch } from '@chakra-ui/core'
-import { Link, useParams } from 'react-router-dom'
 import Form from 'components/Form/Form'
 import FormInput from 'components/Form/Input'
 import FormRichText from 'components/Form/RichText'
@@ -9,13 +8,14 @@ import Permit from 'components/Permit'
 import { Formik } from 'formik'
 import { get, zipObject } from 'lodash-es'
 import React, { useCallback, useMemo } from 'react'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
+import { Link, useParams } from 'react-router-dom'
 import { Button, Header, Message, Segment } from 'semantic-ui-react'
 import { toggleCourseStatus, updateCourse } from 'store/courses'
+import { useCourse } from 'store/courses/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
 import { emptyArray } from 'utils/defaults'
 import * as Yup from 'yup'
-import { useCourse } from 'store/courses/hooks'
 
 const getInitialValues = (course) => ({
   name: get(course, 'name') || '',
@@ -33,7 +33,9 @@ const getValidationSchema = () => {
   })
 }
 
-function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
+function CourseEdit({ courseTags }) {
+  const dispatch = useDispatch()
+
   const { courseId } = useParams()
   const course = useCourse(courseId)
 
@@ -45,10 +47,12 @@ function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
       actions.setStatus(null)
 
       try {
-        await updateCourse(courseId, {
-          price: price * 100,
-          ...values,
-        })
+        await dispatch(
+          updateCourse(courseId, {
+            price: price * 100,
+            ...values,
+          })
+        )
         trackEventAnalytics({
           category: 'Teacher',
           action: 'Edited Course',
@@ -68,7 +72,7 @@ function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
 
       actions.setSubmitting(false)
     },
-    [courseId, updateCourse]
+    [courseId, dispatch]
   )
 
   const tagOptions = useMemo(() => {
@@ -77,6 +81,10 @@ function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
       courseTags.allIds.map((id) => get(courseTags.byId, [id, 'name']))
     )
   }, [courseTags.allIds, courseTags.byId])
+
+  const onToggleCourseStatus = useCallback(async () => {
+    await dispatch(toggleCourseStatus(courseId))
+  }, [courseId, dispatch])
 
   return (
     <Permit roles="teacher,assistant">
@@ -122,9 +130,7 @@ function CourseEdit({ courseTags, updateCourse, toggleCourseStatus }) {
                   id="course-active"
                   size="lg"
                   isChecked={get(course, 'active')}
-                  onClick={async () => {
-                    await toggleCourseStatus(courseId)
-                  }}
+                  onChange={onToggleCourseStatus}
                 />
               </Flex>
 
@@ -161,9 +167,4 @@ const mapStateToProps = ({ courseTags }) => ({
   courseTags,
 })
 
-const mapDispatchToProps = {
-  updateCourse,
-  toggleCourseStatus,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseEdit)
+export default connect(mapStateToProps)(CourseEdit)
