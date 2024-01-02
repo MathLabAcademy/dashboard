@@ -43,7 +43,9 @@ function EmailLogInForm({ logIn }) {
           err.errors.forEach(({ param, message }) =>
             actions.setFieldError(param, message)
           )
-        } else if (err.message) {
+        }
+
+        if (err.message) {
           actions.setStatus(err.message)
         } else {
           actions.setStatus(null)
