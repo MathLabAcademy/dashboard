@@ -506,7 +506,7 @@ function ContactInfo({ userId, person, title, isGuardian, refreshUser }) {
       />
     </Permit>
   ) : (
-    <Box borderWidth={1} shadow="md" p={4} h="100%">
+    <Box borderWidth={1} shadow="md" p={4}>
       <HeaderGrid
         Left={<Header content={title} />}
         Right={
