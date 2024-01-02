@@ -12,27 +12,17 @@ function EnrollmentInfo({
   title,
   courses,
   courseEnrollments,
-  batchClassEnrollments,
-  batchCourseEnrollments,
   getAllEnrollmentsForUser,
 }) {
   useEffect(() => {
-    getAllEnrollmentsForUser(userId, 'batch_class')
-    getAllEnrollmentsForUser(userId, 'batch_course')
     getAllEnrollmentsForUser(userId, 'course')
   }, [getAllEnrollmentsForUser, userId])
 
-  const {
-    courseIds,
-    batchClassEnrollmentIds,
-    batchCourseEnrollmentIds,
-  } = useMemo(
+  const { courseIds } = useMemo(
     () => ({
       courseIds: Object.keys(courseEnrollments),
-      batchClassEnrollmentIds: Object.keys(batchClassEnrollments),
-      batchCourseEnrollmentIds: Object.keys(batchCourseEnrollments),
     }),
-    [batchClassEnrollments, batchCourseEnrollments, courseEnrollments]
+    [courseEnrollments]
   )
 
   return (
@@ -53,52 +43,6 @@ function EnrollmentInfo({
               </Table.Cell>
             </Table.Row>
           ) : null}
-
-          {batchClassEnrollmentIds.length ? (
-            <Table.Row>
-              <Table.HeaderCell
-                collapsing
-                content={`Batch Class Enrollments`}
-              />
-              <Table.Cell>
-                {batchClassEnrollmentIds.map((enrollmentId) => (
-                  <Label
-                    key={enrollmentId}
-                    to={`/batchclasses/${get(
-                      batchClassEnrollments[enrollmentId],
-                      'batchClassId'
-                    )}/enrollments/${enrollmentId}`}
-                    as={Link}
-                  >
-                    {enrollmentId}
-                  </Label>
-                ))}
-              </Table.Cell>
-            </Table.Row>
-          ) : null}
-
-          {batchCourseEnrollmentIds.length ? (
-            <Table.Row>
-              <Table.HeaderCell
-                collapsing
-                content={`Batch Course Enrollments`}
-              />
-              <Table.Cell>
-                {batchCourseEnrollmentIds.map((enrollmentId) => (
-                  <Label
-                    key={enrollmentId}
-                    to={`/batchcourses/${get(
-                      batchCourseEnrollments[enrollmentId],
-                      'batchCourseId'
-                    )}/enrollments/${enrollmentId}`}
-                    as={Link}
-                  >
-                    {enrollmentId}
-                  </Label>
-                ))}
-              </Table.Cell>
-            </Table.Row>
-          ) : null}
         </Table.Body>
       </Table>
     </Segment>
@@ -108,16 +52,6 @@ function EnrollmentInfo({
 const mapStateToProps = ({ courses, users }, { userId }) => ({
   courses,
   courseEnrollments: get(users.courseEnrollmentsById, userId, emptyObject),
-  batchClassEnrollments: get(
-    users.batchClassEnrollmentsById,
-    userId,
-    emptyObject
-  ),
-  batchCourseEnrollments: get(
-    users.batchCourseEnrollmentsById,
-    userId,
-    emptyObject
-  ),
   user: get(users.byId, userId),
 })
 
