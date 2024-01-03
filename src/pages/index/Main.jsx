@@ -15,7 +15,7 @@ import Permit from 'components/Permit'
 import { useStats } from 'hooks/useStats'
 import { get } from 'lodash-es'
 import { FaCalendarAlt, FaSyncAlt } from 'react-icons/fa'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, useMemo } from 'react'
 import { useCurrentUserData } from 'store/currentUser/hooks'
 import paymentMethodImage from './payment-method.jpeg'
 
@@ -33,6 +33,42 @@ function DailyTransactionsForYearStats({ ...props }) {
   const { data = [], loading } = useStats('daily-transactions-for-year', {
     year,
   })
+  const colors = useMemo(() => {
+    const total = data.length
+    const negative = data.filter(({ value }) => value < 0).length
+
+    const colors = [
+      '#009900',
+      '#00CC00',
+      '#00FF00',
+      '#33FF33',
+      '#66FF66',
+      '#99FF99',
+    ]
+
+    const percentage = (negative / total) * 100
+    if (percentage > 0) {
+      colors.push('#FFCCD5')
+    }
+    if (percentage > 10) {
+      colors.push('#FF99AA')
+    }
+    if (percentage > 20) {
+      colors.push('#FF667F')
+    }
+    if (percentage > 30) {
+      colors.push('#FF3355')
+    }
+    if (percentage > 40) {
+      colors.push('#FF002B')
+    }
+    if (percentage > 50) {
+      colors.push('#CC0022')
+    }
+
+    return colors.reverse()
+  }, [data])
+
   const totalDueStat = useStats('total-due')
 
   return (
@@ -79,22 +115,7 @@ function DailyTransactionsForYearStats({ ...props }) {
             from={`${year}-01-01`}
             to={`${year}-12-31`}
             minValue="auto"
-            colors={[
-              '#CC0022',
-              '#FF002B',
-              '#FF3355',
-              '#FF667F',
-              '#FF99AA',
-              '#FFCCD5',
-              '#CCFFCC',
-              '#99FF99',
-              '#66FF66',
-              '#33FF33',
-              '#00FF00',
-              '#00CC00',
-              '#009900',
-              '#006600',
-            ]}
+            colors={colors}
             emptyColor="#eee"
             margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
             monthBorderColor="#fff"
@@ -149,10 +170,10 @@ function PaymentMethod({ ...props }) {
 
 function DashIndex() {
   return (
-      <Stack spacing={8}>
-        <PaymentMethod />
-        <DailyTransactionsForYearStats />
-      </Stack>
+    <Stack spacing={8}>
+      <PaymentMethod />
+      <DailyTransactionsForYearStats />
+    </Stack>
   )
 }
 
