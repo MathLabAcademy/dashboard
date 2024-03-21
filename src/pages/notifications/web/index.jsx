@@ -1,8 +1,9 @@
 import { Box, Button, Stack, Text } from '@chakra-ui/core'
-import { Link } from 'react-router-dom'
+import { DateTime } from 'luxon'
 import React, { useCallback } from 'react'
 import { MdCheck, MdComment } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { markWebNotificationAsRead } from 'store/notifications'
 import { useWebNotifications } from 'store/notifications/hooks'
 import { trackEventAnalytics } from 'utils/analytics'
@@ -43,6 +44,49 @@ function WebNotificationItem({ data: { id, topic, data, read }, ...props }) {
                 : data.event === 'reply'
                 ? `replied on a comment you are subscribed to on the ${data.videoName} video on ${data.courseName} Course!`
                 : ''}
+            </Text>
+          </Stack>
+        </Link>
+      ) : topic === 'course-new-cqexam' ? (
+        <Link to={`/courses/${data.courseId}/cqexams`}>
+          <Stack isInline spacing={4} alignItems="center">
+            <Box as={MdComment} />
+            <Text>
+              New CQ Exam (<em>{data.cqExamName}</em>) is added on your{' '}
+              <em>{data.courseName}</em> course for{' '}
+              {DateTime.fromISO(data.cqExamDate).toLocaleString(
+                DateTime.DATETIME_MED
+              )}
+              !
+            </Text>
+          </Stack>
+        </Link>
+      ) : topic === 'course-new-mcqexam' ? (
+        <Link to={`/courses/${data.courseId}/mcqexams`}>
+          <Stack isInline spacing={4} alignItems="center">
+            <Box as={MdComment} />
+            <Text>
+              New MCQ Exam (<em>{data.mcqExamName}</em>) is added on your{' '}
+              <em>{data.courseName}</em> course for{' '}
+              {DateTime.fromISO(data.mcqExamDate).toLocaleString(
+                DateTime.DATETIME_MED
+              )}
+              !
+            </Text>
+          </Stack>
+        </Link>
+      ) : topic === 'course-new-video' ? (
+        <Link to={`/courses/${data.courseId}/videos`}>
+          <Stack isInline spacing={4} alignItems="center">
+            <Box as={MdComment} />
+            <Text>
+              New video{' '}
+              {data.videoName && (
+                <>
+                  (<em>{data.videoName}</em>)
+                </>
+              )}{' '}
+              uploaded on your <em>{data.courseName}</em> course!
             </Text>
           </Stack>
         </Link>
