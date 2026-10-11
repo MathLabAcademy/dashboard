@@ -10,6 +10,7 @@ import {
   USER_PAGE_ADD,
   USER_PAGE_REMOVE,
   USER_PAGE_REQUEST,
+  USER_PAGINATION_PURGE,
   USER_UPDATE,
 } from './actionTypes'
 
@@ -25,6 +26,22 @@ export const getUser = (userId) => async (dispatch) => {
 
   if (error) throw error
 
+  dispatch(addUser(data))
+
+  return data
+}
+
+export const createUser = (userData) => async (dispatch) => {
+  const url = `/users`
+
+  const { data, error } = await api(url, {
+    method: 'POST',
+    body: userData,
+  })
+
+  if (error) throw error
+
+  dispatch({ type: USER_PAGINATION_PURGE })
   dispatch(addUser(data))
 
   return data

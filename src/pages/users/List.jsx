@@ -1,4 +1,4 @@
-import { Box, Heading, Stack } from '@chakra-ui/core'
+import { Flex, Heading, Stack } from '@chakra-ui/core'
 import Switcher from 'components/Pagination/Switcher'
 import Permit from 'components/Permit'
 import usePagination from 'hooks/usePagination'
@@ -7,6 +7,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { fetchUserPage } from 'store/actions/users'
 import { emptyArray } from 'utils/defaults'
+import AddUser from './ActionModals/AddUser'
 import ListItem from './ListItem'
 
 function UserList({ pagination, fetchPage }) {
@@ -14,11 +15,20 @@ function UserList({ pagination, fetchPage }) {
 
   return (
     <Permit roles="teacher,analyst">
-      <Box borderWidth={1} boxShadow="sm" p={4} mb={4}>
+      <Flex
+        borderWidth={1}
+        boxShadow="sm"
+        p={4}
+        mb={4}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Heading as="h2" fontSize={3}>
           Users
         </Heading>
-      </Box>
+
+        <AddUser />
+      </Flex>
 
       <Stack spacing={4} mb={4}>
         {get(pagination.pages[page], `itemIds`, emptyArray).map((id) => (
